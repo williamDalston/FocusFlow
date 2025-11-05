@@ -181,10 +181,22 @@ Your workout data is stored securely on your device. HealthKit integration is op
 ---
 
 ## Support URL
-**https://williamDalston.github.io/ritual7-support**
+**Option 1 (Recommended - Email):** `mailto:support@ritual7.app?subject=Support%20Request`
+
+**Option 2 (GitHub Pages - Separate repo):** `https://williamDalston.github.io/ritual7-support`
+
+**Option 3 (Netlify - Free):** `https://ritual7-support.netlify.app`
+
+*Note: Use a SEPARATE repository/website that doesn't contain your app code. Only contains simple HTML contact page.*
 
 ## Marketing URL
-**https://williamDalston.github.io/ritual7**
+**Option 1 (GitHub Pages - Separate repo):** `https://williamDalston.github.io/ritual7`
+
+**Option 2 (Netlify - Free):** `https://ritual7.netlify.app`
+
+**Option 3 (Custom Domain):** `https://ritual7.app` (if you purchase domain)
+
+*Note: Use a SEPARATE repository/website that doesn't contain your app code. Only contains simple marketing landing page.*
 
 ## Privacy Policy URL
 (To be added: Your privacy policy URL)

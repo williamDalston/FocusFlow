@@ -227,12 +227,32 @@ Thanks for using Ritual7! ⭐️ If you love it, please rate us 5 stars!
 ---
 
 ## 7. SUPPORT URL
-**https://williamDalston.github.io/ritual7-support**
+
+**Recommended (Email - No website needed):**
+```
+mailto:support@ritual7.app?subject=Support%20Request
+```
+
+**OR (If you prefer a web page - use SEPARATE repository):**
+```
+https://williamDalston.github.io/ritual7-support
+```
+*⚠️ IMPORTANT: Create a SEPARATE GitHub repository that only contains a simple HTML contact page. Do NOT use your code repository.*
 
 ---
 
 ## 8. MARKETING URL
-**https://williamDalston.github.io/ritual7**
+
+**Recommended (Separate repository - no code):**
+```
+https://williamDalston.github.io/ritual7
+```
+*⚠️ IMPORTANT: Create a SEPARATE GitHub repository that only contains a simple HTML landing page. Do NOT use your code repository.*
+
+**Alternative (Netlify - completely separate):**
+```
+https://ritual7.netlify.app
+```
 
 ---
 
