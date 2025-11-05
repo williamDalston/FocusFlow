@@ -42,6 +42,8 @@
 	<string>We use HealthKit to read your weight and activity level to provide better calorie estimates and personalized recommendations for your workouts.</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>We use HealthKit to save your workout sessions, including exercise minutes and calories burned, so you can track your progress in the Health and Activity apps.</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>We use this to show relevant ads and support free features.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>

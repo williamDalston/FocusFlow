@@ -98,8 +98,12 @@ class HealthKitManager {
     }
     
     /// Check authorization status for workout type
+    /// - Note: This is safe to call without authorization - it only checks status, doesn't access data
     var workoutAuthorizationStatus: HKAuthorizationStatus {
-        healthStore.authorizationStatus(for: HKObjectType.workoutType())
+        guard isHealthKitAvailable else {
+            return .notDetermined
+        }
+        return healthStore.authorizationStatus(for: HKObjectType.workoutType())
     }
     
     /// Check if we have write permission for workouts

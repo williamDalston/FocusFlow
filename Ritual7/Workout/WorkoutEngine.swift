@@ -185,9 +185,9 @@ final class WorkoutEngine: ObservableObject {
                 timerToStop.stop()
             }
         } else {
-            // If not on main thread, dispatch to main queue
-            // Capture timer directly to avoid capturing self in deinit
-            Task { @MainActor [timerToStop] in
+            // If not on main thread, dispatch synchronously to avoid Task creation in deinit
+            // Creating a Task in deinit can cause crashes if the object is deallocated before the task completes
+            DispatchQueue.main.sync {
                 timerToStop.stop()
             }
         }

@@ -18,7 +18,7 @@ class HealthInsightsManager: ObservableObject {
     @Published var personalizedRecommendations: [HealthRecommendation] = []
     
     private init() {
-        Task {
+        Task { @MainActor in
             await loadLatestInsights()
         }
     }
