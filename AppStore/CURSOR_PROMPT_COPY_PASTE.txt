@@ -1,0 +1,58 @@
+Create a GitHub Pages website for Ritual7 app with two standalone HTML pages:
+
+1. SUPPORT PAGE (support.html - to be renamed to index.html in ritual7-docs repo)
+2. MARKETING PAGE (marketing.html - to be renamed to index.html in ritual7 repo)
+
+DESIGN REQUIREMENTS:
+- Color Scheme: Primary gradient `linear-gradient(135deg, #667eea 0%, #764ba2 100%)`, primary color `#667eea`, text `#333`, white cards
+- Typography: System fonts `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif`
+- Layout: Max width 600px (support) / 900px (marketing), responsive, centered, rounded corners (12-16px), subtle shadows
+- Background: Gradient background with white card container
+
+SUPPORT PAGE (support.html) MUST INCLUDE:
+1. Header: "Ritual7 Support" (large, purple-blue), subtitle "Need help? We're here for you."
+2. Contact Section with two options:
+   - Email Support: Icon 📧, title "Email Support", description "Get help with any questions or issues", button "Contact Support" linking to `mailto:support@ritual7.app?subject=Support%20Request`
+   - Report Issue: Icon 🐛, title "Report an Issue", description "Found a bug or have a suggestion?", button "Report Issue" linking to `mailto:support@ritual7.app?subject=Bug%20Report`
+3. Information Box (light blue background): "Response Time: We typically respond within 24-48 hours", "App Version: 1.3", "Support Hours: Monday - Friday, 9 AM - 5 PM EST"
+4. Footer: Link "← Back to Ritual7 App" linking to `https://apps.apple.com/app/ritual7`
+
+MARKETING PAGE (marketing.html) MUST INCLUDE:
+1. Hero Section: Large heading "Ritual7", tagline "Transform Your Fitness in Just 7 Minutes", description "Science-backed HIIT workouts. No equipment needed. Beautiful design. Apple Watch support.", large CTA button "📱 Download on App Store" linking to `https://apps.apple.com/app/ritual7`
+2. Features Grid (6 features in responsive grid, 3x2 on desktop):
+   - 🏋️ Science-Backed: "12 exercises based on research from the American College of Sports Medicine"
+   - ⚡ 7 Minutes: "Complete full-body workout in just 7 minutes - perfect for busy schedules"
+   - 🏠 No Equipment: "Work out anywhere - no gym membership or equipment needed"
+   - ⌚ Apple Watch: "Full workout experience on your wrist with seamless sync"
+   - 📊 Track Progress: "Beautiful analytics, streaks, and achievements to stay motivated"
+   - 🎨 Beautiful Design: "Modern, intuitive interface that makes working out enjoyable"
+3. Benefits Section (light gray background): Grid of benefits: "Time Efficient", "No Equipment Required", "Science-Backed Routine", "Progress Tracking", "Apple Watch Support", "HealthKit Integration", "Fully Accessible", "Beautiful Design" (each with ✅ checkmark)
+4. Platforms Section (light blue background): Heading "Available On", icons: 📱 iPhone, 📱 iPad, ⌚ Apple Watch
+5. Secondary CTA: Button "Start Your 7-Minute Journey Today" linking to `https://apps.apple.com/app/ritual7`
+6. Footer: "© 2024 Ritual7. Transform your fitness in just 7 minutes." with links "Support | Contact" (Support: `https://williamDalston.github.io/ritual7-docs`, Contact: `mailto:support@ritual7.app`)
+
+TECHNICAL REQUIREMENTS:
+- Inline CSS only (no external stylesheets)
+- No JavaScript (except mailto links)
+- No external dependencies (no fonts, images, or scripts)
+- Semantic HTML5 elements
+- Meta tags: charset UTF-8, viewport, description (unique for each page)
+- Title tags: "Ritual7 Support" and "Ritual7 - 7-Minute HIIT Workout App"
+- Fully responsive with media queries
+- File size < 50KB per page
+- Fast loading, accessible, SEO-friendly
+- Works immediately on GitHub Pages
+
+RESPONSIVE DESIGN:
+- Mobile (< 768px): Reduced font sizes, single column, stacked cards, 20px padding
+- Desktop (> 768px): Larger fonts, multi-column, side-by-side cards, 40-60px padding
+
+STYLE ELEMENTS:
+- Gradient buttons with hover effects (transform translateY(-2px), darker shadow)
+- Smooth transitions (0.3s)
+- Professional, modern aesthetic
+- Clean, minimal design
+- Good contrast for accessibility
+
+Create both complete HTML files with all specified content, inline CSS, responsive design, and professional appearance. Make them production-ready and immediately usable on GitHub Pages.
+
