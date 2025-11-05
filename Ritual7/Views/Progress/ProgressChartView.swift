@@ -86,6 +86,7 @@ struct ProgressChartView: View {
         .cardShadow()
         .sheet(isPresented: $showingExportSheet) {
             ProgressChartExportSheet(analytics: analytics, timeframe: selectedTimeframe)
+                .iPadOptimizedSheetPresentation()
         }
         .onAppear {
             // Agent 16: Simulate loading delay for smooth transition

@@ -101,9 +101,10 @@ struct ExerciseListView: View {
                 muscleGroups: muscleGroups,
                 selectedMuscleGroup: $selectedMuscleGroup
             )
+            .iPadOptimizedSheetPresentation()
         }
         .sheet(item: $selectedExercise) { exercise in
-            NavigationStack {
+            let sheetContent = NavigationStack {
                 if let index = filteredExercises.firstIndex(where: { $0.id == exercise.id }) {
                     ExerciseGuideView(
                         exercise: exercise,
@@ -113,6 +114,19 @@ struct ExerciseListView: View {
                 } else {
                     ExerciseGuideView(exercise: exercise)
                 }
+            }
+            .presentationDetents(
+                horizontalSizeClass == .regular
+                    ? [.fraction(0.85), .large]  // iPad: 85% or full screen (draggable)
+                    : [.large]  // iPhone: full screen
+            )
+            .presentationDragIndicator(.visible)
+            
+            if #available(iOS 16.4, *) {
+                sheetContent
+                    .presentationBackgroundInteraction(.enabled(upThrough: .fraction(0.85)))
+            } else {
+                sheetContent
             }
         }
     }

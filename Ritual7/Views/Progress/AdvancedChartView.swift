@@ -68,6 +68,7 @@ struct AdvancedChartView: View {
         )
         .sheet(isPresented: $showingExportSheet) {
             ChartExportSheet(analytics: analytics, timeframe: selectedTimeframe)
+                .iPadOptimizedSheetPresentation()
         }
     }
     

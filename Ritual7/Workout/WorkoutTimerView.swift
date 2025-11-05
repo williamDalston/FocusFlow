@@ -285,6 +285,7 @@ struct WorkoutTimerView: View {
         }
         .sheet(isPresented: $showCompletionCelebration) {
             completionCelebrationSheet
+                .iPadOptimizedSheetPresentation()
         }
         .onAppear {
             // Show gesture hints on first use

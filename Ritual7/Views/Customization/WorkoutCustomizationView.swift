@@ -104,6 +104,7 @@ struct WorkoutCustomizationView: View {
                     set: { preferencesStore.updateSelectedPreset($0) }
                 ))
                 .environmentObject(preferencesStore)
+                .iPadOptimizedSheetPresentation()
             }
             .sheet(isPresented: $showExerciseSelector) {
                 // Exercise selector for custom workout creation
@@ -111,6 +112,7 @@ struct WorkoutCustomizationView: View {
             .sheet(item: $editingCustomWorkout) { workout in
                 CustomWorkoutEditorView(workout: workout)
                     .environmentObject(preferencesStore)
+                    .iPadOptimizedSheetPresentation()
             }
             .sheet(item: Binding(
                 get: { editingCustomWorkout != nil ? editingCustomWorkout : nil },
@@ -118,6 +120,7 @@ struct WorkoutCustomizationView: View {
             )) { workout in
                 AdvancedCustomizationView(workout: workout)
                     .environmentObject(preferencesStore)
+                    .iPadOptimizedSheetPresentation()
             }
         }
     }
@@ -866,6 +869,7 @@ struct CustomWorkoutEditorView: View {
             }
             .sheet(isPresented: $showExerciseSelector) {
                 ExerciseSelectorView(selectedExerciseIds: $selectedExerciseIds)
+                    .iPadOptimizedSheetPresentation()
             }
         }
     }

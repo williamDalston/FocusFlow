@@ -221,28 +221,6 @@
 		};
 /* End PBXProject section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		EF9A2EE52E78B78B0047B4FD /* Copy dSYM Files */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Copy dSYM Files";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Copy/Generate dSYM files for Swift Package Manager frameworks\\n# This ensures GoogleMobileAds and UserMessagingPlatform dSYM files are included in archive\\n\\necho \\\"=== dSYM Generation Script Started ===\\\"\\n\\n# Set destination for dSYM files (must be DWARF_DSYM_FOLDER_PATH for archive)\\nDSYM_DEST=\\\"${DWARF_DSYM_FOLDER_PATH}\\\"\\nif [ -z \\\"$DSYM_DEST\\\" ]; then\\n    DSYM_DEST=\\\"${BUILT_PRODUCTS_DIR}\\\"\\nfi\\n\\necho \\\"dSYM Destination: $DSYM_DEST\\\"\\necho \\\"Built Products Dir: ${BUILT_PRODUCTS_DIR}\\\"\\n\\n# Ensure destination directory exists\\nmkdir -p \\\"$DSYM_DEST\\\"\\n\\n# Function to generate dSYM from framework binary\\ngenerate_dsym() {\\n    local FRAMEWORK_PATH=\\\"$1\\\"\\n    local FRAMEWORK_NAME=\\\"$2\\\"\\n    local BINARY_NAME=\\\"$3\\\"\\n    \\n    if [ -d \\\"$FRAMEWORK_PATH\\\" ] && [ -f \\\"$FRAMEWORK_PATH/$BINARY_NAME\\\" ]; then\\n        local DSYM_OUTPUT=\\\"$DSYM_DEST/${FRAMEWORK_NAME}.framework.dSYM\\\"\\n        echo \\\"Generating dSYM for ${FRAMEWORK_NAME} from $FRAMEWORK_PATH/$BINARY_NAME\\\"\\n        echo \\\"  Output: $DSYM_OUTPUT\\\"\\n        if dsymutil \\\"$FRAMEWORK_PATH/$BINARY_NAME\\\" -o \\\"$DSYM_OUTPUT\\\" 2>&1; then\\n            echo \\\"  ✅ Successfully generated ${FRAMEWORK_NAME}.framework.dSYM\\\"\\n        else\\n            echo \\\"  ⚠️ Warning: Failed to generate dSYM for ${FRAMEWORK_NAME}\\\"\\n        fi\\n    else\\n        echo \\\"  ⚠️ Framework not found: $FRAMEWORK_PATH/$BINARY_NAME\\\"\\n    fi\\n}\\n\\n# Function to copy dSYM if it exists\\ncopy_dsym() {\\n    local DSYM_PATH=\\\"$1\\\"\\n    local FRAMEWORK_NAME=\\\"$2\\\"\\n    if [ -d \\\"$DSYM_PATH\\\" ]; then\\n        local DSYM_OUTPUT=\\\"$DSYM_DEST/${FRAMEWORK_NAME}.framework.dSYM\\\"\\n        echo \\\"Copying dSYM: $DSYM_PATH to $DSYM_OUTPUT\\\"\\n        cp -R \\\"$DSYM_PATH\\\" \\\"$DSYM_OUTPUT\\\" || echo \\\"  ⚠️ Failed to copy dSYM\\\"\\n    fi\\n}\\n\\n# Check PackageFrameworks directory (where SPM frameworks are typically placed)\\nPACKAGE_FRAMEWORKS=\\\"${BUILT_PRODUCTS_DIR}/PackageFrameworks\\\"\\nif [ -d \\\"$PACKAGE_FRAMEWORKS\\\" ]; then\\n    echo \\\"Checking PackageFrameworks directory: $PACKAGE_FRAMEWORKS\\\"\\n    ls -la \\\"$PACKAGE_FRAMEWORKS\\\" || true\\n    \\n    # GoogleMobileAds\\n    if [ -d \\\"$PACKAGE_FRAMEWORKS/GoogleMobileAds.framework\\\" ]; then\\n        generate_dsym \\\"$PACKAGE_FRAMEWORKS/GoogleMobileAds.framework\\\" \\\"GoogleMobileAds\\\" \\\"GoogleMobileAds\\\"\\n    else\\n        echo \\\"  ⚠️ GoogleMobileAds.framework not found in PackageFrameworks\\\"\\n    fi\\n    \\n    # UserMessagingPlatform\\n    if [ -d \\\"$PACKAGE_FRAMEWORKS/UserMessagingPlatform.framework\\\" ]; then\\n        generate_dsym \\\"$PACKAGE_FRAMEWORKS/UserMessagingPlatform.framework\\\" \\\"UserMessagingPlatform\\\" \\\"UserMessagingPlatform\\\"\\n    else\\n        echo \\\"  ⚠️ UserMessagingPlatform.framework not found in PackageFrameworks\\\"\\n    fi\\nelse\\n    echo \\\"⚠️ PackageFrameworks directory not found: $PACKAGE_FRAMEWORKS\\\"\\nfi\\n\\n# Also check in Frameworks directory\\nif [ -d \\\"${BUILT_PRODUCTS_DIR}/Frameworks\\\" ]; then\\n    echo \\\"Checking Frameworks directory: ${BUILT_PRODUCTS_DIR}/Frameworks\\\"\\n    if [ -d \\\"${BUILT_PRODUCTS_DIR}/Frameworks/GoogleMobileAds.framework\\\" ]; then\\n        generate_dsym \\\"${BUILT_PRODUCTS_DIR}/Frameworks/GoogleMobileAds.framework\\\" \\\"GoogleMobileAds\\\" \\\"GoogleMobileAds\\\"\\n    fi\\n    if [ -d \\\"${BUILT_PRODUCTS_DIR}/Frameworks/UserMessagingPlatform.framework\\\" ]; then\\n        generate_dsym \\\"${BUILT_PRODUCTS_DIR}/Frameworks/UserMessagingPlatform.framework\\\" \\\"UserMessagingPlatform\\\" \\\"UserMessagingPlatform\\\"\\n    fi\\nfi\\n\\n# Search for existing dSYM files in DerivedData\\nDERIVED_DATA=\\\"${BUILD_ROOT}/../..\\\"\\nif [ -d \\\"$DERIVED_DATA\\\" ]; then\\n    echo \\\"Searching DerivedData for existing dSYM files: $DERIVED_DATA\\\"\\n    # Search in SourcePackages artifacts\\n    find \\\"$DERIVED_DATA\\\" -path \\\"*/SourcePackages/artifacts/*/GoogleMobileAds.framework.dSYM\\\" -type d 2>/dev/null | while read DSYM_PATH; do\\n        copy_dsym \\\"$DSYM_PATH\\\" \\\"GoogleMobileAds\\\"\\n    done\\n    \\n    find \\\"$DERIVED_DATA\\\" -path \\\"*/SourcePackages/artifacts/*/UserMessagingPlatform.framework.dSYM\\\" -type d 2>/dev/null | while read DSYM_PATH; do\\n        copy_dsym \\\"$DSYM_PATH\\\" \\\"UserMessagingPlatform\\\"\\n    done\\nfi\\n\\n# Search in build directory for existing dSYM files\\necho \\\"Searching for existing dSYM files in build directory...\\\"\\nfind \\\"${BUILT_PRODUCTS_DIR}\\\" -name \\\"GoogleMobileAds.framework.dSYM\\\" -type d 2>/dev/null | while read DSYM_PATH; do\\n    copy_dsym \\\"$DSYM_PATH\\\" \\\"GoogleMobileAds\\\"\\ndone\\n\\nfind \\\"${BUILT_PRODUCTS_DIR}\\\" -name \\\"UserMessagingPlatform.framework.dSYM\\\" -type d 2>/dev/null | while read DSYM_PATH; do\\n    copy_dsym \\\"$DSYM_PATH\\\" \\\"UserMessagingPlatform\\\"\\ndone\\n\\n# Verify final dSYM files exist\\necho \\\"\\\"\\necho \\\"=== Verifying dSYM files ===\\\"\\nif [ -d \\\"$DSYM_DEST/GoogleMobileAds.framework.dSYM\\\" ]; then\\n    echo \\\"✅ GoogleMobileAds.framework.dSYM exists\\\"\\nelse\\n    echo \\\"❌ GoogleMobileAds.framework.dSYM NOT found\\\"\\nfi\\n\\nif [ -d \\\"$DSYM_DEST/UserMessagingPlatform.framework.dSYM\\\" ]; then\\n    echo \\\"✅ UserMessagingPlatform.framework.dSYM exists\\\"\\nelse\\n    echo \\\"❌ UserMessagingPlatform.framework.dSYM NOT found\\\"\\nfi\\n\\necho \\\"=== dSYM Generation Script Completed ===\\\"\\n";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXResourcesBuildPhase section */
 		EF9A2EB52E78B7390047B4FD /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
@@ -266,6 +244,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		EF9A2EE52E78B78B0047B4FD /* Copy dSYM Files */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Copy dSYM Files";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Copy/Generate dSYM files for Swift Package Manager frameworks\\n# This ensures GoogleMobileAds and UserMessagingPlatform dSYM files are included in archive\\n\\necho \\\"=== dSYM Generation Script Started ===\\\"\\n\\n# Set destination for dSYM files (must be DWARF_DSYM_FOLDER_PATH for archive)\\nDSYM_DEST=\\\"${DWARF_DSYM_FOLDER_PATH}\\\"\\nif [ -z \\\"$DSYM_DEST\\\" ]; then\\n    DSYM_DEST=\\\"${BUILT_PRODUCTS_DIR}\\\"\\nfi\\n\\necho \\\"dSYM Destination: $DSYM_DEST\\\"\\necho \\\"Built Products Dir: ${BUILT_PRODUCTS_DIR}\\\"\\n\\n# Ensure destination directory exists\\nmkdir -p \\\"$DSYM_DEST\\\"\\n\\n# Function to generate dSYM from framework binary\\ngenerate_dsym() {\\n    local FRAMEWORK_PATH=\\\"$1\\\"\\n    local FRAMEWORK_NAME=\\\"$2\\\"\\n    local BINARY_NAME=\\\"$3\\\"\\n    \\n    if [ -d \\\"$FRAMEWORK_PATH\\\" ] && [ -f \\\"$FRAMEWORK_PATH/$BINARY_NAME\\\" ]; then\\n        local DSYM_OUTPUT=\\\"$DSYM_DEST/${FRAMEWORK_NAME}.framework.dSYM\\\"\\n        echo \\\"Generating dSYM for ${FRAMEWORK_NAME} from $FRAMEWORK_PATH/$BINARY_NAME\\\"\\n        echo \\\"  Output: $DSYM_OUTPUT\\\"\\n        if dsymutil \\\"$FRAMEWORK_PATH/$BINARY_NAME\\\" -o \\\"$DSYM_OUTPUT\\\" 2>&1; then\\n            echo \\\"  ✅ Successfully generated ${FRAMEWORK_NAME}.framework.dSYM\\\"\\n        else\\n            echo \\\"  ⚠️ Warning: Failed to generate dSYM for ${FRAMEWORK_NAME}\\\"\\n        fi\\n    else\\n        echo \\\"  ⚠️ Framework not found: $FRAMEWORK_PATH/$BINARY_NAME\\\"\\n    fi\\n}\\n\\n# Function to copy dSYM if it exists\\ncopy_dsym() {\\n    local DSYM_PATH=\\\"$1\\\"\\n    local FRAMEWORK_NAME=\\\"$2\\\"\\n    if [ -d \\\"$DSYM_PATH\\\" ]; then\\n        local DSYM_OUTPUT=\\\"$DSYM_DEST/${FRAMEWORK_NAME}.framework.dSYM\\\"\\n        echo \\\"Copying dSYM: $DSYM_PATH to $DSYM_OUTPUT\\\"\\n        cp -R \\\"$DSYM_PATH\\\" \\\"$DSYM_OUTPUT\\\" || echo \\\"  ⚠️ Failed to copy dSYM\\\"\\n    fi\\n}\\n\\n# Check PackageFrameworks directory (where SPM frameworks are typically placed)\\nPACKAGE_FRAMEWORKS=\\\"${BUILT_PRODUCTS_DIR}/PackageFrameworks\\\"\\nif [ -d \\\"$PACKAGE_FRAMEWORKS\\\" ]; then\\n    echo \\\"Checking PackageFrameworks directory: $PACKAGE_FRAMEWORKS\\\"\\n    ls -la \\\"$PACKAGE_FRAMEWORKS\\\" || true\\n    \\n    # GoogleMobileAds\\n    if [ -d \\\"$PACKAGE_FRAMEWORKS/GoogleMobileAds.framework\\\" ]; then\\n        generate_dsym \\\"$PACKAGE_FRAMEWORKS/GoogleMobileAds.framework\\\" \\\"GoogleMobileAds\\\" \\\"GoogleMobileAds\\\"\\n    else\\n        echo \\\"  ⚠️ GoogleMobileAds.framework not found in PackageFrameworks\\\"\\n    fi\\n    \\n    # UserMessagingPlatform\\n    if [ -d \\\"$PACKAGE_FRAMEWORKS/UserMessagingPlatform.framework\\\" ]; then\\n        generate_dsym \\\"$PACKAGE_FRAMEWORKS/UserMessagingPlatform.framework\\\" \\\"UserMessagingPlatform\\\" \\\"UserMessagingPlatform\\\"\\n    else\\n        echo \\\"  ⚠️ UserMessagingPlatform.framework not found in PackageFrameworks\\\"\\n    fi\\nelse\\n    echo \\\"⚠️ PackageFrameworks directory not found: $PACKAGE_FRAMEWORKS\\\"\\nfi\\n\\n# Also check in Frameworks directory\\nif [ -d \\\"${BUILT_PRODUCTS_DIR}/Frameworks\\\" ]; then\\n    echo \\\"Checking Frameworks directory: ${BUILT_PRODUCTS_DIR}/Frameworks\\\"\\n    if [ -d \\\"${BUILT_PRODUCTS_DIR}/Frameworks/GoogleMobileAds.framework\\\" ]; then\\n        generate_dsym \\\"${BUILT_PRODUCTS_DIR}/Frameworks/GoogleMobileAds.framework\\\" \\\"GoogleMobileAds\\\" \\\"GoogleMobileAds\\\"\\n    fi\\n    if [ -d \\\"${BUILT_PRODUCTS_DIR}/Frameworks/UserMessagingPlatform.framework\\\" ]; then\\n        generate_dsym \\\"${BUILT_PRODUCTS_DIR}/Frameworks/UserMessagingPlatform.framework\\\" \\\"UserMessagingPlatform\\\" \\\"UserMessagingPlatform\\\"\\n    fi\\nfi\\n\\n# Search for existing dSYM files in DerivedData\\nDERIVED_DATA=\\\"${BUILD_ROOT}/../..\\\"\\nif [ -d \\\"$DERIVED_DATA\\\" ]; then\\n    echo \\\"Searching DerivedData for existing dSYM files: $DERIVED_DATA\\\"\\n    # Search in SourcePackages artifacts\\n    find \\\"$DERIVED_DATA\\\" -path \\\"*/SourcePackages/artifacts/*/GoogleMobileAds.framework.dSYM\\\" -type d 2>/dev/null | while read DSYM_PATH; do\\n        copy_dsym \\\"$DSYM_PATH\\\" \\\"GoogleMobileAds\\\"\\n    done\\n    \\n    find \\\"$DERIVED_DATA\\\" -path \\\"*/SourcePackages/artifacts/*/UserMessagingPlatform.framework.dSYM\\\" -type d 2>/dev/null | while read DSYM_PATH; do\\n        copy_dsym \\\"$DSYM_PATH\\\" \\\"UserMessagingPlatform\\\"\\n    done\\nfi\\n\\n# Search in build directory for existing dSYM files\\necho \\\"Searching for existing dSYM files in build directory...\\\"\\nfind \\\"${BUILT_PRODUCTS_DIR}\\\" -name \\\"GoogleMobileAds.framework.dSYM\\\" -type d 2>/dev/null | while read DSYM_PATH; do\\n    copy_dsym \\\"$DSYM_PATH\\\" \\\"GoogleMobileAds\\\"\\ndone\\n\\nfind \\\"${BUILT_PRODUCTS_DIR}\\\" -name \\\"UserMessagingPlatform.framework.dSYM\\\" -type d 2>/dev/null | while read DSYM_PATH; do\\n    copy_dsym \\\"$DSYM_PATH\\\" \\\"UserMessagingPlatform\\\"\\ndone\\n\\n# Verify final dSYM files exist\\necho \\\"\\\"\\necho \\\"=== Verifying dSYM files ===\\\"\\nif [ -d \\\"$DSYM_DEST/GoogleMobileAds.framework.dSYM\\\" ]; then\\n    echo \\\"✅ GoogleMobileAds.framework.dSYM exists\\\"\\nelse\\n    echo \\\"❌ GoogleMobileAds.framework.dSYM NOT found\\\"\\nfi\\n\\nif [ -d \\\"$DSYM_DEST/UserMessagingPlatform.framework.dSYM\\\" ]; then\\n    echo \\\"✅ UserMessagingPlatform.framework.dSYM exists\\\"\\nelse\\n    echo \\\"❌ UserMessagingPlatform.framework.dSYM NOT found\\\"\\nfi\\n\\necho \\\"=== dSYM Generation Script Completed ===\\\"\\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		EF9A2EB32E78B7390047B4FD /* Sources */ = {
@@ -432,7 +432,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Ritual7/Ritual7.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = AYZ9SP42W8;
 				ENABLE_PREVIEWS = YES;
@@ -476,7 +476,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Ritual7/Ritual7.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = AYZ9SP42W8;
 				ENABLE_PREVIEWS = YES;
@@ -518,7 +518,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = AYZ9SP42W8;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -543,7 +543,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = AYZ9SP42W8;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -567,7 +567,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = AYZ9SP42W8;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -591,7 +591,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = AYZ9SP42W8;
 				GENERATE_INFOPLIST_FILE = YES;

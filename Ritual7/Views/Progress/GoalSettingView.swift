@@ -135,6 +135,7 @@ struct GoalSettingView: View {
                 goalManager.setWeeklyGoal(newGoal)
                 showingWeeklyPicker = false
             }
+            .iPadOptimizedSheetPresentation()
         }
     }
     
@@ -229,6 +230,7 @@ struct GoalSettingView: View {
                 goalManager.setMonthlyGoal(newGoal)
                 showingMonthlyPicker = false
             }
+            .iPadOptimizedSheetPresentation()
         }
     }
     

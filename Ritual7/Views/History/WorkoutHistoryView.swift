@@ -258,15 +258,19 @@ struct WorkoutHistoryView: View {
                 customStartDate: $customStartDate,
                 customEndDate: $customEndDate
             )
+                .iPadOptimizedSheetPresentation()
         }
         .sheet(isPresented: $showingExportSheet) {
             ExportOptionsView(sessions: filteredSessions)
+                .iPadOptimizedSheetPresentation()
         }
         .sheet(isPresented: $showingPatterns) {
             WorkoutPatternsView(sessions: store.sessions)
+                .iPadOptimizedSheetPresentation()
         }
         .sheet(item: $selectedSession) { session in
             WorkoutSessionDetailView(session: session)
+                .iPadOptimizedSheetPresentation()
         }
         // Agent 25: Confirmation dialogs
         .confirmationDialog("Delete Workout", isPresented: $showingDeleteConfirmation, titleVisibility: .visible) {

@@ -263,6 +263,7 @@ struct WorkoutContentView: View {
                 WorkoutTimerView(engine: exerciseEngine ?? engine, store: store)
             }
             .interactiveDismissDisabled((exerciseEngine ?? engine).phase != .idle && (exerciseEngine ?? engine).phase != .completed)
+            .iPadOptimizedSheetPresentation()
             .onAppear {
                 // Ensure engine is ready and configured
                 let currentEngine = exerciseEngine ?? engine
@@ -286,19 +287,23 @@ struct WorkoutContentView: View {
             NavigationStack {
                 ExerciseListView()
             }
+            .iPadOptimizedSheetPresentation()
         }
         .sheet(isPresented: $showHistory) {
             NavigationStack {
                 WorkoutHistoryView()
                     .environmentObject(store)
             }
+            .iPadOptimizedSheetPresentation()
         }
         .sheet(isPresented: $showCustomization) {
             WorkoutCustomizationView()
                 .environmentObject(preferencesStore)
+            .iPadOptimizedSheetPresentation()
         }
         .sheet(item: $showAchievementCelebration) { achievement in
             AchievementCelebrationView(achievement: achievement)
+                .iPadOptimizedSheetPresentation()
         }
         .sheet(isPresented: $showAnalytics) {
             if let analytics = analytics, let manager = achievementManager {
@@ -308,6 +313,7 @@ struct WorkoutContentView: View {
                         .environmentObject(analytics)
                         .environmentObject(manager)
                 }
+                .iPadOptimizedSheetPresentation()
             }
         }
         .sheet(isPresented: $showAchievements) {
@@ -315,6 +321,7 @@ struct WorkoutContentView: View {
                 NavigationStack {
                     AchievementsView(achievementManager: manager)
                 }
+                .iPadOptimizedSheetPresentation()
             }
         }
         .sheet(isPresented: $showInsights) {
@@ -322,6 +329,7 @@ struct WorkoutContentView: View {
                 NavigationStack {
                     InsightsView(analytics: analytics)
                 }
+                .iPadOptimizedSheetPresentation()
             }
         }
         .sheet(isPresented: $showGoals) {
@@ -329,12 +337,14 @@ struct WorkoutContentView: View {
                 NavigationStack {
                     GoalSettingView(goalManager: goalManager)
                 }
+                .iPadOptimizedSheetPresentation()
             }
         }
         .sheet(isPresented: $showMeditation) {
             NavigationStack {
                 MeditationTimerView()
             }
+            .iPadOptimizedSheetPresentation()
         }
         .undoToast() // Agent 25: Enable undo toast notifications
         // Enhanced theme transitions with elegant crossfade

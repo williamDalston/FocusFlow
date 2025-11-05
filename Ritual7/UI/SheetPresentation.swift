@@ -1,11 +1,13 @@
 import SwiftUI
 
-/// Enhanced sheet presentation with smooth modal transitions
+/// Enhanced sheet presentation with smooth modal transitions and iPad optimization
 struct SmoothSheetPresentation: ViewModifier {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
+    @ViewBuilder
     func body(content: Content) -> some View {
-        content
+        let baseContent = content
             .background(
                 ZStack {
                     Color(UIColor.systemBackground)
@@ -23,7 +25,11 @@ struct SmoothSheetPresentation: ViewModifier {
             )
             .applySheetPresentationModifiers()
             .presentationDragIndicator(.visible)
-            .presentationDetents([.large])
+            .presentationDetents(
+                horizontalSizeClass == .regular
+                    ? [.fraction(0.85), .large]  // iPad: 85% or full screen (draggable)
+                    : [.large]  // iPhone: full screen
+            )
             .transition(.asymmetric(
                 insertion: .move(edge: .bottom)
                     .combined(with: .opacity)
@@ -38,6 +44,13 @@ struct SmoothSheetPresentation: ViewModifier {
                     : AnimationConstants.elegantSpring,
                 value: UUID()
             )
+        
+        if #available(iOS 16.4, *) {
+            baseContent
+                .presentationBackgroundInteraction(.enabled(upThrough: .fraction(0.85)))
+        } else {
+            baseContent
+        }
     }
 }
 

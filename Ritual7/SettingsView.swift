@@ -125,9 +125,11 @@ struct SettingsView: View {
             }
             .sheet(isPresented: $showShare) {
                 ActivityView(activityItems: shareItems).ignoresSafeArea()
+                    .iPadOptimizedSheetPresentation()
             }
             .sheet(isPresented: $showHealthKitPermissions) {
                 HealthKitPermissionsView()
+                    .iPadOptimizedSheetPresentation()
             }
             .onAppear {
                 // Appearance seed

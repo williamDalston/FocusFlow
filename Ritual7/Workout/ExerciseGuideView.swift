@@ -9,6 +9,7 @@ struct ExerciseGuideView: View {
     @State private var currentExercise: Exercise
     @State private var currentIndexState: Int
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @EnvironmentObject private var theme: ThemeStore
     
     init(exercise: Exercise, exercises: [Exercise]? = nil, currentIndex: Int? = nil) {
@@ -24,126 +25,13 @@ struct ExerciseGuideView: View {
             ThemeBackground()
             
             ScrollView {
-                VStack(spacing: DesignSystem.Spacing.xl) {
-                    // Exercise header
-                    VStack(spacing: DesignSystem.Spacing.lg) {
-                        Image(systemName: currentExercise.icon)
-                            .font(.system(size: DesignSystem.IconSize.huge * 1.25, weight: .bold))
-                            .foregroundStyle(Theme.accentA)
-                            .accessibilityLabel("Exercise icon for \(currentExercise.name)")
-                        
-                        Text(currentExercise.name)
-                            .font(Theme.largeTitle)
-                            .foregroundStyle(Theme.textPrimary)
-                            .accessibilityAddTraits(.isHeader)
-                        
-                        Text(currentExercise.description)
-                            .font(Theme.title3)
-                            .foregroundStyle(.secondary)
-                            .multilineTextAlignment(.center)
-                        
-                        // Navigation buttons if exercises list is provided
-                        if let exercises = exercises, exercises.count > 1 {
-                            VStack(spacing: DesignSystem.Spacing.sm) {
-                                // Exercise counter - more prominent and centered
-                                Text("\(currentIndexState + 1) of \(exercises.count)")
-                                    .font(Theme.subheadline.weight(.semibold))
-                                    .foregroundStyle(Theme.textPrimary)
-                                    .monospacedDigit()
-                                    .padding(.horizontal, DesignSystem.Spacing.md)
-                                    .padding(.vertical, DesignSystem.Spacing.xs)
-                                    .background(
-                                        Capsule()
-                                            .fill(Theme.accentA.opacity(DesignSystem.Opacity.subtle * 0.5))
-                                    )
-                                
-                                // Navigation buttons
-                                HStack(spacing: DesignSystem.Spacing.sm) {
-                                    // Previous button
-                                    Button {
-                                        if currentIndexState > 0 {
-                                            withAnimation(.easeInOut(duration: 0.3)) {
-                                                currentIndexState -= 1
-                                                currentExercise = exercises[currentIndexState]
-                                            }
-                                            Haptics.tap()
-                                        }
-                                    } label: {
-                                        HStack(spacing: DesignSystem.Spacing.xs) {
-                                            Image(systemName: "chevron.left")
-                                                .font(.system(size: DesignSystem.IconSize.medium, weight: .semibold))
-                                            Text("Previous")
-                                                .font(Theme.subheadline.weight(.semibold))
-                                        }
-                                        .foregroundStyle(currentIndexState > 0 ? Theme.accentA : .secondary)
-                                        .frame(maxWidth: .infinity)
-                                        .frame(height: DesignSystem.ButtonSize.large.height)
-                                    }
-                                    .buttonStyle(SecondaryGlassButtonStyle())
-                                    .disabled(currentIndexState <= 0)
-                                    .accessibilityLabel("Previous exercise")
-                                    .accessibilityTouchTarget()
-                                    
-                                    // Next button
-                                    Button {
-                                        if currentIndexState < exercises.count - 1 {
-                                            withAnimation(.easeInOut(duration: 0.3)) {
-                                                currentIndexState += 1
-                                                currentExercise = exercises[currentIndexState]
-                                            }
-                                            Haptics.tap()
-                                        }
-                                    } label: {
-                                        HStack(spacing: DesignSystem.Spacing.xs) {
-                                            Text("Next")
-                                                .font(Theme.subheadline.weight(.semibold))
-                                            Image(systemName: "chevron.right")
-                                                .font(.system(size: DesignSystem.IconSize.medium, weight: .semibold))
-                                        }
-                                        .foregroundStyle(currentIndexState < exercises.count - 1 ? Theme.accentA : .secondary)
-                                        .frame(maxWidth: .infinity)
-                                        .frame(height: DesignSystem.ButtonSize.large.height)
-                                    }
-                                    .buttonStyle(SecondaryGlassButtonStyle())
-                                    .disabled(currentIndexState >= exercises.count - 1)
-                                    .accessibilityLabel("Next exercise")
-                                    .accessibilityTouchTarget()
-                                }
-                            }
-                            .padding(.top, DesignSystem.Spacing.lg)
-                            .padding(.horizontal, DesignSystem.Spacing.md)
-                        }
-                    }
-                    .padding(.top, DesignSystem.Spacing.xxl)
-                    .frame(maxWidth: .infinity)
-                    .accessibilityElement(children: .combine)
-                    
-                    // Instructions card
-                    instructionsCard
-                    
-                    // Breathing cues card
-                    breathingCard
-                    
-                    // Muscle groups card
-                    muscleGroupsCard
-                    
-                    // Common mistakes card
-                    commonMistakesCard
-                    
-                    // Modifications card
-                    modificationsCard
-                    
-                    // Safety warnings card
-                    safetyCard
-                    
-                    // Tips card
-                    tipsCard
-                    
-                    // Duration info
-                    durationCard
+                if horizontalSizeClass == .regular {
+                    // iPad: Two-column layout for better use of space
+                    iPadLayout
+                } else {
+                    // iPhone: Single column layout
+                    iPhoneLayout
                 }
-                .contentPadding()
-                .padding(.bottom, DesignSystem.Spacing.xxl)
             }
         }
         .navigationBarTitleDisplayMode(.inline)
@@ -217,6 +105,187 @@ struct ExerciseGuideView: View {
         .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
         .accessibilityElement(children: .contain)
     }
+    
+    // MARK: - iPad Layout (Two-Column)
+    
+    private var iPadLayout: some View {
+        VStack(spacing: DesignSystem.Spacing.xl) {
+            // Exercise header (full width)
+            exerciseHeader
+                .padding(.bottom, DesignSystem.Spacing.lg)
+            
+            // Two-column content layout
+            HStack(alignment: .top, spacing: DesignSystem.Spacing.xl) {
+                // Left column
+                VStack(spacing: DesignSystem.Spacing.xl) {
+                    instructionsCard
+                    breathingCard
+                    muscleGroupsCard
+                    durationCard
+                }
+                .frame(maxWidth: .infinity)
+                
+                // Right column
+                VStack(spacing: DesignSystem.Spacing.xl) {
+                    commonMistakesCard
+                    modificationsCard
+                    safetyCard
+                    tipsCard
+                }
+                .frame(maxWidth: .infinity)
+            }
+        }
+        .contentPadding()
+        .padding(.bottom, DesignSystem.Spacing.xxl)
+        .frame(maxWidth: 1200)  // Max width for optimal reading
+        .frame(maxWidth: .infinity)  // Center horizontally
+    }
+    
+    // MARK: - iPhone Layout (Single Column)
+    
+    private var iPhoneLayout: some View {
+        VStack(spacing: DesignSystem.Spacing.xl) {
+            // Exercise header
+            exerciseHeader
+            
+            // Instructions card
+            instructionsCard
+            
+            // Breathing cues card
+            breathingCard
+            
+            // Muscle groups card
+            muscleGroupsCard
+            
+            // Common mistakes card
+            commonMistakesCard
+            
+            // Modifications card
+            modificationsCard
+            
+            // Safety warnings card
+            safetyCard
+            
+            // Tips card
+            tipsCard
+            
+            // Duration info
+            durationCard
+        }
+        .contentPadding()
+        .padding(.bottom, DesignSystem.Spacing.xxl)
+    }
+    
+    // MARK: - Exercise Header
+    
+    private var exerciseHeader: some View {
+        VStack(spacing: DesignSystem.Spacing.lg) {
+            Image(systemName: currentExercise.icon)
+                .font(.system(
+                    size: horizontalSizeClass == .regular 
+                        ? DesignSystem.IconSize.huge * 1.75  // Larger on iPad
+                        : DesignSystem.IconSize.huge * 1.25,
+                    weight: .bold
+                ))
+                .foregroundStyle(Theme.accentA)
+                .accessibilityLabel("Exercise icon for \(currentExercise.name)")
+            
+            Text(currentExercise.name)
+                .font(horizontalSizeClass == .regular 
+                    ? Theme.largeTitle.weight(.bold)  // Bolder on iPad
+                    : Theme.largeTitle
+                )
+                .foregroundStyle(Theme.textPrimary)
+                .accessibilityAddTraits(.isHeader)
+            
+            Text(currentExercise.description)
+                .font(horizontalSizeClass == .regular 
+                    ? Theme.title2  // Larger on iPad
+                    : Theme.title3
+                )
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+            
+            // Navigation buttons if exercises list is provided
+            if let exercises = exercises, exercises.count > 1 {
+                VStack(spacing: DesignSystem.Spacing.sm) {
+                    // Exercise counter - more prominent and centered
+                    Text("\(currentIndexState + 1) of \(exercises.count)")
+                        .font(Theme.subheadline.weight(.semibold))
+                        .foregroundStyle(Theme.textPrimary)
+                        .monospacedDigit()
+                        .padding(.horizontal, DesignSystem.Spacing.md)
+                        .padding(.vertical, DesignSystem.Spacing.xs)
+                        .background(
+                            Capsule()
+                                .fill(Theme.accentA.opacity(DesignSystem.Opacity.subtle * 0.5))
+                        )
+                    
+                    // Navigation buttons (only show on iPhone, iPad uses toolbar)
+                    if horizontalSizeClass != .regular {
+                        HStack(spacing: DesignSystem.Spacing.sm) {
+                            // Previous button
+                            Button {
+                                if currentIndexState > 0 {
+                                    withAnimation(.easeInOut(duration: 0.3)) {
+                                        currentIndexState -= 1
+                                        currentExercise = exercises[currentIndexState]
+                                    }
+                                    Haptics.tap()
+                                }
+                            } label: {
+                                HStack(spacing: DesignSystem.Spacing.xs) {
+                                    Image(systemName: "chevron.left")
+                                        .font(.system(size: DesignSystem.IconSize.medium, weight: .semibold))
+                                    Text("Previous")
+                                        .font(Theme.subheadline.weight(.semibold))
+                                }
+                                .foregroundStyle(currentIndexState > 0 ? Theme.accentA : .secondary)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: DesignSystem.ButtonSize.large.height)
+                            }
+                            .buttonStyle(SecondaryGlassButtonStyle())
+                            .disabled(currentIndexState <= 0)
+                            .accessibilityLabel("Previous exercise")
+                            .accessibilityTouchTarget()
+                            
+                            // Next button
+                            Button {
+                                if currentIndexState < exercises.count - 1 {
+                                    withAnimation(.easeInOut(duration: 0.3)) {
+                                        currentIndexState += 1
+                                        currentExercise = exercises[currentIndexState]
+                                    }
+                                    Haptics.tap()
+                                }
+                            } label: {
+                                HStack(spacing: DesignSystem.Spacing.xs) {
+                                    Text("Next")
+                                        .font(Theme.subheadline.weight(.semibold))
+                                    Image(systemName: "chevron.right")
+                                        .font(.system(size: DesignSystem.IconSize.medium, weight: .semibold))
+                                }
+                                .foregroundStyle(currentIndexState < exercises.count - 1 ? Theme.accentA : .secondary)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: DesignSystem.ButtonSize.large.height)
+                            }
+                            .buttonStyle(SecondaryGlassButtonStyle())
+                            .disabled(currentIndexState >= exercises.count - 1)
+                            .accessibilityLabel("Next exercise")
+                            .accessibilityTouchTarget()
+                        }
+                    }
+                }
+                .padding(.top, DesignSystem.Spacing.lg)
+                .padding(.horizontal, DesignSystem.Spacing.md)
+            }
+        }
+        .padding(.top, DesignSystem.Spacing.xxl)
+        .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .combine)
+    }
+    
+    // MARK: - Card Views
     
     private var instructionsCard: some View {
         GlassCard(material: .ultraThinMaterial) {

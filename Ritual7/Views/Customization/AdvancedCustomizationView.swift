@@ -85,6 +85,7 @@ struct AdvancedCustomizationView: View {
                         exercise: exercise,
                         workout: $workout
                     )
+                    .iPadOptimizedSheetPresentation()
                 }
             }
         }
