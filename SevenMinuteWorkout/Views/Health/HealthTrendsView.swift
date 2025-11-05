@@ -111,14 +111,14 @@ struct HealthTrendsView: View {
             if let insight = currentInsight {
                 // Summary Cards
                 HStack(spacing: 16) {
-                    InsightCard(
+                    HealthTrendsInsightCard(
                         title: "Workouts",
                         value: "\(insight.workoutsCount)",
                         icon: "figure.run",
                         color: Theme.accentA
                     )
                     
-                    InsightCard(
+                    HealthTrendsInsightCard(
                         title: "Calories",
                         value: "\(Int(insight.totalCaloriesBurned))",
                         icon: "flame.fill",
@@ -211,7 +211,7 @@ struct HealthTrendsView: View {
                             .foregroundStyle(Theme.textPrimary)
                         
                         ForEach(insight.recommendations) { recommendation in
-                            RecommendationCard(recommendation: recommendation)
+                            HealthTrendsRecommendationCard(recommendation: recommendation)
                         }
                     }
                 }
@@ -309,7 +309,7 @@ struct HealthTrendsView: View {
                             .foregroundStyle(Theme.textPrimary)
                         
                         ForEach(analysis.recommendations) { recommendation in
-                            RecommendationCard(recommendation: recommendation)
+                            HealthTrendsRecommendationCard(recommendation: recommendation)
                         }
                     }
                 }
@@ -492,7 +492,7 @@ struct HealthTrendsView: View {
 
 // MARK: - Supporting Views
 
-private struct InsightCard: View {
+private struct HealthTrendsInsightCard: View {
     let title: String
     let value: String
     let icon: String
@@ -519,7 +519,7 @@ private struct InsightCard: View {
     }
 }
 
-private struct RecommendationCard: View {
+private struct HealthTrendsRecommendationCard: View {
     let title: String
     let message: String
     let action: String?
@@ -583,7 +583,7 @@ private struct RecommendationCard: View {
     }
 }
 
-extension RecommendationCard.Priority {
+extension HealthTrendsRecommendationCard.Priority {
     init(from priority: HealthRecommendation.Priority) {
         switch priority {
         case .low:

@@ -64,7 +64,7 @@ enum PosterExporter {
     ) -> UIImage {
         let minutes = Int(duration) / 60
         let seconds = Int(duration) % 60
-        let text = "Just completed a 7-minute workout! 💪\n\n⏱️ \(minutes):\(String(format: "%02d", seconds))\n🏃 \(exercisesCompleted)/12 exercises"
+        let text = "Just completed Ritual7! 💪\n\n⏱️ \(minutes):\(String(format: "%02d", seconds))\n🏃 \(exercisesCompleted)/12 exercises"
         
         return image(text: text, date: date, streak: streak, scale: scale)
     }

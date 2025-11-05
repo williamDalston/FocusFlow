@@ -4,7 +4,7 @@ import HealthKit
 /// Agent 13: Recovery Analyzer - Analyzes recovery needs and training load
 /// Provides recovery time suggestions and tracks training load
 @MainActor
-class RecoveryAnalyzer {
+class RecoveryAnalyzer: ObservableObject {
     static let shared = RecoveryAnalyzer()
     
     private let healthStore = HKHealthStore()
@@ -17,7 +17,7 @@ class RecoveryAnalyzer {
     /// Analyzes recovery needs based on recent workouts
     func analyzeRecoveryNeeds() async throws -> RecoveryAnalysis {
         guard healthKitManager.isHealthKitAvailable else {
-            throw HealthKitError.notAvailable
+            throw HealthKitManager.HealthKitError.notAvailable
         }
         
         // Get recent workouts (last 7 days)
@@ -248,9 +248,7 @@ class RecoveryAnalyzer {
     
     /// Fetches recent workouts
     private func fetchRecentWorkouts(days: Int) async throws -> [HKWorkout] {
-        guard let workoutType = HKObjectType.workoutType() else {
-            return []
-        }
+        let workoutType = HKObjectType.workoutType()
         
         let endDate = Date()
         let startDate = Calendar.current.date(byAdding: .day, value: -days, to: endDate) ?? endDate

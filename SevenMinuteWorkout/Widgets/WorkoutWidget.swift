@@ -272,7 +272,6 @@ struct StatView: View {
 
 // MARK: - Widget Bundle
 
-@main
 struct WorkoutWidgetBundle: WidgetBundle {
     var body: some Widget {
         WorkoutWidget()

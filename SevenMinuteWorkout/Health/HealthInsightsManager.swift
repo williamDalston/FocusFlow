@@ -28,7 +28,7 @@ class HealthInsightsManager: ObservableObject {
     /// Analyzes workout impact on health metrics
     func analyzeWorkoutImpact() async throws -> HealthInsight {
         guard healthKitManager.isHealthKitAvailable else {
-            throw HealthKitError.notAvailable
+            throw HealthKitManager.HealthKitError.notAvailable
         }
         
         // Get recent workouts
@@ -76,9 +76,7 @@ class HealthInsightsManager: ObservableObject {
     
     /// Fetches recent workouts from HealthKit
     private func fetchRecentWorkouts(days: Int) async throws -> [HKWorkout] {
-        guard let workoutType = HKObjectType.workoutType() else {
-            return []
-        }
+        let workoutType = HKObjectType.workoutType()
         
         let status = healthStore.authorizationStatus(for: workoutType)
         guard status == .sharingAuthorized else {

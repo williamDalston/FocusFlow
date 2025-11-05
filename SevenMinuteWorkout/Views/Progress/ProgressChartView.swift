@@ -70,7 +70,7 @@ struct ProgressChartView: View {
         )
         .cardShadow()
         .sheet(isPresented: $showingExportSheet) {
-            ChartExportSheet(analytics: analytics, timeframe: selectedTimeframe)
+            ProgressChartExportSheet(analytics: analytics, timeframe: selectedTimeframe)
         }
     }
     
@@ -392,7 +392,7 @@ struct WorkoutFrequencyChartView: View {
 
 // MARK: - Agent 10: Chart Export Sheet
 
-private struct ChartExportSheet: View {
+private struct ProgressChartExportSheet: View {
     @ObservedObject var analytics: WorkoutAnalytics
     let timeframe: ProgressChartView.Timeframe
     @Environment(\.dismiss) private var dismiss

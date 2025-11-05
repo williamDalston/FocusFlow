@@ -20,7 +20,7 @@ final class InterstitialAdManager: NSObject, ObservableObject, FullScreenContent
 
     private var lastShown: Date?
 
-    private init() {
+    private override init() {
         self.unitID = AdConfig.interstitialUnit
         super.init()
         // Preload ad on initialization

@@ -152,12 +152,17 @@ final class WorkoutEngine: ObservableObject {
     ///   - sound: Sound feedback provider (defaults to SoundManager)
     init(
         exercises: [Exercise] = Exercise.sevenMinuteWorkout,
-        timer: WorkoutTimerProtocol = WorkoutTimer(),
+        timer: WorkoutTimerProtocol? = nil,
         haptics: HapticFeedbackProvider = DefaultHapticFeedback(),
         sound: SoundFeedbackProvider = DefaultSoundFeedback()
     ) {
         self.exercises = exercises
-        self.timer = timer
+        // Initialize timer on main actor if not provided
+        if let timer = timer {
+            self.timer = timer
+        } else {
+            self.timer = WorkoutTimer()
+        }
         self.haptics = haptics
         self.sound = sound
         

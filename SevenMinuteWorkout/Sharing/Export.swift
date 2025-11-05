@@ -1,6 +1,7 @@
 import SwiftUI
 
-struct ExportButton: View {
+/// Legacy export button - use ExportButton from WorkoutHistoryView instead
+private struct LegacyExportButton: View {
     @EnvironmentObject private var workoutStore: WorkoutStore
 
     var body: some View {

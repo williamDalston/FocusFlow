@@ -2,6 +2,7 @@ import Foundation
 import Combine
 
 /// Protocol for workout timer functionality to enable dependency injection and testing
+@MainActor
 protocol WorkoutTimerProtocol: AnyObject {
     /// Callback when timer updates
     var onUpdate: ((TimeInterval) -> Void)? { get set }

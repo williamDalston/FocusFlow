@@ -1,4 +1,4 @@
-# app-ads.txt file for One-Tap Gratitude iOS App
+# app-ads.txt file for Ritual7 iOS App
 # This file helps prevent ad fraud and ensures proper revenue attribution
 
 # Google AdMob (Primary ad network)

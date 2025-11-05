@@ -52,6 +52,11 @@
 			path = SevenMinuteWorkout;
 			sourceTree = "<group>";
 		};
+		EF9A2F502E79AAEC0047B4FD /* SevenMinuteWorkoutTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = SevenMinuteWorkoutTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				EF9A2EB92E78B7390047B4FD /* SevenMinuteWorkout */,
+				EF9A2F502E79AAEC0047B4FD /* SevenMinuteWorkoutTests */,
 				EF9A2EB82E78B7390047B4FD /* Products */,
 			);
 			sourceTree = "<group>";
@@ -136,6 +142,9 @@
 			);
 			dependencies = (
 				EF9A2EC72E78B73A0047B4FD /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				EF9A2F502E79AAEC0047B4FD /* SevenMinuteWorkoutTests */,
 			);
 			name = SevenMinuteWorkoutTests;
 			packageProductDependencies = (

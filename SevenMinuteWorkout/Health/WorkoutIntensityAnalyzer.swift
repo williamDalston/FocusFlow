@@ -19,7 +19,7 @@ class WorkoutIntensityAnalyzer {
         let restingHR = restingHeartRate ?? 60
         
         // Calculate maximum heart rate (220 - age)
-        let maxHeartRate = 220 - userAge
+        let maxHeartRate = Double(220 - userAge)
         
         // Calculate heart rate reserve (HRR)
         let heartRateReserve = maxHeartRate - restingHR
@@ -36,7 +36,7 @@ class WorkoutIntensityAnalyzer {
             zone2: HeartRateZone(range: zone1Max...zone2Max, name: "Aerobic", intensity: .light),
             zone3: HeartRateZone(range: zone2Max...zone3Max, name: "Aerobic", intensity: .moderate),
             zone4: HeartRateZone(range: zone3Max...zone4Max, name: "Anaerobic", intensity: .hard),
-            zone5: HeartRateZone(range: zone4Max...Double(maxHeartRate), name: "Maximum", intensity: .maximum),
+            zone5: HeartRateZone(range: zone4Max...maxHeartRate, name: "Maximum", intensity: .maximum),
             maxHeartRate: maxHeartRate,
             restingHeartRate: restingHR
         )
@@ -130,7 +130,7 @@ class WorkoutIntensityAnalyzer {
     /// Analyzes time spent in each heart rate zone during a workout
     func analyzeTimeInZones(workout: HKWorkout) async throws -> ZoneAnalysis {
         guard let hrType = HKQuantityType.quantityType(forIdentifier: .heartRate) else {
-            throw HealthKitError.notAvailable
+            throw HealthKitManager.HealthKitError.notAvailable
         }
         
         // Query heart rate samples for this workout
@@ -140,7 +140,7 @@ class WorkoutIntensityAnalyzer {
             options: .strictStartDate
         )
         
-        let samples = try await withCheckedThrowingContinuation { continuation in
+        let samples: [HKQuantitySample] = try await withCheckedThrowingContinuation { continuation in
             let query = HKSampleQuery(
                 sampleType: hrType,
                 predicate: predicate,

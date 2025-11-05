@@ -1,0 +1,1009 @@
+{
+  "" : {
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/SevenMinuteWorkout-primary.dia",
+    "emit-module-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/SevenMinuteWorkout-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/SevenMinuteWorkout-primary-emit-module.dia",
+    "pch" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/SevenMinuteWorkout-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/SevenMinuteWorkout-primary.swiftdeps"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Analytics/AchievementManager.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AchievementManager.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AchievementManager.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AchievementManager.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AchievementManager.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AchievementManager.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AchievementManager.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AchievementManager.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AchievementManager~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Analytics/GoalManager.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GoalManager.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GoalManager.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GoalManager.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GoalManager.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GoalManager.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GoalManager.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GoalManager.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GoalManager~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Analytics/PredictiveAnalytics.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PredictiveAnalytics.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PredictiveAnalytics.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PredictiveAnalytics.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PredictiveAnalytics.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PredictiveAnalytics.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PredictiveAnalytics.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PredictiveAnalytics.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PredictiveAnalytics~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Analytics/TrendAnalyzer.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/TrendAnalyzer.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/TrendAnalyzer.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/TrendAnalyzer.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/TrendAnalyzer.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/TrendAnalyzer.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/TrendAnalyzer.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/TrendAnalyzer.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/TrendAnalyzer~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Analytics/WorkoutAnalytics.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutAnalytics.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutAnalytics.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutAnalytics.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutAnalytics.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutAnalytics.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutAnalytics.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutAnalytics.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutAnalytics~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/AppDelegate.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AppDelegate.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AppDelegate.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AppDelegate.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AppDelegate.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AppDelegate.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AppDelegate.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AppDelegate.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AppDelegate~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Health/HealthInsightsManager.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthInsightsManager.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthInsightsManager.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthInsightsManager.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthInsightsManager.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthInsightsManager.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthInsightsManager.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthInsightsManager.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthInsightsManager~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Health/HealthKitManager.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthKitManager.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthKitManager.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthKitManager.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthKitManager.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthKitManager.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthKitManager.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthKitManager.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthKitManager~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Health/HealthKitStore.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthKitStore.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthKitStore.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthKitStore.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthKitStore.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthKitStore.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthKitStore.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthKitStore.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthKitStore~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Health/RecoveryAnalyzer.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/RecoveryAnalyzer.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/RecoveryAnalyzer.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/RecoveryAnalyzer.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/RecoveryAnalyzer.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/RecoveryAnalyzer.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/RecoveryAnalyzer.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/RecoveryAnalyzer.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/RecoveryAnalyzer~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Health/WorkoutIntensityAnalyzer.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutIntensityAnalyzer.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutIntensityAnalyzer.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutIntensityAnalyzer.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutIntensityAnalyzer.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutIntensityAnalyzer.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutIntensityAnalyzer.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutIntensityAnalyzer.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutIntensityAnalyzer~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/LaunchScreen.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/LaunchScreen.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/LaunchScreen.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/LaunchScreen.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/LaunchScreen.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/LaunchScreen.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/LaunchScreen.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/LaunchScreen.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/LaunchScreen~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Models/CustomWorkout.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/CustomWorkout.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/CustomWorkout.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/CustomWorkout.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/CustomWorkout.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/CustomWorkout.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/CustomWorkout.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/CustomWorkout.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/CustomWorkout~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Models/Exercise.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Exercise.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Exercise.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Exercise.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Exercise.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Exercise.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Exercise.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Exercise.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Exercise~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Models/WorkoutPreferencesStore.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutPreferencesStore.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutPreferencesStore.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutPreferencesStore.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutPreferencesStore.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutPreferencesStore.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutPreferencesStore.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutPreferencesStore.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutPreferencesStore~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Models/WorkoutPreset.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutPreset.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutPreset.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutPreset.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutPreset.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutPreset.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutPreset.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutPreset.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutPreset~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Models/WorkoutSession.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutSession.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutSession.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutSession.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutSession.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutSession.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutSession.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutSession.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutSession~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Models/WorkoutStore.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutStore.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutStore.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutStore.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutStore.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutStore.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutStore.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutStore.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutStore~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Monetization/AdConfig.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AdConfig.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AdConfig.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AdConfig.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AdConfig.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AdConfig.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AdConfig.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AdConfig.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AdConfig~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Monetization/InterstitialAdManager.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/InterstitialAdManager.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/InterstitialAdManager.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/InterstitialAdManager.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/InterstitialAdManager.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/InterstitialAdManager.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/InterstitialAdManager.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/InterstitialAdManager.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/InterstitialAdManager~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Motivation/AchievementNotifier.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AchievementNotifier.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AchievementNotifier.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AchievementNotifier.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AchievementNotifier.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AchievementNotifier.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AchievementNotifier.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AchievementNotifier.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AchievementNotifier~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Motivation/MotivationalMessageManager.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/MotivationalMessageManager.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/MotivationalMessageManager.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/MotivationalMessageManager.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/MotivationalMessageManager.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/MotivationalMessageManager.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/MotivationalMessageManager.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/MotivationalMessageManager.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/MotivationalMessageManager~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Notifications/NotificationManager.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/NotificationManager.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/NotificationManager.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/NotificationManager.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/NotificationManager.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/NotificationManager.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/NotificationManager.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/NotificationManager.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/NotificationManager~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Onboarding/FirstWorkoutTutorialView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FirstWorkoutTutorialView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FirstWorkoutTutorialView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FirstWorkoutTutorialView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FirstWorkoutTutorialView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FirstWorkoutTutorialView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FirstWorkoutTutorialView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FirstWorkoutTutorialView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FirstWorkoutTutorialView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Onboarding/FitnessLevelAssessmentView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FitnessLevelAssessmentView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FitnessLevelAssessmentView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FitnessLevelAssessmentView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FitnessLevelAssessmentView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FitnessLevelAssessmentView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FitnessLevelAssessmentView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FitnessLevelAssessmentView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FitnessLevelAssessmentView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Onboarding/OnboardingView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/OnboardingView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/OnboardingView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/OnboardingView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/OnboardingView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/OnboardingView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/OnboardingView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/OnboardingView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/OnboardingView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Personalization/HabitLearner.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HabitLearner.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HabitLearner.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HabitLearner.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HabitLearner.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HabitLearner.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HabitLearner.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HabitLearner.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HabitLearner~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Personalization/PersonalizationEngine.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PersonalizationEngine.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PersonalizationEngine.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PersonalizationEngine.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PersonalizationEngine.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PersonalizationEngine.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PersonalizationEngine.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PersonalizationEngine.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PersonalizationEngine~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/RootView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/RootView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/RootView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/RootView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/RootView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/RootView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/RootView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/RootView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/RootView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/SettingsView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/SettingsView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/SettingsView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/SettingsView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/SettingsView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/SettingsView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/SettingsView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/SettingsView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/SettingsView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/SevenMinuteWorkoutApp.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/SevenMinuteWorkoutApp.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/SevenMinuteWorkoutApp.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/SevenMinuteWorkoutApp.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/SevenMinuteWorkoutApp.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/SevenMinuteWorkoutApp.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/SevenMinuteWorkoutApp.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/SevenMinuteWorkoutApp.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/SevenMinuteWorkoutApp~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Sharing/Export.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Export.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Export.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Export.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Export.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Export.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Export.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Export.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Export~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Sharing/PosterExporter.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PosterExporter.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PosterExporter.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PosterExporter.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PosterExporter.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PosterExporter.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PosterExporter.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PosterExporter.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PosterExporter~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Sharing/PosterRenderer.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PosterRenderer.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PosterRenderer.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PosterRenderer.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PosterRenderer.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PosterRenderer.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PosterRenderer.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PosterRenderer.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PosterRenderer~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Sharing/ShareImageGenerator.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ShareImageGenerator.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ShareImageGenerator.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ShareImageGenerator.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ShareImageGenerator.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ShareImageGenerator.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ShareImageGenerator.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ShareImageGenerator.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ShareImageGenerator~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Sharing/WorkoutShareManager.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutShareManager.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutShareManager.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutShareManager.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutShareManager.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutShareManager.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutShareManager.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutShareManager.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutShareManager~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Shortcuts/WorkoutShortcuts.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutShortcuts.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutShortcuts.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutShortcuts.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutShortcuts.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutShortcuts.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutShortcuts.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutShortcuts.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutShortcuts~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/System/AppTrackingManager.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AppTrackingManager.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AppTrackingManager.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AppTrackingManager.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AppTrackingManager.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AppTrackingManager.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AppTrackingManager.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AppTrackingManager.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AppTrackingManager~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/System/CrashReporter.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/CrashReporter.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/CrashReporter.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/CrashReporter.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/CrashReporter.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/CrashReporter.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/CrashReporter.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/CrashReporter.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/CrashReporter~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/System/Haptics.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Haptics.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Haptics.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Haptics.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Haptics.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Haptics.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Haptics.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Haptics.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Haptics~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/System/PerformanceOptimizer.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PerformanceOptimizer.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PerformanceOptimizer.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PerformanceOptimizer.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PerformanceOptimizer.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PerformanceOptimizer.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PerformanceOptimizer.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PerformanceOptimizer.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PerformanceOptimizer~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/System/PerformanceValidation.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PerformanceValidation.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PerformanceValidation.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PerformanceValidation.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PerformanceValidation.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PerformanceValidation.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PerformanceValidation.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PerformanceValidation.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PerformanceValidation~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/System/PromptProvider.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PromptProvider.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PromptProvider.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PromptProvider.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PromptProvider.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PromptProvider.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PromptProvider.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PromptProvider.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PromptProvider~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/System/Quotes.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Quotes.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Quotes.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Quotes.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Quotes.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Quotes.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Quotes.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Quotes.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Quotes~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/System/ReviewGate.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ReviewGate.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ReviewGate.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ReviewGate.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ReviewGate.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ReviewGate.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ReviewGate.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ReviewGate.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ReviewGate~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/System/SoundManager.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/SoundManager.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/SoundManager.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/SoundManager.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/SoundManager.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/SoundManager.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/SoundManager.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/SoundManager.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/SoundManager~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/System/UIApplication+KeyWindow.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/UIApplication+KeyWindow.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/UIApplication+KeyWindow.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/UIApplication+KeyWindow.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/UIApplication+KeyWindow.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/UIApplication+KeyWindow.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/UIApplication+KeyWindow.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/UIApplication+KeyWindow.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/UIApplication+KeyWindow~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/System/WatchSessionManager.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WatchSessionManager.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WatchSessionManager.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WatchSessionManager.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WatchSessionManager.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WatchSessionManager.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WatchSessionManager.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WatchSessionManager.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WatchSessionManager~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/UI/AccessibilityHelpers.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AccessibilityHelpers.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AccessibilityHelpers.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AccessibilityHelpers.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AccessibilityHelpers.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AccessibilityHelpers.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AccessibilityHelpers.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AccessibilityHelpers.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AccessibilityHelpers~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/UI/AnimationModifiers.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AnimationModifiers.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AnimationModifiers.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AnimationModifiers.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AnimationModifiers.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AnimationModifiers.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AnimationModifiers.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AnimationModifiers.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AnimationModifiers~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/UI/AutoGrowingTextEditor.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AutoGrowingTextEditor.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AutoGrowingTextEditor.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AutoGrowingTextEditor.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AutoGrowingTextEditor.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AutoGrowingTextEditor.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AutoGrowingTextEditor.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AutoGrowingTextEditor.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AutoGrowingTextEditor~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/UI/ButtonStyles.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ButtonStyles.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ButtonStyles.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ButtonStyles.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ButtonStyles.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ButtonStyles.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ButtonStyles.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ButtonStyles.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ButtonStyles~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/UI/ConfettiView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ConfettiView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ConfettiView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ConfettiView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ConfettiView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ConfettiView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ConfettiView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ConfettiView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ConfettiView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/UI/DepthLight.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/DepthLight.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/DepthLight.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/DepthLight.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/DepthLight.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/DepthLight.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/DepthLight.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/DepthLight.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/DepthLight~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/UI/DesignSystem.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/DesignSystem.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/DesignSystem.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/DesignSystem.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/DesignSystem.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/DesignSystem.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/DesignSystem.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/DesignSystem.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/DesignSystem~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/UI/Effects.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Effects.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Effects.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Effects.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Effects.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Effects.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Effects.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Effects.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Effects~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/UI/ErrorHandling.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ErrorHandling.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ErrorHandling.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ErrorHandling.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ErrorHandling.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ErrorHandling.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ErrorHandling.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ErrorHandling.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ErrorHandling~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/UI/GlassCard.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GlassCard.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GlassCard.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GlassCard.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GlassCard.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GlassCard.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GlassCard.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GlassCard.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GlassCard~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/UI/HoloText.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HoloText.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HoloText.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HoloText.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HoloText.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HoloText.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HoloText.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HoloText.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HoloText~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/UI/NativeCalendar.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/NativeCalendar.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/NativeCalendar.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/NativeCalendar.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/NativeCalendar.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/NativeCalendar.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/NativeCalendar.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/NativeCalendar.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/NativeCalendar~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/UI/OrbfieldView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/OrbfieldView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/OrbfieldView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/OrbfieldView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/OrbfieldView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/OrbfieldView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/OrbfieldView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/OrbfieldView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/OrbfieldView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/UI/PrivacyView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PrivacyView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PrivacyView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PrivacyView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PrivacyView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PrivacyView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PrivacyView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PrivacyView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PrivacyView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/UI/Theme.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Theme.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Theme.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Theme.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Theme.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Theme.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Theme.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Theme.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/Theme~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/UI/ThemeBackground.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ThemeBackground.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ThemeBackground.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ThemeBackground.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ThemeBackground.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ThemeBackground.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ThemeBackground.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ThemeBackground.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ThemeBackground~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/UI/ThemeStore.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ThemeStore.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ThemeStore.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ThemeStore.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ThemeStore.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ThemeStore.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ThemeStore.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ThemeStore.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ThemeStore~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/UI/TiltEffect.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/TiltEffect.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/TiltEffect.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/TiltEffect.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/TiltEffect.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/TiltEffect.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/TiltEffect.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/TiltEffect.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/TiltEffect~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Views/Customization/AdvancedCustomizationView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AdvancedCustomizationView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AdvancedCustomizationView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AdvancedCustomizationView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AdvancedCustomizationView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AdvancedCustomizationView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AdvancedCustomizationView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AdvancedCustomizationView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AdvancedCustomizationView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Views/Customization/ExerciseSelectorView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseSelectorView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseSelectorView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseSelectorView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseSelectorView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseSelectorView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseSelectorView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseSelectorView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseSelectorView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Views/Customization/PresetSelectorView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PresetSelectorView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PresetSelectorView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PresetSelectorView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PresetSelectorView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PresetSelectorView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PresetSelectorView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PresetSelectorView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/PresetSelectorView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Views/Customization/WorkoutCustomizationView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutCustomizationView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutCustomizationView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutCustomizationView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutCustomizationView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutCustomizationView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutCustomizationView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutCustomizationView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutCustomizationView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Views/Customization/WorkoutTemplateManager.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutTemplateManager.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutTemplateManager.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutTemplateManager.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutTemplateManager.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutTemplateManager.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutTemplateManager.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutTemplateManager.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutTemplateManager~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Views/Exercises/ExerciseListView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseListView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseListView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseListView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseListView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseListView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseListView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseListView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseListView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Views/Health/HealthKitPermissionsView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthKitPermissionsView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthKitPermissionsView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthKitPermissionsView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthKitPermissionsView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthKitPermissionsView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthKitPermissionsView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthKitPermissionsView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthKitPermissionsView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Views/Health/HealthTrendsView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthTrendsView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthTrendsView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthTrendsView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthTrendsView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthTrendsView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthTrendsView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthTrendsView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HealthTrendsView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Views/Help/FAQView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FAQView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FAQView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FAQView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FAQView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FAQView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FAQView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FAQView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FAQView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Views/Help/HelpView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HelpView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HelpView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HelpView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HelpView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HelpView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HelpView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HelpView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/HelpView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Views/History/WorkoutHistoryFilterView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutHistoryFilterView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutHistoryFilterView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutHistoryFilterView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutHistoryFilterView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutHistoryFilterView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutHistoryFilterView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutHistoryFilterView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutHistoryFilterView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Views/History/WorkoutHistoryRow.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutHistoryRow.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutHistoryRow.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutHistoryRow.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutHistoryRow.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutHistoryRow.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutHistoryRow.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutHistoryRow.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutHistoryRow~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Views/History/WorkoutHistoryView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutHistoryView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutHistoryView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutHistoryView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutHistoryView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutHistoryView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutHistoryView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutHistoryView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutHistoryView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Views/Motivation/DailyQuoteView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/DailyQuoteView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/DailyQuoteView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/DailyQuoteView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/DailyQuoteView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/DailyQuoteView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/DailyQuoteView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/DailyQuoteView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/DailyQuoteView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Views/Progress/AchievementsView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AchievementsView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AchievementsView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AchievementsView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AchievementsView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AchievementsView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AchievementsView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AchievementsView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AchievementsView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Views/Progress/AdvancedChartView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AdvancedChartView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AdvancedChartView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AdvancedChartView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AdvancedChartView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AdvancedChartView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AdvancedChartView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AdvancedChartView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/AdvancedChartView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Views/Progress/ComparisonView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ComparisonView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ComparisonView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ComparisonView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ComparisonView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ComparisonView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ComparisonView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ComparisonView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ComparisonView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Views/Progress/GoalSettingView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GoalSettingView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GoalSettingView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GoalSettingView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GoalSettingView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GoalSettingView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GoalSettingView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GoalSettingView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GoalSettingView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Views/Progress/InsightsView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/InsightsView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/InsightsView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/InsightsView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/InsightsView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/InsightsView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/InsightsView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/InsightsView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/InsightsView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Views/Progress/ProgressChartView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ProgressChartView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ProgressChartView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ProgressChartView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ProgressChartView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ProgressChartView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ProgressChartView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ProgressChartView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ProgressChartView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Views/Progress/WeeklyCalendarView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WeeklyCalendarView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WeeklyCalendarView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WeeklyCalendarView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WeeklyCalendarView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WeeklyCalendarView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WeeklyCalendarView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WeeklyCalendarView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WeeklyCalendarView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Widgets/WorkoutWidget.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutWidget.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutWidget.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutWidget.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutWidget.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutWidget.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutWidget.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutWidget.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutWidget~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Workout/BreathingGuideView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/BreathingGuideView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/BreathingGuideView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/BreathingGuideView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/BreathingGuideView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/BreathingGuideView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/BreathingGuideView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/BreathingGuideView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/BreathingGuideView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Workout/CompletionCelebrationView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/CompletionCelebrationView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/CompletionCelebrationView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/CompletionCelebrationView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/CompletionCelebrationView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/CompletionCelebrationView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/CompletionCelebrationView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/CompletionCelebrationView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/CompletionCelebrationView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Workout/ExerciseAnimations.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseAnimations.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseAnimations.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseAnimations.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseAnimations.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseAnimations.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseAnimations.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseAnimations.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseAnimations~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Workout/ExerciseGuideView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseGuideView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseGuideView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseGuideView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseGuideView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseGuideView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseGuideView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseGuideView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/ExerciseGuideView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Workout/FormFeedbackSystem.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FormFeedbackSystem.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FormFeedbackSystem.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FormFeedbackSystem.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FormFeedbackSystem.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FormFeedbackSystem.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FormFeedbackSystem.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FormFeedbackSystem.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/FormFeedbackSystem~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Workout/RepCounter.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/RepCounter.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/RepCounter.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/RepCounter.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/RepCounter.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/RepCounter.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/RepCounter.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/RepCounter.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/RepCounter~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Workout/VoiceCuesManager.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/VoiceCuesManager.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/VoiceCuesManager.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/VoiceCuesManager.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/VoiceCuesManager.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/VoiceCuesManager.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/VoiceCuesManager.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/VoiceCuesManager.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/VoiceCuesManager~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Workout/WorkoutContentView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutContentView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutContentView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutContentView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutContentView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutContentView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutContentView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutContentView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutContentView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Workout/WorkoutEngine.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutEngine.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutEngine.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutEngine.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutEngine.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutEngine.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutEngine.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutEngine.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutEngine~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Workout/WorkoutTimer.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutTimer.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutTimer.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutTimer.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutTimer.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutTimer.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutTimer.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutTimer.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutTimer~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/SevenMinuteWorkout/Workout/WorkoutTimerView.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutTimerView.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutTimerView.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutTimerView.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutTimerView.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutTimerView.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutTimerView.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutTimerView.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/WorkoutTimerView~partial.swiftmodule"
+  },
+  "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "const-values" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GeneratedAssetSymbols.swiftconstvalues",
+    "dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GeneratedAssetSymbols.d",
+    "diagnostics" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GeneratedAssetSymbols.dia",
+    "index-unit-output-path" : "/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GeneratedAssetSymbols.o",
+    "swift-dependencies" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GeneratedAssetSymbols.swiftdeps",
+    "swiftmodule" : "/Users/williamalston/Desktop/01-Projects/apps/07-Fitness/7 Minute Workout/build/SevenMinuteWorkout.build/Debug-iphonesimulator/SevenMinuteWorkout.build/Objects-normal/x86_64/GeneratedAssetSymbols~partial.swiftmodule"
+  }
+}

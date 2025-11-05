@@ -1,0 +1,4 @@
+module UserMessagingPlatformTarget {
+umbrella "/Users/williamalston/Library/Developer/Xcode/DerivedData/SevenMinuteWorkout-haljscckiyqzmrfohtyueqkrxqut/SourcePackages/checkouts/swift-package-manager-google-user-messaging-platform/UserMessagingPlatformTarget/include"
+export *
+}
