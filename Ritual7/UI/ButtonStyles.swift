@@ -90,6 +90,7 @@ struct PrimaryProminentButtonStyle: ButtonStyle {
                     y: configuration.isPressed ? DesignSystem.Shadow.pressed.y * 0.5 : DesignSystem.Shadow.soft.y * 0.7)
             .scaleEffect(configuration.isPressed ? 0.98 : 1.0)  // More subtle scale
             .brightness(configuration.isPressed ? -0.015 : 0)  // More subtle brightness change
+            .contentShape(Rectangle())  // Ensure entire button area is tappable
             .animation(AnimationConstants.quickSpring, value: configuration.isPressed)
     }
 }
@@ -184,6 +185,7 @@ struct SecondaryGlassButtonStyle: ButtonStyle {
                     y: configuration.isPressed ? DesignSystem.Shadow.pressed.y * 0.4 : DesignSystem.Shadow.soft.y * 0.6)
             .scaleEffect(configuration.isPressed ? 0.98 : 1.0)  // Consistent with primary
             .brightness(configuration.isPressed ? -0.02 : 0)  // More subtle brightness change
+            .contentShape(Rectangle())  // Ensure entire button area is tappable
             .animation(AnimationConstants.quickSpring, value: configuration.isPressed)
     }
 }

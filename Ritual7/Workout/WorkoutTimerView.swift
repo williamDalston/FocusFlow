@@ -583,8 +583,9 @@ struct WorkoutTimerView: View {
                             .frame(height: DesignSystem.ButtonSize.standard.height)
                     }
                     .buttonStyle(SecondaryGlassButtonStyle())
+                    .keyboardShortcut(.space, modifiers: [])  // Spacebar to pause/resume for simulator testing
                     .accessibilityLabel(engine.isPaused ? "Resume workout" : "Pause workout")
-                    .accessibilityHint("Double tap to \(engine.isPaused ? "resume" : "pause") the workout")
+                    .accessibilityHint("Double tap to \(engine.isPaused ? "resume" : "pause") the workout. Press spacebar to pause or resume.")
                     
                     if engine.phase == .rest {
                         Button {

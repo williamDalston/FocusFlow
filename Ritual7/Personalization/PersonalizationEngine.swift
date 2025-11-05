@@ -91,7 +91,6 @@ final class PersonalizationEngine: ObservableObject {
     /// Get personalized workout recommendation
     func getRecommendedWorkout() -> WorkoutRecommendation {
         let calendar = Calendar.current
-        let currentHour = calendar.component(.hour, from: Date())
         let currentWeekday = calendar.component(.weekday, from: Date())
         
         // Determine best time for workout today
@@ -212,9 +211,6 @@ final class PersonalizationEngine: ObservableObject {
     
     /// Get personalized workout schedule
     func getPersonalizedSchedule() -> WorkoutSchedule {
-        let calendar = Calendar.current
-        let currentWeekday = calendar.component(.weekday, from: Date())
-        
         // Analyze patterns to suggest schedule
         var suggestedDays: [Int] = []
         

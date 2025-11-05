@@ -18,6 +18,7 @@ struct TiltEffect: ViewModifier {
                         withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) { tilt = .zero }
                     }
             )
+            // DragGesture doesn't interfere with tap gestures/clicks, so mouse clicks work fine
     }
 }
 extension View { func tilt() -> some View { modifier(TiltEffect()) } }

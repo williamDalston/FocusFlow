@@ -12,14 +12,17 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil
     ) -> Bool {
 
-        // Configure audio session for background playback
+        // Configure audio session for background playback (lightweight, keep synchronous)
         configureAudioSession()
         
-        // Configure notification delegate for actionable notifications
+        // Configure notification delegate for actionable notifications (lightweight, keep synchronous)
         UNUserNotificationCenter.current().delegate = self
 
-        // Start Google Mobile Ads (App ID must be in Info.plist under GADApplicationIdentifier)
-        MobileAds.shared.start()
+        // Defer Google Mobile Ads initialization to improve launch time
+        // Start after UI is visible to avoid blocking initial render
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            MobileAds.shared.start()
+        }
 
         // If you ever need to test on a PHYSICAL device only during development,
         // you can temporarily uncomment and add your device's IDFA hash here under DEBUG.

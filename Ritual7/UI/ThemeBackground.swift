@@ -12,6 +12,7 @@ struct ThemeBackground: View {
             grain
         }
         .ignoresSafeArea(.all)
+        .allowsHitTesting(false)  // Allow touches to pass through to content above
     }
 
     // MARK: Layers

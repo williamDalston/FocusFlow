@@ -109,8 +109,6 @@ final class HabitLearner: ObservableObject {
     
     /// Analyze consistency patterns
     private func analyzeConsistencyPatterns(sessions: [WorkoutSession]) {
-        let calendar = Calendar.current
-        
         // Calculate streak stability
         let currentStreak = workoutStore.streak
         habitPatterns.currentStreak = currentStreak

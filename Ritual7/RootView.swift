@@ -29,23 +29,28 @@ struct RootView: View {
                 TabView {
                     // Main Workout Tab
                     NavigationStack {
-                        VStack(spacing: 0) {
-                            // Permission banner if notifications are denied
-                            if notifStatus == .denied {
-                                PermissionBanner(
-                                    title: "Notifications are Off",
-                                    message: "Turn on a daily reminder so you don't miss your workout.",
-                                    actionTitle: "Open Settings",
-                                    action: openSystemSettings
-                                )
-                                .padding(.horizontal)
-                                .padding(.top, 8)
-                            }
+                        ZStack {
+                            ThemeBackground().ignoresSafeArea()
                             
-                            // Main content
-                            WorkoutContentView()
+                            VStack(spacing: 0) {
+                                // Permission banner if notifications are denied
+                                if notifStatus == .denied {
+                                    PermissionBanner(
+                                        title: "Notifications are Off",
+                                        message: "Turn on a daily reminder so you don't miss your workout.",
+                                        actionTitle: "Open Settings",
+                                        action: openSystemSettings
+                                    )
+                                    .padding(.horizontal, DesignSystem.Spacing.md)
+                                    .padding(.top, DesignSystem.Spacing.md)
+                                }
+                                
+                                // Main content with popup effect
+                                PopupContainer(edgePadding: DesignSystem.Spacing.sm, topPadding: DesignSystem.Spacing.lg) {
+                                    WorkoutContentView()
+                                }
+                            }
                         }
-                        .background(ThemeBackground().ignoresSafeArea())
                     }
                     .tabItem {
                         Image(systemName: "figure.run")
@@ -54,10 +59,18 @@ struct RootView: View {
                     
                     // History Tab
                     NavigationStack {
-                        WorkoutHistoryView()
-                            .environmentObject(workoutStore)
-                            .navigationTitle("History")
-                            .navigationBarTitleDisplayMode(.large)
+                        ZStack {
+                            ThemeBackground().ignoresSafeArea()
+                            
+                            PopupContainer(edgePadding: DesignSystem.Spacing.sm, topPadding: DesignSystem.Spacing.md) {
+                                WorkoutHistoryView()
+                                    .environmentObject(workoutStore)
+                            }
+                        }
+                        .navigationTitle("History")
+                        .navigationBarTitleDisplayMode(.large)
+                        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+                        .toolbarBackground(.visible, for: .navigationBar)
                     }
                     .tabItem {
                         Image(systemName: "clock")
@@ -66,11 +79,19 @@ struct RootView: View {
                     
                     // Settings Tab
                     NavigationStack {
-                        SettingsView()
-                            .environmentObject(workoutStore)
-                            .environmentObject(theme)
-                            .navigationTitle("Settings")
-                            .navigationBarTitleDisplayMode(.large)
+                        ZStack {
+                            ThemeBackground().ignoresSafeArea()
+                            
+                            PopupContainer(edgePadding: DesignSystem.Spacing.sm, topPadding: DesignSystem.Spacing.md) {
+                                SettingsView()
+                                    .environmentObject(workoutStore)
+                                    .environmentObject(theme)
+                            }
+                        }
+                        .navigationTitle("Settings")
+                        .navigationBarTitleDisplayMode(.large)
+                        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+                        .toolbarBackground(.visible, for: .navigationBar)
                     }
                     .tabItem {
                         Image(systemName: "gearshape.fill")
@@ -81,8 +102,9 @@ struct RootView: View {
             }
         }
         .onAppear {
-            // Defer heavy operations to avoid blocking UI
-            DispatchQueue.main.async {
+            // Defer all heavy operations to avoid blocking UI
+            // Use a small delay to ensure UI renders first
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 // 1) Request ATT exactly once (and only if not determined)
                 requestATTIfNeeded()
 
@@ -90,8 +112,11 @@ struct RootView: View {
                 refreshNotificationStatus()
 
                 // 3) Schedule daily reminder if we haven't and we're already authorized
-                if !reminderScheduled {
-                    scheduleDefaultReminderIfAuthorized()
+                // Defer this even further as it's not critical for initial render
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    if !reminderScheduled {
+                        scheduleDefaultReminderIfAuthorized()
+                    }
                 }
             }
         }
@@ -125,7 +150,7 @@ struct RootView: View {
     // MARK: - Shortcut Handling
     
     private func handleShortcutActivity(_ userActivity: NSUserActivity) {
-        WorkoutShortcuts.handleShortcut(userActivity)
+        _ = WorkoutShortcuts.handleShortcut(userActivity)
         // Trigger workout start (this would need to be connected to WorkoutContentView)
         NotificationCenter.default.post(name: NSNotification.Name("StartWorkoutFromShortcut"), object: nil)
     }

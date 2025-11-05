@@ -387,10 +387,19 @@ final class WorkoutStore: ObservableObject {
     }
     
     init() {
-        load()
+        // Load minimal data synchronously for immediate UI display
         loadPersonalBest()
-        recalcStreakIfNeeded()
-        setupWatchConnectivity()
+        
+        // Defer heavy operations to avoid blocking UI
+        Task { @MainActor in
+            load()
+            recalcStreakIfNeeded()
+        }
+        
+        // Defer watch connectivity setup (non-critical for initial render)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+            self?.setupWatchConnectivity()
+        }
     }
 }
 

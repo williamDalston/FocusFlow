@@ -40,9 +40,6 @@ final class GoalManager: ObservableObject {
     
     /// Get adaptive goal suggestion based on user's current performance
     func getAdaptiveGoalSuggestion(for period: GoalPeriod) -> Int {
-        let calendar = Calendar.current
-        let today = Date()
-        
         switch period {
         case .weekly:
             // Suggest based on average workouts per week

@@ -19,28 +19,34 @@ struct Ritual7App: App {
                 .environmentObject(workoutStore)
                 .environmentObject(preferencesStore)
                 .onAppear {
-                    // Agent 16: Configure preferences store with workout store
-                    preferencesStore.configure(with: workoutStore)
-                    // Agent 8: Optimize startup performance
+                    // Agent 8: Optimize startup performance (lightweight, keep synchronous)
                     PerformanceOptimizer.optimizeStartup()
-                    PerformanceOptimizer.preloadCriticalAssets()
                     
-                    // Agent 8: Monitor app launch
+                    // Agent 8: Monitor app launch (lightweight, keep synchronous)
                     PerformanceMonitor.monitorAppLaunch()
                     
-                    // Agent 8: Run performance validation in debug mode
+                    // Defer all heavy operations to improve initial render
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        // Agent 16: Configure preferences store with workout store
+                        preferencesStore.configure(with: workoutStore)
+                        
+                        // Agent 8: Preload critical assets (can run in background)
+                        PerformanceOptimizer.preloadCriticalAssets()
+                        
+                        // Register shortcuts for Siri integration
+                        WorkoutShortcuts.registerWorkoutShortcut()
+                        
+                        // Preload interstitial ad (loads in background)
+                        InterstitialAdManager.shared.load()
+                    }
+                    
+                    // Agent 8: Run performance validation in debug mode (defer even further)
                     #if DEBUG
                     PerformanceOptimizer.deferHeavyOperations {
                         let results = PerformanceValidation.validatePerformance()
                         PerformanceValidation.logResults(results)
                     }
                     #endif
-                    
-                    // Register shortcuts for Siri integration
-                    WorkoutShortcuts.registerWorkoutShortcut()
-                    
-                    // Preload interstitial ad (loads in background)
-                    InterstitialAdManager.shared.load()
                 }
         }
         .onChange(of: scenePhase) { phase in

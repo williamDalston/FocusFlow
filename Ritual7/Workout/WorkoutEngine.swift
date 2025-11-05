@@ -106,13 +106,13 @@ final class WorkoutEngine: ObservableObject {
     // MARK: - Configuration
     
     /// Duration of the preparation phase before workout starts (seconds)
-    let prepDuration: TimeInterval = 10.0
+    var prepDuration: TimeInterval = 10.0
     
     /// Duration of each exercise phase (seconds)
-    let exerciseDuration: TimeInterval = 30.0
+    var exerciseDuration: TimeInterval = 30.0
     
     /// Duration of rest periods between exercises (seconds)
-    let restDuration: TimeInterval = 10.0
+    var restDuration: TimeInterval = 10.0
     
     /// List of exercises in the workout
     private(set) var exercises: [Exercise]
@@ -171,8 +171,18 @@ final class WorkoutEngine: ObservableObject {
     }
     
     deinit {
-        Task { @MainActor in
-            timer.stop()
+        // Stop timer - ensure we're on main actor
+        let timerToStop = timer
+        if Thread.isMainThread {
+            MainActor.assumeIsolated {
+                timerToStop.stop()
+            }
+        } else {
+            // If not on main thread, dispatch to main queue
+            // Capture timer directly to avoid capturing self in deinit
+            Task { @MainActor [timerToStop] in
+                timerToStop.stop()
+            }
         }
     }
     
@@ -280,6 +290,27 @@ final class WorkoutEngine: ObservableObject {
         sessionStartTime = nil
         totalPausedTime = 0
         pauseStartTime = nil
+    }
+    
+    /// Configures the engine with custom durations
+    /// - Parameters:
+    ///   - exerciseDuration: Duration of each exercise phase (seconds)
+    ///   - restDuration: Duration of rest periods between exercises (seconds)
+    ///   - prepDuration: Duration of the preparation phase (seconds)
+    func configureDurations(
+        exerciseDuration: TimeInterval? = nil,
+        restDuration: TimeInterval? = nil,
+        prepDuration: TimeInterval? = nil
+    ) {
+        if let exerciseDuration = exerciseDuration {
+            self.exerciseDuration = exerciseDuration
+        }
+        if let restDuration = restDuration {
+            self.restDuration = restDuration
+        }
+        if let prepDuration = prepDuration {
+            self.prepDuration = prepDuration
+        }
     }
     
     // MARK: - Computed Properties
@@ -559,7 +590,7 @@ final class WorkoutEngine: ObservableObject {
         }
         
         // Restore state
-        if let phaseString = state["phase"] as? String,
+        if let _ = state["phase"] as? String,
            let index = state["currentExerciseIndex"] as? Int,
            let timeRemaining = state["timeRemaining"] as? TimeInterval {
             

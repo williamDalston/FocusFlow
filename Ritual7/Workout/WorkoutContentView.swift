@@ -132,30 +132,33 @@ struct WorkoutContentView: View {
         }
         .animation(.easeInOut(duration: 0.6), value: theme.colorTheme)
         .onAppear {
-            // Initialize analytics with current store
-            if analytics == nil {
-                analytics = WorkoutAnalytics(store: store)
-            }
-            if achievementManager == nil {
-                achievementManager = AchievementManager(store: store)
-            }
-            // Agent 10: Initialize goal manager
-            if goalManager == nil {
-                goalManager = GoalManager(store: store)
-            }
-            
-            // Check achievements
-            achievementManager?.checkAchievements()
-            
-            // Agent 10: Update goal progress
-            goalManager?.updateProgress()
-            
-            // Load personalized message
+            // Load personalized message immediately (lightweight)
             messageManager.personalizedMessage = messageManager.getPersonalizedMessage(
                 streak: store.streak,
                 totalWorkouts: store.totalWorkouts,
                 workoutsThisWeek: store.workoutsThisWeek
             )
+            
+            // Defer heavy manager initialization to improve initial render performance
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                // Initialize analytics with current store
+                if analytics == nil {
+                    analytics = WorkoutAnalytics(store: store)
+                }
+                if achievementManager == nil {
+                    achievementManager = AchievementManager(store: store)
+                }
+                // Agent 10: Initialize goal manager
+                if goalManager == nil {
+                    goalManager = GoalManager(store: store)
+                }
+                
+                // Check achievements
+                achievementManager?.checkAchievements()
+                
+                // Agent 10: Update goal progress
+                goalManager?.updateProgress()
+            }
         }
     }
     
@@ -291,7 +294,9 @@ struct WorkoutContentView: View {
                         .frame(height: 56)
                 }
                 .buttonStyle(PrimaryProminentButtonStyle())
+                .keyboardShortcut(.return, modifiers: [])  // Enter key to start workout for simulator testing
                 .disabled(engine.phase != .idle && engine.phase != .completed)
+                .accessibilityHint("Press Enter to start workout")
                 
                 HStack(spacing: 16) {
                     Button {
@@ -644,14 +649,14 @@ struct WorkoutContentView: View {
     // MARK: - Agent 3: Engine Configuration
     
     private func configureEngineFromPreferences() {
-        // Note: WorkoutEngine currently uses default durations
-        // Configuration from preferences would require engine modifications
-        // For now, engine uses standard 30s exercise / 10s rest / 10s prep durations
-        let prefs = preferencesStore.preferences
+        let preferences = preferencesStore.preferences
         
-        // TODO: Implement engine configuration if needed
-        // The engine currently doesn't support runtime configuration
-        // It would need to be recreated with new parameters or have configurable properties
+        // Configure engine with user preferences
+        engine.configureDurations(
+            exerciseDuration: preferences.exerciseDuration,
+            restDuration: preferences.restDuration,
+            prepDuration: preferences.skipPrepTime ? 0 : preferences.prepDuration
+        )
     }
 }
 

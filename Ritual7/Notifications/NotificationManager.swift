@@ -52,8 +52,12 @@ enum NotificationManager {
             center.setNotificationCategories([category])
 
             let req = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
-            center.add(req) { err in
-                if let err = err { print("Notif schedule error:", err) }
+            Task {
+                do {
+                    try await center.add(req)
+                } catch {
+                    print("Notif schedule error:", error)
+                }
             }
         }
     }
@@ -101,8 +105,12 @@ enum NotificationManager {
             content.sound = .default
             
             let req = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
-            center.add(req) { err in
-                if let err = err { print("No workout nudge schedule error:", err) }
+            Task {
+                do {
+                    try await center.add(req)
+                } catch {
+                    print("No workout nudge schedule error:", error)
+                }
             }
         }
     }

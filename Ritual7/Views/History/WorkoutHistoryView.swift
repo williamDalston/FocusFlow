@@ -56,19 +56,15 @@ struct WorkoutHistoryView: View {
     }
     
     var body: some View {
-        ZStack {
-            ThemeBackground()
+        VStack(spacing: 0) {
+            // Search and filter bar
+            searchAndFilterBar
             
-            VStack(spacing: 0) {
-                // Search and filter bar
-                searchAndFilterBar
-                
-                // Content
-                if filteredSessions.isEmpty {
-                    emptyStateView
-                } else {
-                    workoutList
-                }
+            // Content
+            if filteredSessions.isEmpty {
+                emptyStateView
+            } else {
+                workoutList
             }
         }
         .navigationTitle("Workout History")
@@ -800,21 +796,17 @@ struct ExportButton: View {
     private func export() {
         let data: Data?
         let filename: String
-        let mimeType: String
         
         switch format {
         case .json:
             data = try? JSONEncoder().encode(sessions)
             filename = "workouts_\(Date().formatted(date: .numeric, time: .omitted)).json"
-            mimeType = "application/json"
         case .csv:
             data = generateCSV()
             filename = "workouts_\(Date().formatted(date: .numeric, time: .omitted)).csv"
-            mimeType = "text/csv"
         case .pdf:
             data = nil // PDF export would require additional implementation
             filename = ""
-            mimeType = ""
         }
         
         guard let data = data else {
