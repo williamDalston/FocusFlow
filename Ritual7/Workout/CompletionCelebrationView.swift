@@ -315,24 +315,14 @@ struct CompletionCelebrationView: View {
     
     // MARK: - Helpers
     
+    /// Agent 30: Enhanced completion message using MicrocopyManager for personalized, varied messaging
     private var completionMessage: String {
-        if workoutStats.isPersonalBest {
-            return "Personal best! You're getting stronger! 💪"
-        } else if workoutStats.isStreakDay {
-            return "Day \(workoutStats.currentStreak) of your streak! 🔥"
-        } else {
-            return "Great job completing your workout!"
-        }
+        MicrocopyManager.shared.completionMessage(for: workoutStats)
     }
     
+    /// Agent 30: Enhanced suggestion message using MicrocopyManager for personalized guidance
     private var suggestionMessage: String {
-        if workoutStats.currentStreak >= 7 {
-            return "You're on fire! Keep your streak going tomorrow."
-        } else if workoutStats.currentStreak > 0 {
-            return "You're building a great habit! Work out again tomorrow to grow your streak."
-        } else {
-            return "Start a streak by working out again tomorrow!"
-        }
+        MicrocopyManager.shared.suggestionMessage(for: workoutStats)
     }
     
     private func formatDuration(_ duration: TimeInterval) -> String {

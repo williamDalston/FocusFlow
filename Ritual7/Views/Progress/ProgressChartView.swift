@@ -168,7 +168,7 @@ struct ProgressChartView: View {
                     y: .value("Workouts", day.count)
                 )
                 .foregroundStyle(Theme.accentA.gradient)
-                .cornerRadius(8)
+                .cornerRadius(DesignSystem.CornerRadius.small)
                 .opacity(selectedDataPoint?.id == day.id ? 1.0 : 0.7)
                 
                 // Agent 10: Interactive annotation
@@ -412,7 +412,7 @@ struct WorkoutFrequencyChartView: View {
                     y: .value("Workouts", frequency[time] ?? 0)
                 )
                 .foregroundStyle(Theme.accentA.gradient)
-                .cornerRadius(8)
+                .cornerRadius(DesignSystem.CornerRadius.small)
             }
             .frame(height: 200)
             .chartYAxis {

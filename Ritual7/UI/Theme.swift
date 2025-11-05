@@ -137,6 +137,23 @@ enum Theme {
     
     // For secondary text on dark/colored backgrounds
     static var textSecondaryOnDark: Color { .white.opacity(0.8) }
+    
+    // MARK: - Semantic Colors
+    
+    // Error color for validation and error states
+    static var error: Color {
+        Color(uiColor: UIColor.systemRed)
+    }
+    
+    // Success color for positive feedback
+    static var success: Color {
+        Color(uiColor: UIColor.systemGreen)
+    }
+    
+    // Warning color for warnings
+    static var warning: Color {
+        Color(uiColor: UIColor.systemOrange)
+    }
 
     // MARK: - Neutral Colors (Sophisticated Grayscale)
     

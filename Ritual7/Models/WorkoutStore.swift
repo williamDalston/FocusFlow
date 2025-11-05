@@ -147,10 +147,18 @@ final class WorkoutStore: ObservableObject {
         }
     }
     
+    // Agent 25: Undo support for deleted sessions
+    private var deletedSessionsBackup: [WorkoutSession] = []
+    private var deletedSessionsStats: (totalWorkouts: Int, totalMinutes: TimeInterval)?
+    
     func deleteSession(at offsets: IndexSet) {
         // Filter out invalid indices to prevent crashes
         let validOffsets = offsets.filter { $0 >= 0 && $0 < sessions.count }
         guard !validOffsets.isEmpty else { return }
+        
+        // Agent 25: Store backup for undo
+        deletedSessionsBackup = validOffsets.map { sessions[$0] }
+        deletedSessionsStats = (totalWorkouts, totalMinutes)
         
         let deletedSessions = validOffsets.map { sessions[$0] }
         for session in deletedSessions {
@@ -159,6 +167,33 @@ final class WorkoutStore: ObservableObject {
         }
         sessions.remove(atOffsets: IndexSet(validOffsets))
         save()
+    }
+    
+    /// Agent 25: Undo the last deletion
+    func undoDelete() {
+        guard !deletedSessionsBackup.isEmpty else { return }
+        
+        // Restore deleted sessions
+        for session in deletedSessionsBackup.reversed() {
+            sessions.insert(session, at: 0)
+        }
+        
+        // Restore stats
+        if let stats = deletedSessionsStats {
+            totalWorkouts = stats.totalWorkouts
+            totalMinutes = stats.totalMinutes
+        }
+        
+        // Clear backup
+        deletedSessionsBackup = []
+        deletedSessionsStats = nil
+        
+        save()
+    }
+    
+    /// Agent 25: Check if undo is available
+    var canUndoDelete: Bool {
+        !deletedSessionsBackup.isEmpty
     }
     
     func reset() {

@@ -100,15 +100,27 @@ struct PrimaryProminentButtonStyle: ButtonStyle {
             .shadow(color: Theme.glowColor.opacity(configuration.isPressed ? DesignSystem.Opacity.subtle * 0.3 : DesignSystem.Opacity.subtle * 0.9),
                     radius: configuration.isPressed ? DesignSystem.Shadow.pressed.radius * 0.5 : DesignSystem.Shadow.soft.radius * 0.7, 
                     y: configuration.isPressed ? DesignSystem.Shadow.pressed.y * 0.5 : DesignSystem.Shadow.soft.y * 0.7)
-            // Agent 4: Disabled buttons don't animate - ensure conditional animation
-            .scaleEffect((configuration.isPressed && isEnabled && !isLoading) ? 0.98 : 1.0)  // More subtle scale
-            .brightness((configuration.isPressed && isEnabled && !isLoading) ? -0.015 : 0)  // More subtle brightness change
+            // Agent 27: Enhanced micro-animations with ripple effect
+            .scaleEffect((configuration.isPressed && isEnabled && !isLoading) ? 0.97 : 1.0)  // Slightly more pronounced scale
+            .brightness((configuration.isPressed && isEnabled && !isLoading) ? -0.02 : 0)  // Subtle brightness change
             .contentShape(Rectangle())  // Ensure entire button area is tappable
             .allowsHitTesting(isEnabled && !isLoading)  // Disable interaction when disabled or loading
             .animation((isEnabled && !isLoading) ? AnimationConstants.quickSpring : nil, value: configuration.isPressed)
             .animation(AnimationConstants.quickEase, value: isLoading)
+            .overlay(
+                // Agent 27: Ripple effect on press
+                Group {
+                    if configuration.isPressed && isEnabled && !isLoading {
+                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.button, style: .continuous)
+                            .fill(Color.white.opacity(0.3))
+                            .scaleEffect(1.5)
+                            .opacity(0)
+                            .animation(.easeOut(duration: 0.4), value: configuration.isPressed)
+                    }
+                }
+            )
             .onChange(of: configuration.isPressed) { pressed in
-                // Sync haptics with button press animations
+                // Agent 27: Sync haptics with button press animations
                 if pressed && isEnabled && !isLoading {
                     Haptics.buttonPress()
                 }
@@ -216,15 +228,27 @@ struct SecondaryGlassButtonStyle: ButtonStyle {
             .shadow(color: Theme.glowColor.opacity(configuration.isPressed ? DesignSystem.Opacity.subtle * 0.3 : DesignSystem.Opacity.subtle * 0.8),
                     radius: configuration.isPressed ? DesignSystem.Shadow.pressed.radius * 0.4 : DesignSystem.Shadow.soft.radius * 0.6, 
                     y: configuration.isPressed ? DesignSystem.Shadow.pressed.y * 0.4 : DesignSystem.Shadow.soft.y * 0.6)
-            // Agent 4: Disabled buttons don't animate - ensure conditional animation
-            .scaleEffect((configuration.isPressed && isEnabled && !isLoading) ? 0.98 : 1.0)  // Consistent with primary
-            .brightness((configuration.isPressed && isEnabled && !isLoading) ? -0.02 : 0)  // More subtle brightness change
+            // Agent 27: Enhanced micro-animations with ripple effect
+            .scaleEffect((configuration.isPressed && isEnabled && !isLoading) ? 0.97 : 1.0)  // Consistent with primary
+            .brightness((configuration.isPressed && isEnabled && !isLoading) ? -0.02 : 0)  // Subtle brightness change
             .contentShape(Rectangle())  // Ensure entire button area is tappable
             .allowsHitTesting(isEnabled && !isLoading)  // Disable interaction when disabled or loading
             .animation((isEnabled && !isLoading) ? AnimationConstants.quickSpring : nil, value: configuration.isPressed)
             .animation(AnimationConstants.quickEase, value: isLoading)
+            .overlay(
+                // Agent 27: Ripple effect on press
+                Group {
+                    if configuration.isPressed && isEnabled && !isLoading {
+                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.button, style: .continuous)
+                            .fill(Color.white.opacity(0.2))
+                            .scaleEffect(1.5)
+                            .opacity(0)
+                            .animation(.easeOut(duration: 0.4), value: configuration.isPressed)
+                    }
+                }
+            )
             .onChange(of: configuration.isPressed) { pressed in
-                // Sync haptics with button press animations
+                // Agent 27: Sync haptics with button press animations
                 if pressed && isEnabled && !isLoading {
                     Haptics.buttonPress()
                 }

@@ -19,6 +19,11 @@ struct WorkoutHistoryView: View {
     @State private var viewMode: ViewMode = .list  // Agent 20: Timeline view toggle
     @State private var showingPatterns = false  // Agent 20: Workout patterns visualization
     
+    // Agent 25: Confirmation dialogs
+    @State private var showingDeleteConfirmation = false
+    @State private var sessionToDelete: WorkoutSession?
+    @State private var showingDeleteAllConfirmation = false
+    
     // Agent 20: View mode enum
     enum ViewMode {
         case list
@@ -233,7 +238,8 @@ struct WorkoutHistoryView: View {
                             Divider()
                             
                             Button(role: .destructive) {
-                                deleteAllFiltered()
+                                // Agent 25: Show confirmation before deleting all
+                                showingDeleteAllConfirmation = true
                                 Haptics.tap()
                             } label: {
                                 Label("Delete All", systemImage: "trash")
@@ -262,6 +268,29 @@ struct WorkoutHistoryView: View {
         .sheet(item: $selectedSession) { session in
             WorkoutSessionDetailView(session: session)
         }
+        // Agent 25: Confirmation dialogs
+        .confirmationDialog("Delete Workout", isPresented: $showingDeleteConfirmation, titleVisibility: .visible) {
+            Button("Delete", role: .destructive) {
+                if let session = sessionToDelete {
+                    deleteSession(session)
+                    sessionToDelete = nil
+                }
+            }
+            Button("Cancel", role: .cancel) {
+                sessionToDelete = nil
+            }
+        } message: {
+            Text("Are you sure you want to delete this workout? This action can be undone.")
+        }
+        .confirmationDialog("Delete All Workouts", isPresented: $showingDeleteAllConfirmation, titleVisibility: .visible) {
+            Button("Delete All", role: .destructive) {
+                deleteAllFiltered()
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Are you sure you want to delete all \(filteredSessions.count) filtered workout\(filteredSessions.count == 1 ? "" : "s")? This action can be undone.")
+        }
+        .toast() // Agent 25: Enable toast notifications
     }
     
     // MARK: - Search and Filter Bar
@@ -412,7 +441,9 @@ struct WorkoutHistoryView: View {
                                 }
                                 .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                                     Button(role: .destructive) {
-                                        deleteSession(session)
+                                        // Agent 25: Show confirmation before deleting
+                                        sessionToDelete = session
+                                        showingDeleteConfirmation = true
                                         Haptics.buttonPress()
                                     } label: {
                                         Label("Delete", systemImage: "trash")
@@ -434,14 +465,21 @@ struct WorkoutHistoryView: View {
                                 guard index >= 0 && index < section.sessions.count else { return nil }
                                 return section.sessions[index]
                             }
-                            for session in sessionsToDelete {
-                                deleteSession(session)
+                            // Agent 25: Show confirmation for bulk delete
+                            if sessionsToDelete.count > 1 {
+                                showingDeleteAllConfirmation = true
+                            } else {
+                                for session in sessionsToDelete {
+                                    deleteSession(session)
+                                }
                             }
                             Haptics.buttonPress()
                         }
                     } header: {
+                        // Agent 23: Enhanced section header hierarchy
                         Text(section.title)
-                            .font(Theme.headline)
+                            .font(.system(size: DesignSystem.Hierarchy.tertiaryTitle, weight: DesignSystem.Hierarchy.secondaryWeight, design: .rounded))
+                            .allowsTightening(false) // Prevent hyphen splits
                             .foregroundStyle(Theme.textPrimary)
                     }
                 }
@@ -521,17 +559,48 @@ struct WorkoutHistoryView: View {
         return String(format: "%d:%02d", minutes, seconds)
     }
     
+    // Agent 26: Optimistic update state for undo support (using WorkoutStore's built-in undo)
+    
     private func deleteSession(_ session: WorkoutSession) {
+        // Agent 25: Delete with undo support
         if let index = store.sessions.firstIndex(where: { $0.id == session.id }) {
             store.deleteSession(at: IndexSet(integer: index))
+            
+            // Agent 25: Show toast with undo option
+            ToastManager.shared.show(
+                message: "Workout deleted",
+                onUndo: {
+                    store.undoDelete()
+                    Haptics.success()
+                }
+            )
         }
+        
+        // Haptic feedback
+        Haptics.buttonPress()
     }
     
     private func deleteAllFiltered() {
-        let indices = filteredSessions.compactMap { session in
+        // Agent 26: Optimistic update for batch delete
+        let sessionsToDelete = filteredSessions
+        let indices = sessionsToDelete.compactMap { session in
             store.sessions.firstIndex(where: { $0.id == session.id })
         }
-        store.deleteSession(at: IndexSet(indices))
+        
+        if !indices.isEmpty {
+            store.deleteSession(at: IndexSet(indices))
+            
+            // Show undo toast
+            ToastManager.shared.show(
+                message: "\(sessionsToDelete.count) workout\(sessionsToDelete.count == 1 ? "" : "s") deleted",
+                onUndo: {
+                    store.undoDelete()
+                    Haptics.success()
+                }
+            )
+        }
+        
+        Haptics.buttonPress()
     }
     
     private func shareSession(_ session: WorkoutSession) {
@@ -1150,17 +1219,17 @@ struct TimelineSectionView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
-            // Section header
+            // Agent 23: Enhanced section header hierarchy
             HStack {
                 Text(section.title)
-                    .font(Theme.headline)
+                    .font(.system(size: DesignSystem.Hierarchy.tertiaryTitle, weight: DesignSystem.Hierarchy.secondaryWeight, design: .rounded))
                     .foregroundStyle(Theme.textPrimary)
                 
                 Spacer()
                 
                 Text("\(section.sessions.count)")
                     .font(Theme.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.secondary.opacity(DesignSystem.Hierarchy.tertiaryOpacity))
                     .monospacedDigit()
             }
             
@@ -1354,8 +1423,9 @@ struct WorkoutPatternsView: View {
     
     private var timeOfDayChart: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
+            // Agent 23: Enhanced section title hierarchy
             Text("Workout Time Distribution")
-                .font(Theme.headline)
+                .font(.system(size: DesignSystem.Hierarchy.secondaryTitle, weight: DesignSystem.Hierarchy.secondaryWeight, design: .rounded))
                 .foregroundStyle(Theme.textPrimary)
                 .padding(.horizontal, DesignSystem.Spacing.lg)
             
@@ -1366,7 +1436,7 @@ struct WorkoutPatternsView: View {
                     y: .value("Workouts", frequency[time] ?? 0)
                 )
                 .foregroundStyle(Theme.accentA.gradient)
-                .cornerRadius(8)
+                .cornerRadius(DesignSystem.CornerRadius.small)
             }
             .frame(height: 250)
             .chartYAxis {
@@ -1392,8 +1462,9 @@ struct WorkoutPatternsView: View {
     
     private var dayOfWeekChart: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
+            // Agent 23: Enhanced section title hierarchy
             Text("Workout Day Distribution")
-                .font(Theme.headline)
+                .font(.system(size: DesignSystem.Hierarchy.secondaryTitle, weight: DesignSystem.Hierarchy.secondaryWeight, design: .rounded))
                 .foregroundStyle(Theme.textPrimary)
                 .padding(.horizontal, DesignSystem.Spacing.lg)
             
@@ -1404,7 +1475,7 @@ struct WorkoutPatternsView: View {
                     y: .value("Workouts", frequency[day] ?? 0)
                 )
                 .foregroundStyle(Theme.accentB.gradient)
-                .cornerRadius(8)
+                .clipShape(RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous))
             }
             .frame(height: 250)
             .chartYAxis {
@@ -1430,8 +1501,9 @@ struct WorkoutPatternsView: View {
     
     private var insightsCard: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
+            // Agent 23: Enhanced section title hierarchy
             Text("Insights")
-                .font(Theme.headline)
+                .font(.system(size: DesignSystem.Hierarchy.secondaryTitle, weight: DesignSystem.Hierarchy.secondaryWeight, design: .rounded))
                 .foregroundStyle(Theme.textPrimary)
             
             let bestTime = calculateBestTime()

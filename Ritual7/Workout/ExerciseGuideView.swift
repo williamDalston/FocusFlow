@@ -3,8 +3,21 @@ import SwiftUI
 /// Agent 5: Instruction Guide - Exercise instruction views with demonstrations and tips
 struct ExerciseGuideView: View {
     let exercise: Exercise
+    let exercises: [Exercise]?
+    let currentIndex: Int?
+    
+    @State private var currentExercise: Exercise
+    @State private var currentIndexState: Int
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var theme: ThemeStore
+    
+    init(exercise: Exercise, exercises: [Exercise]? = nil, currentIndex: Int? = nil) {
+        self.exercise = exercise
+        self.exercises = exercises
+        self.currentIndex = currentIndex
+        _currentExercise = State(initialValue: exercise)
+        _currentIndexState = State(initialValue: currentIndex ?? 0)
+    }
     
     var body: some View {
         ZStack {
@@ -14,20 +27,92 @@ struct ExerciseGuideView: View {
                 VStack(spacing: DesignSystem.Spacing.xl) {
                     // Exercise header
                     VStack(spacing: DesignSystem.Spacing.lg) {
-                        Image(systemName: exercise.icon)
+                        Image(systemName: currentExercise.icon)
                             .font(.system(size: DesignSystem.IconSize.huge * 1.25, weight: .bold))
                             .foregroundStyle(Theme.accentA)
-                            .accessibilityLabel("Exercise icon for \(exercise.name)")
+                            .accessibilityLabel("Exercise icon for \(currentExercise.name)")
                         
-                        Text(exercise.name)
+                        Text(currentExercise.name)
                             .font(Theme.largeTitle)
                             .foregroundStyle(Theme.textPrimary)
                             .accessibilityAddTraits(.isHeader)
                         
-                        Text(exercise.description)
+                        Text(currentExercise.description)
                             .font(Theme.title3)
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
+                        
+                        // Navigation buttons if exercises list is provided
+                        if let exercises = exercises, exercises.count > 1 {
+                            VStack(spacing: DesignSystem.Spacing.sm) {
+                                // Exercise counter - more prominent and centered
+                                Text("\(currentIndexState + 1) of \(exercises.count)")
+                                    .font(Theme.subheadline.weight(.semibold))
+                                    .foregroundStyle(Theme.textPrimary)
+                                    .monospacedDigit()
+                                    .padding(.horizontal, DesignSystem.Spacing.md)
+                                    .padding(.vertical, DesignSystem.Spacing.xs)
+                                    .background(
+                                        Capsule()
+                                            .fill(Theme.accentA.opacity(DesignSystem.Opacity.subtle * 0.5))
+                                    )
+                                
+                                // Navigation buttons
+                                HStack(spacing: DesignSystem.Spacing.sm) {
+                                    // Previous button
+                                    Button {
+                                        if currentIndexState > 0 {
+                                            withAnimation(.easeInOut(duration: 0.3)) {
+                                                currentIndexState -= 1
+                                                currentExercise = exercises[currentIndexState]
+                                            }
+                                            Haptics.tap()
+                                        }
+                                    } label: {
+                                        HStack(spacing: DesignSystem.Spacing.xs) {
+                                            Image(systemName: "chevron.left")
+                                                .font(.system(size: DesignSystem.IconSize.medium, weight: .semibold))
+                                            Text("Previous")
+                                                .font(Theme.subheadline.weight(.semibold))
+                                        }
+                                        .foregroundStyle(currentIndexState > 0 ? Theme.accentA : .secondary)
+                                        .frame(maxWidth: .infinity)
+                                        .frame(height: DesignSystem.ButtonSize.large.height)
+                                    }
+                                    .buttonStyle(SecondaryGlassButtonStyle())
+                                    .disabled(currentIndexState <= 0)
+                                    .accessibilityLabel("Previous exercise")
+                                    .accessibilityTouchTarget()
+                                    
+                                    // Next button
+                                    Button {
+                                        if currentIndexState < exercises.count - 1 {
+                                            withAnimation(.easeInOut(duration: 0.3)) {
+                                                currentIndexState += 1
+                                                currentExercise = exercises[currentIndexState]
+                                            }
+                                            Haptics.tap()
+                                        }
+                                    } label: {
+                                        HStack(spacing: DesignSystem.Spacing.xs) {
+                                            Text("Next")
+                                                .font(Theme.subheadline.weight(.semibold))
+                                            Image(systemName: "chevron.right")
+                                                .font(.system(size: DesignSystem.IconSize.medium, weight: .semibold))
+                                        }
+                                        .foregroundStyle(currentIndexState < exercises.count - 1 ? Theme.accentA : .secondary)
+                                        .frame(maxWidth: .infinity)
+                                        .frame(height: DesignSystem.ButtonSize.large.height)
+                                    }
+                                    .buttonStyle(SecondaryGlassButtonStyle())
+                                    .disabled(currentIndexState >= exercises.count - 1)
+                                    .accessibilityLabel("Next exercise")
+                                    .accessibilityTouchTarget()
+                                }
+                            }
+                            .padding(.top, DesignSystem.Spacing.lg)
+                            .padding(.horizontal, DesignSystem.Spacing.md)
+                        }
                     }
                     .padding(.top, DesignSystem.Spacing.xxl)
                     .frame(maxWidth: .infinity)
@@ -63,6 +148,58 @@ struct ExerciseGuideView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                // Previous/Next navigation in toolbar for easier access
+                if let exercises = exercises, exercises.count > 1 {
+                    HStack(spacing: DesignSystem.Spacing.xs) {
+                        Button {
+                            if currentIndexState > 0 {
+                                withAnimation(.easeInOut(duration: 0.3)) {
+                                    currentIndexState -= 1
+                                    currentExercise = exercises[currentIndexState]
+                                }
+                                Haptics.tap()
+                            }
+                        } label: {
+                            Image(systemName: "chevron.left")
+                                .font(.system(size: DesignSystem.IconSize.large, weight: .semibold))
+                                .foregroundStyle(currentIndexState > 0 ? Theme.accentA : .secondary)
+                                .frame(width: DesignSystem.TouchTarget.comfortable, height: DesignSystem.TouchTarget.comfortable)
+                                .contentShape(Rectangle())
+                        }
+                        .disabled(currentIndexState <= 0)
+                        .accessibilityLabel("Previous exercise")
+                        .accessibilityTouchTarget()
+                        
+                        // Exercise counter in toolbar (compact)
+                        Text("\(currentIndexState + 1)/\(exercises.count)")
+                            .font(Theme.caption.weight(.semibold))
+                            .foregroundStyle(Theme.textPrimary)
+                            .monospacedDigit()
+                            .padding(.horizontal, DesignSystem.Spacing.xs)
+                        
+                        Button {
+                            if currentIndexState < exercises.count - 1 {
+                                withAnimation(.easeInOut(duration: 0.3)) {
+                                    currentIndexState += 1
+                                    currentExercise = exercises[currentIndexState]
+                                }
+                                Haptics.tap()
+                            }
+                        } label: {
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: DesignSystem.IconSize.large, weight: .semibold))
+                                .foregroundStyle(currentIndexState < exercises.count - 1 ? Theme.accentA : .secondary)
+                                .frame(width: DesignSystem.TouchTarget.comfortable, height: DesignSystem.TouchTarget.comfortable)
+                                .contentShape(Rectangle())
+                        }
+                        .disabled(currentIndexState >= exercises.count - 1)
+                        .accessibilityLabel("Next exercise")
+                        .accessibilityTouchTarget()
+                    }
+                }
+            }
+            
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("Done") {
                     // Show interstitial ad after viewing exercise guide (natural break point)
@@ -96,7 +233,7 @@ struct ExerciseGuideView: View {
                     Spacer()
                     
                     // Difficulty badge
-                    Text(exercise.intensityLevel.displayName)
+                    Text(currentExercise.intensityLevel.displayName)
                         .font(Theme.caption)
                         .foregroundStyle(.white)
                         .padding(.horizontal, DesignSystem.Spacing.md)
@@ -107,11 +244,11 @@ struct ExerciseGuideView: View {
                         )
                 }
                 
-                Text(exercise.instructions)
+                Text(currentExercise.instructions)
                     .font(Theme.body)
                     .foregroundStyle(Theme.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
-                    .accessibilityLabel("Instructions: \(exercise.instructions)")
+                    .accessibilityLabel("Instructions: \(currentExercise.instructions)")
             }
             .cardPadding()
         }
@@ -132,11 +269,11 @@ struct ExerciseGuideView: View {
                     Spacer()
                 }
                 
-                Text(exercise.breathingCues)
+                Text(currentExercise.breathingCues)
                     .font(Theme.body)
                     .foregroundStyle(Theme.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
-                    .accessibilityLabel("Breathing cues: \(exercise.breathingCues)")
+                    .accessibilityLabel("Breathing cues: \(currentExercise.breathingCues)")
             }
             .cardPadding()
         }
@@ -180,7 +317,7 @@ struct ExerciseGuideView: View {
                 }
                 
                 VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
-                    ForEach(exercise.commonMistakes, id: \.self) { mistake in
+                    ForEach(currentExercise.commonMistakes, id: \.self) { mistake in
                         HStack(alignment: .top, spacing: DesignSystem.Spacing.md) {
                             Image(systemName: "xmark.circle.fill")
                                 .font(.system(size: DesignSystem.IconSize.small))
@@ -214,7 +351,7 @@ struct ExerciseGuideView: View {
                 }
                 
                 VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
-                    ForEach(exercise.modifications) { modification in
+                    ForEach(currentExercise.modifications) { modification in
                         VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
                             Text(modification.difficulty.displayName)
                                 .font(Theme.headline)
@@ -253,7 +390,7 @@ struct ExerciseGuideView: View {
                 }
                 
                 VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
-                    ForEach(exercise.safetyWarnings, id: \.self) { warning in
+                    ForEach(currentExercise.safetyWarnings, id: \.self) { warning in
                         HStack(alignment: .top, spacing: DesignSystem.Spacing.md) {
                             Image(systemName: "exclamationmark.shield.fill")
                                 .font(.system(size: DesignSystem.IconSize.small))
@@ -287,7 +424,7 @@ struct ExerciseGuideView: View {
                 }
                 
                 VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
-                    ForEach(tipsForExercise(exercise.name), id: \.self) { tip in
+                    ForEach(tipsForExercise(currentExercise.name), id: \.self) { tip in
                         HStack(alignment: .top, spacing: DesignSystem.Spacing.md) {
                             Image(systemName: "circle.fill")
                                 .font(.system(size: DesignSystem.Spacing.xs * 0.75))
@@ -307,7 +444,7 @@ struct ExerciseGuideView: View {
     
     private var muscleGroupTags: some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))], alignment: .leading, spacing: DesignSystem.Spacing.sm) {
-            ForEach(exercise.muscleGroups, id: \.self) { muscle in
+            ForEach(currentExercise.muscleGroups, id: \.self) { muscle in
                 Text(muscle.displayName)
                     .font(Theme.caption)
                     .foregroundStyle(Theme.accentA)
@@ -325,7 +462,7 @@ struct ExerciseGuideView: View {
         GlassCard(material: .ultraThinMaterial) {
             HStack(spacing: DesignSystem.Spacing.md) {
                 Image(systemName: "clock.fill")
-                    .font(.title2)
+                    .font(Theme.title2)
                     .foregroundStyle(Theme.accentB)
                 
                 VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {

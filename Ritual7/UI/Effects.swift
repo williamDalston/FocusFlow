@@ -135,9 +135,9 @@ extension View {
     }
     
     /// Apply glow effect to any view
-    func glowEffect(color: Color = Theme.glowColor, intensity: Double = 1.0) -> some View {
+    func glowEffect(cornerRadius: CGFloat = DesignSystem.CornerRadius.card, color: Color = Theme.glowColor, intensity: Double = 1.0) -> some View {
         self.overlay(
-            GlowEffect(cornerRadius: DesignSystem.CornerRadius.card, color: color, intensity: intensity)
+            GlowEffect(cornerRadius: cornerRadius, color: color, intensity: intensity)
         )
     }
     

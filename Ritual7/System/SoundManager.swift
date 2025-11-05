@@ -20,6 +20,9 @@ class SoundManager: ObservableObject {
     private let soundEnabledKey = AppConstants.UserDefaultsKeys.soundEnabled
     private let vibrationEnabledKey = AppConstants.UserDefaultsKeys.vibrationEnabled
     
+    // Ad audio handling: Track paused state for ad audio best practices
+    private var isPausedForAd = false
+    
     private init() {
         loadSettings()
     }
@@ -42,6 +45,8 @@ class SoundManager: ObservableObject {
     
     func playSound(_ type: SoundType) async {
         guard soundEnabled else { return }
+        // Respect ad audio: Don't play app audio when paused for ad
+        guard !isPausedForAd else { return }
         
         switch type {
         case .start:
@@ -141,6 +146,32 @@ class SoundManager: ObservableObject {
         case .long:
             UINotificationFeedbackGenerator().notificationOccurred(.success)
         }
+    }
+    
+    // MARK: - Ad Audio Management
+    
+    /// Pause app audio when ad audio starts playing
+    /// Best practice: Respect ad audio by pausing app audio
+    func pauseAudioForAd() {
+        guard !isPausedForAd else { return }
+        isPausedForAd = true
+        
+        // Stop any currently playing audio
+        audioPlayer?.stop()
+        audioPlayer = nil
+        
+        // Note: AVAudioEngine tones are short-lived and will complete naturally
+        // No need to actively stop them as they finish quickly
+    }
+    
+    /// Resume app audio after ad audio finishes
+    /// Best practice: Resume app audio when ad audio stops
+    func resumeAudioAfterAd() {
+        guard isPausedForAd else { return }
+        isPausedForAd = false
+        
+        // Audio will resume naturally when next sound is requested
+        // This flag ensures we don't block future audio playback
     }
 }
 

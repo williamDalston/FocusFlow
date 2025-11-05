@@ -1,134 +1,96 @@
 import SwiftUI
 
-/// Agent 6 & 7: Onboarding flow with carefully polished layout, spacing, and styling
+/// Agent 24: Progressive Onboarding System - Enhanced with skip option and improved progressive disclosure
 struct OnboardingView: View {
-    @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
+    @ObservedObject private var onboardingManager = OnboardingManager.shared
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     @State private var step = 0
     @State private var reminderEnabled = false
     @State private var reminderTime = DateComponents(hour: 20, minute: 0) // 8 PM default
     @State private var pendingAuth = false
+    
+    // Onboarding steps with progressive disclosure
+    private let steps: [OnboardingStep] = [
+        OnboardingStep(
+            title: "Welcome to Ritual7 👋",
+            description: "Transform your life in just 7 minutes a day. Build strength, improve fitness, and create lasting habits with our science-backed workout program.",
+            icon: "figure.run",
+            iconColors: [Theme.accentA, Theme.accentB]
+        ),
+        OnboardingStep(
+            title: "12 Exercises, 7 Minutes 💪",
+            description: "Complete a full-body workout with 12 exercises, each lasting 30 seconds with 10-second rest periods. No equipment needed—just your commitment.",
+            icon: "timer",
+            iconColors: [Theme.accentB, Theme.accentC]
+        ),
+        OnboardingStep(
+            title: "Build a Streak 🔥",
+            description: "Work out daily to grow your streak. Small consistent efforts compound into big results. Track your progress and celebrate your achievements.",
+            icon: "flame.fill",
+            iconColors: [Theme.accentC, Theme.accentA]
+        )
+    ]
 
     var body: some View {
         ZStack {
             ThemeBackground()
-            TabView(selection: $step) {
-                page(title: "Welcome 👋",
-                     body: "Ritual7 helps you build strength and fitness in just 7 minutes. No equipment needed, just 12 exercises and your commitment.",
-                     icon: "figure.run")
-                    .tag(0)
-
-                page(title: "12 Exercises, 7 Minutes 💪",
-                     body: "Complete a full-body workout with 12 exercises, each lasting 30 seconds with 10-second rest periods. Perfect for busy schedules.",
-                     icon: "timer")
-                    .tag(1)
-
-                page(title: "Build a streak 🔥",
-                     body: "Work out daily to grow your streak. Small consistent efforts compound into big results.",
-                     icon: "flame.fill")
-                    .tag(2)
-
-                remindersPage.tag(3)
-            }
-            .tabViewStyle(.page(indexDisplayMode: .always))
-        }
-    }
-
-    private func page(title: String, body: String, icon: String) -> some View {
-        let isIPad = horizontalSizeClass == .regular
-        
-        return VStack(spacing: isIPad ? DesignSystem.Spacing.xxl : DesignSystem.Spacing.xl) {
-            Spacer()
             
-            // Icon container with carefully chosen spacing and styling
-            Image(systemName: icon)
-                .font(.system(
-                    size: isIPad ? DesignSystem.IconSize.huge * 1.25 : DesignSystem.IconSize.huge,
-                    weight: .bold
-                ))
-                .foregroundStyle(
-                    LinearGradient(
-                        colors: [
-                            Theme.accentA,
-                            Theme.accentB,
-                            Theme.accentC
-                        ],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
-                .padding(isIPad ? DesignSystem.Spacing.xl : DesignSystem.Spacing.lg)
-                .background(
-                    .ultraThinMaterial,
-                    in: RoundedRectangle(
-                        cornerRadius: DesignSystem.CornerRadius.xlarge,
-                        style: .continuous
-                    )
-                )
-                .overlay(
-                    RoundedRectangle(
-                        cornerRadius: DesignSystem.CornerRadius.xlarge,
-                        style: .continuous
-                    )
-                    .stroke(
-                        LinearGradient(
-                            colors: [
-                                Theme.strokeOuter,
-                                Theme.accentA.opacity(DesignSystem.Opacity.light),
-                                Theme.strokeOuter
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        ),
-                        lineWidth: DesignSystem.Border.standard
-                    )
-                )
-                .shadow(
-                    color: Theme.enhancedShadow.opacity(DesignSystem.Opacity.medium),
-                    radius: DesignSystem.Shadow.medium.radius,
-                    y: DesignSystem.Shadow.medium.y
-                )
-            
-            // Title with proper typography hierarchy
-            Text(title)
-                .font(isIPad ? Theme.largeTitle : Theme.title)
-                .foregroundStyle(Theme.textOnDark)
-                .multilineTextAlignment(.center)
-                .minimumScaleFactor(0.8)
-                .lineLimit(2)
-                .padding(.horizontal, isIPad ? DesignSystem.Spacing.xxl : DesignSystem.Spacing.xl)
-                .padding(.top, DesignSystem.Spacing.lg)
-            
-            // Body text with carefully chosen opacity and spacing
-            Text(body)
-                .font(isIPad ? Theme.title2 : Theme.title3)
-                .foregroundStyle(Theme.textSecondaryOnDark)
-                .multilineTextAlignment(.center)
-                .lineSpacing(DesignSystem.Typography.bodyLineHeight - 1.0)
-                .padding(.horizontal, isIPad ? DesignSystem.Spacing.xxxl : DesignSystem.Spacing.xxl)
-                .padding(.top, DesignSystem.Spacing.lg)
-                .minimumScaleFactor(0.85)
-            
-            Spacer()
-            
-            // Button with consistent styling
-            Button {
-                Haptics.tap()
-                withAnimation(AnimationConstants.smoothSpring) {
-                    step += 1
+            VStack(spacing: 0) {
+                // Skip button at top (only show if not on last step)
+                if step < steps.count {
+                    HStack {
+                        Spacer()
+                        Button {
+                            Haptics.tap()
+                            skipOnboarding()
+                        } label: {
+                            Text("Skip")
+                                .font(Theme.body)
+                                .foregroundStyle(Theme.textSecondaryOnDark)
+                                .padding(.horizontal, DesignSystem.Spacing.md)
+                                .padding(.vertical, DesignSystem.Spacing.sm)
+                        }
+                        .padding(.top, DesignSystem.Spacing.md)
+                        .padding(.trailing, DesignSystem.Spacing.md)
+                    }
                 }
-            } label: {
-                Text("Next")
-                    .fontWeight(DesignSystem.Typography.headlineWeight)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: DesignSystem.ButtonSize.large.height)
+                
+                TabView(selection: $step) {
+                    // Welcome steps using OnboardingStepView
+                    ForEach(0..<steps.count, id: \.self) { index in
+                        OnboardingStepView(
+                            step: steps[index],
+                            isLastStep: index == steps.count - 1,
+                            onNext: {
+                                withAnimation(AnimationConstants.smoothSpring) {
+                                    if index < steps.count - 1 {
+                                        step += 1
+                                    } else {
+                                        step = steps.count // Move to reminders page
+                                    }
+                                }
+                            },
+                            onSkip: index < steps.count - 1 ? {
+                                skipOnboarding()
+                            } : nil
+                        )
+                        .tag(index)
+                    }
+                    
+                    // Reminders page (last step)
+                    remindersPage.tag(steps.count)
+                }
+                .tabViewStyle(.page(indexDisplayMode: .always))
             }
-            .buttonStyle(PrimaryProminentButtonStyle())
-            .padding(.horizontal, isIPad ? DesignSystem.Screen.sidePaddingIPad : DesignSystem.Screen.sidePadding)
-            .padding(.bottom, isIPad ? DesignSystem.Spacing.xxxl : DesignSystem.Spacing.xxl)
         }
     }
+    
+    private func skipOnboarding() {
+        Haptics.tap()
+        onboardingManager.completeOnboarding()
+    }
+
 
     private var remindersPage: some View {
         let isIPad = horizontalSizeClass == .regular
@@ -211,7 +173,7 @@ struct OnboardingView: View {
                         }
                     }
                     Haptics.success()
-                    hasSeenOnboarding = true
+                    onboardingManager.completeOnboarding()
                 }
             } label: {
                 HStack(spacing: DesignSystem.Spacing.sm) {
@@ -233,3 +195,4 @@ struct OnboardingView: View {
         .animation(AnimationConstants.smoothSpring, value: reminderEnabled)
     }
 }
+

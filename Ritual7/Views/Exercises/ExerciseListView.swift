@@ -104,7 +104,15 @@ struct ExerciseListView: View {
         }
         .sheet(item: $selectedExercise) { exercise in
             NavigationStack {
-                ExerciseGuideView(exercise: exercise)
+                if let index = filteredExercises.firstIndex(where: { $0.id == exercise.id }) {
+                    ExerciseGuideView(
+                        exercise: exercise,
+                        exercises: filteredExercises,
+                        currentIndex: index
+                    )
+                } else {
+                    ExerciseGuideView(exercise: exercise)
+                }
             }
         }
     }

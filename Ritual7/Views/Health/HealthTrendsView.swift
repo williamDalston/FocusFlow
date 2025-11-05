@@ -515,7 +515,7 @@ private struct HealthTrendsInsightCard: View {
                     .foregroundStyle(.secondary)
             }
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 20)
+            .padding(.vertical, DesignSystem.Spacing.regularCardPadding + DesignSystem.Spacing.xs / 2)
         }
     }
 }
@@ -565,7 +565,7 @@ private struct HealthTrendsRecommendationCard: View {
                     Text(action)
                         .font(Theme.caption)
                         .foregroundStyle(Theme.accentA)
-                        .padding(.top, 4)
+                        .padding(.top, DesignSystem.Spacing.xs / 2)
                 }
             }
             .padding(DesignSystem.Spacing.formFieldSpacing)

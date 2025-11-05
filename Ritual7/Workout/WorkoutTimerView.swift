@@ -7,6 +7,8 @@ struct WorkoutTimerView: View {
     @ObservedObject var store: WorkoutStore
     @EnvironmentObject private var theme: ThemeStore
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
     
     @State private var showCompletionConfetti = false
     @StateObject private var repCounter = RepCounter()
@@ -14,6 +16,22 @@ struct WorkoutTimerView: View {
     @State private var showCompletionCelebration = false
     @AppStorage("hasSeenGestureHint") private var hasSeenGestureHint = false
     @State private var showGestureHint = false
+    @State private var previousPhase: WorkoutPhase = .idle
+    @State private var hasAutoStarted = false
+    
+    // Agent 24: Contextual hints for first-time users
+    @ObservedObject private var onboardingManager = OnboardingManager.shared
+    @State private var showWorkoutTimerHint = false
+    @State private var showPauseHint = false
+    @State private var showProgressHint = false
+    
+    // Agent 25: Confirmation dialog for workout stop
+    @State private var showingStopConfirmation = false
+    
+    // Agent 29: Landscape detection
+    private var isLandscape: Bool {
+        horizontalSizeClass == .compact && verticalSizeClass == .compact
+    }
     
     var body: some View {
         ZStack {
@@ -21,6 +39,23 @@ struct WorkoutTimerView: View {
             VStack(spacing: 0) {
                 progressBar
                 scrollContent
+                
+                // Agent 29: Sticky control bar at bottom (thumb zone optimized, ≥48pt hit targets per spec)
+                if engine.phase != .idle && engine.phase != .completed {
+                    VStack(spacing: DesignSystem.Spacing.sm) {
+                        // "Now/Next" line above control bar per spec
+                        nowNextLine
+                        
+                        stickyControlBar
+                    }
+                    .padding(.horizontal, DesignSystem.Spacing.md)
+                    .padding(.top, DesignSystem.Spacing.sm)
+                    .padding(.bottom, DesignSystem.Spacing.md)
+                    .background(.ultraThinMaterial)
+                    .shadow(color: .black.opacity(0.1), radius: 8, y: -2)
+                    // Agent 29: Ensure proper safe area padding for modern devices
+                    .safeAreaPadding(.bottom, DesignSystem.Spacing.xs)
+                }
             }
             completionOverlayIfNeeded
             ConfettiView(trigger: $showCompletionConfetti)
@@ -29,20 +64,61 @@ struct WorkoutTimerView: View {
             if showGestureHint {
                 gestureHintsOverlay
             }
+            
+            // Agent 24: Contextual hints for first-time users
+            VStack {
+                if showWorkoutTimerHint {
+                    ContextualHintView(
+                        feature: .workoutTimer,
+                        onDismiss: {
+                            showWorkoutTimerHint = false
+                            onboardingManager.markHintAsSeen(for: .workoutTimer)
+                        }
+                    )
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                }
+                
+                if showPauseHint {
+                    ContextualHintView(
+                        feature: .pause,
+                        onDismiss: {
+                            showPauseHint = false
+                            onboardingManager.markHintAsSeen(for: .pause)
+                        }
+                    )
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                }
+                
+                if showProgressHint {
+                    ContextualHintView(
+                        feature: .progress,
+                        onDismiss: {
+                            showProgressHint = false
+                            onboardingManager.markHintAsSeen(for: .progress)
+                        }
+                    )
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                }
+                
+                Spacer()
+            }
+            .padding(.top, DesignSystem.Spacing.lg)
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            // Lock rotation to portrait during workout
+            // Agent 29: Allow rotation - optimize for both portrait and landscape
             ToolbarItem(placement: .principal) {
                 EmptyView()
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("Done") {
-                    Haptics.buttonPress()
-                    if engine.phase != .idle {
-                        engine.stop()
+                    // Agent 25: Show confirmation before stopping
+                    if engine.phase != .idle && engine.phase != .completed {
+                        showingStopConfirmation = true
+                    } else {
+                        dismiss()
                     }
-                    dismiss()
+                    Haptics.buttonPress()
                 }
                 .foregroundStyle(Theme.accentA)
                 .accessibilityLabel("Done")
@@ -52,7 +128,65 @@ struct WorkoutTimerView: View {
         .accessibilityElement(children: .combine)
         .accessibilityLabel(workoutVoiceOverLabel)
         .dynamicTypeSize(...DynamicTypeSize.accessibility5)
+        // Agent 25: Confirmation dialog for workout stop
+        .confirmationDialog("Stop Workout", isPresented: $showingStopConfirmation, titleVisibility: .visible) {
+            Button("Stop", role: .destructive) {
+                // Agent 25: Stop workout with undo support
+                engine.stop()
+                
+                // Agent 25: Show toast with undo option
+                ToastManager.shared.show(
+                    message: "Workout stopped",
+                    onUndo: {
+                        if engine.undoStop() {
+                            Haptics.success()
+                        }
+                    }
+                )
+                
+                dismiss()
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Are you sure you want to stop this workout? This action can be undone.")
+        }
+        .toast() // Agent 25: Enable toast notifications
         .onChange(of: engine.phase) { newPhase in
+            // Phase transition animations (180-220ms ease-in-out per spec)
+            withAnimation(.easeInOut(duration: 0.2)) {
+                // Phase color crossfade handled by segmented ring
+            }
+            
+            // Agent 29: Enhanced haptic feedback for phase transitions
+            if previousPhase != newPhase {
+                // Agent 28: Announce phase changes via VoiceOver
+                let phaseString: String
+                switch newPhase {
+                case .idle:
+                    phaseString = "idle"
+                case .preparing:
+                    phaseString = "preparing"
+                    // Agent 29: Light haptic for preparation
+                    Haptics.phaseTransitionToPrep()
+                case .exercise:
+                    phaseString = "exercise"
+                    // Agent 29: Distinct pattern for exercise transition
+                    Haptics.phaseTransitionToExercise()
+                case .rest:
+                    phaseString = "rest"
+                    // Agent 29: Softer pattern for rest transition
+                    Haptics.phaseTransitionToRest()
+                case .completed:
+                    phaseString = "completed"
+                }
+                
+                AccessibilityAnnouncer.announcePhaseChange(
+                    phase: phaseString,
+                    exercise: engine.currentExercise?.name,
+                    timeRemaining: Int(engine.timeRemaining)
+                )
+            }
+            
             if newPhase == .completed {
                 let duration = engine.currentSessionDuration ?? AppConstants.TimingConstants.defaultWorkoutDuration
                 // Get start date from engine
@@ -68,12 +202,61 @@ struct WorkoutTimerView: View {
                 )
                 voiceCues.speakCompletion(stats: stats)
                 
-                // Vibrate on completion
-                Haptics.success()
+                // Agent 28: Announce workout completion with stats via VoiceOver
+                AccessibilityAnnouncer.announceWorkoutCompletion(
+                    duration: duration,
+                    exercisesCompleted: engine.exercises.count
+                )
+                
+                // Agent 29: Celebration pattern for workout completion
+                Haptics.workoutComplete()
             } else if newPhase == .exercise {
                 // Agent 11: Start rep counting for new exercise
                 if let exercise = engine.currentExercise {
                     repCounter.startTracking(for: exercise)
+                }
+                
+                // Agent 24: Show pause hint when control bar first appears
+                if onboardingManager.shouldShowHint(for: .pause) && !showPauseHint && previousPhase == .idle {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                        withAnimation(AnimationConstants.smoothSpring) {
+                            showPauseHint = true
+                        }
+                    }
+                }
+                
+                // Agent 24: Show progress hint on first exercise
+                if onboardingManager.shouldShowHint(for: .progress) && !showProgressHint {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        withAnimation(AnimationConstants.smoothSpring) {
+                            showProgressHint = true
+                        }
+                    }
+                }
+            }
+            
+            // Update previous phase for next comparison
+            previousPhase = newPhase
+        }
+        .onAppear {
+            // Initialize previous phase
+            previousPhase = engine.phase
+            
+            // Agent 24: Show contextual hints for first-time users
+            if onboardingManager.shouldShowHint(for: .workoutTimer) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    withAnimation(AnimationConstants.smoothSpring) {
+                        showWorkoutTimerHint = true
+                    }
+                }
+            }
+            
+            // Auto-start workout if idle and not already started
+            if engine.phase == .idle && !hasAutoStarted {
+                hasAutoStarted = true
+                // Small delay to ensure view is fully presented
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    engine.start()
                 }
             }
         }
@@ -122,15 +305,116 @@ struct WorkoutTimerView: View {
     
     private var scrollContent: some View {
         ScrollView {
-            VStack(spacing: DesignSystem.Spacing.xxl) {
+            // Agent 29: Optimize layout for landscape vs portrait
+            if isLandscape {
+                landscapeLayout
+            } else {
+                portraitLayout
+            }
+        }
+        .gesture(
+            DragGesture(minimumDistance: 50)
+                .onEnded { value in
+                    let horizontalAmount = value.translation.width
+                    let verticalAmount = value.translation.height
+                    
+                    // Horizontal swipe (left or right)
+                    if abs(horizontalAmount) > abs(verticalAmount) {
+                        if horizontalAmount > 50 {
+                            // Swipe right: Pause/Resume
+                            if engine.phase != .idle && engine.phase != .completed {
+                                if engine.isPaused {
+                                    engine.resume()
+                                } else {
+                                    engine.pause()
+                                }
+                                Haptics.buttonPress()
+                                // Dismiss gesture hint if showing
+                                if showGestureHint {
+                                    showGestureHint = false
+                                    hasSeenGestureHint = true
+                                }
+                            }
+                        } else if horizontalAmount < -50 {
+                            // Swipe left: Skip rest (only during rest phase)
+                            if engine.phase == .rest {
+                                engine.skipRest()
+                                Haptics.buttonPress()
+                                // Dismiss gesture hint if showing
+                                if showGestureHint {
+                                    showGestureHint = false
+                                    hasSeenGestureHint = true
+                                }
+                            }
+                        }
+                    }
+                }
+        )
+    }
+    
+    // Agent 29: Portrait layout (original)
+    private var portraitLayout: some View {
+        VStack(spacing: DesignSystem.Spacing.xl) {
+            // Timer section with circular progress (shows when idle or before workout starts)
+            if engine.phase == .idle {
                 timerSectionWithCircularProgress
-                exerciseOrPrepView
+                    .padding(.top, DesignSystem.Spacing.xl)
+            } else {
+                // Segmented progress ring (12 segments per spec)
+                segmentedProgressRing
+                    .padding(.top, DesignSystem.Spacing.xl)
+            }
+            
+            // Exercise/prep view (simplified)
+            exerciseOrPrepView
+                .padding(.top, DesignSystem.Spacing.lg)
+            
+            // Controls section - always show when idle or completed
+            if engine.phase == .idle || engine.phase == .completed {
                 controlsSection
+                    .padding(.top, DesignSystem.Spacing.lg)
+            }
+            
+            statsSectionIfNeeded
+                .padding(.top, DesignSystem.Spacing.lg)
+        }
+        .padding(.horizontal, DesignSystem.Spacing.xl)
+        .padding(.vertical, DesignSystem.Spacing.xl)
+        .padding(.bottom, DesignSystem.Spacing.xxxl + DesignSystem.Spacing.md) // Space for sticky control bar (96pt)
+    }
+    
+    // Agent 29: Landscape layout (optimized for horizontal viewing)
+    private var landscapeLayout: some View {
+        HStack(alignment: .top, spacing: LandscapeOptimizer.landscapeSpacing) {
+            // Left side: Timer and progress
+            VStack(spacing: DesignSystem.Spacing.md) {
+                if engine.phase == .idle {
+                    timerSectionWithCircularProgress
+                        .frame(width: LandscapeOptimizer.landscapeTimerSize, height: LandscapeOptimizer.landscapeTimerSize)
+                        .padding(.top, DesignSystem.Spacing.md)
+                } else {
+                    segmentedProgressRing
+                        .frame(width: LandscapeOptimizer.landscapeTimerSize, height: LandscapeOptimizer.landscapeTimerSize)
+                        .padding(.top, DesignSystem.Spacing.md)
+                }
+                
                 statsSectionIfNeeded
             }
-            .padding(.horizontal, DesignSystem.Spacing.xl)
-            .padding(.vertical, DesignSystem.Spacing.xxl)
+            .frame(width: LandscapeOptimizer.landscapeTimerSize + 40)
+            
+            // Right side: Exercise info and controls
+            VStack(spacing: DesignSystem.Spacing.md) {
+                exerciseOrPrepView
+                
+                if engine.phase == .idle || engine.phase == .completed {
+                    controlsSection
+                }
+            }
+            .frame(maxWidth: .infinity)
         }
+        .padding(.horizontal, LandscapeOptimizer.landscapePadding)
+        .padding(.vertical, LandscapeOptimizer.landscapeSpacing)
+        .padding(.bottom, DesignSystem.Spacing.xxxl + DesignSystem.Spacing.md) // Space for sticky control bar (96pt)
         .gesture(
             DragGesture(minimumDistance: 50)
                 .onEnded { value in
@@ -173,12 +457,50 @@ struct WorkoutTimerView: View {
     
     @ViewBuilder
     private var exerciseOrPrepView: some View {
-        if engine.phase == .preparing {
+        if engine.phase == .idle {
+            // Show welcome message when idle
+            idleWelcomeView
+        } else if engine.phase == .preparing {
             prepView
         } else if engine.phase == .rest {
             restView
         } else if let exercise = engine.currentExercise {
             exerciseCard(exercise: exercise)
+        }
+    }
+    
+    // MARK: - Idle Welcome View
+    
+    private var idleWelcomeView: some View {
+        GlassCard(material: .ultraThinMaterial) {
+            VStack(spacing: DesignSystem.Spacing.lg) {
+                Image(systemName: "figure.run")
+                    .font(.system(size: DesignSystem.IconSize.huge, weight: .bold))
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [Theme.accentA, Theme.accentB],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                
+                Text("Ready to Start")
+                    .font(Theme.title2.weight(.bold))
+                    .foregroundStyle(Theme.textPrimary)
+                    .multilineTextAlignment(.center)
+                
+                Text("Your workout will begin automatically")
+                    .font(Theme.subheadline)
+                    .foregroundStyle(Theme.textSecondary)
+                    .multilineTextAlignment(.center)
+                    .lineSpacing(DesignSystem.Typography.bodyLineHeight - 1.0)
+                
+                Text("\(engine.exercises.count) exercises • ~\(Int(engine.totalWorkoutDuration / 60)) minutes")
+                    .font(Theme.caption)
+                    .foregroundStyle(Theme.textSecondary)
+                    .multilineTextAlignment(.center)
+            }
+            .padding(DesignSystem.Spacing.cardPadding)
         }
     }
     
@@ -246,10 +568,11 @@ struct WorkoutTimerView: View {
         VStack(spacing: DesignSystem.Spacing.xl) {
             // Phase indicator
             Text(phaseTitle)
-                .font(Theme.title3)
-                .foregroundStyle(.secondary)
+                .font(Theme.title3.weight(.semibold))
+                .foregroundStyle(Theme.textSecondary)
                 .textCase(.uppercase)
                 .tracking(DesignSystem.Typography.uppercaseTracking)
+                .multilineTextAlignment(.center)
             
             // Circular progress ring with timer (Master Designer Polish)
             ZStack {
@@ -327,6 +650,7 @@ struct WorkoutTimerView: View {
                 VStack(spacing: DesignSystem.Spacing.sm) {
                     Text(timeString)
                         .font(.system(size: DesignSystem.IconSize.huge * 1.125, weight: .bold, design: .rounded)) // 72pt timer display (increased from 68pt for prominence)
+                        .dynamicTypeSize(...DynamicTypeSize.accessibility5) // Support Dynamic Type for accessibility
                         .foregroundStyle(
                             LinearGradient(
                                 colors: [
@@ -397,7 +721,38 @@ struct WorkoutTimerView: View {
         .padding(.vertical, DesignSystem.Spacing.xl)
     }
     
-    private var segmentProgress: Double {
+    // MARK: - Segmented Progress Ring (12 segments per spec)
+    
+    private var segmentedProgressRing: some View {
+        SegmentedProgressRing(
+            totalSegments: 12,
+            completedSegments: completedSegmentCount,
+            currentSegmentProgress: currentSegmentProgressValue,
+            phase: engine.phase,
+            timeRemaining: engine.timeRemaining,
+            currentExercise: engine.currentExercise,
+            nextExercise: engine.nextExercise
+        )
+        .animation(.easeInOut(duration: 0.2), value: engine.phase) // 180-220ms transition
+        .animation(.easeInOut(duration: 0.2), value: completedSegmentCount)
+    }
+    
+    /// Number of completed segments (completed exercises)
+    private var completedSegmentCount: Int {
+        switch engine.phase {
+        case .preparing:
+            return 0
+        case .exercise:
+            return engine.currentExerciseIndex
+        case .rest:
+            return engine.currentExerciseIndex + 1
+        default:
+            return 0
+        }
+    }
+    
+    /// Progress for current segment (0.0 to 1.0)
+    private var currentSegmentProgressValue: Double {
         guard engine.phase != .idle && engine.phase != .completed else { return 0 }
         
         let segmentDuration: TimeInterval
@@ -414,6 +769,142 @@ struct WorkoutTimerView: View {
         
         guard segmentDuration > 0 else { return 0 }
         return 1.0 - (engine.timeRemaining / segmentDuration)
+    }
+    
+    // Legacy segment progress (kept for backward compatibility)
+    private var segmentProgress: Double {
+        currentSegmentProgressValue
+    }
+    
+    // MARK: - Sticky Control Bar (≥48pt hit targets per spec)
+    
+    private var stickyControlBar: some View {
+        HStack(spacing: DesignSystem.Spacing.sm) {
+            // Back button (only during exercise, not on first exercise)
+            if engine.phase == .exercise && engine.currentExerciseIndex > 0 {
+                Button {
+                    Haptics.buttonPress()
+                    engine.goToPreviousExercise()
+                } label: {
+                    Image(systemName: "arrow.left")
+                        .font(.system(size: DesignSystem.IconSize.medium, weight: .semibold))
+                        .frame(width: DesignSystem.TouchTarget.comfortable)
+                        .frame(height: DesignSystem.TouchTarget.comfortable)
+                }
+                .buttonStyle(SecondaryGlassButtonStyle())
+                .accessibilityLabel("Previous exercise")
+                .accessibilityHint("Double tap to go back to the previous exercise")
+            }
+            
+            // Pause/Resume (primary, takes remaining space)
+            Button {
+                Haptics.buttonPress()
+                if engine.isPaused {
+                    engine.resume()
+                } else {
+                    engine.pause()
+                }
+            } label: {
+                Label(engine.isPaused ? "Resume" : "Pause",
+                      systemImage: engine.isPaused ? "play.fill" : "pause.fill")
+                    .font(Theme.headline)
+                    .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: DesignSystem.TouchTarget.comfortable)
+            }
+            .buttonStyle(PrimaryProminentButtonStyle())
+            .accessibilityLabel(engine.isPaused ? "Resume workout" : "Pause workout")
+            .accessibilityHint("Double tap to \(engine.isPaused ? "resume" : "pause") the workout")
+            
+            // Next/Skip button
+            if engine.phase == .rest {
+                // Skip rest button
+                Button {
+                    Haptics.buttonPress()
+                    engine.skipRest()
+                } label: {
+                    Image(systemName: "forward.fill")
+                        .font(.system(size: DesignSystem.IconSize.medium, weight: .semibold))
+                        .frame(width: DesignSystem.TouchTarget.comfortable)
+                        .frame(height: DesignSystem.TouchTarget.comfortable)
+                }
+                .buttonStyle(SecondaryGlassButtonStyle())
+                .accessibilityLabel("Skip rest")
+                .accessibilityHint("Double tap to skip the rest period and move to next exercise")
+            } else if engine.phase == .exercise && engine.nextExercise != nil {
+                // Next exercise button (only if there's a next exercise)
+                Button {
+                    Haptics.buttonPress()
+                    engine.skipExercise()
+                } label: {
+                    Image(systemName: "arrow.right")
+                        .font(.system(size: DesignSystem.IconSize.medium, weight: .semibold))
+                        .frame(width: DesignSystem.TouchTarget.comfortable)
+                        .frame(height: DesignSystem.TouchTarget.comfortable)
+                }
+                .buttonStyle(SecondaryGlassButtonStyle())
+                .accessibilityLabel("Next exercise")
+                .accessibilityHint("Double tap to skip to the next exercise")
+            }
+            
+            // Volume control (toggle voice cues)
+            Button {
+                Haptics.buttonPress()
+                voiceCues.voiceEnabled.toggle()
+                voiceCues.saveSettings()
+            } label: {
+                Image(systemName: voiceCues.voiceEnabled ? "speaker.wave.2.fill" : "speaker.slash.fill")
+                    .font(.system(size: DesignSystem.IconSize.medium))
+                    .foregroundStyle(voiceCues.voiceEnabled ? Theme.accentA : .secondary)
+                    .frame(width: DesignSystem.TouchTarget.comfortable)
+                    .frame(height: DesignSystem.TouchTarget.comfortable)
+            }
+            .buttonStyle(SecondaryGlassButtonStyle())
+            .accessibilityLabel(voiceCues.voiceEnabled ? "Voice cues on" : "Voice cues off")
+            .accessibilityHint("Double tap to toggle voice cues")
+        }
+    }
+    
+    // MARK: - Now/Next Line
+    
+    private var nowNextLine: some View {
+        HStack(spacing: DesignSystem.Spacing.md) {
+            // Now line - only show during exercise
+            if engine.phase == .exercise, let currentExercise = engine.currentExercise {
+                HStack(spacing: DesignSystem.Spacing.xs) {
+                    Circle()
+                        .fill(Theme.accentA)
+                        .frame(width: 6, height: 6)
+                    Text("Now:")
+                        .font(Theme.caption.weight(.medium))
+                        .foregroundStyle(.secondary)
+                    Text(currentExercise.name)
+                        .font(Theme.caption.weight(.semibold))
+                        .foregroundStyle(Theme.textPrimary)
+                        .lineLimit(1)
+                }
+            }
+            
+            Spacer()
+            
+            // Next line - show during exercise or rest
+            if let nextExercise = engine.nextExercise {
+                HStack(spacing: DesignSystem.Spacing.xs) {
+                    Circle()
+                        .fill(Theme.accentB.opacity(0.6))
+                        .frame(width: 6, height: 6)
+                    Text("Next:")
+                        .font(Theme.caption.weight(.medium))
+                        .foregroundStyle(.secondary)
+                    Text(nextExercise.name)
+                        .font(Theme.caption.weight(.semibold))
+                        .foregroundStyle(Theme.textPrimary)
+                        .lineLimit(1)
+                }
+            }
+        }
+        .padding(.horizontal, DesignSystem.Spacing.md)
+        .padding(.vertical, DesignSystem.Spacing.xs)
     }
     
     // MARK: - Agent 19: Timer Color Transitions
@@ -522,15 +1013,18 @@ struct WorkoutTimerView: View {
                     }
                     
                     Text("Prepare to Start")
-                        .font(Theme.title2)
+                        .font(Theme.title2.weight(.bold))
                         .foregroundStyle(Theme.textPrimary)
                         .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity)
                     
                     if let firstExercise = engine.nextExercise {
-                        Text("First stage: \(firstExercise.name)")
+                        Text("First exercise: \(firstExercise.name)")
                             .font(Theme.subheadline)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Theme.textSecondary)
                             .multilineTextAlignment(.center)
+                            .lineSpacing(DesignSystem.Typography.bodyLineHeight - 1.0)
+                            .frame(maxWidth: .infinity)
                     }
                 }
                 .padding(DesignSystem.Spacing.cardPadding)
@@ -574,7 +1068,7 @@ struct WorkoutTimerView: View {
                         
                         Text(nextExercise.description)
                             .font(Theme.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Theme.textSecondary)
                             .multilineTextAlignment(.center)
                             .lineSpacing(DesignSystem.Typography.captionLineHeight - 1.0)
                             .lineLimit(3)
@@ -622,23 +1116,26 @@ struct WorkoutTimerView: View {
                         .foregroundStyle(Theme.textPrimary)
                         .multilineTextAlignment(.center)
                         .lineSpacing(DesignSystem.Typography.titleLineHeight - 1.0)
+                        .frame(maxWidth: .infinity)
                     
-                    // Description
+                    // Description - centered below timer
                     Text(exercise.description)
                         .font(Theme.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Theme.textSecondary)
                         .multilineTextAlignment(.center)
                         .lineSpacing(DesignSystem.Typography.bodyLineHeight - 1.0)
+                        .frame(maxWidth: .infinity)
+                        .padding(.top, DesignSystem.Spacing.xs)
                     
                     // Agent 11: Rep counter
                     RepCounterView(repCounter: repCounter, exercise: exercise)
                     
                     // Instructions (shown during exercise)
                     Text(exercise.instructions)
-                        .font(Theme.caption)
+                        .font(Theme.subheadline) // Increased from caption for better readability during workouts
                         .foregroundStyle(Theme.textSecondary)
                         .multilineTextAlignment(.leading)
-                        .lineSpacing(DesignSystem.Typography.captionLineHeight - 1.0)
+                        .lineSpacing(DesignSystem.Typography.bodyLineHeight - 1.0) // Updated to match subheadline line height
                         .padding(.top, DesignSystem.Spacing.sm)
                         .transition(.opacity.combined(with: .move(edge: .bottom)))
                     
@@ -683,13 +1180,14 @@ struct WorkoutTimerView: View {
                     Haptics.buttonPress()
                     engine.start()
                 } label: {
-                    Label("Start Workout", systemImage: "play.fill")
+                    Label(MicrocopyManager.shared.ButtonLabel.startWorkout.text, systemImage: "play.fill")
                         .font(Theme.title3)
                         .fontWeight(DesignSystem.Typography.headlineWeight)
                         .frame(maxWidth: .infinity)
                         .frame(height: DesignSystem.ButtonSize.large.height)
                 }
                 .buttonStyle(PrimaryProminentButtonStyle())
+                .accessibilityHint(MicrocopyManager.shared.tooltip(for: .startWorkout))
             } else if engine.phase == .completed {
                 // Workout completed
                 VStack(spacing: DesignSystem.Spacing.md) {
@@ -713,7 +1211,7 @@ struct WorkoutTimerView: View {
                             engine.pause()
                         }
                     } label: {
-                        Label(engine.isPaused ? "Resume" : "Pause", 
+                        Label(engine.isPaused ? MicrocopyManager.shared.ButtonLabel.resume.text : MicrocopyManager.shared.ButtonLabel.pause.text, 
                               systemImage: engine.isPaused ? "play.fill" : "pause.fill")
                             .font(Theme.headline)
                             .fontWeight(DesignSystem.Typography.headlineWeight)
@@ -722,14 +1220,14 @@ struct WorkoutTimerView: View {
                     }
                     .buttonStyle(SecondaryGlassButtonStyle())
                     .accessibilityLabel(engine.isPaused ? "Resume workout" : "Pause workout")
-                    .accessibilityHint("Double tap to \(engine.isPaused ? "resume" : "pause") the workout")
+                    .accessibilityHint(engine.isPaused ? MicrocopyManager.shared.tooltip(for: .resumeWorkout) : MicrocopyManager.shared.tooltip(for: .pauseWorkout))
                     
                     if engine.phase == .rest {
                         Button {
                             Haptics.buttonPress()
                             engine.skipRest()
                         } label: {
-                            Label("Skip Rest", systemImage: "forward.fill")
+                            Label(MicrocopyManager.shared.ButtonLabel.skipRest.text, systemImage: "forward.fill")
                                 .font(Theme.headline)
                                 .fontWeight(DesignSystem.Typography.headlineWeight)
                                 .frame(maxWidth: .infinity)
@@ -737,14 +1235,14 @@ struct WorkoutTimerView: View {
                         }
                         .buttonStyle(SecondaryGlassButtonStyle())
                         .accessibilityLabel("Skip Rest")
-                        .accessibilityHint("Double tap to skip the rest period and move to the next exercise.")
+                        .accessibilityHint(MicrocopyManager.shared.tooltip(for: .skipRest))
                         .accessibilityAddTraits(.isButton)
                     } else if engine.phase == .preparing {
                         Button {
                             Haptics.buttonPress()
                             engine.skipPrep()
                         } label: {
-                            Label("Skip Prep", systemImage: "forward.fill")
+                            Label(MicrocopyManager.shared.ButtonLabel.skipPrep.text, systemImage: "forward.fill")
                                 .font(Theme.headline)
                                 .fontWeight(DesignSystem.Typography.headlineWeight)
                                 .frame(maxWidth: .infinity)
@@ -752,16 +1250,16 @@ struct WorkoutTimerView: View {
                         }
                         .buttonStyle(SecondaryGlassButtonStyle())
                         .accessibilityLabel("Skip Preparation")
-                        .accessibilityHint("Double tap to skip the preparation countdown and start the workout immediately.")
+                        .accessibilityHint(MicrocopyManager.shared.tooltip(for: .skipPrep))
                         .accessibilityAddTraits(.isButton)
                     }
                 }
                 
-                // Stop button
+                // Agent 25: Stop button with confirmation
                 Button(role: .destructive) {
+                    // Agent 25: Show confirmation before stopping
+                    showingStopConfirmation = true
                     Haptics.buttonPress()
-                    engine.stop()
-                    dismiss()
                 } label: {
                     Text("Stop Workout")
                         .font(Theme.headline)
@@ -946,15 +1444,15 @@ struct WorkoutTimerView: View {
     private var phaseTitle: String {
         switch engine.phase {
         case .idle:
-            return "Get Ready"
+            return "Ready to Begin"
         case .preparing:
-            return "The Journey Begins"
+            return "Preparing"
         case .exercise:
-            return "Stage \(engine.currentExerciseIndex + 1) of \(engine.exercises.count)"
+            return "Exercise \(engine.currentExerciseIndex + 1) of \(engine.exercises.count)"
         case .rest:
-            return "Rest Stop"
+            return "Rest"
         case .completed:
-            return "Complete"
+            return "Workout Complete"
         }
     }
     
@@ -974,7 +1472,7 @@ struct WorkoutTimerView: View {
                 if !engine.isPaused {
                     HStack(spacing: DesignSystem.Spacing.md) {
                         Image(systemName: "arrow.left")
-                            .font(.title2)
+                            .font(Theme.title2)
                             .foregroundStyle(Theme.accentA)
                             .modifier(SymbolBounceModifier(trigger: showGestureHint))
                         
@@ -983,7 +1481,7 @@ struct WorkoutTimerView: View {
                             .foregroundStyle(.white)
                         
                         Image(systemName: "arrow.right")
-                            .font(.title2)
+                            .font(Theme.title2)
                             .foregroundStyle(Theme.accentA)
                             .modifier(SymbolBounceModifier(trigger: showGestureHint))
                     }
@@ -1005,7 +1503,7 @@ struct WorkoutTimerView: View {
                 if engine.phase == .rest {
                     HStack(spacing: DesignSystem.Spacing.md) {
                         Image(systemName: "arrow.left")
-                            .font(.title2)
+                            .font(Theme.title2)
                             .foregroundStyle(Theme.accentB)
                             .modifier(SymbolBounceModifier(trigger: showGestureHint))
                         
@@ -1014,7 +1512,7 @@ struct WorkoutTimerView: View {
                             .foregroundStyle(.white)
                         
                         Image(systemName: "arrow.right")
-                            .font(.title2)
+                            .font(Theme.title2)
                             .foregroundStyle(Theme.accentB)
                             .modifier(SymbolBounceModifier(trigger: showGestureHint))
                     }

@@ -125,40 +125,20 @@ public struct GlassCard<Content: View>: View {
                     )
                     .allowsHitTesting(false)
             )
-            // Enhanced premium glow effect for depth and 3D appearance
+            // Single glow effect (removed stacked blurs for performance per spec)
             .overlay(
                 RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.card, style: .continuous)
                     .stroke(
                         LinearGradient(
                             colors: [
-                                Theme.glowColor.opacity(DesignSystem.Opacity.glow * 1.5),
-                                Theme.accentA.opacity(DesignSystem.Opacity.glow * 1.0),
+                                Theme.glowColor.opacity(DesignSystem.Opacity.glow * 0.6),
                                 Color.clear
                             ],
                             startPoint: .topLeading,
                             endPoint: .center
                         ),
-                        lineWidth: DesignSystem.Border.hairline * 1.5
-                    )
-                    .blur(radius: 2.5)
-                    .allowsHitTesting(false)
-            )
-            // Inner glow for sophisticated depth
-            .overlay(
-                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.card, style: .continuous)
-                    .stroke(
-                        LinearGradient(
-                            colors: [
-                                Theme.glowColor.opacity(DesignSystem.Opacity.glow * 0.8),
-                                Color.clear,
-                                Color.clear
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        ),
                         lineWidth: DesignSystem.Border.hairline
                     )
-                    .blur(radius: 1.5)
                     .allowsHitTesting(false)
             )
             // Enhanced multi-layer shadow system using DesignSystem shadow extensions

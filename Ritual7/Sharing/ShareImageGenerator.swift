@@ -410,7 +410,7 @@ private struct ProgressChartShareView: View {
                                             )
                                         )
                                         .frame(width: 40, height: CGFloat(day.count * 30 + 20))
-                                        .cornerRadius(8)
+                                        .cornerRadius(DesignSystem.CornerRadius.small)
                                     
                                     Text(day.date.formatted(.dateTime.weekday(.abbreviated)))
                                         .font(.system(size: 10, design: .rounded))

@@ -2,6 +2,7 @@ import Foundation
 import SwiftUI
 
 /// Agent 2: Achievement Manager - Tracks and manages workout achievements
+/// Agent 28: Enhanced with VoiceOver announcements for achievement unlocks
 @MainActor
 final class AchievementManager: ObservableObject {
     private let store: WorkoutStore
@@ -103,6 +104,9 @@ final class AchievementManager: ObservableObject {
         }
         
         save()
+        
+        // Agent 28: Announce achievement unlock via VoiceOver
+        AccessibilityAnnouncer.announceAchievementUnlocked(achievement.title)
         
         // ASO: Consider review prompt after achievement unlock
         Task { @MainActor in

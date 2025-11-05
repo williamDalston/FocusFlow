@@ -134,7 +134,7 @@ struct WeeklyCalendarView: View {
             Rectangle()
                 .fill(color)
                 .frame(width: 12, height: 12)
-                .cornerRadius(2)
+                .cornerRadius(DesignSystem.CornerRadius.small / 4)
             Text(label)
                 .foregroundStyle(.secondary)
         }
@@ -318,7 +318,7 @@ struct MonthlyCalendarView: View {
             Rectangle()
                 .fill(color)
                 .frame(width: 12, height: 12)
-                .cornerRadius(2)
+                .cornerRadius(DesignSystem.CornerRadius.small / 4)
             Text(label)
                 .foregroundStyle(.secondary)
         }

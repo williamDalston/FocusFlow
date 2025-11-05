@@ -84,6 +84,36 @@ struct FadeTransition: ViewModifier {
     }
 }
 
+/// Enhanced crossfade transition for smooth color/phase changes
+/// Optimized for 180-220ms duration as per spec
+struct CrossfadeTransition: ViewModifier {
+    let duration: Double
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    
+    init(duration: Double = 0.2) {
+        self.duration = duration
+    }
+    
+    func body(content: Content) -> some View {
+        content
+            .transition(.opacity.combined(with: .scale(scale: 0.98)))
+            .animation(
+                reduceMotion 
+                    ? .easeInOut(duration: 0.1)
+                    : .easeInOut(duration: duration),
+                value: UUID()
+            )
+    }
+}
+
+extension View {
+    /// Apply crossfade transition for smooth color/phase changes
+    /// Duration defaults to 200ms (within 180-220ms spec range)
+    func crossfadeTransition(duration: Double = 0.2) -> some View {
+        modifier(CrossfadeTransition(duration: duration))
+    }
+}
+
 /// Slide transition for views
 /// Agent 4: Enhanced with AnimationConstants and Reduce Motion support
 struct SlideTransition: ViewModifier {

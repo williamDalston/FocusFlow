@@ -89,7 +89,7 @@ struct FirstWorkoutTutorialView: View {
                                 .fontWeight(.semibold)
                                 .frame(maxWidth: .infinity)
                                 .foregroundStyle(.white)
-                                .padding(.vertical, 16)
+                                .padding(.vertical, DesignSystem.Spacing.sm)
                                 .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous))
                                 .overlay(RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox).stroke(.white.opacity(DesignSystem.Opacity.borderSubtle), lineWidth: DesignSystem.Border.standard))
                         }
@@ -163,7 +163,7 @@ struct FirstWorkoutTutorialView: View {
                             Image(systemName: "checkmark.circle.fill")
                                 .font(Theme.title3)
                                 .foregroundStyle(Theme.accentA)
-                                .padding(.top, 2)
+                                .padding(.top, DesignSystem.Spacing.xs / 4)
                             
                             Text(tip)
                                 .font(Theme.body)

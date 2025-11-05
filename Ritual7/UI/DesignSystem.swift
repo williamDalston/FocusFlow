@@ -4,43 +4,47 @@ import SwiftUI
 /// Ensures consistent spacing, sizing, and visual elements throughout the app
 enum DesignSystem {
     
-    // MARK: - Spacing Scale (Refined 8pt grid system for elegance)
+    // MARK: - Spacing Scale (Strict 8pt grid system per Apple HIG)
     
     enum Spacing {
-        static let xs: CGFloat = 4
-        static let sm: CGFloat = 8
-        static let md: CGFloat = 12
-        static let lg: CGFloat = 16
+        // Strict 8pt grid: 8, 16, 24, 32
+        static let xs: CGFloat = 8
+        static let sm: CGFloat = 16
+        static let md: CGFloat = 24
+        static let lg: CGFloat = 32
+        
+        // Legacy spacing (kept for backward compatibility, will migrate)
         static let xl: CGFloat = 24
         static let xxl: CGFloat = 32
         static let xxxl: CGFloat = 48
         static let huge: CGFloat = 64
         
-        // Semantic spacing (refined for more breathing room)
-        static let cardPadding: CGFloat = 24  // Hero cards (main workout card, prominent cards)
-        static let regularCardPadding: CGFloat = 20  // Regular cards (stat boxes, list items, etc.)
-        static let sectionSpacing: CGFloat = 32  // Spacing between major sections (iPhone)
-        static let sectionSpacingIPad: CGFloat = 40  // Spacing between major sections (iPad)
-        static let gridSpacing: CGFloat = 20  // Increased from 16 for better visual separation in stat grids
-        static let listItemSpacing: CGFloat = 12  // Spacing between list items
-        static let formFieldSpacing: CGFloat = 20  // Spacing between form fields
+        // Semantic spacing (8pt grid aligned)
+        static let cardPadding: CGFloat = 24  // Hero cards (8pt grid: 24 = 3×8)
+        static let regularCardPadding: CGFloat = 16  // Regular cards (8pt grid: 16 = 2×8)
+        static let sectionSpacing: CGFloat = 32  // Spacing between major sections (8pt grid: 32 = 4×8)
+        static let sectionSpacingIPad: CGFloat = 32  // Same as iPhone (8pt grid aligned)
+        static let gridSpacing: CGFloat = 16  // Grid spacing (8pt grid: 16 = 2×8)
+        static let listItemSpacing: CGFloat = 16  // List items (8pt grid: 16 = 2×8)
+        static let formFieldSpacing: CGFloat = 24  // Form fields (8pt grid: 24 = 3×8)
     }
     
-    // MARK: - Corner Radius
+    // MARK: - Corner Radius (Apple HIG aligned)
     
     enum CornerRadius {
-        static let small: CGFloat = 10
+        // Base radii (8pt grid aligned where possible)
+        static let small: CGFloat = 8
         static let medium: CGFloat = 16
-        static let large: CGFloat = 22
-        static let xlarge: CGFloat = 28
+        static let large: CGFloat = 24
+        static let xlarge: CGFloat = 24
         static let xxlarge: CGFloat = 32
         static let circular: CGFloat = 9999
         
-        // Semantic radii - increased for softer, more polished look
-        static let card: CGFloat = 28
-        static let button: CGFloat = 18
-        static let statBox: CGFloat = 16
-        static let badge: CGFloat = 10
+        // Semantic radii (per Apple HIG + fitness app patterns)
+        static let card: CGFloat = 24  // Large cards (reduced from 28 for less "marshmallow" feel)
+        static let button: CGFloat = 16  // Buttons/chips (reduced from 18)
+        static let statBox: CGFloat = 16  // Stat boxes
+        static let badge: CGFloat = 8  // Badges (reduced from 10)
     }
     
     // MARK: - Border Widths (Refined for Visual Precision)
@@ -59,29 +63,30 @@ enum DesignSystem {
         static let divider: CGFloat = 0.5
     }
     
-    // MARK: - Shadow System (Enhanced for Sophisticated Depth)
+    // MARK: - Shadow System (Apple HIG aligned - single token per spec)
     
     enum Shadow {
-        // Base shadows with refined, softer depth
-        static let small: (radius: CGFloat, y: CGFloat) = (8, 4)  // Softer than before
-        static let medium: (radius: CGFloat, y: CGFloat) = (16, 8)  // Softer, more elegant
-        static let large: (radius: CGFloat, y: CGFloat) = (24, 12)  // Refined for sophistication
+        // Base shadows (8pt grid aligned)
+        static let small: (radius: CGFloat, y: CGFloat) = (8, 4)
+        static let medium: (radius: CGFloat, y: CGFloat) = (16, 8)
+        static let large: (radius: CGFloat, y: CGFloat) = (24, 12)
         static let xlarge: (radius: CGFloat, y: CGFloat) = (32, 16)
-        static let xxlarge: (radius: CGFloat, y: CGFloat) = (40, 20)  // Increased for more presence
+        static let xxlarge: (radius: CGFloat, y: CGFloat) = (40, 20)
         
-        // Semantic shadows with refined multi-layer depth
-        static let card: (radius: CGFloat, y: CGFloat) = (32, 16)  // Softer, more elegant
-        static let button: (radius: CGFloat, y: CGFloat) = (28, 14)  // Refined for sophistication
-        static let elevated: (radius: CGFloat, y: CGFloat) = (24, 12)  // Softer elevation
-        static let floating: (radius: CGFloat, y: CGFloat) = (36, 18)  // For floating elements
-        static let modal: (radius: CGFloat, y: CGFloat) = (44, 22)  // For modal presentations
+        // Semantic shadows (per Apple HIG + fitness app patterns)
+        // Primary token: rgba(0,0,0,0.18), y:8, blur:24
+        static let card: (radius: CGFloat, y: CGFloat, opacity: Double) = (24, 8, 0.18)  // Single token per spec
+        static let button: (radius: CGFloat, y: CGFloat, opacity: Double) = (24, 8, 0.18)  // Same token
+        static let elevated: (radius: CGFloat, y: CGFloat) = (24, 8)  // Simplified
+        static let floating: (radius: CGFloat, y: CGFloat) = (24, 8)  // Simplified
+        static let modal: (radius: CGFloat, y: CGFloat) = (24, 8)  // Simplified
         
-        // Pressed/interactive states (refined for subtle feedback)
-        static let pressed: (radius: CGFloat, y: CGFloat) = (10, 5)  // Slightly softer
+        // Pressed/interactive states
+        static let pressed: (radius: CGFloat, y: CGFloat) = (8, 4)
         
-        // Soft shadows for subtle elevation (refined)
-        static let soft: (radius: CGFloat, y: CGFloat) = (20, 10)  // More refined
-        static let verySoft: (radius: CGFloat, y: CGFloat) = (12, 6)  // Softer, more elegant
+        // Soft shadows for subtle elevation
+        static let soft: (radius: CGFloat, y: CGFloat) = (16, 4)
+        static let verySoft: (radius: CGFloat, y: CGFloat) = (8, 2)
         
         // Ambient shadows for depth (no Y offset)
         static let ambientSmall: CGFloat = 4
@@ -112,6 +117,18 @@ enum DesignSystem {
         static let shimmer: Double = 0.30  // Refined shimmer
         static let borderSubtle: Double = 0.18  // More elegant border
         static let borderStrong: Double = 0.45  // Refined strong border
+        
+        // Special effects
+        static let scrim: Double = 0.11  // Dark scrim for text readability (10-12% range)
+    }
+    
+    // MARK: - Blur Radius
+    
+    enum BlurRadius {
+        static let small: CGFloat = 4
+        static let medium: CGFloat = 8
+        static let large: CGFloat = 16
+        static let xlarge: CGFloat = 24
     }
     
     // MARK: - Typography System (Refined for Elegance)
@@ -133,7 +150,7 @@ enum DesignSystem {
         static let captionWeight: Font.Weight = .medium
     }
     
-    // MARK: - Icon Sizes
+    // MARK: - Icon Sizes & Weights
     
     enum IconSize {
         static let small: CGFloat = 16
@@ -147,6 +164,18 @@ enum DesignSystem {
         static let statBox: CGFloat = 24
         static let button: CGFloat = 20
         static let card: CGFloat = 48
+    }
+    
+    enum IconWeight {
+        // Standard icon weights (Agent 31: Standardized)
+        // Most icons use medium weight
+        static let standard: Font.Weight = .medium
+        
+        // Secondary emphasis (for slightly more prominent icons)
+        static let emphasis: Font.Weight = .semibold
+        
+        // Primary emphasis (for hero icons, primary actions, hero metrics)
+        static let strong: Font.Weight = .bold
     }
     
     // MARK: - Button Sizes
@@ -184,6 +213,40 @@ enum DesignSystem {
         static let sidePaddingIPad: CGFloat = 32
         static let topPadding: CGFloat = 24
         static let bottomPadding: CGFloat = 32
+    }
+    
+    // MARK: - Visual Hierarchy (Agent 23)
+    
+    enum Hierarchy {
+        // Font size hierarchy (increased differentiation)
+        static let primaryTitle: CGFloat = 34  // Large title (increased from 28)
+        static let secondaryTitle: CGFloat = 28  // Section title
+        static let tertiaryTitle: CGFloat = 22  // Subsection title
+        static let primaryBody: CGFloat = 17  // Primary body text
+        static let secondaryBody: CGFloat = 15  // Secondary body text
+        static let caption: CGFloat = 13  // Caption/helper text
+        
+        // Font weight hierarchy
+        static let primaryWeight: Font.Weight = .bold  // Primary content
+        static let secondaryWeight: Font.Weight = .semibold  // Secondary emphasis
+        static let tertiaryWeight: Font.Weight = .medium  // Tertiary emphasis
+        static let bodyWeight: Font.Weight = .regular  // Body text
+        
+        // Color saturation hierarchy (for importance indication)
+        static let primarySaturation: Double = 1.0  // Full saturation for primary
+        static let secondarySaturation: Double = 0.85  // Reduced for secondary
+        static let tertiarySaturation: Double = 0.70  // Further reduced for tertiary
+        
+        // Opacity hierarchy (for secondary information)
+        static let primaryOpacity: Double = 1.0  // Full opacity for primary
+        static let secondaryOpacity: Double = 0.85  // Reduced for secondary
+        static let tertiaryOpacity: Double = 0.65  // Further reduced for tertiary
+        static let quaternaryOpacity: Double = 0.45  // Minimal for helper text
+        
+        // Section spacing hierarchy
+        static let majorSectionSpacing: CGFloat = 40  // Between major sections (increased)
+        static let minorSectionSpacing: CGFloat = 32  // Between minor sections
+        static let subsectionSpacing: CGFloat = 24  // Within sections
     }
 }
 
@@ -266,11 +329,31 @@ extension View {
     }
 }
 
-// MARK: - Shadow Extensions (Enhanced Multi-Layer Premium Shadows)
+// MARK: - Shadow Extensions (Apple HIG aligned - single token per spec)
 
 extension View {
-    /// Apply premium multi-layer card shadow with sophisticated depth hierarchy
+    /// Apply card shadow - single token: rgba(0,0,0,0.18), y:8, blur:24
+    /// Uses scroll-aware shadow for performance during scrolling
     func cardShadow() -> some View {
+        self.scrollAwareShadow(
+            opacity: DesignSystem.Shadow.card.opacity,
+            radius: DesignSystem.Shadow.card.radius,
+            y: DesignSystem.Shadow.card.y
+        )
+    }
+    
+    /// Apply button shadow - same token as card
+    func buttonShadow() -> some View {
+        self.shadow(
+            color: Color.black.opacity(DesignSystem.Shadow.button.opacity),
+            radius: DesignSystem.Shadow.button.radius,
+            x: 0,
+            y: DesignSystem.Shadow.button.y
+        )
+    }
+    
+    /// Legacy multi-layer shadow (kept for backward compatibility)
+    func legacyCardShadow() -> some View {
         self
             // Ambient shadow for base depth
             .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.subtle * 0.8), 
@@ -290,26 +373,6 @@ extension View {
                    y: DesignSystem.Shadow.soft.y)
     }
     
-    /// Apply premium multi-layer button shadow with depth hierarchy
-    func buttonShadow() -> some View {
-        self
-            // Ambient shadow
-            .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.subtle * 0.6), 
-                   radius: DesignSystem.Shadow.ambientSmall, 
-                   x: 0, y: 0)
-            // Primary directional shadow
-            .shadow(color: Theme.enhancedShadow.opacity(DesignSystem.Opacity.medium * 1.1), 
-                   radius: DesignSystem.Shadow.button.radius, 
-                   y: DesignSystem.Shadow.button.y)
-            // Secondary shadow
-            .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.light * 0.9), 
-                   radius: DesignSystem.Shadow.medium.radius * 0.8, 
-                   y: DesignSystem.Shadow.medium.y * 0.8)
-            // Accent glow shadow
-            .shadow(color: Theme.glowColor.opacity(DesignSystem.Opacity.subtle * 0.8), 
-                   radius: DesignSystem.Shadow.soft.radius * 0.6, 
-                   y: DesignSystem.Shadow.soft.y * 0.6)
-    }
     
     /// Apply elevated element shadow (for raised components)
     func elevatedShadow() -> some View {

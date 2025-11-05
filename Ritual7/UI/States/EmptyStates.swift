@@ -96,68 +96,74 @@ struct EmptyStateView: View {
 
 /// Agent 7: Predefined empty states for common scenarios
 extension EmptyStateView {
-    /// Empty state for no workouts
+    /// Agent 30: Enhanced empty state for no workouts using MicrocopyManager
     static func noWorkouts(action: @escaping () -> Void) -> EmptyStateView {
-        EmptyStateView(
+        let emptyState = MicrocopyManager.shared.emptyStateMessage(for: .noWorkouts)
+        return EmptyStateView(
             icon: "figure.run",
-            title: "No Workouts Yet",
-            message: "Start your fitness journey by completing your first workout. Every great achievement begins with a single step!",
-            actionTitle: "Start Workout",
+            title: emptyState.title,
+            message: emptyState.message,
+            actionTitle: emptyState.actionTitle ?? "Start Workout",
             action: action
         )
     }
     
-    /// Empty state for no history found
+    /// Agent 30: Enhanced empty state for no history found using MicrocopyManager
     static func noHistoryFound(action: @escaping () -> Void) -> EmptyStateView {
-        EmptyStateView(
+        let emptyState = MicrocopyManager.shared.emptyStateMessage(for: .noHistoryFound)
+        return EmptyStateView(
             icon: "magnifyingglass",
-            title: "No Results Found",
-            message: "We couldn't find any workouts matching your search. Try adjusting your filters or search terms.",
-            actionTitle: "Clear Filters",
+            title: emptyState.title,
+            message: emptyState.message,
+            actionTitle: emptyState.actionTitle ?? "Clear Filters",
             action: action
         )
     }
     
-    /// Empty state for no exercises found
+    /// Agent 30: Enhanced empty state for no exercises found using MicrocopyManager
     static func noExercisesFound(action: @escaping () -> Void) -> EmptyStateView {
-        EmptyStateView(
+        let emptyState = MicrocopyManager.shared.emptyStateMessage(for: .noExercisesFound)
+        return EmptyStateView(
             icon: "figure.run.circle",
-            title: "No Exercises Found",
-            message: "No exercises match your search or filters. Try adjusting your search terms or clearing filters.",
-            actionTitle: "Clear Filters",
+            title: emptyState.title,
+            message: emptyState.message,
+            actionTitle: emptyState.actionTitle ?? "Clear Filters",
             action: action
         )
     }
     
-    /// Empty state for no achievements
+    /// Agent 30: Enhanced empty state for no achievements using MicrocopyManager
     static func noAchievements() -> EmptyStateView {
-        EmptyStateView(
+        let emptyState = MicrocopyManager.shared.emptyStateMessage(for: .noAchievements)
+        return EmptyStateView(
             icon: "trophy",
-            title: "No Achievements Yet",
-            message: "Complete workouts to unlock achievements and track your progress. Keep pushing forward!",
-            actionTitle: nil,
+            title: emptyState.title,
+            message: emptyState.message,
+            actionTitle: emptyState.actionTitle,
             action: nil
         )
     }
     
-    /// Empty state for no insights
+    /// Agent 30: Enhanced empty state for no insights using MicrocopyManager
     static func noInsights() -> EmptyStateView {
-        EmptyStateView(
+        let emptyState = MicrocopyManager.shared.emptyStateMessage(for: .noInsights)
+        return EmptyStateView(
             icon: "chart.bar.xaxis",
-            title: "Complete More Workouts",
-            message: "Complete more workouts to unlock personalized insights and see your fitness trends.",
-            actionTitle: nil,
+            title: emptyState.title,
+            message: emptyState.message,
+            actionTitle: emptyState.actionTitle,
             action: nil
         )
     }
     
-    /// Empty state for no goals
+    /// Agent 30: Enhanced empty state for no goals using MicrocopyManager
     static func noGoals(action: @escaping () -> Void) -> EmptyStateView {
-        EmptyStateView(
+        let emptyState = MicrocopyManager.shared.emptyStateMessage(for: .noGoals)
+        return EmptyStateView(
             icon: "target",
-            title: "Set Your First Goal",
-            message: "Set a fitness goal to stay motivated and track your progress. Goals help you achieve more!",
-            actionTitle: "Create Goal",
+            title: emptyState.title,
+            message: emptyState.message,
+            actionTitle: emptyState.actionTitle ?? "Create Goal",
             action: action
         )
     }

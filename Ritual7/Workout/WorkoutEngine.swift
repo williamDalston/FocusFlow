@@ -250,8 +250,24 @@ final class WorkoutEngine: ObservableObject {
         timer.resume()
     }
     
+    // Agent 25: Undo support for workout stops
+    private var workoutStateBeforeStop: (phase: WorkoutPhase, currentExercise: Exercise?, currentExerciseIndex: Int, timeRemaining: TimeInterval, sessionStartTime: Date?, totalPausedTime: TimeInterval)?
+    
     /// Stops the workout and resets all state
+    /// - Note: Agent 25: Stores state for potential undo
     func stop() {
+        // Agent 25: Store state before stopping (only if workout is in progress)
+        if phase != .idle && phase != .completed {
+            workoutStateBeforeStop = (
+                phase: phase,
+                currentExercise: currentExercise,
+                currentExerciseIndex: currentExerciseIndex,
+                timeRemaining: timeRemaining,
+                sessionStartTime: sessionStartTime,
+                totalPausedTime: totalPausedTime
+            )
+        }
+        
         timer.stop()
         
         // Stop Live Activity if available (iOS 16.2+)
@@ -260,6 +276,42 @@ final class WorkoutEngine: ObservableObject {
         }
         
         reset()
+    }
+    
+    /// Agent 25: Undo the last stop action
+    /// - Returns: True if workout was restored, false otherwise
+    @discardableResult
+    func undoStop() -> Bool {
+        guard let state = workoutStateBeforeStop else {
+            return false
+        }
+        
+        // Restore workout state
+        phase = state.phase
+        currentExercise = state.currentExercise
+        currentExerciseIndex = state.currentExerciseIndex
+        timeRemaining = state.timeRemaining
+        sessionStartTime = state.sessionStartTime
+        totalPausedTime = state.totalPausedTime
+        
+        // Resume timer if workout was active
+        if phase == .preparing {
+            timer.start(duration: timeRemaining)
+        } else if phase == .exercise {
+            timer.start(duration: timeRemaining)
+        } else if phase == .rest {
+            timer.start(duration: timeRemaining)
+        }
+        
+        // Clear backup
+        workoutStateBeforeStop = nil
+        
+        return true
+    }
+    
+    /// Agent 25: Check if undo is available for workout stop
+    var canUndoStop: Bool {
+        workoutStateBeforeStop != nil
     }
     
     /// Skips the current rest period and moves to the next exercise
@@ -284,6 +336,37 @@ final class WorkoutEngine: ObservableObject {
         
         timer.stop()
         startExercise(at: 0)
+    }
+    
+    /// Skips the current exercise and moves to the next one
+    /// - Note: If not in exercise phase, this method does nothing
+    func skipExercise() {
+        guard phase == .exercise else {
+            ErrorHandling.handleError(ErrorHandling.WorkoutError.invalidState, context: "WorkoutEngine.skipExercise() - not in exercise phase")
+            return
+        }
+        
+        timer.stop()
+        // Directly move to next exercise (skip rest)
+        if currentExerciseIndex < exercises.count - 1 {
+            moveToNextExercise()
+        } else {
+            // Last exercise, complete the workout
+            completeWorkout()
+        }
+    }
+    
+    /// Goes back to the previous exercise
+    /// - Note: Only works if not on the first exercise
+    func goToPreviousExercise() {
+        guard currentExerciseIndex > 0 else {
+            ErrorHandling.handleError(ErrorHandling.WorkoutError.invalidState, context: "WorkoutEngine.goToPreviousExercise() - already on first exercise")
+            return
+        }
+        
+        timer.stop()
+        let previousIndex = currentExerciseIndex - 1
+        startExercise(at: previousIndex)
     }
     
     /// Resets the engine to idle state

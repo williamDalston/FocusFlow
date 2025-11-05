@@ -7,6 +7,7 @@ struct WorkoutContentView: View {
     @EnvironmentObject private var preferencesStore: WorkoutPreferencesStore
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @StateObject private var engine = WorkoutEngine()
+    @State private var exerciseEngine: WorkoutEngine? = nil
     
     @State private var showTimerView = false
     @State private var showExerciseList = false
@@ -15,6 +16,7 @@ struct WorkoutContentView: View {
     @State private var showAnalytics = false
     @State private var showAchievements = false
     @State private var showInsights = false
+    @State private var showMeditation = false
     @StateObject private var messageManager = MotivationalMessageManager.shared
     @State private var showAchievementCelebration: AchievementNotifier.Achievement? = nil
     
@@ -26,41 +28,148 @@ struct WorkoutContentView: View {
     @State private var goalManager: GoalManager?
     @State private var showGoals = false
     
+    // Insights time range filter
+    @State private var selectedInsightsTimeRange: InsightsTimeRange = .all
+    
+    // Daily Motivation toggle
+    @AppStorage("dailyMotivationEnabled") private var dailyMotivationEnabled = true
+    
+    @AppStorage("hasSeenHomepageFlourishes") private var hasSeenHomepageFlourishes = false
+    
     var body: some View {
         ZStack {
             ThemeBackground()
             
+            // Subtle floating particles for first-time users (only show once)
+            if !hasSeenHomepageFlourishes {
+                FloatingParticles()
+                    .ignoresSafeArea()
+                    .allowsHitTesting(false)
+                    .opacity(DesignSystem.Opacity.medium)
+            }
+            
             ScrollViewReader { proxy in
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 0) {
-                        header
-                            .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Spacing.sectionSpacingIPad : DesignSystem.Spacing.sectionSpacing)
+                        // Hero Workout Card - single hero card with primary CTA per Apple HIG
+                        // Agent 22: Pass isFirstWorkout to enable first-time animations
+                        HeroWorkoutCard(
+                            onStartWorkout: {
+                                // Agent 25: Validate exercise selection before starting
+                                let exercises = engine.exercises
+                                let validation = InputValidator.validateWorkoutStart(exercises: exercises)
+                                
+                                if !validation.isValid {
+                                    // Show error message
+                                    ToastManager.shared.show(
+                                        message: validation.errorMessage ?? "Cannot start workout"
+                                    )
+                                    Haptics.tap()
+                                    return
+                                }
+                                
+                                configureEngineFromPreferences()
+                                engine.stop()
+                                showTimerView = true
+                                Haptics.tap()
+                            },
+                            onCustomize: {
+                                showCustomization = true
+                                Haptics.tap()
+                            },
+                            onViewExercises: {
+                                showExerciseList = true
+                                Haptics.tap()
+                            },
+                            onViewHistory: {
+                                showHistory = true
+                                Haptics.tap()
+                            },
+                            estimatedCalories: 84,
+                            estimatedDuration: 420, // 7 minutes
+                            isFirstWorkout: store.sessions.isEmpty // Agent 22: Detect first workout
+                        )
+                        .padding(.bottom, DesignSystem.Spacing.md)
                         
-                        quickStartCard  // Moved to top 3 for better prominence
-                            .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Spacing.sectionSpacingIPad : DesignSystem.Spacing.sectionSpacing)
+                        // Three chips outside hero card in single row (3 equal buttons)
+                        HStack(spacing: DesignSystem.Spacing.md) {
+                            Button(action: {
+                                showCustomization = true
+                                Haptics.tap()
+                            }) {
+                                Text("Customize")
+                                    .font(Theme.subheadline.weight(.medium))
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.9)
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: DesignSystem.TouchTarget.minimum)
+                            }
+                            .buttonStyle(SecondaryGlassButtonStyle())
+                            .accessibilityLabel("Customize")
+                            .accessibilityHint("Double tap to customize your workout")
+                            .fadeSlideIn(delay: 0.4, direction: .up)
+                            
+                            Button(action: {
+                                showExerciseList = true
+                                Haptics.tap()
+                            }) {
+                                Text("Exercises")
+                                    .font(Theme.subheadline.weight(.medium))
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.9)
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: DesignSystem.TouchTarget.minimum)
+                            }
+                            .buttonStyle(SecondaryGlassButtonStyle())
+                            .accessibilityLabel("Exercises")
+                            .accessibilityHint("Double tap to see all exercises")
+                            .fadeSlideIn(delay: 0.5, direction: .up)
+                            
+                            Button(action: {
+                                showHistory = true
+                                Haptics.tap()
+                            }) {
+                                Text("History")
+                                    .font(Theme.subheadline.weight(.medium))
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.9)
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: DesignSystem.TouchTarget.minimum)
+                            }
+                            .buttonStyle(SecondaryGlassButtonStyle())
+                            .accessibilityLabel("History")
+                            .accessibilityHint("Double tap to view your workout history")
+                            .fadeSlideIn(delay: 0.6, direction: .up)
+                        }
+                        .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Spacing.sectionSpacingIPad : DesignSystem.Spacing.sectionSpacing)
                         
-                        // Subtle divider
+                        // Daily Motivation card (only if enabled)
+                        if dailyMotivationEnabled {
+                            // Agent 23: Enhanced visual separator
+                            Divider()
+                                .background(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.2))
+                                .padding(.vertical, DesignSystem.Hierarchy.subsectionSpacing)
+                            
+                            dailyQuoteCard
+                                .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Hierarchy.majorSectionSpacing : DesignSystem.Hierarchy.minorSectionSpacing)
+                                .fadeSlideIn(delay: 0.7, direction: .up)
+                        }
+                        
+                        // Agent 23: Enhanced visual separator between major sections
                         Divider()
-                            .background(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle))
-                            .padding(.vertical, DesignSystem.Spacing.lg)
-                        
-                        dailyQuoteCard
-                            .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Spacing.sectionSpacingIPad : DesignSystem.Spacing.sectionSpacing)
-                        
-                        // Subtle divider
-                        Divider()
-                            .background(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle))
-                            .padding(.vertical, DesignSystem.Spacing.lg)
+                            .background(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.5))
+                            .padding(.vertical, DesignSystem.Hierarchy.subsectionSpacing)
                         
                         statsGrid
-                            .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Spacing.sectionSpacingIPad : DesignSystem.Spacing.sectionSpacing)
+                            .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Hierarchy.majorSectionSpacing : DesignSystem.Hierarchy.minorSectionSpacing)
+                            .fadeSlideIn(delay: 0.8, direction: .up)
                         
                         // Agent 21: Next Achievement (Prominent)
                         if let manager = achievementManager, let nextAchievement = manager.nextAchievement() {
-                            // Subtle divider
+                            // Agent 23: Enhanced visual separator
                             Divider()
-                                .background(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle))
-                                .padding(.vertical, DesignSystem.Spacing.lg)
+                                .background(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.2))
+                                .padding(.vertical, DesignSystem.Hierarchy.subsectionSpacing)
                             
                             NextAchievementCard(
                                 achievement: nextAchievement.achievement,
@@ -71,65 +180,73 @@ struct WorkoutContentView: View {
                                 showAchievements = true
                                 Haptics.tap()
                             }
-                            .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Spacing.sectionSpacingIPad : DesignSystem.Spacing.sectionSpacing)
+                            .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Hierarchy.majorSectionSpacing : DesignSystem.Hierarchy.minorSectionSpacing)
                         }
                         
                         // Agent 21: Achievement Progress Cards (showing closest achievements)
                         if let manager = achievementManager, !manager.closestAchievements(limit: 3).isEmpty {
-                            // Subtle divider
+                            // Agent 23: Enhanced visual separator
                             Divider()
-                                .background(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle))
-                                .padding(.vertical, DesignSystem.Spacing.lg)
+                                .background(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.2))
+                                .padding(.vertical, DesignSystem.Hierarchy.subsectionSpacing)
                             
                             achievementProgressSection(manager: manager)
-                                .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Spacing.sectionSpacingIPad : DesignSystem.Spacing.sectionSpacing)
+                                .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Hierarchy.majorSectionSpacing : DesignSystem.Hierarchy.minorSectionSpacing)
                         }
                         
                         // Agent 2: Recent Achievements
                         if let manager = achievementManager, !manager.recentUnlocks.isEmpty {
-                            // Subtle divider
+                            // Agent 23: Enhanced visual separator
                             Divider()
-                                .background(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle))
-                                .padding(.vertical, DesignSystem.Spacing.lg)
+                                .background(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.2))
+                                .padding(.vertical, DesignSystem.Hierarchy.subsectionSpacing)
                             
                             RecentAchievementsView(achievementManager: manager)
-                                .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Spacing.sectionSpacingIPad : DesignSystem.Spacing.sectionSpacing)
+                                .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Hierarchy.majorSectionSpacing : DesignSystem.Hierarchy.minorSectionSpacing)
                         }
                         
                         // Agent 2: Quick Insights
                         if analytics != nil {
-                            // Subtle divider
+                            // Agent 23: Enhanced visual separator
                             Divider()
-                                .background(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle))
-                                .padding(.vertical, DesignSystem.Spacing.lg)
+                                .background(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.2))
+                                .padding(.vertical, DesignSystem.Hierarchy.subsectionSpacing)
                             
                             quickInsightsSection
-                                .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Spacing.sectionSpacingIPad : DesignSystem.Spacing.sectionSpacing)
+                                .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Hierarchy.majorSectionSpacing : DesignSystem.Hierarchy.minorSectionSpacing)
                         }
                         
                         // Agent 10: Goals Section
                         if let goalManager = goalManager {
-                            // Subtle divider
+                            // Agent 23: Enhanced visual separator
                             Divider()
-                                .background(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle))
-                                .padding(.vertical, DesignSystem.Spacing.lg)
+                                .background(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.2))
+                                .padding(.vertical, DesignSystem.Hierarchy.subsectionSpacing)
                             
                             goalsSection(goalManager: goalManager)
-                                .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Spacing.sectionSpacingIPad : DesignSystem.Spacing.sectionSpacing)
+                                .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Hierarchy.majorSectionSpacing : DesignSystem.Hierarchy.minorSectionSpacing)
                         }
                         
-                        // Subtle divider
+                        // Agent 23: Enhanced visual separator
                         Divider()
-                            .background(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle))
-                            .padding(.vertical, DesignSystem.Spacing.lg)
+                            .background(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.2))
+                            .padding(.vertical, DesignSystem.Hierarchy.subsectionSpacing)
+                        
+                        meditationSection
+                            .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Hierarchy.majorSectionSpacing : DesignSystem.Hierarchy.minorSectionSpacing)
+                        
+                        // Agent 23: Enhanced visual separator
+                        Divider()
+                            .background(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.2))
+                            .padding(.vertical, DesignSystem.Hierarchy.subsectionSpacing)
                         
                         exerciseListPreview
-                            .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Spacing.sectionSpacingIPad : DesignSystem.Spacing.sectionSpacing)
+                            .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Hierarchy.majorSectionSpacing : DesignSystem.Hierarchy.minorSectionSpacing)
                         
-                        // Subtle divider
+                        // Agent 23: Enhanced visual separator
                         Divider()
-                            .background(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle))
-                            .padding(.vertical, DesignSystem.Spacing.lg)
+                            .background(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.2))
+                            .padding(.vertical, DesignSystem.Hierarchy.subsectionSpacing)
                         
                         recentWorkouts
                         Spacer(minLength: horizontalSizeClass == .regular ? 300 : 200)
@@ -143,14 +260,21 @@ struct WorkoutContentView: View {
         }
         .sheet(isPresented: $showTimerView) {
             NavigationStack {
-                WorkoutTimerView(engine: engine, store: store)
+                WorkoutTimerView(engine: exerciseEngine ?? engine, store: store)
             }
-            .interactiveDismissDisabled(engine.phase != .idle && engine.phase != .completed)
+            .interactiveDismissDisabled((exerciseEngine ?? engine).phase != .idle && (exerciseEngine ?? engine).phase != .completed)
             .onAppear {
-                // Ensure engine is ready
-                if engine.phase == .completed {
-                    engine.reset()
+                // Ensure engine is ready and configured
+                let currentEngine = exerciseEngine ?? engine
+                if currentEngine.phase == .completed {
+                    currentEngine.reset()
                 }
+                // Configure engine from preferences before timer view appears
+                configureEngineFromPreferences()
+            }
+            .onDisappear {
+                // Reset exercise engine when done
+                exerciseEngine = nil
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("StartWorkoutFromShortcut"))) { _ in
@@ -207,28 +331,44 @@ struct WorkoutContentView: View {
                 }
             }
         }
+        .sheet(isPresented: $showMeditation) {
+            NavigationStack {
+                MeditationTimerView()
+            }
+        }
+        .toast() // Agent 25: Enable toast notifications
         // Agent 4: Use AnimationConstants for theme transitions
         .animation(AnimationConstants.longEase, value: theme.colorTheme)
         .onAppear {
-            // Initialize analytics with current store
-            if analytics == nil {
-                analytics = WorkoutAnalytics(store: store)
-            }
-            if achievementManager == nil {
-                achievementManager = AchievementManager(store: store)
-            }
-            // Agent 10: Initialize goal manager
-            if goalManager == nil {
-                goalManager = GoalManager(store: store)
+            // Mark that user has seen homepage flourishes after animation completes
+            if !hasSeenHomepageFlourishes {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                    hasSeenHomepageFlourishes = true
+                }
             }
             
-            // Check achievements
-            achievementManager?.checkAchievements()
+            // Agent 26: Progressive loading - show cached stats immediately, load analytics in background
+            // Initialize analytics with current store (async to avoid blocking UI)
+            Task { @MainActor in
+                if analytics == nil {
+                    analytics = WorkoutAnalytics(store: store)
+                }
+                if achievementManager == nil {
+                    achievementManager = AchievementManager(store: store)
+                }
+                // Agent 10: Initialize goal manager
+                if goalManager == nil {
+                    goalManager = GoalManager(store: store)
+                }
+                
+                // Check achievements
+                achievementManager?.checkAchievements()
+                
+                // Agent 10: Update goal progress
+                goalManager?.updateProgress()
+            }
             
-            // Agent 10: Update goal progress
-            goalManager?.updateProgress()
-            
-            // Load personalized message
+            // Load personalized message (synchronous - fast)
             messageManager.personalizedMessage = messageManager.getPersonalizedMessage(
                 streak: store.streak,
                 totalWorkouts: store.totalWorkouts,
@@ -273,6 +413,7 @@ struct WorkoutContentView: View {
                     
                     Text("Ritual7")
                         .font(horizontalSizeClass == .regular ? Theme.largeTitle : Theme.title)
+                        .allowsTightening(false) // Prevent hyphen splits
                         .foregroundStyle(Theme.textPrimary)
                         .minimumScaleFactor(0.5)
                         .lineLimit(nil)
@@ -364,7 +505,7 @@ struct WorkoutContentView: View {
                         HStack(spacing: DesignSystem.Spacing.sm) {
                             ForEach(Array(Exercise.sevenMinuteWorkout.prefix(8)), id: \.id) { exercise in
                                 Image(systemName: exercise.icon)
-                                    .font(.system(size: DesignSystem.IconSize.medium, weight: .medium))
+                                    .font(.system(size: DesignSystem.IconSize.medium, weight: DesignSystem.IconWeight.standard))
                                     .foregroundStyle(
                                         LinearGradient(
                                             colors: [Theme.accentA, Theme.accentB],
@@ -405,13 +546,15 @@ struct WorkoutContentView: View {
                     
                     Text("Ready to Work Out?")
                         .font(Theme.title.weight(.bold))
+                        .allowsTightening(false) // Prevent awkward line breaks
                         .foregroundStyle(Theme.textPrimary)
                         .multilineTextAlignment(.center)
                     
                     Text("12 exercises • 7 minutes • No equipment needed")
                         .font(Theme.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Theme.textSecondary)
                         .multilineTextAlignment(.center)
+                        .lineSpacing(DesignSystem.Typography.bodyLineHeight - 1.0)
                     
                     // Estimated calories and time
                     HStack(spacing: DesignSystem.Spacing.lg) {
@@ -426,6 +569,19 @@ struct WorkoutContentView: View {
                 }
                 
                 Button {
+                    // Agent 25: Validate exercise selection before starting
+                    let exercises = engine.exercises
+                    let validation = InputValidator.validateWorkoutStart(exercises: exercises)
+                    
+                    if !validation.isValid {
+                        // Show error message
+                        ToastManager.shared.show(
+                            message: validation.errorMessage ?? "Cannot start workout"
+                        )
+                        Haptics.tap()
+                        return
+                    }
+                    
                     // Configure engine from preferences before starting
                     configureEngineFromPreferences()
                     // Reset engine before starting
@@ -436,9 +592,9 @@ struct WorkoutContentView: View {
                     HStack(spacing: DesignSystem.Spacing.sm) {
                         Image(systemName: "play.fill")
                             .font(.system(size: DesignSystem.IconSize.medium, weight: .bold))
-                        Text("Start Workout")
+                        Text(MicrocopyManager.shared.ButtonLabel.startWorkout.text)
+                            .font(Theme.headline)
                             .fontWeight(.bold)
-                            .font(.system(size: 18))
                     }
                     .frame(maxWidth: .infinity)
                     .frame(height: DesignSystem.ButtonSize.large.height + 8) // Larger button
@@ -447,7 +603,7 @@ struct WorkoutContentView: View {
                 .keyboardShortcut(.return, modifiers: [])  // Enter key to start workout for simulator testing
                 .disabled(engine.phase != .idle && engine.phase != .completed)
                 .accessibilityLabel("Start Workout")
-                .accessibilityHint("Double tap to begin your 7-minute workout. Press Enter key to start workout.")
+                .accessibilityHint(MicrocopyManager.shared.tooltip(for: .startWorkout))
                 .accessibilityAddTraits(.isButton)
                 
                 HStack(spacing: 16) {
@@ -455,36 +611,36 @@ struct WorkoutContentView: View {
                         showCustomization = true
                         Haptics.tap()
                     } label: {
-                        Label("Customize", systemImage: "slider.horizontal.3")
+                        Label(MicrocopyManager.shared.ButtonLabel.customize.text, systemImage: "slider.horizontal.3")
                             .font(Theme.subheadline.weight(.medium))
                     }
                     .buttonStyle(SecondaryGlassButtonStyle())
                     .accessibilityLabel("Customize Workout")
-                    .accessibilityHint("Double tap to customize exercise duration, rest periods, and workout preferences.")
+                    .accessibilityHint(MicrocopyManager.shared.tooltip(for: .customizeWorkout))
                     .accessibilityAddTraits(.isButton)
                     
                     Button {
                         showExerciseList = true
                         Haptics.tap()
                     } label: {
-                        Label("View Exercises", systemImage: "list.bullet")
+                        Label(MicrocopyManager.shared.ButtonLabel.viewExercises.text, systemImage: "list.bullet")
                             .font(Theme.subheadline.weight(.medium))
                     }
                     .buttonStyle(SecondaryGlassButtonStyle())
                     .accessibilityLabel("View Exercises")
-                    .accessibilityHint("Double tap to see all available exercises with descriptions and instructions.")
+                    .accessibilityHint(MicrocopyManager.shared.tooltip(for: .viewExercises))
                     .accessibilityAddTraits(.isButton)
                     
                     Button {
                         showHistory = true
                         Haptics.tap()
                     } label: {
-                        Label("History", systemImage: "clock")
+                        Label(MicrocopyManager.shared.ButtonLabel.viewHistory.text, systemImage: "clock")
                             .font(Theme.subheadline.weight(.medium))
                     }
                     .buttonStyle(SecondaryGlassButtonStyle())
                     .accessibilityLabel("Workout History")
-                    .accessibilityHint("Double tap to view your past workout sessions and progress.")
+                    .accessibilityHint(MicrocopyManager.shared.tooltip(for: .viewHistory))
                     .accessibilityAddTraits(.isButton)
                 }
             }
@@ -502,8 +658,9 @@ struct WorkoutContentView: View {
     private var statsGrid: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
             HStack {
+                // Agent 23: Increased section title size and weight for hierarchy
                 Text("Your Progress")
-                    .font(Theme.headline)
+                    .font(.system(size: DesignSystem.Hierarchy.secondaryTitle, weight: DesignSystem.Hierarchy.secondaryWeight, design: .rounded))
                     .foregroundStyle(Theme.textPrimary)
                     .accessibilityAddTraits(.isHeader)
                 
@@ -517,7 +674,7 @@ struct WorkoutContentView: View {
                     } label: {
                         HStack(spacing: DesignSystem.Spacing.xs) {
                             Image(systemName: next.achievement.icon)
-                                .font(.caption2)
+                                .font(Theme.caption2)
                                 .foregroundStyle(next.achievement.color)
                             Text("\(next.remaining)")
                                 .font(Theme.caption2)
@@ -596,8 +753,9 @@ struct WorkoutContentView: View {
         if !closest.isEmpty {
             VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
                 HStack {
+                    // Agent 23: Increased section title size and weight
                     Text("Next Achievements")
-                        .font(Theme.headline)
+                        .font(.system(size: DesignSystem.Hierarchy.secondaryTitle, weight: DesignSystem.Hierarchy.secondaryWeight, design: .rounded))
                         .foregroundStyle(Theme.textPrimary)
                         .accessibilityAddTraits(.isHeader)
                     
@@ -607,9 +765,10 @@ struct WorkoutContentView: View {
                         showAchievements = true
                         Haptics.tap()
                     } label: {
+                        // Agent 23: Reduced visual weight of secondary action
                         Text("View All")
                             .font(Theme.subheadline)
-                            .foregroundStyle(Theme.accentA)
+                            .foregroundStyle(Theme.accentA.opacity(DesignSystem.Hierarchy.secondaryOpacity))
                     }
                     .accessibilityLabel("View All Achievements")
                     .accessibilityHint("Double tap to see all available achievements.")
@@ -636,13 +795,110 @@ struct WorkoutContentView: View {
         }
     }
     
+    // MARK: - Meditation Section
+    
+    @State private var meditationBreathingAnimation: Bool = false
+    
+    private var meditationSection: some View {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
+            HStack {
+                // Agent 23: Increased section title size and weight
+                Text("Meditation")
+                    .font(.system(size: DesignSystem.Hierarchy.secondaryTitle, weight: DesignSystem.Hierarchy.secondaryWeight, design: .rounded))
+                    .foregroundStyle(Theme.textPrimary)
+                    .accessibilityAddTraits(.isHeader)
+                
+                Spacer()
+            }
+            .padding(.horizontal, DesignSystem.Spacing.xs)
+            
+            GlassCard(material: .ultraThinMaterial) {
+                VStack(spacing: DesignSystem.Spacing.lg) {
+                    HStack(spacing: DesignSystem.Spacing.md) {
+                        // Animated leaf icon with breathing effect
+                        ZStack {
+                            Circle()
+                                .fill(
+                                    LinearGradient(
+                                        colors: [
+                                            Theme.accentA.opacity(DesignSystem.Opacity.highlight * 1.5),
+                                            Theme.accentB.opacity(DesignSystem.Opacity.highlight)
+                                        ],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                                .frame(width: DesignSystem.IconSize.xxlarge + 16, height: DesignSystem.IconSize.xxlarge + 16)
+                                .scaleEffect(meditationBreathingAnimation ? 1.1 : 1.0)
+                                .animation(
+                                    .easeInOut(duration: 4.0).repeatForever(autoreverses: true),
+                                    value: meditationBreathingAnimation
+                                )
+                            
+                            Image(systemName: "leaf.fill")
+                                .font(.system(size: DesignSystem.IconSize.xxlarge, weight: .bold))
+                                .foregroundStyle(
+                                    LinearGradient(
+                                        colors: [Theme.accentA, Theme.accentB],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                        }
+                        .onAppear {
+                            meditationBreathingAnimation = true
+                        }
+                        
+                        VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
+                            Text("Mindful Moments")
+                                .font(Theme.title3.weight(.bold))
+                                .foregroundStyle(Theme.textPrimary)
+                                .allowsTightening(false) // Prevent hyphen splits per spec
+                            
+                            Text("1, 3, 5, or 10 minute sessions")
+                                .font(Theme.subheadline)
+                                .foregroundStyle(Theme.textSecondary)
+                                .lineSpacing(DesignSystem.Typography.bodyLineHeight - 1.0)
+                            
+                            HStack(spacing: DesignSystem.Spacing.xs) {
+                                Image(systemName: "waveform")
+                                    .font(Theme.caption2)
+                                    .foregroundStyle(Theme.accentB)
+                                Text("With optional nature sounds")
+                                    .font(Theme.caption)
+                                    .foregroundStyle(Theme.textSecondary)
+                            }
+                        }
+                        
+                        Spacer()
+                    }
+                    
+                    Button {
+                        showMeditation = true
+                        Haptics.tap()
+                    } label: {
+                        Label("Start Meditation", systemImage: "leaf.fill")
+                            .font(Theme.subheadline.weight(.semibold))
+                            .frame(maxWidth: .infinity)
+                            .frame(height: DesignSystem.ButtonSize.standard.height)
+                    }
+                    .buttonStyle(SecondaryGlassButtonStyle())
+                    .accessibilityLabel("Start Meditation")
+                    .accessibilityHint("Double tap to begin a meditation session")
+                }
+                .padding(DesignSystem.Spacing.cardPadding)
+            }
+        }
+    }
+    
     // MARK: - Exercise List Preview
     
     private var exerciseListPreview: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
             HStack {
+                // Agent 23: Increased section title size and weight
                 Text("Exercises")
-                    .font(Theme.headline)
+                    .font(.system(size: DesignSystem.Hierarchy.secondaryTitle, weight: DesignSystem.Hierarchy.secondaryWeight, design: .rounded))
                     .foregroundStyle(Theme.textPrimary)
                     .accessibilityAddTraits(.isHeader)
                 
@@ -652,9 +908,15 @@ struct WorkoutContentView: View {
                     showExerciseList = true
                     Haptics.tap()
                 } label: {
-                    Text("View All")
-                        .font(Theme.subheadline)
-                        .foregroundStyle(Theme.accentA)
+                    // Agent 23: Reduced visual weight of secondary action
+                    HStack(spacing: DesignSystem.Spacing.xs) {
+                        Text("View All")
+                            .font(Theme.subheadline)
+                            .foregroundStyle(Theme.accentA.opacity(DesignSystem.Hierarchy.secondaryOpacity))
+                        Image(systemName: "chevron.right")
+                            .font(Theme.caption)
+                            .foregroundStyle(Theme.accentA.opacity(DesignSystem.Hierarchy.secondaryOpacity))
+                    }
                 }
                 .accessibilityLabel("View All Exercises")
                 .accessibilityHint("Double tap to see the complete list of exercises.")
@@ -665,14 +927,34 @@ struct WorkoutContentView: View {
             
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: DesignSystem.Spacing.md) {
-                    ForEach(Array(Exercise.sevenMinuteWorkout.prefix(6).enumerated()), id: \.element.id) { index, exercise in
-                        ExercisePreviewCard(exercise: exercise)
-                            .staggeredEntrance(index: index, delay: 0.08)
-                            .cardLift()
+                    ForEach(Array(Exercise.sevenMinuteWorkout.enumerated()), id: \.element.id) { index, exercise in
+                        ExercisePreviewCard(exercise: exercise) {
+                            // Start this specific exercise
+                            startSingleExercise(exercise)
+                        }
+                        .staggeredEntrance(index: index, delay: 0.08)
+                        .cardLift()
                     }
                 }
                 .padding(.horizontal, DesignSystem.Spacing.xs)
             }
+        }
+    }
+    
+    // MARK: - Start Single Exercise
+    
+    private func startSingleExercise(_ exercise: Exercise) {
+        Haptics.tap()
+        // Create a new engine with just this exercise
+        exerciseEngine = WorkoutEngine(exercises: [exercise])
+        if let exerciseEngine = exerciseEngine {
+            // Configure from preferences
+            exerciseEngine.exerciseDuration = preferencesStore.preferences.exerciseDuration
+            exerciseEngine.restDuration = preferencesStore.preferences.restDuration
+            exerciseEngine.prepDuration = 0 // Skip prep time for single exercises
+            showTimerView = true
+            // Start immediately
+            exerciseEngine.start()
         }
     }
     
@@ -681,8 +963,9 @@ struct WorkoutContentView: View {
     private var recentWorkouts: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
             HStack {
+                // Agent 23: Increased section title size and weight
                 Text("Recent Workouts")
-                    .font(Theme.headline)
+                    .font(.system(size: DesignSystem.Hierarchy.secondaryTitle, weight: DesignSystem.Hierarchy.secondaryWeight, design: .rounded))
                     .foregroundStyle(Theme.textPrimary)
                     .accessibilityAddTraits(.isHeader)
                 
@@ -692,9 +975,10 @@ struct WorkoutContentView: View {
                     showHistory = true
                     Haptics.tap()
                 } label: {
+                    // Agent 23: Reduced visual weight of secondary action
                     Text("View All")
                         .font(Theme.subheadline)
-                        .foregroundStyle(Theme.accentA)
+                        .foregroundStyle(Theme.accentA.opacity(DesignSystem.Hierarchy.secondaryOpacity))
                 }
                 .accessibilityLabel("View All Workout History")
                 .accessibilityHint("Double tap to see all your past workout sessions.")
@@ -819,9 +1103,11 @@ struct WorkoutContentView: View {
         if let analytics = analytics {
             VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
                 HStack {
+                    // Agent 23: Increased section title size and weight
                     Text("Insights")
-                        .font(Theme.headline)
+                        .font(.system(size: DesignSystem.Hierarchy.secondaryTitle, weight: DesignSystem.Hierarchy.secondaryWeight, design: .rounded))
                         .foregroundStyle(Theme.textPrimary)
+                        .allowsTightening(false) // Prevent hyphen splits
                         .accessibilityAddTraits(.isHeader)
                     
                     Spacer()
@@ -830,15 +1116,31 @@ struct WorkoutContentView: View {
                         showInsights = true
                         Haptics.tap()
                     } label: {
-                        Text("View All")
-                            .font(Theme.subheadline)
-                            .foregroundStyle(Theme.accentA)
+                        // Agent 23: Reduced visual weight of secondary action
+                        HStack(spacing: DesignSystem.Spacing.xs) {
+                            Text("View All")
+                                .font(Theme.subheadline)
+                                .foregroundStyle(Theme.accentA.opacity(DesignSystem.Hierarchy.secondaryOpacity))
+                            Image(systemName: "chevron.right")
+                                .font(Theme.caption)
+                                .foregroundStyle(Theme.accentA.opacity(DesignSystem.Hierarchy.secondaryOpacity))
+                        }
                     }
                     .accessibilityLabel("View All Insights")
                     .accessibilityHint("Double tap to see detailed analytics and workout insights.")
                     .accessibilityAddTraits(.isButton)
                     .accessibilityTouchTarget()
                 }
+                .padding(.horizontal, DesignSystem.Spacing.xs)
+                
+                // Segmented control ("All / 7d / 30d") above Insights per spec
+                Picker("Time Range", selection: $selectedInsightsTimeRange) {
+                    Text("All").tag(InsightsTimeRange.all)
+                    Text("7d").tag(InsightsTimeRange.week)
+                    Text("30d").tag(InsightsTimeRange.month)
+                }
+                .pickerStyle(.segmented)
+                .tint(Theme.accentA)
                 .padding(.horizontal, DesignSystem.Spacing.xs)
                 
                 let insights = analytics.generateInsights()
@@ -892,8 +1194,9 @@ struct WorkoutContentView: View {
     private func goalsSection(goalManager: GoalManager) -> some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
             HStack {
+                // Agent 23: Increased section title size and weight
                 Text("Goals")
-                    .font(Theme.headline)
+                    .font(.system(size: DesignSystem.Hierarchy.secondaryTitle, weight: DesignSystem.Hierarchy.secondaryWeight, design: .rounded))
                     .foregroundStyle(Theme.textPrimary)
                     .accessibilityAddTraits(.isHeader)
                 
@@ -903,9 +1206,10 @@ struct WorkoutContentView: View {
                     showGoals = true
                     Haptics.tap()
                 } label: {
+                    // Agent 23: Reduced visual weight of secondary action
                     Text("Manage")
                         .font(Theme.subheadline)
-                        .foregroundStyle(Theme.accentA)
+                        .foregroundStyle(Theme.accentA.opacity(DesignSystem.Hierarchy.secondaryOpacity))
                 }
                 .accessibilityLabel("Manage Goals")
                 .accessibilityHint("Double tap to set or modify your weekly and monthly workout goals.")
@@ -923,7 +1227,11 @@ struct WorkoutContentView: View {
                             goal: goalManager.weeklyGoal,
                             progress: goalManager.weeklyProgressPercentage,
                             isAchieved: goalManager.isWeeklyGoalAchieved,
-                            color: Theme.accentA
+                            color: Theme.accentA,
+                            onEdit: {
+                                showGoals = true
+                                Haptics.tap()
+                            }
                         )
                     }
                     
@@ -934,7 +1242,11 @@ struct WorkoutContentView: View {
                             goal: goalManager.monthlyGoal,
                             progress: goalManager.monthlyProgressPercentage,
                             isAchieved: goalManager.isMonthlyGoalAchieved,
-                            color: Theme.accentB
+                            color: Theme.accentB,
+                            onEdit: {
+                                showGoals = true
+                                Haptics.tap()
+                            }
                         )
                     }
                 }
@@ -949,7 +1261,7 @@ struct WorkoutContentView: View {
                             .foregroundStyle(Theme.accentA)
                             .frame(width: DesignSystem.IconSize.statBox, height: DesignSystem.IconSize.statBox)
                         VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
-                            Text("Set Your Goals")
+                            Text("Weekly & monthly goals")
                                 .font(Theme.subheadline)
                                 .foregroundStyle(Theme.textPrimary)
                             Text("Track your progress with weekly and monthly goals")
@@ -1078,40 +1390,61 @@ private struct StatBox: View {
                     .frame(width: DesignSystem.IconSize.statBox + 8, height: DesignSystem.IconSize.statBox + 8)
                 
                 Image(systemName: icon)
-                    .font(.title3)
+                    .font(Theme.title3)
                     .foregroundStyle(color)
                     .frame(width: DesignSystem.IconSize.statBox, height: DesignSystem.IconSize.statBox)
             }
             .accessibilityHidden(true)
             
-            // Animated counter instead of static text - Enhanced typography for hero metrics
+            // Agent 23: Increased hero metrics size for prominence
             AnimatedGradientCounter(
                 value: value,
                 duration: 0.8,
                 font: title == "Total Workouts" 
-                    ? .system(size: 48, weight: .bold, design: .rounded)  // 48pt for total workouts
-                    : .system(size: 36, weight: .bold, design: .rounded), // 36pt for other hero metrics
+                    ? .system(size: 52, weight: DesignSystem.Hierarchy.primaryWeight, design: .rounded)  // 52pt for total workouts (increased from 48)
+                    : .system(size: 40, weight: DesignSystem.Hierarchy.primaryWeight, design: .rounded), // 40pt for other hero metrics (increased from 36)
                 gradient: LinearGradient(
                     colors: [Theme.textPrimary, Theme.textPrimary.opacity(0.9)],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
             )
+            .dynamicTypeSize(...DynamicTypeSize.accessibility5) // Support Dynamic Type for accessibility
+            .monospacedDigit() // Monospaced digits for timers & stats per spec
             .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.subtle * 0.5), 
                    radius: DesignSystem.Shadow.verySoft.radius * 0.5, 
                    x: 0, y: DesignSystem.Shadow.verySoft.y * 0.25)
             .accessibilityLabel("\(title): \(value)")
             .accessibilityAddTraits(.updatesFrequently)
             
+            // Agent 23: Reduced visual weight of secondary information
             Text(title)
                 .font(Theme.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(.secondary.opacity(DesignSystem.Hierarchy.tertiaryOpacity))
                 .lineLimit(2)
                 .accessibilityHidden(true) // Value already announced above
             
-            // Mini progress bar showing progress toward next milestone
-            if let milestone = nextMilestone, milestone > value {
-                VStack(spacing: DesignSystem.Spacing.xs) {
+                    // Agent 23: Reduced visual weight of progress text
+                    if let milestone = nextMilestone {
+                        VStack(spacing: DesignSystem.Spacing.xs) {
+                            // Progress language with monospaced digits
+                            HStack(spacing: DesignSystem.Spacing.xs) {
+                                Text("\(value) / \(milestone)")
+                                    .font(Theme.caption2)
+                                    .foregroundStyle(.secondary.opacity(DesignSystem.Hierarchy.quaternaryOpacity))
+                                    .monospacedDigit()
+                                
+                                Text("·")
+                                    .font(Theme.caption2)
+                                    .foregroundStyle(.secondary.opacity(DesignSystem.Hierarchy.quaternaryOpacity))
+                                
+                                Text("Goal: \(milestone)")
+                                    .font(Theme.caption2)
+                                    .foregroundStyle(.secondary.opacity(DesignSystem.Hierarchy.quaternaryOpacity))
+                                    .monospacedDigit()
+                            }
+                    
+                    // Subtle progress bar under each stat
                     GeometryReader { geometry in
                         ZStack(alignment: .leading) {
                             RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small * 0.5, style: .continuous)
@@ -1124,19 +1457,6 @@ private struct StatBox: View {
                         }
                     }
                     .frame(height: 3)
-                    
-                    // Agent 21: Show achievement preview if available
-                    if let manager = achievementManager,
-                       let relatedAchievement = findRelatedAchievement(for: title, manager: manager) {
-                        Text(relatedAchievement.progressText)
-                            .font(Theme.caption2)
-                            .foregroundStyle(relatedAchievement.achievement.color)
-                            .lineLimit(1)
-                    } else {
-                        Text("\(milestone - value) until \(milestone)")
-                            .font(Theme.caption2)
-                            .foregroundStyle(.secondary)
-                    }
                 }
             }
         }
@@ -1193,74 +1513,96 @@ private struct StatBox: View {
 
 private struct ExercisePreviewCard: View {
     let exercise: Exercise
+    let onTap: () -> Void
     
     var body: some View {
-        VStack(spacing: DesignSystem.Spacing.sm) {
-            // Icon with premium styling
-            ZStack {
-                Circle()
-                    .fill(Theme.accentA.opacity(DesignSystem.Opacity.highlight * 1.5))
-                    .frame(width: DesignSystem.IconSize.large + 8, height: DesignSystem.IconSize.large + 8)
+        Button(action: onTap) {
+            ZStack(alignment: .topTrailing) {
+                VStack(spacing: DesignSystem.Spacing.sm) {
+                    // Icon with premium styling
+                    ZStack {
+                        Circle()
+                            .fill(Theme.accentA.opacity(DesignSystem.Opacity.highlight * 1.5))
+                            .frame(width: DesignSystem.IconSize.large + 8, height: DesignSystem.IconSize.large + 8)
+                        
+                        Image(systemName: exercise.icon)
+                            .font(Theme.title2)
+                            .foregroundStyle(
+                                LinearGradient(
+                                    colors: [Theme.accentA, Theme.accentB],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                            .frame(width: DesignSystem.IconSize.large, height: DesignSystem.IconSize.large)
+                    }
+                    
+                    Text(exercise.name)
+                        .font(Theme.caption)
+                        .foregroundStyle(Theme.textPrimary)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.center)
+                        .frame(width: 160 - DesignSystem.Spacing.md * 2) // Consistent width
+                }
                 
-                Image(systemName: exercise.icon)
-                    .font(.title2)
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [Theme.accentA, Theme.accentB],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
+                // "30s" badge per spec
+                Text("30s")
+                    .font(Theme.caption2.weight(.semibold))
+                    .foregroundStyle(.white)
+                    .monospacedDigit()
+                    .padding(.horizontal, DesignSystem.Spacing.xs)
+                    .padding(.vertical, DesignSystem.Spacing.xs * 0.5)
+                    .background(
+                        Capsule()
+                            .fill(Theme.accentA.opacity(0.8))
                     )
-                    .frame(width: DesignSystem.IconSize.large, height: DesignSystem.IconSize.large)
+                    .padding(.top, DesignSystem.Spacing.xs)
+                    .padding(.trailing, DesignSystem.Spacing.xs)
             }
-            
-            Text(exercise.name)
-                .font(Theme.caption)
-                .foregroundStyle(Theme.textPrimary)
-                .lineLimit(2)
-                .multilineTextAlignment(.center)
-                .frame(width: 100)
-        }
-        .padding(DesignSystem.Spacing.md)
-        .frame(width: 120, height: 100)
-        .background(
-            ZStack {
-                // Base material
-                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
-                    .fill(.ultraThinMaterial)
-                
-                // Subtle gradient overlay
-                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                Theme.accentA.opacity(DesignSystem.Opacity.highlight * 0.4),
-                                Color.clear
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
+            .padding(DesignSystem.Spacing.md)
+            .frame(width: 170, height: 140) // Consistent tile width (160-180pt range, using 170pt)
+            .background(
+                ZStack {
+                    // Base material
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                        .fill(.ultraThinMaterial)
+                    
+                    // Subtle gradient overlay
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                        .fill(
+                            LinearGradient(
+                                colors: [
+                                    Theme.accentA.opacity(DesignSystem.Opacity.highlight * 0.4),
+                                    Color.clear
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
                         )
-                    )
-                    .blendMode(.overlay)
-            }
-            .overlay(
-                // Refined border
-                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
-                    .stroke(
-                        LinearGradient(
-                            colors: [
-                                Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.5),
-                                Theme.accentA.opacity(DesignSystem.Opacity.light * 0.5),
-                                Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.5)
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        ),
-                        lineWidth: DesignSystem.Border.subtle
-                    )
+                        .blendMode(.overlay)
+                }
+                .overlay(
+                    // Refined border
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                        .stroke(
+                            LinearGradient(
+                                colors: [
+                                    Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.5),
+                                    Theme.accentA.opacity(DesignSystem.Opacity.light * 0.5),
+                                    Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.5)
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: DesignSystem.Border.subtle
+                        )
+                )
             )
-        )
-        .softShadow()
+            .softShadow()
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Start \(exercise.name)")
+        .accessibilityHint("Double tap to begin this exercise")
     }
 }
 
@@ -1278,7 +1620,7 @@ private struct QuickInsightCard: View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
             HStack(spacing: DesignSystem.Spacing.sm) {
                 Image(systemName: insight.icon)
-                    .font(.title3)
+                    .font(Theme.title3)
                     .foregroundStyle(insight.color)
                     .frame(width: DesignSystem.IconSize.statBox, height: DesignSystem.IconSize.statBox)
                 
@@ -1358,6 +1700,7 @@ private struct GoalProgressCard: View {
     let progress: Double
     let isAchieved: Bool
     let color: Color
+    let onEdit: () -> Void
     
     var body: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
@@ -1365,6 +1708,7 @@ private struct GoalProgressCard: View {
                 Text(title)
                     .font(Theme.subheadline)
                     .foregroundStyle(Theme.textPrimary)
+                    .allowsTightening(false) // Prevent hyphen splits
                 
                 Spacer()
                 
@@ -1378,10 +1722,22 @@ private struct GoalProgressCard: View {
                             .foregroundStyle(.green)
                     }
                 } else {
-                    Text("\(current) / \(goal)")
-                        .font(Theme.caption)
-                        .foregroundStyle(.secondary)
-                        .monospacedDigit()
+                    // Progress language: "0 / 10 · Goal: 10" per spec
+                    HStack(spacing: DesignSystem.Spacing.xs) {
+                        Text("\(current) / \(goal)")
+                            .font(Theme.caption)
+                            .foregroundStyle(.secondary)
+                            .monospacedDigit()
+                        
+                        Text("·")
+                            .font(Theme.caption2)
+                            .foregroundStyle(.secondary)
+                        
+                        Text("Goal: \(goal)")
+                            .font(Theme.caption2)
+                            .foregroundStyle(.secondary)
+                            .monospacedDigit()
+                    }
                 }
             }
             
@@ -1400,9 +1756,20 @@ private struct GoalProgressCard: View {
             .frame(height: DesignSystem.Spacing.sm)
             
             if !isAchieved {
-                Text("\(Int(progress * 100))% complete")
-                    .font(Theme.caption2)
-                    .foregroundStyle(.secondary)
+                HStack {
+                    Text("\(Int(progress * 100))% complete")
+                        .font(Theme.caption2)
+                        .foregroundStyle(.secondary)
+                    
+                    Spacer()
+                    
+                    // Small "Edit Goal" button per spec
+                    Button(action: onEdit) {
+                        Text("Edit Goal")
+                            .font(Theme.caption2)
+                            .foregroundStyle(color)
+                    }
+                }
             }
         }
         .padding()
@@ -1535,7 +1902,7 @@ struct NextAchievementCard: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     
                     Image(systemName: "chevron.right")
-                        .font(.caption)
+                        .font(Theme.caption)
                         .foregroundStyle(.secondary)
                 }
             }
@@ -1694,5 +2061,13 @@ struct AchievementProgressCard: View {
         .softShadow()
         .accessibilityLabel("Achievement: \(achievement.title). \(progressText). \(Int(progress * 100)) percent complete.")
     }
+}
+
+// MARK: - Insights Time Range
+
+private enum InsightsTimeRange: String, CaseIterable {
+    case all = "all"
+    case week = "week"
+    case month = "month"
 }
 

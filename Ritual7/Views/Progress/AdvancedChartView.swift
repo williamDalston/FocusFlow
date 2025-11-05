@@ -85,7 +85,7 @@ struct AdvancedChartView: View {
                     y: .value("Workouts", day.count)
                 )
                 .foregroundStyle(Theme.accentA.gradient)
-                .cornerRadius(8)
+                .cornerRadius(DesignSystem.CornerRadius.small)
                 .opacity(selectedDataPoint?.id == day.id ? 1.0 : 0.7)
                 
                 // Interactive overlay
@@ -221,7 +221,7 @@ struct AdvancedChartView: View {
                     y: .value("Workouts", month.count)
                 )
                 .foregroundStyle(Theme.accentC.gradient)
-                .cornerRadius(8)
+                .cornerRadius(DesignSystem.CornerRadius.small)
                 .opacity(selectedDataPoint?.id == month.id ? 1.0 : 0.7)
                 
                 // Interactive overlay

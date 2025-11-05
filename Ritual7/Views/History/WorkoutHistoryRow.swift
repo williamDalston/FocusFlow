@@ -46,11 +46,11 @@ struct WorkoutHistoryRow: View {
                     if let notes = session.notes, !notes.isEmpty {
                         Label {
                             Text("Has notes")
-                                .font(Theme.caption2)
+                                .font(Theme.caption) // Increased from caption2 for better legibility
                                 .foregroundStyle(.secondary)
                         } icon: {
                             Image(systemName: "note.text")
-                                .font(Theme.caption2)
+                                .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                         }
                     }

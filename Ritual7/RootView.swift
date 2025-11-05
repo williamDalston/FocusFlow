@@ -9,6 +9,9 @@ struct RootView: View {
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     @EnvironmentObject private var workoutStore: WorkoutStore
     @EnvironmentObject private var theme: ThemeStore
+    
+    // Agent 24: Onboarding state management
+    @ObservedObject private var onboardingManager = OnboardingManager.shared
 
     // Persisted toggles
     @AppStorage("hasRequestedATT") private var hasRequestedATT = false
@@ -20,15 +23,19 @@ struct RootView: View {
 
     var body: some View {
         ZStack {
-            // Main app UI with proper responsive layout
-            if horizontalSizeClass == .regular {
-                // iPad: Advanced split-view with adaptive layout
-                iPadLayout
+            // Agent 24: Show onboarding if user hasn't seen it
+            if onboardingManager.shouldShowOnboarding {
+                OnboardingView()
             } else {
-                // iPhone: Use TabView for proper navigation
-                TabView {
-                    // Main Workout Tab
-                    NavigationStack {
+                // Main app UI with proper responsive layout
+                if horizontalSizeClass == .regular {
+                    // iPad: Advanced split-view with adaptive layout
+                    iPadLayout
+                } else {
+                    // iPhone: Use TabView for proper navigation
+                    TabView {
+                        // Main Workout Tab
+                        NavigationStack {
                         ZStack {
                             ThemeBackground().ignoresSafeArea()
                             
@@ -45,63 +52,94 @@ struct RootView: View {
                                     .padding(.top, DesignSystem.Spacing.md)
                                 }
                                 
-                                // Main content with popup effect
-                                PopupContainer(edgePadding: DesignSystem.Spacing.sm, topPadding: DesignSystem.Spacing.lg) {
-                                    WorkoutContentView()
-                                }
+                                // Main content - removed PopupContainer framing per Apple HIG
+                                WorkoutContentView()
+                                    .padding(.horizontal, DesignSystem.Spacing.md)
+                                    .padding(.top, DesignSystem.Spacing.md)
                             }
                         }
                     }
-                    .tabItem {
-                        Image(systemName: "figure.run")
-                        Text("Workout")
-                    }
-                    
-                    // History Tab
-                    NavigationStack {
+                        .tabItem {
+                            Image(systemName: "figure.run")
+                            Text("Workout")
+                        }
+                        
+                        // History Tab
+                        NavigationStack {
                         ZStack {
                             ThemeBackground().ignoresSafeArea()
                             
-                            PopupContainer(edgePadding: DesignSystem.Spacing.sm, topPadding: DesignSystem.Spacing.md) {
-                                WorkoutHistoryView()
-                                    .environmentObject(workoutStore)
-                            }
+                            WorkoutHistoryView()
+                                .environmentObject(workoutStore)
+                                .padding(.horizontal, DesignSystem.Spacing.md)
+                                .padding(.top, DesignSystem.Spacing.md)
                         }
                         .navigationTitle("History")
                         .navigationBarTitleDisplayMode(.large)
                         .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
                         .toolbarBackground(.visible, for: .navigationBar)
-                    }
-                    .tabItem {
-                        Image(systemName: "clock")
-                        Text("History")
-                    }
-                    
-                    // Settings Tab
-                    NavigationStack {
+                        }
+                        .tabItem {
+                            Image(systemName: "clock")
+                            Text("History")
+                        }
+                        
+                        // Settings Tab
+                        NavigationStack {
                         ZStack {
                             ThemeBackground().ignoresSafeArea()
                             
-                            PopupContainer(edgePadding: DesignSystem.Spacing.sm, topPadding: DesignSystem.Spacing.md) {
-                                SettingsView()
-                                    .environmentObject(workoutStore)
-                                    .environmentObject(theme)
-                            }
+                            SettingsView()
+                                .environmentObject(workoutStore)
+                                .environmentObject(theme)
+                                .padding(.horizontal, DesignSystem.Spacing.md)
+                                .padding(.top, DesignSystem.Spacing.md)
                         }
                         .navigationTitle("Settings")
                         .navigationBarTitleDisplayMode(.large)
                         .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
                         .toolbarBackground(.visible, for: .navigationBar)
+                        }
+                        .tabItem {
+                            Image(systemName: "gearshape.fill")
+                            Text("Settings")
+                        }
                     }
-                    .tabItem {
-                        Image(systemName: "gearshape.fill")
-                        Text("Settings")
+                    .accentColor(Theme.accentA)
+                    .onAppear {
+                            // Configure tab bar appearance per spec: cap at ~72pt, one shadow, bump active tab contrast
+                        let appearance = UITabBarAppearance()
+                        appearance.configureWithOpaqueBackground()
+                        
+                        // Cap tab bar height at ~72pt (normal is ~49pt, but we want to ensure it doesn't exceed 72pt)
+                        appearance.shadowColor = UIColor.black.withAlphaComponent(0.18) // 18% black shadow
+                        appearance.shadowImage = UIImage()
+                        
+                        // Bump active tab contrast (label + icon)
+                        appearance.stackedLayoutAppearance.selected.iconColor = UIColor(Theme.accentA)
+                        appearance.stackedLayoutAppearance.selected.titleTextAttributes = [
+                            .foregroundColor: UIColor(Theme.accentA),
+                            .font: UIFont.systemFont(ofSize: 10, weight: .semibold)
+                        ]
+                        
+                        // Inactive tab styling
+                        appearance.stackedLayoutAppearance.normal.iconColor = UIColor.secondaryLabel
+                        appearance.stackedLayoutAppearance.normal.titleTextAttributes = [
+                            .foregroundColor: UIColor.secondaryLabel,
+                            .font: UIFont.systemFont(ofSize: 10, weight: .regular)
+                        ]
+                        
+                        // Apply appearance
+                        UITabBar.appearance().standardAppearance = appearance
+                        if #available(iOS 15.0, *) {
+                            UITabBar.appearance().scrollEdgeAppearance = appearance
+                        }
                     }
                 }
-                .accentColor(Theme.accentA)
             }
         }
-        .toastContainer()
+        .toastContainer()  // Legacy toast system (Agent 7)
+        .toastNotificationContainer()  // Enhanced toast system (Agent 27)
         .onAppear {
             // Defer all heavy operations to avoid blocking UI
             // Use a small delay to ensure UI renders first
@@ -275,11 +313,11 @@ struct iPadSidebar: View {
             VStack(spacing: DesignSystem.Spacing.lg) {
                 HStack {
                     Image(systemName: "figure.run")
-                        .font(.title2)
+                        .font(Theme.title2)
                         .foregroundStyle(Theme.accentA)
                     
                     Text("Ritual7")
-                        .font(.title2.weight(.bold))
+                        .font(Theme.title2)
                         .foregroundStyle(Theme.textPrimary)
                     
                     Spacer()
@@ -289,19 +327,19 @@ struct iPadSidebar: View {
                 HStack(spacing: DesignSystem.Spacing.formFieldSpacing) {
                     VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                         Text("\(workoutStore.totalWorkouts)")
-                            .font(.title2.weight(.bold))
+                            .font(Theme.title2)
                             .foregroundStyle(Theme.accentA)
                         Text("Workouts")
-                            .font(.caption)
+                            .font(Theme.caption)
                             .foregroundStyle(.secondary)
                     }
                     
                     VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                         Text("\(workoutStore.streak)")
-                            .font(.title2.weight(.bold))
+                            .font(Theme.title2)
                             .foregroundStyle(Theme.accentB)
                         Text("Day Streak")
-                            .font(.caption)
+                            .font(Theme.caption)
                             .foregroundStyle(.secondary)
                     }
                     
@@ -357,7 +395,7 @@ struct iPadSidebar: View {
             if !workoutStore.sessions.isEmpty {
                 VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
                     Text("Recent")
-                        .font(.headline)
+                        .font(Theme.headline)
                         .foregroundStyle(Theme.textPrimary)
                         .padding(.horizontal, DesignSystem.Spacing.formFieldSpacing)
                     
@@ -436,12 +474,12 @@ struct iPadSidebarButton: View {
         Button(action: action) {
             HStack(spacing: DesignSystem.Spacing.md) {
                 Image(systemName: icon)
-                    .font(.title3)
+                    .font(Theme.title3)
                     .foregroundStyle(isSelected ? Theme.textOnDark : Theme.textSecondary)
                     .frame(width: DesignSystem.IconSize.statBox)
                 
                 Text(title)
-                    .font(.body.weight(.medium))
+                    .font(Theme.body.weight(.medium))
                     .foregroundStyle(isSelected ? Theme.textOnDark : Theme.textPrimary)
                 
                 Spacer()
@@ -487,13 +525,13 @@ struct iPadRecentWorkoutCard: View {
             
             VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                 Text("\(session.exercisesCompleted) exercises")
-                    .font(.caption)
+                    .font(Theme.caption)
                     .foregroundStyle(Theme.textPrimary)
                     .lineLimit(2)
                     .multilineTextAlignment(.leading)
                 
                 Text(session.date.formatted(date: .abbreviated, time: .shortened))
-                    .font(.caption2)
+                    .font(Theme.caption2)
                     .foregroundStyle(.secondary)
             }
             
@@ -577,7 +615,7 @@ struct iPadInsightsView: View {
                 // Recent entries chart placeholder
                 VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
                     Text("Activity This Week")
-                        .font(.headline)
+                        .font(Theme.headline)
                         .foregroundStyle(Theme.textPrimary)
                     
                     RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
@@ -630,7 +668,7 @@ struct iPadInsightCard: View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
             HStack {
                 Image(systemName: icon)
-                    .font(.title2)
+                    .font(Theme.title2)
                     .foregroundStyle(color)
                 
                 Spacer()
@@ -638,11 +676,11 @@ struct iPadInsightCard: View {
             
             VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                 Text(value)
-                    .font(.title2.weight(.bold))
+                    .font(Theme.title2)
                     .foregroundStyle(Theme.textPrimary)
                 
                 Text(title)
-                    .font(.caption)
+                    .font(Theme.caption)
                     .foregroundStyle(.secondary)
             }
         }
@@ -679,12 +717,12 @@ private struct PermissionBanner: View {
     var body: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
             HStack(spacing: DesignSystem.Spacing.md) {
-                Image(systemName: "bell.slash.fill").font(.title3)
-                Text(title).font(.headline)
+                Image(systemName: "bell.slash.fill").font(Theme.title3)
+                Text(title).font(Theme.headline)
                 Spacer()
             }
             Text(message)
-                .font(.subheadline)
+                .font(Theme.subheadline)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
 

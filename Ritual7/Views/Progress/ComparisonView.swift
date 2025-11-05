@@ -64,14 +64,14 @@ struct ComparisonView: View {
                     y: .value("Workouts", comparison.lastWeek)
                 )
                 .foregroundStyle(Theme.accentA.opacity(0.6))
-                .cornerRadius(8)
+                .cornerRadius(DesignSystem.CornerRadius.small)
                 
                 BarMark(
                     x: .value("Period", "This Week"),
                     y: .value("Workouts", comparison.thisWeek)
                 )
                 .foregroundStyle(Theme.accentB.gradient)
-                .cornerRadius(8)
+                .cornerRadius(DesignSystem.CornerRadius.small)
             }
             .frame(height: 200)
             .chartYAxis {
@@ -111,14 +111,14 @@ struct ComparisonView: View {
                     y: .value("Workouts", comparison.lastMonth)
                 )
                 .foregroundStyle(Theme.accentA.opacity(0.6))
-                .cornerRadius(8)
+                .cornerRadius(DesignSystem.CornerRadius.small)
                 
                 BarMark(
                     x: .value("Period", "This Month"),
                     y: .value("Workouts", comparison.thisMonth)
                 )
                 .foregroundStyle(Theme.accentC.gradient)
-                .cornerRadius(8)
+                .cornerRadius(DesignSystem.CornerRadius.small)
             }
             .frame(height: 200)
             .chartYAxis {
@@ -158,14 +158,14 @@ struct ComparisonView: View {
                     y: .value("Workouts", trend.previousPeriod)
                 )
                 .foregroundStyle(Theme.accentA.opacity(0.6))
-                .cornerRadius(8)
+                .cornerRadius(DesignSystem.CornerRadius.small)
                 
                 BarMark(
                     x: .value("Period", "Recent 15 Days"),
                     y: .value("Workouts", trend.recentPeriod)
                 )
                 .foregroundStyle(Theme.accentB.gradient)
-                .cornerRadius(8)
+                .cornerRadius(DesignSystem.CornerRadius.small)
             }
             .frame(height: 200)
             .chartYAxis {

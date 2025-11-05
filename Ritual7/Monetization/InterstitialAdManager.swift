@@ -2,6 +2,7 @@ import Foundation
 import SwiftUI
 import GoogleMobileAds
 import UIKit
+import os.log
 
 /// Shared interstitial ad manager for the entire app
 /// Optimized for maximum revenue with minimal user interruption
@@ -55,7 +56,7 @@ final class InterstitialAdManager: NSObject, ObservableObject, FullScreenContent
             } catch {
                 self.interstitial = nil
                 self.isReady = false
-                print("Interstitial load failed (attempt \(self.loadAttempts)): \(error.localizedDescription)")
+                os_log("Interstitial load failed (attempt %d): %{public}@", log: .default, type: .error, self.loadAttempts, error.localizedDescription)
                 
                 // Retry with exponential backoff (schedule retry, don't call recursively)
                 if self.loadAttempts < self.maxLoadAttempts {
@@ -65,6 +66,8 @@ final class InterstitialAdManager: NSObject, ObservableObject, FullScreenContent
                     await MainActor.run {
                         self.load()
                     }
+                } else {
+                    os_log("Interstitial ad load failed after %d attempts, will retry later", log: .default, type: .info, self.maxLoadAttempts)
                 }
             }
         }
@@ -119,14 +122,30 @@ final class InterstitialAdManager: NSObject, ObservableObject, FullScreenContent
 
         // Mark as not ready before presenting (ad will be consumed)
         isReady = false
-        let presenter = vc ?? UIApplication.shared.connectedScenes
-            .compactMap { ($0 as? UIWindowScene)?.keyWindow }
-            .first?.rootViewController
+        
+        // Get root view controller safely
+        let presenter: UIViewController?
+        if let vc = vc {
+            presenter = vc
+        } else {
+            presenter = UIApplication.shared.connectedScenes
+                .compactMap { ($0 as? UIWindowScene)?.keyWindow }
+                .first?.rootViewController
+        }
+        
+        guard let presenter = presenter else {
+            os_log("Failed to get root view controller for ad presentation", log: .default, type: .error)
+            // Try to load next ad
+            load()
+            return
+        }
 
         // Present the ad
         ad.present(from: presenter)
         shownThisSession += 1
         lastShown = Date()
+        
+        os_log("Interstitial ad presented successfully (session count: %d)", log: .default, type: .info, shownThisSession)
         
         // Preload next ad immediately after showing (for maximum fill rate)
         // This ensures we always have an ad ready for the next opportunity
@@ -142,7 +161,7 @@ final class InterstitialAdManager: NSObject, ObservableObject, FullScreenContent
     // MARK: - FullScreenContentDelegate
     
     func ad(_ ad: FullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
-        print("Interstitial ad failed to present: \(error.localizedDescription)")
+        os_log("Interstitial ad failed to present: %{public}@", log: .default, type: .error, error.localizedDescription)
         interstitial = nil
         isReady = false
         // Immediately load next ad to maintain fill rate

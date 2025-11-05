@@ -38,6 +38,9 @@ struct SettingsView: View {
     // HealthKit
     @StateObject private var healthKitStore = HealthKitStore.shared
     @State private var showHealthKitPermissions = false
+    
+    // Daily Motivation toggle
+    @AppStorage("dailyMotivationEnabled") private var dailyMotivationEnabled = true
 
     var body: some View {
         NavigationStack {
@@ -80,8 +83,33 @@ struct SettingsView: View {
                     .toolbar {
                         ToolbarItem(placement: .topBarTrailing) {
                             Button("Done") {
-                                dismiss()
+                                // Ensure all settings are saved before dismissing
+                                
+                                // Ensure color theme is saved and applied
+                                Theme.currentTheme = theme.colorTheme
+                                UserDefaults.standard.set(theme.colorTheme.rawValue, forKey: "colorTheme")
+                                
+                                // Theme appearance settings
+                                if !matchSystem {
+                                    theme.colorScheme = forcedScheme
+                                } else {
+                                    theme.colorScheme = nil
+                                }
+                                
+                                // Save sound/vibration settings
+                                soundManager.saveSettings()
+                                
+                                // Force UserDefaults sync to ensure persistence
+                                UserDefaults.standard.synchronize()
+                                
+                                // Force UI refresh for theme changes
+                                theme.objectWillChange.send()
+                                
+                                // Provide haptic feedback
                                 Haptics.tap()
+                                
+                                // Dismiss the view (works if presented as sheet, no-op if in tab)
+                                dismiss()
                             }
                             .font(Theme.headline)
                             .foregroundStyle(Theme.textOnDark)
@@ -206,6 +234,23 @@ struct SettingsView: View {
                     Toggle("", isOn: $soundManager.vibrationEnabled)
                         .tint(.white)
                 }
+                
+                Divider()
+                
+                // Daily Motivation toggle per spec
+                HStack {
+                    VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
+                        Text("Daily Motivation")
+                            .font(Theme.body)
+                        Text("Show inspirational quotes to help you stay motivated.")
+                            .font(Theme.caption)
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    Spacer()
+                    Toggle("", isOn: $dailyMotivationEnabled)
+                        .tint(.white)
+                }
             }
         } header: {
             Text("Sound & Haptics").textCase(.none)
@@ -222,7 +267,7 @@ struct SettingsView: View {
                             .font(Theme.body)
                             .foregroundStyle(Theme.textPrimary)
                         Spacer()
-                        // Color preview
+                        // Color preview - refresh when theme changes
                         HStack(spacing: DesignSystem.Spacing.xs) {
                             Circle()
                                 .fill(Theme.accentA)
@@ -234,6 +279,7 @@ struct SettingsView: View {
                                 .fill(Theme.accentC)
                                 .frame(width: DesignSystem.Spacing.md, height: DesignSystem.Spacing.md)
                         }
+                        .id(theme.colorTheme) // Force refresh when theme changes
                     }
                     
                     Picker("Color Theme", selection: $theme.colorTheme) {
@@ -244,10 +290,18 @@ struct SettingsView: View {
                     }
                     .pickerStyle(.segmented)
                     .tint(Theme.accentA)
+                    .id(theme.colorTheme) // Force view refresh when theme changes
                     .onChange(of: theme.colorTheme) { newTheme in
-                        Haptics.gentle()
+                        // Ensure Theme.currentTheme is updated immediately
+                        Theme.currentTheme = newTheme
+                        
+                        // Save to UserDefaults explicitly
+                        UserDefaults.standard.set(newTheme.rawValue, forKey: "colorTheme")
+                        UserDefaults.standard.synchronize()
+                        
                         // Force UI refresh
                         theme.objectWillChange.send()
+                        Haptics.gentle()
                     }
                 }
                 .padding(.vertical, DesignSystem.Spacing.xs)
@@ -412,7 +466,7 @@ struct SettingsView: View {
                         watchManager.sendSessionsToWatch()
                         watchManager.updateWatchComplications()
                     }
-                    .font(.caption.weight(.medium))
+                    .font(Theme.caption)
                     .foregroundStyle(Theme.textOnDark)
                     .padding(.horizontal, DesignSystem.Spacing.md)
                     .padding(.vertical, DesignSystem.Spacing.sm)
@@ -610,11 +664,11 @@ struct SettingsView: View {
                     
                     VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                         Text("Health Integration")
-                            .font(.body.weight(DesignSystem.Typography.headlineWeight))
+                            .font(Theme.headline)
                             .foregroundStyle(Theme.textPrimary)
                         
                         Text(healthKitStatusText)
-                            .font(.caption.weight(DesignSystem.Typography.captionWeight))
+                            .font(Theme.caption)
                             .foregroundStyle(.secondary)
                     }
                     
@@ -661,7 +715,7 @@ struct SettingsView: View {
                 
                 VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
                     Text("What's synced:")
-                        .font(.caption.weight(DesignSystem.Typography.headlineWeight))
+                        .font(Theme.caption)
                         .foregroundStyle(Theme.accentA)
                     
                     VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
@@ -696,11 +750,11 @@ struct SettingsView: View {
                     
                     VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                         Text("Health Integration")
-                            .font(.body.weight(DesignSystem.Typography.headlineWeight))
+                            .font(Theme.headline)
                             .foregroundStyle(Theme.textPrimary)
                         
                         Text("HealthKit is not available on this device")
-                            .font(.caption.weight(DesignSystem.Typography.captionWeight))
+                            .font(Theme.caption)
                             .foregroundStyle(.secondary)
                     }
                     
@@ -734,7 +788,7 @@ struct SettingsView: View {
                     .frame(width: DesignSystem.IconSize.small, height: DesignSystem.IconSize.small)
                 
                 Text(text)
-                    .font(.caption2.weight(DesignSystem.Typography.bodyWeight))
+                    .font(Theme.caption2)
                     .foregroundStyle(Theme.textPrimary)
             }
             .accessibilityElement(children: .combine)
@@ -764,6 +818,13 @@ struct SettingsView: View {
 
     private var aboutSection: some View {
         Section {
+            // Agent 30: Add help link to settings
+            NavigationLink {
+                HelpCenterView()
+            } label: {
+                Label(MicrocopyManager.shared.ButtonLabel.viewHelp.text, systemImage: "questionmark.circle.fill")
+            }
+            
             NavigationLink {
                 PrivacyView().navigationTitle("Privacy")
             } label: {

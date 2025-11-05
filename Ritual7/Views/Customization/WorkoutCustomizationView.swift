@@ -25,6 +25,15 @@ struct WorkoutCustomizationView: View {
                                 .padding(.bottom, DesignSystem.Spacing.sectionSpacing)
                         }
                         
+                        // Quick toggles at top: Warm-up, Cooldown, Voice cues, Haptics per spec
+                        quickTogglesSection
+                            .padding(.bottom, DesignSystem.Spacing.sectionSpacing)
+                        
+                        // Subtle divider
+                        Divider()
+                            .background(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle))
+                            .padding(.vertical, DesignSystem.Spacing.lg)
+                        
                         // Preset Selection
                         presetSection
                             .padding(.bottom, DesignSystem.Spacing.sectionSpacing)
@@ -113,14 +122,104 @@ struct WorkoutCustomizationView: View {
         }
     }
     
+    // MARK: - Quick Toggles Section
+    
+    private var quickTogglesSection: some View {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
+            Text("Quick Settings")
+                .font(Theme.headline)
+                .foregroundStyle(Theme.textPrimary)
+                .padding(.horizontal, DesignSystem.Spacing.xs / 2)
+            
+            GlassCard(material: .ultraThinMaterial) {
+                VStack(spacing: DesignSystem.Spacing.md) {
+                    // Warm-up toggle
+                    Toggle(isOn: Binding(
+                        get: { !preferencesStore.preferences.skipPrepTime },
+                        set: { preferencesStore.updateSkipPrepTime(!$0) }
+                    )) {
+                        HStack {
+                            Image(systemName: "figure.walk")
+                                .foregroundStyle(Theme.accentA)
+                                .frame(width: DesignSystem.IconSize.medium)
+                            Text("Warm-up")
+                                .font(Theme.body)
+                                .foregroundStyle(Theme.textPrimary)
+                        }
+                    }
+                    .tint(Theme.accentA)
+                    
+                    Divider()
+                    
+                    // Cooldown toggle (if available in preferences)
+                    Toggle(isOn: Binding(
+                        get: { preferencesStore.preferences.restDuration > 0 },
+                        set: { _ in } // Rest duration is controlled via slider
+                    )) {
+                        HStack {
+                            Image(systemName: "figure.cooldown")
+                                .foregroundStyle(Theme.accentB)
+                                .frame(width: DesignSystem.IconSize.medium)
+                            Text("Cooldown")
+                                .font(Theme.body)
+                                .foregroundStyle(Theme.textPrimary)
+                        }
+                    }
+                    .tint(Theme.accentB)
+                    .disabled(true) // Controlled via duration slider
+                    
+                    Divider()
+                    
+                    // Voice cues toggle
+                    Toggle(isOn: Binding(
+                        get: { VoiceCuesManager.shared.voiceEnabled },
+                        set: { 
+                            VoiceCuesManager.shared.voiceEnabled = $0
+                            VoiceCuesManager.shared.saveSettings()
+                        }
+                    )) {
+                        HStack {
+                            Image(systemName: "speaker.wave.2")
+                                .foregroundStyle(Theme.accentC)
+                                .frame(width: DesignSystem.IconSize.medium)
+                            Text("Voice cues")
+                                .font(Theme.body)
+                                .foregroundStyle(Theme.textPrimary)
+                        }
+                    }
+                    .tint(Theme.accentC)
+                    
+                    Divider()
+                    
+                    // Haptics toggle
+                    Toggle(isOn: Binding(
+                        get: { SoundManager.shared.vibrationEnabled },
+                        set: { SoundManager.shared.vibrationEnabled = $0 }
+                    )) {
+                        HStack {
+                            Image(systemName: "hand.tap")
+                                .foregroundStyle(Theme.accentA)
+                                .frame(width: DesignSystem.IconSize.medium)
+                            Text("Haptics")
+                                .font(Theme.body)
+                                .foregroundStyle(Theme.textPrimary)
+                        }
+                    }
+                    .tint(Theme.accentA)
+                }
+                .regularCardPadding()
+            }
+        }
+    }
+    
     // MARK: - Preset Section
     
     private var presetSection: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
             Text("Workout Presets")
-                .font(.headline.weight(.semibold))
+                .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
-                .padding(.horizontal, 4)
+                .padding(.horizontal, DesignSystem.Spacing.xs / 2)
             
             Button {
                 showPresetSelector = true
@@ -131,37 +230,37 @@ struct WorkoutCustomizationView: View {
                             VStack(alignment: .leading, spacing: 8) {
                                 HStack {
                                     Image(systemName: preset.icon)
-                                        .font(.title2)
+                                        .font(Theme.title3)
                                         .foregroundStyle(Theme.accentA)
                                     
                                     Text(preset.displayName)
-                                        .font(.headline.weight(.semibold))
+                                        .font(Theme.headline)
                                         .foregroundStyle(Theme.textPrimary)
                                 }
                                 
                                 Text(preset.description)
-                                    .font(.subheadline)
+                                    .font(Theme.subheadline)
                                     .foregroundStyle(.secondary)
                                     .fixedSize(horizontal: false, vertical: true)
                                 
                                 HStack(spacing: 12) {
                                     Label("\(preset.exerciseIndices.count) exercises", systemImage: "figure.run")
-                                        .font(.caption)
+                                        .font(Theme.caption)
                                         .foregroundStyle(.secondary)
                                     
                                     Label("~\(preset.estimatedMinutes) min", systemImage: "timer")
-                                        .font(.caption)
+                                        .font(Theme.caption)
                                         .foregroundStyle(.secondary)
                                 }
                             }
                         } else {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text("Select a Preset")
-                                    .font(.headline)
+                                    .font(Theme.headline)
                                     .foregroundStyle(Theme.textPrimary)
                                 
                                 Text("Choose from predefined workout configurations")
-                                    .font(.subheadline)
+                                    .font(Theme.subheadline)
                                     .foregroundStyle(.secondary)
                             }
                         }
@@ -184,7 +283,7 @@ struct WorkoutCustomizationView: View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
             HStack {
                 Text("Custom Workouts")
-                    .font(.headline.weight(.semibold))
+                    .font(Theme.headline)
                     .foregroundStyle(Theme.textPrimary)
                 
                 Spacer()
@@ -202,24 +301,24 @@ struct WorkoutCustomizationView: View {
                     editingCustomWorkout = newWorkout
                 } label: {
                     Image(systemName: "plus.circle.fill")
-                        .font(.title3)
+                        .font(Theme.title3)
                         .foregroundStyle(Theme.accentA)
                 }
             }
-            .padding(.horizontal, 4)
+            .padding(.horizontal, DesignSystem.Spacing.xs / 2)
             
             if preferencesStore.customWorkouts.isEmpty {
                 VStack(spacing: 8) {
                     Image(systemName: "list.bullet.rectangle")
-                        .font(.title2)
+                        .font(Theme.title2)
                         .foregroundStyle(.secondary)
                     
                     Text("No custom workouts yet")
-                        .font(.subheadline)
+                        .font(Theme.subheadline)
                         .foregroundStyle(.secondary)
                     
                     Text("Create your own workout routine")
-                        .font(.caption)
+                        .font(Theme.caption)
                         .foregroundStyle(.secondary)
                 }
                 .frame(maxWidth: .infinity)
@@ -249,9 +348,9 @@ struct WorkoutCustomizationView: View {
     private var durationSection: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
             Text("Duration Settings")
-                .font(.headline.weight(.semibold))
+                .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
-                .padding(.horizontal, 4)
+                .padding(.horizontal, DesignSystem.Spacing.xs / 2)
             
             GlassCard(material: .ultraThinMaterial) {
                 VStack(spacing: 20) {
@@ -259,13 +358,13 @@ struct WorkoutCustomizationView: View {
                     VStack(alignment: .leading, spacing: 8) {
                         HStack {
                             Text("Exercise Duration")
-                                .font(.subheadline.weight(.semibold))
+                                .font(Theme.subheadline.weight(.semibold))
                                 .foregroundStyle(Theme.textPrimary)
                             
                             Spacer()
                             
                             Text("\(Int(preferencesStore.preferences.exerciseDuration))s")
-                                .font(.subheadline.weight(.semibold))
+                                .font(Theme.subheadline.weight(.semibold))
                                 .foregroundStyle(Theme.accentA)
                         }
                         
@@ -281,11 +380,11 @@ struct WorkoutCustomizationView: View {
                         
                         HStack {
                             Text("15s")
-                                .font(.caption)
+                                .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                             Spacer()
                             Text("60s")
-                                .font(.caption)
+                                .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                         }
                     }
@@ -296,13 +395,13 @@ struct WorkoutCustomizationView: View {
                     VStack(alignment: .leading, spacing: 8) {
                         HStack {
                             Text("Rest Duration")
-                                .font(.subheadline.weight(.semibold))
+                                .font(Theme.subheadline.weight(.semibold))
                                 .foregroundStyle(Theme.textPrimary)
                             
                             Spacer()
                             
                             Text("\(Int(preferencesStore.preferences.restDuration))s")
-                                .font(.subheadline.weight(.semibold))
+                                .font(Theme.subheadline.weight(.semibold))
                                 .foregroundStyle(Theme.accentA)
                         }
                         
@@ -318,11 +417,11 @@ struct WorkoutCustomizationView: View {
                         
                         HStack {
                             Text("5s")
-                                .font(.caption)
+                                .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                             Spacer()
                             Text("30s")
-                                .font(.caption)
+                                .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                         }
                     }
@@ -333,13 +432,13 @@ struct WorkoutCustomizationView: View {
                     VStack(alignment: .leading, spacing: 8) {
                         HStack {
                             Text("Prep Duration")
-                                .font(.subheadline.weight(.semibold))
+                                .font(Theme.subheadline.weight(.semibold))
                                 .foregroundStyle(Theme.textPrimary)
                             
                             Spacer()
                             
                             Text("\(Int(preferencesStore.preferences.prepDuration))s")
-                                .font(.subheadline.weight(.semibold))
+                                .font(Theme.subheadline.weight(.semibold))
                                 .foregroundStyle(Theme.accentA)
                         }
                         
@@ -355,11 +454,11 @@ struct WorkoutCustomizationView: View {
                         
                         HStack {
                             Text("5s")
-                                .font(.caption)
+                                .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                             Spacer()
                             Text("15s")
-                                .font(.caption)
+                                .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                         }
                     }
@@ -383,9 +482,9 @@ struct WorkoutCustomizationView: View {
     private var fitnessLevelSection: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
             Text("Fitness Level")
-                .font(.headline.weight(.semibold))
+                .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
-                .padding(.horizontal, 4)
+                .padding(.horizontal, DesignSystem.Spacing.xs / 2)
             
             GlassCard(material: .ultraThinMaterial) {
                 Picker("Fitness Level", selection: Binding(
@@ -400,9 +499,9 @@ struct WorkoutCustomizationView: View {
                 .tint(Theme.accentA)
                 
                 Text("This will adjust recommended durations for your fitness level.")
-                    .font(.caption)
+                    .font(Theme.caption)
                     .foregroundStyle(.secondary)
-                    .padding(.top, 8)
+                    .padding(.top, DesignSystem.Spacing.xs)
             }
             .regularCardPadding()
         }
@@ -413,9 +512,9 @@ struct WorkoutCustomizationView: View {
     private var advancedCustomizationSection: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
             Text("Advanced Options")
-                .font(.headline.weight(.semibold))
+                .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
-                .padding(.horizontal, 4)
+                .padding(.horizontal, DesignSystem.Spacing.xs / 2)
             
             if let selectedCustomWorkoutId = preferencesStore.preferences.selectedCustomWorkoutId,
                let customWorkout = preferencesStore.getCustomWorkout(id: selectedCustomWorkoutId) {
@@ -429,20 +528,20 @@ struct WorkoutCustomizationView: View {
                                     .foregroundStyle(Theme.accentA)
                                 
                                 Text("Advanced Customization")
-                                    .font(.headline)
+                                    .font(Theme.headline)
                                     .foregroundStyle(Theme.textPrimary)
                                 
                                 Spacer()
                                 
                                 Image(systemName: "chevron.right")
                                     .foregroundStyle(.secondary)
-                                    .font(.caption)
+                                    .font(Theme.caption)
                             }
                         }
                         .buttonStyle(.plain)
                         
                         Text("Customize exercise order, per-exercise rest periods, and sets")
-                            .font(.caption)
+                            .font(Theme.caption)
                             .foregroundStyle(.secondary)
                     }
                     .regularCardPadding()
@@ -456,9 +555,9 @@ struct WorkoutCustomizationView: View {
     private var personalizationSettingsSection: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
             Text("Personalization")
-                .font(.headline.weight(.semibold))
+                .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
-                .padding(.horizontal, 4)
+                .padding(.horizontal, DesignSystem.Spacing.xs / 2)
             
             GlassCard(material: .ultraThinMaterial) {
                 VStack(spacing: DesignSystem.Spacing.lg) {
@@ -490,9 +589,9 @@ struct WorkoutCustomizationView: View {
                         .tint(Theme.accentA)
                         
                         Text("Personalization learns your workout patterns and adapts recommendations to help you build stronger habits.")
-                            .font(.caption)
+                            .font(Theme.caption)
                             .foregroundStyle(.secondary)
-                            .padding(.top, 4)
+                            .padding(.top, DesignSystem.Spacing.xs / 2)
                     }
                 }
                 .regularCardPadding()
@@ -505,7 +604,7 @@ struct WorkoutCustomizationView: View {
     private func personalizationRecommendationSection(recommendation: WorkoutRecommendation) -> some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
             Text("Recommended for You")
-                .font(.headline.weight(.semibold))
+                .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
                 .padding(.horizontal, DesignSystem.Spacing.xs)
             
@@ -514,31 +613,34 @@ struct WorkoutCustomizationView: View {
                     HStack {
                         Image(systemName: "sparkles")
                             .foregroundStyle(Theme.accentA)
-                            .font(.title3)
+                            .font(Theme.title3)
                         
                         Text(recommendation.recommendedWorkoutType.displayName)
-                            .font(.headline.weight(.semibold))
+                            .font(Theme.headline)
                             .foregroundStyle(Theme.textPrimary)
                         
                         Spacer()
                         
                         if let optimalTime = recommendation.optimalTime {
                             Text(optimalTime, style: .time)
-                                .font(.caption)
+                                .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                         }
                     }
                     
                     HStack {
-                        Label("\(recommendation.confidencePercentage)% confidence", systemImage: "chart.line.uptrend.xyaxis")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                        // Hide "0% confidence" or show user-friendly message per spec
+                        if recommendation.confidencePercentage > 0 {
+                            Label("Based on your patterns", systemImage: "chart.line.uptrend.xyaxis")
+                                .font(Theme.caption)
+                                .foregroundStyle(.secondary)
+                        }
                         
                         Spacer()
                         
                         if let optimalTime = recommendation.optimalTime {
                             Label("Optimal time: \(optimalTime, style: .time)", systemImage: "clock")
-                                .font(.caption)
+                                .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                         }
                     }
@@ -553,7 +655,7 @@ struct WorkoutCustomizationView: View {
     private func habitInsightsSection(habitLearner: HabitLearner) -> some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
             Text("Your Workout Habits")
-                .font(.headline.weight(.semibold))
+                .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
                 .padding(.horizontal, DesignSystem.Spacing.xs)
             
@@ -564,16 +666,16 @@ struct WorkoutCustomizationView: View {
                     HStack(alignment: .top, spacing: 12) {
                         Image(systemName: insight.type.icon)
                             .foregroundStyle(insight.type.color)
-                            .font(.title3)
+                            .font(Theme.title3)
                             .frame(width: DesignSystem.IconSize.large)
                         
                         VStack(alignment: .leading, spacing: 4) {
                             Text(insight.title)
-                                .font(.headline)
+                                .font(Theme.headline)
                                 .foregroundStyle(Theme.textPrimary)
                             
                             Text(insight.message)
-                                .font(.subheadline)
+                                .font(Theme.subheadline)
                                 .foregroundStyle(.secondary)
                         }
                     }
@@ -592,54 +694,54 @@ private struct CustomWorkoutRow: View {
     let onDelete: () -> Void
     
     var body: some View {
-        GlassCard(material: .ultraThinMaterial) {
-            HStack {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(workout.name)
-                        .font(.headline.weight(.semibold))
-                        .foregroundStyle(Theme.textPrimary)
-                    
-                    if !workout.description.isEmpty {
-                        Text(workout.description)
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
+        Button(action: onEdit) {
+            GlassCard(material: .ultraThinMaterial) {
+                HStack {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(workout.name)
+                            .font(Theme.headline)
+                            .foregroundStyle(Theme.textPrimary)
+                        
+                        if !workout.description.isEmpty {
+                            Text(workout.description)
+                                .font(Theme.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
+                        
+                        HStack(spacing: 12) {
+                            Label("\(workout.exerciseIds.count) exercises", systemImage: "figure.run")
+                                .font(Theme.caption)
+                                .foregroundStyle(.secondary)
+                            
+                            Label("~\(workout.estimatedMinutes) min", systemImage: "timer")
+                                .font(Theme.caption)
+                                .foregroundStyle(.secondary)
+                        }
                     }
+                    
+                    Spacer()
                     
                     HStack(spacing: 12) {
-                        Label("\(workout.exerciseIds.count) exercises", systemImage: "figure.run")
-                            .font(.caption)
+                        // Chevron affordance per spec
+                        Image(systemName: "chevron.right")
+                            .font(Theme.caption)
                             .foregroundStyle(.secondary)
                         
-                        Label("~\(workout.estimatedMinutes) min", systemImage: "timer")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                        Button {
+                            onDelete()
+                            Haptics.tap()
+                        } label: {
+                            Image(systemName: "trash")
+                                .foregroundStyle(.red)
+                                .font(Theme.title3)
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
-                
-                Spacer()
-                
-                HStack(spacing: 12) {
-                    Button {
-                        onEdit()
-                        Haptics.tap()
-                    } label: {
-                        Image(systemName: "pencil")
-                            .foregroundStyle(Theme.accentA)
-                            .font(.title3)
-                    }
-                    
-                    Button(role: .destructive) {
-                        onDelete()
-                        Haptics.tap()
-                    } label: {
-                        Image(systemName: "trash")
-                            .foregroundStyle(.red)
-                            .font(.title3)
-                    }
-                }
+                .regularCardPadding()
             }
-            .regularCardPadding()
         }
+        .buttonStyle(.plain)
     }
 }
 
@@ -653,6 +755,10 @@ struct CustomWorkoutEditorView: View {
     @State private var showExerciseSelector = false
     @State private var selectedExerciseIds: Set<UUID>
     
+    // Agent 25: Real-time validation
+    @StateObject private var nameValidation = ValidationState()
+    @StateObject private var exerciseValidation = ValidationState()
+    
     init(workout: CustomWorkout) {
         _workout = State(initialValue: workout)
         _selectedExerciseIds = State(initialValue: Set(workout.exerciseIds))
@@ -665,12 +771,23 @@ struct CustomWorkoutEditorView: View {
                 
                 Form {
                     Section("Workout Details") {
+                        // Agent 25: Real-time validation for workout name
                         TextField("Workout Name", text: $workout.name)
+                            .onChange(of: workout.name) { _, newValue in
+                                nameValidation.touch()
+                                nameValidation.validate(newValue) { InputValidator.validateWorkoutName($0) }
+                            }
+                            .validation(nameValidation.validation, showError: nameValidation.hasBeenTouched)
+                        
                         TextField("Description (optional)", text: $workout.description, axis: .vertical)
                             .lineLimit(3...6)
+                            .onChange(of: workout.description) { _, newValue in
+                                _ = InputValidator.validateWorkoutDescription(newValue)
+                            }
                     }
                     
                     Section("Exercises") {
+                        // Agent 25: Real-time validation for exercise selection
                         Button {
                             showExerciseSelector = true
                         } label: {
@@ -681,8 +798,19 @@ struct CustomWorkoutEditorView: View {
                                     .foregroundStyle(.secondary)
                                 Image(systemName: "chevron.right")
                                     .foregroundStyle(.secondary)
-                                    .font(.caption)
+                                    .font(Theme.caption)
                             }
+                        }
+                        .onChange(of: selectedExerciseIds) { _, _ in
+                            exerciseValidation.touch()
+                            let exerciseArray = Array(selectedExerciseIds)
+                            exerciseValidation.validate(exerciseArray) { InputValidator.validateExerciseSelection($0) }
+                        }
+                        
+                        if exerciseValidation.hasBeenTouched, let errorMessage = exerciseValidation.errorMessage {
+                            Text(errorMessage)
+                                .font(Theme.caption)
+                                .foregroundStyle(Theme.error)
                         }
                     }
                     
@@ -715,13 +843,25 @@ struct CustomWorkoutEditorView: View {
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Save") {
+                        // Agent 25: Validate before saving
+                        nameValidation.touch()
+                        exerciseValidation.touch()
+                        
+                        nameValidation.validate(workout.name) { InputValidator.validateWorkoutName($0) }
+                        exerciseValidation.validate(Array(selectedExerciseIds)) { InputValidator.validateExerciseSelection($0) }
+                        
+                        // Only save if valid
+                        guard nameValidation.isValid && exerciseValidation.isValid else {
+                            return
+                        }
+                        
                         workout.exerciseIds = Array(selectedExerciseIds)
                         workout.updateLastModified()
                         preferencesStore.saveCustomWorkout(workout)
                         dismiss()
                     }
                     .fontWeight(.semibold)
-                    .disabled(workout.name.isEmpty || selectedExerciseIds.isEmpty)
+                    .disabled(!nameValidation.isValid || !exerciseValidation.isValid)
                 }
             }
             .sheet(isPresented: $showExerciseSelector) {
