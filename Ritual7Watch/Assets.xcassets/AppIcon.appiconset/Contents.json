@@ -1,0 +1,92 @@
+{
+  "images" : [
+    {
+      "idiom" : "watch",
+      "role" : "appLauncher",
+      "size" : "40x40",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "watch",
+      "role" : "appLauncher",
+      "size" : "44x44",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "watch",
+      "role" : "appLauncher",
+      "size" : "46x46",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "watch",
+      "role" : "appLauncher",
+      "size" : "50x50",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "watch",
+      "role" : "appLauncher",
+      "size" : "51x51",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "watch",
+      "role" : "appLauncher",
+      "size" : "54x54",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "watch",
+      "role" : "appLauncher",
+      "size" : "55x55",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "watch",
+      "role" : "appLauncher",
+      "size" : "58x58",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "watch",
+      "role" : "appLauncher",
+      "size" : "60x60",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "watch",
+      "role" : "appLauncher",
+      "size" : "66x66",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "watch",
+      "role" : "appLauncher",
+      "size" : "80x80",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "watch",
+      "role" : "appLauncher",
+      "size" : "88x88",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "watch",
+      "role" : "appLauncher",
+      "size" : "100x100",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "watch",
+      "role" : "appLauncher",
+      "size" : "102x102",
+      "scale" : "2x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

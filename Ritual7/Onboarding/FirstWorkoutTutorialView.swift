@@ -1,0 +1,193 @@
+import SwiftUI
+
+/// Agent 6: First Workout Tutorial View - Guides users through their first workout
+struct FirstWorkoutTutorialView: View {
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Binding var showTutorial: Bool
+    @State private var currentStep = 0
+    
+    let steps = [
+        TutorialStep(
+            title: "Welcome to Your First Workout",
+            description: "You'll complete 12 exercises, each lasting 30 seconds with 10-second rest periods.",
+            icon: "figure.run",
+            tips: [
+                "Find a comfortable space with enough room to move",
+                "Have a sturdy chair nearby for some exercises",
+                "Wear comfortable clothing"
+            ]
+        ),
+        TutorialStep(
+            title: "During the Workout",
+            description: "Follow the timer and exercise instructions on screen. You can pause anytime if needed.",
+            icon: "timer",
+            tips: [
+                "Focus on proper form over speed",
+                "Listen to your body and rest if needed",
+                "The timer will guide you through each exercise"
+            ]
+        ),
+        TutorialStep(
+            title: "Rest Periods",
+            description: "Use the 10-second rest periods to catch your breath and prepare for the next exercise.",
+            icon: "wind",
+            tips: [
+                "Take deep breaths during rest",
+                "Stay hydrated",
+                "Use rest to check your form"
+            ]
+        ),
+        TutorialStep(
+            title: "You're Ready!",
+            description: "Remember: form is more important than speed. Take your time and enjoy your first workout!",
+            icon: "checkmark.circle.fill",
+            tips: [
+                "Start when you're ready",
+                "You can always pause or stop",
+                "Good luck! 💪"
+            ]
+        )
+    ]
+    
+    var body: some View {
+        ZStack {
+            ThemeBackground()
+            
+            VStack(spacing: 0) {
+                // Progress indicator
+                HStack(spacing: 8) {
+                    ForEach(0..<steps.count, id: \.self) { index in
+                        Circle()
+                            .fill(index <= currentStep ? Theme.accentA : .white.opacity(0.3))
+                            .frame(width: 8, height: 8)
+                            .animation(.spring(response: 0.3), value: currentStep)
+                    }
+                }
+                .padding(.top, 20)
+                .padding(.bottom, 32)
+                
+                TabView(selection: $currentStep) {
+                    ForEach(0..<steps.count, id: \.self) { index in
+                        tutorialStepView(steps[index])
+                            .tag(index)
+                    }
+                }
+                .tabViewStyle(.page(indexDisplayMode: .never))
+                .indexViewStyle(.page(backgroundDisplayMode: .never))
+                
+                // Navigation buttons
+                HStack(spacing: 16) {
+                    if currentStep > 0 {
+                        Button {
+                            withAnimation {
+                                currentStep -= 1
+                            }
+                            Haptics.tap()
+                        } label: {
+                            Text("Previous")
+                                .fontWeight(.semibold)
+                                .frame(maxWidth: .infinity)
+                                .foregroundStyle(.white)
+                                .padding(.vertical, 16)
+                                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                                .overlay(RoundedRectangle(cornerRadius: 16).stroke(.white.opacity(0.18), lineWidth: 1))
+                        }
+                    }
+                    
+                    Button {
+                        if currentStep < steps.count - 1 {
+                            withAnimation {
+                                currentStep += 1
+                            }
+                            Haptics.tap()
+                        } else {
+                            showTutorial = false
+                            dismiss()
+                            Haptics.success()
+                        }
+                    } label: {
+                        Text(currentStep < steps.count - 1 ? "Next" : "Start Workout")
+                            .fontWeight(.semibold)
+                            .frame(maxWidth: .infinity)
+                            .foregroundStyle(.black)
+                            .padding(.vertical, 16)
+                            .background(.white, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                    }
+                }
+                .padding(.horizontal, 24)
+                .padding(.bottom, 40)
+            }
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Skip") {
+                    showTutorial = false
+                    dismiss()
+                }
+                .foregroundStyle(.white)
+            }
+        }
+    }
+    
+    private func tutorialStepView(_ step: TutorialStep) -> some View {
+        ScrollView {
+            VStack(spacing: horizontalSizeClass == .regular ? 32 : 24) {
+                // Icon
+                Image(systemName: step.icon)
+                    .font(.system(size: horizontalSizeClass == .regular ? 80 : 64, weight: .bold))
+                    .foregroundStyle(.white)
+                    .padding(horizontalSizeClass == .regular ? 24 : 20)
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+                    .overlay(RoundedRectangle(cornerRadius: 22).stroke(.white.opacity(0.18), lineWidth: 1))
+                
+                // Title
+                Text(step.title)
+                    .font(horizontalSizeClass == .regular ? .largeTitle.weight(.bold) : .title.weight(.bold))
+                    .foregroundStyle(.white)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 24)
+                
+                // Description
+                Text(step.description)
+                    .font(horizontalSizeClass == .regular ? .title3 : .body)
+                    .foregroundStyle(.white.opacity(0.85))
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 24)
+                
+                // Tips
+                VStack(alignment: .leading, spacing: 16) {
+                    ForEach(step.tips, id: \.self) { tip in
+                        HStack(alignment: .top, spacing: 12) {
+                            Image(systemName: "checkmark.circle.fill")
+                                .font(.title3)
+                                .foregroundStyle(Theme.accentA)
+                                .padding(.top, 2)
+                            
+                            Text(tip)
+                                .font(.body)
+                                .foregroundStyle(.white.opacity(0.9))
+                        }
+                    }
+                }
+                .padding(24)
+                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 16).stroke(.white.opacity(0.18), lineWidth: 1))
+                .padding(.horizontal, 24)
+                
+                Spacer()
+            }
+            .padding(.top, 32)
+        }
+    }
+}
+
+struct TutorialStep {
+    let title: String
+    let description: String
+    let icon: String
+    let tips: [String]
+}
+
+

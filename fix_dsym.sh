@@ -7,8 +7,8 @@ echo "🔧 Fixing DSYM generation for Swift Package Manager dependencies..."
 
 # Build the project with DSYM generation enabled
 echo "📦 Building project with DSYM generation..."
-xcodebuild -project SevenMinuteWorkout.xcodeproj \
-    -scheme SevenMinuteWorkout \
+xcodebuild -project Ritual7.xcodeproj \
+    -scheme Ritual7 \
     -configuration Release \
     -destination generic/platform=iOS \
     DEBUG_INFORMATION_FORMAT=dwarf-with-dsym \
