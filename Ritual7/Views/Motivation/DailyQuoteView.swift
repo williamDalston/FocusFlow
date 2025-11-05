@@ -420,25 +420,26 @@ struct AchievementCelebrationView: View {
             }
         }
         .onAppear {
-            // Agent 21: Enhanced entrance animation
-            withAnimation(.spring(response: 0.6, dampingFraction: 0.7)) {
+            // Enhanced entrance animation with haptic
+            Haptics.milestoneReached()  // Milestone haptic pattern
+            withAnimation(AnimationConstants.elegantSpring) {
                 scale = 1.0
                 glowOpacity = 1.0
             }
             
-            // Confetti after short delay
+            // Confetti after short delay with haptic
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 showConfetti = true
-                Haptics.success()
+                Haptics.workoutComplete()  // Celebration haptic pattern
             }
             
             // Pulse animation
-            withAnimation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
+            withAnimation(AnimationConstants.elegantSpring.repeatForever(autoreverses: true)) {
                 pulseScale = 1.15
             }
             
             // Rotation animation
-            withAnimation(.linear(duration: 20).repeatForever(autoreverses: false)) {
+            withAnimation(AnimationConstants.smoothEase.repeatForever(autoreverses: false)) {
                 rotation = 360
             }
         }

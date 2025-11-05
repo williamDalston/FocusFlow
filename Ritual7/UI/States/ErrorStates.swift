@@ -18,12 +18,24 @@ struct ErrorStateView: View {
     
     var body: some View {
         VStack(spacing: DesignSystem.Spacing.lg) {
-            // Error icon with bounce animation
+            // Enhanced error icon with refined bounce animation and glow
             Image(systemName: iconName)
-                .font(.system(size: 64, weight: .medium))
-                .foregroundStyle(errorColor)
-                .scaleEffect(isVisible ? 1.0 : 0.8)
+                .font(.system(size: 72, weight: .semibold))  // Larger for prominence
+                .foregroundStyle(
+                    LinearGradient(
+                        colors: [
+                            errorColor,
+                            errorColor.opacity(0.9),
+                            errorColor.opacity(0.8)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .scaleEffect(isVisible ? 1.0 : 0.75)
                 .opacity(isVisible ? 1.0 : 0.0)
+                .shadow(color: errorColor.opacity(DesignSystem.Opacity.glow * 0.6), radius: 16, x: 0, y: 4)
+                .shadow(color: errorColor.opacity(DesignSystem.Opacity.medium), radius: 8, x: 0, y: 2)
                 .animation(AnimationConstants.bouncySpring.delay(0.1), value: isVisible)
             
             VStack(spacing: DesignSystem.Spacing.md) {
@@ -89,13 +101,26 @@ struct ErrorStateView: View {
                 isVisible = true
             }
             
-            // Shake animation for error
+            // Enhanced shake animation for error feedback
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                withAnimation(.spring(response: 0.3, dampingFraction: 0.3).repeatCount(3, autoreverses: true)) {
-                    shakeOffset = 10
+                Haptics.error()  // Error haptic
+                withAnimation(AnimationConstants.bouncySpring) {
+                    shakeOffset = 12
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                    withAnimation(AnimationConstants.bouncySpring) {
+                        shakeOffset = -10
+                    }
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    shakeOffset = 0
+                    withAnimation(AnimationConstants.bouncySpring) {
+                        shakeOffset = 8
+                    }
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.45) {
+                    withAnimation(AnimationConstants.elegantSpring) {
+                        shakeOffset = 0
+                    }
                 }
             }
         }

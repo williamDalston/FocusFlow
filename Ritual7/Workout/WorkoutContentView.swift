@@ -336,9 +336,11 @@ struct WorkoutContentView: View {
                 MeditationTimerView()
             }
         }
-        .toast() // Agent 25: Enable toast notifications
-        // Agent 4: Use AnimationConstants for theme transitions
+        .undoToast() // Agent 25: Enable undo toast notifications
+        // Enhanced theme transitions with elegant crossfade
         .animation(AnimationConstants.longEase, value: theme.colorTheme)
+        .transition(.opacity.combined(with: .scale(scale: 0.98)))
+        .crossfadeTransition(duration: 0.52)  // Smooth color transitions
         .onAppear {
             // Mark that user has seen homepage flourishes after animation completes
             if !hasSeenHomepageFlourishes {
@@ -524,7 +526,7 @@ struct WorkoutContentView: View {
                     }
                     .frame(height: 40)
                     
-                    // Main icon with breathing animation
+                    // Main icon with enhanced breathing animation
                     Image(systemName: "figure.run")
                         .font(.system(size: DesignSystem.IconSize.huge, weight: .bold))
                         .foregroundStyle(
@@ -534,9 +536,13 @@ struct WorkoutContentView: View {
                                 endPoint: .bottomTrailing
                             )
                         )
-                        .scaleEffect(breathingAnimation ? 1.05 : 1.0)
+                        .scaleEffect(breathingAnimation ? 1.06 : 1.0)
+                        .opacity(breathingAnimation ? 1.0 : 0.95)
+                        .shadow(color: Theme.accentA.opacity(breathingAnimation ? DesignSystem.Opacity.glow * 0.6 : DesignSystem.Opacity.glow * 0.3), 
+                               radius: breathingAnimation ? 12 : 8, 
+                               x: 0, y: 4)
                         .animation(
-                            Animation.easeInOut(duration: 2.0)
+                            Animation.easeInOut(duration: 2.5)
                                 .repeatForever(autoreverses: true),
                             value: breathingAnimation
                         )
@@ -815,23 +821,28 @@ struct WorkoutContentView: View {
             GlassCard(material: .ultraThinMaterial) {
                 VStack(spacing: DesignSystem.Spacing.lg) {
                     HStack(spacing: DesignSystem.Spacing.md) {
-                        // Animated leaf icon with breathing effect
+                        // Enhanced animated leaf icon with refined breathing effect
                         ZStack {
                             Circle()
                                 .fill(
                                     LinearGradient(
                                         colors: [
-                                            Theme.accentA.opacity(DesignSystem.Opacity.highlight * 1.5),
-                                            Theme.accentB.opacity(DesignSystem.Opacity.highlight)
+                                            Theme.accentA.opacity(DesignSystem.Opacity.highlight * 1.6),
+                                            Theme.accentB.opacity(DesignSystem.Opacity.highlight * 1.2),
+                                            Theme.accentC.opacity(DesignSystem.Opacity.highlight * 0.8)
                                         ],
                                         startPoint: .topLeading,
                                         endPoint: .bottomTrailing
                                     )
                                 )
                                 .frame(width: DesignSystem.IconSize.xxlarge + 16, height: DesignSystem.IconSize.xxlarge + 16)
-                                .scaleEffect(meditationBreathingAnimation ? 1.1 : 1.0)
+                                .scaleEffect(meditationBreathingAnimation ? 1.12 : 1.0)
+                                .opacity(meditationBreathingAnimation ? 1.0 : 0.95)
+                                .shadow(color: Theme.accentA.opacity(meditationBreathingAnimation ? DesignSystem.Opacity.glow * 0.5 : DesignSystem.Opacity.glow * 0.3), 
+                                       radius: meditationBreathingAnimation ? 16 : 10, 
+                                       x: 0, y: 4)
                                 .animation(
-                                    .easeInOut(duration: 4.0).repeatForever(autoreverses: true),
+                                    .easeInOut(duration: 4.5).repeatForever(autoreverses: true),
                                     value: meditationBreathingAnimation
                                 )
                             
@@ -839,10 +850,15 @@ struct WorkoutContentView: View {
                                 .font(.system(size: DesignSystem.IconSize.xxlarge, weight: .bold))
                                 .foregroundStyle(
                                     LinearGradient(
-                                        colors: [Theme.accentA, Theme.accentB],
+                                        colors: [Theme.accentA, Theme.accentB, Theme.accentC],
                                         startPoint: .topLeading,
                                         endPoint: .bottomTrailing
                                     )
+                                )
+                                .scaleEffect(meditationBreathingAnimation ? 1.05 : 1.0)
+                                .animation(
+                                    .easeInOut(duration: 4.5).repeatForever(autoreverses: true),
+                                    value: meditationBreathingAnimation
                                 )
                         }
                         .onAppear {
@@ -1396,24 +1412,32 @@ private struct StatBox: View {
             }
             .accessibilityHidden(true)
             
-            // Agent 23: Increased hero metrics size for prominence
+            // Enhanced hero metrics with larger, bolder typography and refined shadows
             AnimatedGradientCounter(
                 value: value,
                 duration: 0.8,
                 font: title == "Total Workouts" 
-                    ? .system(size: 52, weight: DesignSystem.Hierarchy.primaryWeight, design: .rounded)  // 52pt for total workouts (increased from 48)
-                    : .system(size: 40, weight: DesignSystem.Hierarchy.primaryWeight, design: .rounded), // 40pt for other hero metrics (increased from 36)
+                    ? .system(size: 56, weight: DesignSystem.Hierarchy.primaryWeight, design: .rounded)  // 56pt for total workouts (increased from 52)
+                    : .system(size: 44, weight: DesignSystem.Hierarchy.primaryWeight, design: .rounded), // 44pt for other hero metrics (increased from 40)
                 gradient: LinearGradient(
-                    colors: [Theme.textPrimary, Theme.textPrimary.opacity(0.9)],
+                    colors: [
+                        Theme.textPrimary,
+                        Theme.textPrimary.opacity(0.95),
+                        Theme.textPrimary.opacity(0.9),
+                        Theme.textPrimary.opacity(0.85)
+                    ],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
             )
             .dynamicTypeSize(...DynamicTypeSize.accessibility5) // Support Dynamic Type for accessibility
             .monospacedDigit() // Monospaced digits for timers & stats per spec
-            .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.subtle * 0.5), 
-                   radius: DesignSystem.Shadow.verySoft.radius * 0.5, 
-                   x: 0, y: DesignSystem.Shadow.verySoft.y * 0.25)
+            .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.subtle * 0.6), 
+                   radius: DesignSystem.Shadow.soft.radius, 
+                   x: 0, y: DesignSystem.Shadow.soft.y * 0.5)
+            .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.subtle * 0.3), 
+                   radius: DesignSystem.Shadow.verySoft.radius * 0.8, 
+                   x: 0, y: DesignSystem.Shadow.verySoft.y * 0.4)
             .accessibilityLabel("\(title): \(value)")
             .accessibilityAddTraits(.updatesFrequently)
             
@@ -1444,16 +1468,27 @@ private struct StatBox: View {
                                     .monospacedDigit()
                             }
                     
-                    // Subtle progress bar under each stat
+                    // Enhanced progress bar with animated gradient and glow
                     GeometryReader { geometry in
                         ZStack(alignment: .leading) {
                             RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small * 0.5, style: .continuous)
                                 .fill(Color.gray.opacity(DesignSystem.Opacity.subtle))
                             
                             RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small * 0.5, style: .continuous)
-                                .fill(color.gradient)
+                                .fill(
+                                    LinearGradient(
+                                        colors: [
+                                            color,
+                                            color.opacity(0.9),
+                                            color.opacity(0.8)
+                                        ],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                )
                                 .frame(width: geometry.size.width * progress)
-                                .animation(AnimationConstants.smoothSpring, value: progress)
+                                .shadow(color: color.opacity(DesignSystem.Opacity.glow * 0.6), radius: 2, x: 0, y: 1)
+                                .animation(AnimationConstants.elegantSpring, value: progress)
                         }
                     }
                     .frame(height: 3)

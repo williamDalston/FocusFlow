@@ -330,13 +330,27 @@ extension View {
     /// Agent 28: Adds custom focus indicator for keyboard navigation
     /// Provides a visible focus ring that meets WCAG standards (3px minimum width)
     func accessibilityFocusIndicator(color: Color = .blue) -> some View {
-        self
-            .focusable()
-            .overlay(
-                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.button)
-                    .stroke(color, lineWidth: 3)
-                    .opacity(0) // Will be animated on focus
+        if #available(iOS 17.0, *) {
+            return AnyView(
+                self
+                    .focusable()
+                    .overlay(
+                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.button)
+                            .stroke(color, lineWidth: 3)
+                            .opacity(0) // Will be animated on focus
+                    )
             )
+        } else {
+            // For iOS 16.0, use FocusState as alternative
+            return AnyView(
+                self
+                    .overlay(
+                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.button)
+                            .stroke(color, lineWidth: 3)
+                            .opacity(0) // Will be animated on focus
+                    )
+            )
+        }
     }
 }
 

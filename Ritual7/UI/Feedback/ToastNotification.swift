@@ -171,9 +171,10 @@ struct ToastNotificationView: View {
         .offset(y: offset)
         .opacity(opacity)
         .scaleEffect(scale)
+        .blur(radius: opacity < 0.5 ? 3 : 0)  // Subtle blur on entrance
         .onAppear {
-            // Entrance animation
-            withAnimation(AnimationConstants.smoothSpring) {
+            // Enhanced entrance animation with elegant spring
+            withAnimation(AnimationConstants.elegantSpring) {
                 offset = 0
                 opacity = 1.0
                 scale = 1.0

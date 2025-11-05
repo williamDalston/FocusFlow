@@ -2,7 +2,7 @@ import SwiftUI
 
 // MARK: - Loading State Components
 
-/// Agent 7: Beautiful loading indicator with smooth animation
+/// Enhanced loading indicator with refined animation and gradients
 struct LoadingIndicator: View {
     @State private var rotation: Double = 0
     let size: CGFloat
@@ -15,13 +15,37 @@ struct LoadingIndicator: View {
     
     var body: some View {
         ZStack {
+            // Background circle with subtle gradient
             Circle()
-                .stroke(color.opacity(DesignSystem.Opacity.light), lineWidth: 3)
+                .stroke(
+                    LinearGradient(
+                        colors: [
+                            color.opacity(DesignSystem.Opacity.light * 0.5),
+                            color.opacity(DesignSystem.Opacity.light)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    lineWidth: 3
+                )
             
+            // Animated arc with gradient
             Circle()
                 .trim(from: 0, to: 0.7)
-                .stroke(color, style: StrokeStyle(lineWidth: 3, lineCap: .round))
+                .stroke(
+                    LinearGradient(
+                        colors: [
+                            color,
+                            color.opacity(0.9),
+                            color.opacity(0.8)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    style: StrokeStyle(lineWidth: 3, lineCap: .round)
+                )
                 .rotationEffect(.degrees(rotation))
+                .shadow(color: color.opacity(DesignSystem.Opacity.glow * 0.3), radius: 4, x: 0, y: 2)
         }
         .frame(width: size, height: size)
         .onAppear {
@@ -32,7 +56,7 @@ struct LoadingIndicator: View {
     }
 }
 
-/// Agent 7: Shimmer effect for loading states
+/// Enhanced shimmer effect for loading states with refined gradients
 struct ShimmerView: View {
     @State private var phase: CGFloat = 0
     let duration: Double
@@ -45,13 +69,16 @@ struct ShimmerView: View {
         LinearGradient(
             colors: [
                 .clear,
-                .white.opacity(DesignSystem.Opacity.shimmer),
+                Color.white.opacity(DesignSystem.Opacity.shimmer * 0.8),
+                Color.white.opacity(DesignSystem.Opacity.shimmer),
+                Color.white.opacity(DesignSystem.Opacity.shimmer * 0.8),
                 .clear
             ],
             startPoint: .leading,
             endPoint: .trailing
         )
-        .offset(x: phase * 300)
+        .offset(x: phase * 400)
+        .blur(radius: 1)  // Subtle blur for smoother shimmer
         .onAppear {
             withAnimation(.linear(duration: duration).repeatForever(autoreverses: false)) {
                 phase = 1.0

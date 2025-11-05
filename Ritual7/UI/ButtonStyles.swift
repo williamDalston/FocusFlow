@@ -100,29 +100,48 @@ struct PrimaryProminentButtonStyle: ButtonStyle {
             .shadow(color: Theme.glowColor.opacity(configuration.isPressed ? DesignSystem.Opacity.subtle * 0.3 : DesignSystem.Opacity.subtle * 0.9),
                     radius: configuration.isPressed ? DesignSystem.Shadow.pressed.radius * 0.5 : DesignSystem.Shadow.soft.radius * 0.7, 
                     y: configuration.isPressed ? DesignSystem.Shadow.pressed.y * 0.5 : DesignSystem.Shadow.soft.y * 0.7)
-            // Agent 27: Enhanced micro-animations with ripple effect
-            .scaleEffect((configuration.isPressed && isEnabled && !isLoading) ? 0.97 : 1.0)  // Slightly more pronounced scale
-            .brightness((configuration.isPressed && isEnabled && !isLoading) ? -0.02 : 0)  // Subtle brightness change
+            // Enhanced micro-animations with refined scale and ripple effect
+            .scaleEffect((configuration.isPressed && isEnabled && !isLoading) ? 0.96 : 1.0)  // More refined scale for premium feel
+            .brightness((configuration.isPressed && isEnabled && !isLoading) ? -0.03 : 0)  // Enhanced brightness change
+            .saturation((configuration.isPressed && isEnabled && !isLoading) ? 0.95 : 1.0)  // Subtle saturation change for depth
             .contentShape(Rectangle())  // Ensure entire button area is tappable
             .allowsHitTesting(isEnabled && !isLoading)  // Disable interaction when disabled or loading
-            .animation((isEnabled && !isLoading) ? AnimationConstants.quickSpring : nil, value: configuration.isPressed)
+            .animation((isEnabled && !isLoading) ? AnimationConstants.elegantSpring : nil, value: configuration.isPressed)
             .animation(AnimationConstants.quickEase, value: isLoading)
             .overlay(
-                // Agent 27: Ripple effect on press
+                // Enhanced ripple effect with smoother animation
                 Group {
                     if configuration.isPressed && isEnabled && !isLoading {
                         RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.button, style: .continuous)
-                            .fill(Color.white.opacity(0.3))
-                            .scaleEffect(1.5)
+                            .fill(
+                                RadialGradient(
+                                    colors: [
+                                        Color.white.opacity(0.4),
+                                        Color.white.opacity(0.2),
+                                        Color.clear
+                                    ],
+                                    center: .center,
+                                    startRadius: 0,
+                                    endRadius: 60
+                                )
+                            )
+                            .scaleEffect(1.8)
                             .opacity(0)
-                            .animation(.easeOut(duration: 0.4), value: configuration.isPressed)
+                            .animation(.easeOut(duration: 0.5), value: configuration.isPressed)
                     }
                 }
             )
             .onChange(of: configuration.isPressed) { pressed in
-                // Agent 27: Sync haptics with button press animations
+                // Enhanced haptic sync with refined timing
                 if pressed && isEnabled && !isLoading {
+                    // Immediate haptic for instant feedback
                     Haptics.buttonPress()
+                    // Additional subtle haptic on release for premium feel
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        if !configuration.isPressed {
+                            Haptics.tap()
+                        }
+                    }
                 }
             }
     }
@@ -228,29 +247,48 @@ struct SecondaryGlassButtonStyle: ButtonStyle {
             .shadow(color: Theme.glowColor.opacity(configuration.isPressed ? DesignSystem.Opacity.subtle * 0.3 : DesignSystem.Opacity.subtle * 0.8),
                     radius: configuration.isPressed ? DesignSystem.Shadow.pressed.radius * 0.4 : DesignSystem.Shadow.soft.radius * 0.6, 
                     y: configuration.isPressed ? DesignSystem.Shadow.pressed.y * 0.4 : DesignSystem.Shadow.soft.y * 0.6)
-            // Agent 27: Enhanced micro-animations with ripple effect
-            .scaleEffect((configuration.isPressed && isEnabled && !isLoading) ? 0.97 : 1.0)  // Consistent with primary
-            .brightness((configuration.isPressed && isEnabled && !isLoading) ? -0.02 : 0)  // Subtle brightness change
+            // Enhanced micro-animations with refined scale and ripple effect
+            .scaleEffect((configuration.isPressed && isEnabled && !isLoading) ? 0.96 : 1.0)  // Consistent with primary
+            .brightness((configuration.isPressed && isEnabled && !isLoading) ? -0.03 : 0)  // Enhanced brightness change
+            .saturation((configuration.isPressed && isEnabled && !isLoading) ? 0.95 : 1.0)  // Subtle saturation change for depth
             .contentShape(Rectangle())  // Ensure entire button area is tappable
             .allowsHitTesting(isEnabled && !isLoading)  // Disable interaction when disabled or loading
-            .animation((isEnabled && !isLoading) ? AnimationConstants.quickSpring : nil, value: configuration.isPressed)
+            .animation((isEnabled && !isLoading) ? AnimationConstants.elegantSpring : nil, value: configuration.isPressed)
             .animation(AnimationConstants.quickEase, value: isLoading)
             .overlay(
-                // Agent 27: Ripple effect on press
+                // Enhanced ripple effect with smoother animation
                 Group {
                     if configuration.isPressed && isEnabled && !isLoading {
                         RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.button, style: .continuous)
-                            .fill(Color.white.opacity(0.2))
-                            .scaleEffect(1.5)
+                            .fill(
+                                RadialGradient(
+                                    colors: [
+                                        Color.white.opacity(0.3),
+                                        Color.white.opacity(0.15),
+                                        Color.clear
+                                    ],
+                                    center: .center,
+                                    startRadius: 0,
+                                    endRadius: 60
+                                )
+                            )
+                            .scaleEffect(1.8)
                             .opacity(0)
-                            .animation(.easeOut(duration: 0.4), value: configuration.isPressed)
+                            .animation(.easeOut(duration: 0.5), value: configuration.isPressed)
                     }
                 }
             )
             .onChange(of: configuration.isPressed) { pressed in
-                // Agent 27: Sync haptics with button press animations
+                // Enhanced haptic sync with refined timing
                 if pressed && isEnabled && !isLoading {
+                    // Immediate haptic for instant feedback
                     Haptics.buttonPress()
+                    // Additional subtle haptic on release for premium feel
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        if !configuration.isPressed {
+                            Haptics.tap()
+                        }
+                    }
                 }
             }
     }

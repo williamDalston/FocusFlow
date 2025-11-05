@@ -290,7 +290,7 @@ struct WorkoutHistoryView: View {
         } message: {
             Text("Are you sure you want to delete all \(filteredSessions.count) filtered workout\(filteredSessions.count == 1 ? "" : "s")? This action can be undone.")
         }
-        .toast() // Agent 25: Enable toast notifications
+        .undoToast() // Agent 25: Enable undo toast notifications
     }
     
     // MARK: - Search and Filter Bar

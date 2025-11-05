@@ -208,7 +208,7 @@ class MicrocopyManager {
             return ("No Exercises Found", "No exercises match your current search or filters. Try different search terms or clear your filters to browse all exercises.", "Clear Filters")
             
         case .noAchievements:
-            let messages = [
+            let messages: [(String, String, String?)] = [
                 ("No Achievements Yet", "Complete workouts to unlock achievements and track your progress. Every workout counts!", nil),
                 ("Start Unlocking", "Your achievements are waiting. Complete workouts to unlock badges and celebrate your progress.", nil),
                 ("Build Your Collection", "Start building your achievement collection. Complete workouts to unlock rewards and track milestones.", nil)
@@ -216,7 +216,7 @@ class MicrocopyManager {
             return messages.randomElement() ?? messages[0]
             
         case .noInsights:
-            let messages = [
+            let messages: [(String, String, String?)] = [
                 ("Complete More Workouts", "Complete more workouts to unlock personalized insights and discover your fitness patterns.", nil),
                 ("Insights Coming Soon", "Your workout data creates valuable insights. Complete a few more workouts to see personalized trends and recommendations.", nil),
                 ("Build Your Data", "Insights are generated from your workout history. Complete workouts to unlock personalized analytics and recommendations.", nil)
@@ -236,6 +236,7 @@ class MicrocopyManager {
     // MARK: - Contextual Help
     
     /// Contextual help text for complex features
+    /// Note: HelpContext is defined in ContextualHelpManager.swift
     func contextualHelp(for context: HelpContext) -> String {
         switch context {
         case .workoutCustomization:
@@ -250,6 +251,8 @@ class MicrocopyManager {
             return "Configure app appearance, notifications, sound settings, and more. All changes are saved automatically."
         case .healthIntegration:
             return "Connect with Apple Health to sync your workouts automatically. Your health data is private and secure."
+        case .gestureControls:
+            return "Use swipe gestures to control your workout. Swipe right to pause or resume, swipe left to skip rest periods."
         }
     }
 }
@@ -290,12 +293,5 @@ enum EmptyStateType {
     case noGoals
 }
 
-enum HelpContext {
-    case workoutCustomization
-    case workoutHistory
-    case streakTracking
-    case achievements
-    case settings
-    case healthIntegration
-}
+// HelpContext enum is defined in ContextualHelpManager.swift
 

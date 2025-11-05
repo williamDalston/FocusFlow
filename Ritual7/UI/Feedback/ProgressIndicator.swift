@@ -22,17 +22,37 @@ struct LinearProgressIndicator: View {
                 RoundedRectangle(cornerRadius: height / 2, style: .continuous)
                     .fill(color.opacity(DesignSystem.Opacity.subtle))
                 
-                // Progress bar
+                // Enhanced progress bar with animated gradient
                 RoundedRectangle(cornerRadius: height / 2, style: .continuous)
                     .fill(
                         LinearGradient(
-                            colors: [color, color.opacity(0.8)],
+                            colors: [
+                                color,
+                                color.opacity(0.9),
+                                color.opacity(0.8),
+                                color.opacity(0.7)
+                            ],
                             startPoint: .leading,
                             endPoint: .trailing
                         )
                     )
                     .frame(width: geometry.size.width * animatedProgress)
+                    .shadow(color: color.opacity(DesignSystem.Opacity.glow * 0.8), radius: 4, x: 0, y: 2)
                     .shadow(color: color.opacity(DesignSystem.Opacity.medium), radius: 2, x: 0, y: 1)
+                    .overlay(
+                        // Subtle shimmer effect
+                        LinearGradient(
+                            colors: [
+                                Color.white.opacity(0.3),
+                                Color.clear
+                            ],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                        .frame(width: geometry.size.width * animatedProgress * 0.3)
+                        .offset(x: -geometry.size.width * animatedProgress * 0.7)
+                        .blendMode(.overlay)
+                    )
             }
         }
         .frame(height: height)
@@ -71,18 +91,24 @@ struct CircularProgressIndicator: View {
             Circle()
                 .stroke(color.opacity(DesignSystem.Opacity.subtle), lineWidth: lineWidth)
             
-            // Progress circle
+            // Enhanced progress circle with animated gradient
             Circle()
                 .trim(from: 0, to: animatedProgress)
                 .stroke(
                     LinearGradient(
-                        colors: [color, color.opacity(0.7)],
+                        colors: [
+                            color,
+                            color.opacity(0.9),
+                            color.opacity(0.8),
+                            color.opacity(0.7)
+                        ],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     ),
-                    style: StrokeStyle(lineWidth: lineWidth, lineCap: .round)
+                    style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round)
                 )
                 .rotationEffect(.degrees(-90))
+                .shadow(color: color.opacity(DesignSystem.Opacity.glow * 0.8), radius: 4, x: 0, y: 2)
                 .shadow(color: color.opacity(DesignSystem.Opacity.medium), radius: 2)
         }
         .frame(width: size, height: size)

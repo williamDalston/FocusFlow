@@ -88,6 +88,12 @@ struct AnimatedGradientCounter: View {
             .foregroundStyle(gradient)
             .monospacedDigit()
             .contentTransition(.numericText())
+            .animation(AnimationConstants.elegantSpring, value: displayValue)  // Smooth spring animation
+            .scaleEffect(displayValue == value ? 1.0 : 1.05)  // Subtle scale during animation
+            .opacity(displayValue == value ? 1.0 : 0.95)  // Subtle opacity during animation
+            .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.subtle * 0.3), 
+                   radius: DesignSystem.Shadow.verySoft.radius * 0.3, 
+                   x: 0, y: DesignSystem.Shadow.verySoft.y * 0.15)
             .onAppear {
                 animateToValue()
             }

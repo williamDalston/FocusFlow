@@ -29,14 +29,15 @@ struct EmptyStateView: View {
     
     var body: some View {
         VStack(spacing: DesignSystem.Spacing.xl) {
-            // Icon with animation
+            // Enhanced icon with refined animation and glow
             Image(systemName: icon)
-                .font(.system(size: DesignSystem.IconSize.huge, weight: .light))
+                .font(.system(size: DesignSystem.IconSize.huge * 1.2, weight: .light))
                 .foregroundStyle(
                     LinearGradient(
                         colors: [
-                            Theme.accentA.opacity(DesignSystem.Opacity.medium),
-                            Theme.accentB.opacity(DesignSystem.Opacity.medium)
+                            Theme.accentA.opacity(DesignSystem.Opacity.strong),
+                            Theme.accentB.opacity(DesignSystem.Opacity.medium),
+                            Theme.accentC.opacity(DesignSystem.Opacity.medium)
                         ],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
@@ -44,23 +45,29 @@ struct EmptyStateView: View {
                 )
                 .scaleEffect(iconScale)
                 .opacity(iconOpacity)
+                .shadow(color: Theme.accentA.opacity(DesignSystem.Opacity.glow * 0.5), radius: 16, x: 0, y: 4)
+                .shadow(color: Theme.accentB.opacity(DesignSystem.Opacity.glow * 0.3), radius: 24, x: 0, y: 6)
             
-            // Content
+            // Enhanced content with refined typography spacing
             VStack(spacing: DesignSystem.Spacing.md) {
                 Text(title)
-                    .font(Theme.title2)
+                    .font(Theme.title2.weight(.bold))
                     .foregroundStyle(Theme.textPrimary)
                     .multilineTextAlignment(.center)
+                    .lineSpacing(DesignSystem.Typography.titleLineHeight - 1.0)
+                    .tracking(DesignSystem.Typography.normalTracking)
                 
                 Text(message)
                     .font(Theme.body)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
-                    .lineSpacing(4)
+                    .lineSpacing(DesignSystem.Typography.bodyLineHeight - 1.0)
+                    .tracking(DesignSystem.Typography.normalTracking)
                     .padding(.horizontal, DesignSystem.Spacing.lg)
             }
             .opacity(isVisible ? 1 : 0)
             .offset(y: isVisible ? 0 : 10)
+            .scaleEffect(isVisible ? 1.0 : 0.96)  // Subtle scale for premium feel
             
             // Action button
             if let actionTitle = actionTitle, let action = action {

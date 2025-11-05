@@ -158,23 +158,31 @@ struct BounceAnimation: ViewModifier {
 
 // MARK: - Additional Animation Modifiers (Agent 4)
 
-/// Card lift effect on press - Agent 4: Card interactions
+/// Enhanced card lift effect on press with sophisticated shadow transitions
 struct CardLiftEffect: ViewModifier {
     @State private var isPressed = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     
     func body(content: Content) -> some View {
         content
-            .scaleEffect(reduceMotion ? 1.0 : (isPressed ? 0.98 : 1.0))
-            .shadow(color: .black.opacity(reduceMotion ? 0.1 : (isPressed ? 0.15 : 0.25)), 
-                   radius: reduceMotion ? 8 : (isPressed ? 12 : 16), 
-                   y: reduceMotion ? 4 : (isPressed ? 6 : 8))
-            .animation(AnimationConstants.quickSpring, value: isPressed)
+            .scaleEffect(reduceMotion ? 1.0 : (isPressed ? 0.97 : 1.0))  // More refined scale
+            .shadow(color: Theme.enhancedShadow.opacity(reduceMotion ? 0.1 : (isPressed ? 0.12 : 0.18)), 
+                   radius: reduceMotion ? 8 : (isPressed ? 10 : 24), 
+                   y: reduceMotion ? 4 : (isPressed ? 5 : 8))
+            .shadow(color: Theme.shadow.opacity(reduceMotion ? 0.05 : (isPressed ? 0.08 : 0.12)), 
+                   radius: reduceMotion ? 4 : (isPressed ? 6 : 16), 
+                   y: reduceMotion ? 2 : (isPressed ? 3 : 6))
+            .shadow(color: Theme.glowColor.opacity(reduceMotion ? 0.0 : (isPressed ? 0.05 : 0.08)), 
+                   radius: reduceMotion ? 0 : (isPressed ? 4 : 12), 
+                   y: reduceMotion ? 0 : (isPressed ? 2 : 4))
+            .brightness(reduceMotion ? 0 : (isPressed ? -0.02 : 0))  // Subtle brightness change
+            .animation(AnimationConstants.elegantSpring, value: isPressed)
             .gesture(
                 DragGesture(minimumDistance: 0)
                     .onChanged { _ in
                         if !reduceMotion {
                             isPressed = true
+                            Haptics.tap()  // Subtle haptic on press
                         }
                     }
                     .onEnded { _ in
@@ -184,7 +192,7 @@ struct CardLiftEffect: ViewModifier {
     }
 }
 
-/// Staggered entrance animation for list items - Agent 4: List animations
+/// Enhanced staggered entrance animation for list items with refined effects
 struct StaggeredEntrance: ViewModifier {
     let index: Int
     let delay: Double
@@ -199,12 +207,14 @@ struct StaggeredEntrance: ViewModifier {
     func body(content: Content) -> some View {
         content
             .opacity(reduceMotion ? 1.0 : (isVisible ? 1.0 : 0.0))
-            .offset(y: reduceMotion ? 0 : (isVisible ? 0 : 20))
+            .offset(y: reduceMotion ? 0 : (isVisible ? 0 : 24))
+            .scaleEffect(reduceMotion ? 1.0 : (isVisible ? 1.0 : 0.92))
+            .blur(radius: reduceMotion ? 0 : (isVisible ? 0 : 2))
             .onAppear {
                 guard !reduceMotion else { return }
                 let delayTime = Double(index) * delay
                 DispatchQueue.main.asyncAfter(deadline: .now() + delayTime) {
-                    withAnimation(AnimationConstants.smoothSpring) {
+                    withAnimation(AnimationConstants.elegantSpring) {
                         isVisible = true
                     }
                 }
@@ -212,33 +222,40 @@ struct StaggeredEntrance: ViewModifier {
     }
 }
 
-/// Shake animation for error states - Agent 4: Error animations
+/// Enhanced shake animation for error states with refined motion
 struct ShakeAnimation: ViewModifier {
     let trigger: Bool
     @State private var offset: CGFloat = 0
+    @State private var rotation: Double = 0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     
     func body(content: Content) -> some View {
         content
             .offset(x: reduceMotion ? 0 : offset)
+            .rotationEffect(.degrees(reduceMotion ? 0 : rotation))
             .onChange(of: trigger) { newValue in
                 guard !reduceMotion, newValue else { return }
-                withAnimation(AnimationConstants.quickSpring) {
-                    offset = -10
+                Haptics.error()  // Error haptic feedback
+                withAnimation(AnimationConstants.bouncySpring) {
+                    offset = -12
+                    rotation = -2
                 }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    withAnimation(AnimationConstants.quickSpring) {
-                        offset = 10
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.12) {
+                    withAnimation(AnimationConstants.bouncySpring) {
+                        offset = 12
+                        rotation = 2
                     }
                 }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                    withAnimation(AnimationConstants.quickSpring) {
-                        offset = -5
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.24) {
+                    withAnimation(AnimationConstants.bouncySpring) {
+                        offset = -8
+                        rotation = -1
                     }
                 }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    withAnimation(AnimationConstants.quickSpring) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.36) {
+                    withAnimation(AnimationConstants.elegantSpring) {
                         offset = 0
+                        rotation = 0
                     }
                 }
             }

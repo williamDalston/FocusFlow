@@ -63,7 +63,9 @@ struct UndoToastView: View {
                y: DesignSystem.Shadow.medium.y)
         .padding(.horizontal, DesignSystem.Spacing.lg)
         .opacity(isVisible ? 1 : 0)
-        .offset(y: isVisible ? 0 : -100)
+        .offset(y: isVisible ? 0 : -120)
+        .scaleEffect(isVisible ? 1.0 : 0.9)  // Subtle scale for premium feel
+        .blur(radius: isVisible ? 0 : 3)  // Subtle blur on entrance
         .onAppear {
             show()
         }
@@ -73,7 +75,8 @@ struct UndoToastView: View {
     }
     
     private func show() {
-        withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+        Haptics.gentle()  // Subtle haptic on toast appearance
+        withAnimation(AnimationConstants.elegantSpring) {
             isVisible = true
         }
         
@@ -88,23 +91,23 @@ struct UndoToastView: View {
     
     private func dismiss() {
         dismissTask?.cancel()
-        withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+        withAnimation(AnimationConstants.elegantSpring) {
             isVisible = false
         }
         
         // Call onDismiss after animation
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
             onDismiss?()
         }
     }
 }
 
-// MARK: - Toast Manager
+// MARK: - Undo Toast Manager
 
-/// Manager for displaying toast notifications globally
+/// Manager for displaying undo toast notifications globally
 @MainActor
-class ToastManager: ObservableObject {
-    static let shared = ToastManager()
+class UndoToastManager: ObservableObject {
+    static let shared = UndoToastManager()
     
     @Published var currentToast: ToastItem?
     
@@ -139,9 +142,9 @@ struct ToastItem: Identifiable {
 
 // MARK: - Toast Container
 
-/// Container view for displaying toast notifications
-struct ToastContainer: View {
-    @StateObject private var toastManager = ToastManager.shared
+/// Container view for displaying undo toast notifications
+struct UndoToastContainer: View {
+    @StateObject private var toastManager = UndoToastManager.shared
     
     var body: some View {
         ZStack {
@@ -167,10 +170,10 @@ struct ToastContainer: View {
 // MARK: - Toast View Modifier
 
 extension View {
-    /// Adds toast notification support to a view
-    func toast() -> some View {
+    /// Adds undo toast notification support to a view
+    func undoToast() -> some View {
         self.overlay(
-            ToastContainer()
+            UndoToastContainer()
                 .allowsHitTesting(false)
         )
     }

@@ -105,7 +105,7 @@ struct HelpCenterView: View {
                 .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
             
-            let filtered = HelpContent.all.filter { content in
+            let filtered = HelpCenterContent.all.filter { content in
                 content.title.localizedCaseInsensitiveContains(searchText) ||
                 content.description.localizedCaseInsensitiveContains(searchText) ||
                 content.content.localizedCaseInsensitiveContains(searchText)
@@ -135,7 +135,7 @@ struct HelpCenterView: View {
                 .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
             
-            ForEach(HelpContent.popular) { content in
+            ForEach(HelpCenterContent.popular) { content in
                 HelpContentCard(content: content)
             }
         }
@@ -213,7 +213,7 @@ private struct HelpCategoryCard: View {
 // MARK: - Help Content Card
 
 private struct HelpContentCard: View {
-    let content: HelpContent
+    let content: HelpCenterContent
     @State private var isExpanded = false
     
     var body: some View {
@@ -303,47 +303,47 @@ enum HelpCategory: String, CaseIterable {
     }
 }
 
-// MARK: - Help Content
+// MARK: - Help Center Content
 
-struct HelpContent: Identifiable {
+struct HelpCenterContent: Identifiable {
     let id = UUID()
     let title: String
     let description: String
     let content: String
     let category: HelpCategory
     
-    static let all: [HelpContent] = [
-        HelpContent(
+    static let all: [HelpCenterContent] = [
+        HelpCenterContent(
             title: "How do I start my first workout?",
             description: "Learn how to begin your fitness journey",
             content: "Starting your first workout is easy! Simply tap the 'Start Workout' button on the main screen. Your workout will begin automatically with a short preparation countdown. You can customize your workout duration, rest periods, and exercises before starting.",
             category: .gettingStarted
         ),
-        HelpContent(
+        HelpCenterContent(
             title: "How do I customize my workout?",
             description: "Adjust exercise duration, rest periods, and more",
             content: "To customize your workout, tap the 'Customize' button on the main screen. From there, you can adjust exercise duration (default 30 seconds), rest periods (default 10 seconds), and select which exercises to include. Changes are saved automatically.",
             category: .workouts
         ),
-        HelpContent(
+        HelpCenterContent(
             title: "How does streak tracking work?",
             description: "Understand how your workout streak is calculated",
             content: "Your streak is the number of consecutive days you've completed a workout. Work out every day to keep your streak growing! If you miss a day, your streak resets to zero. The longer your streak, the more motivated you'll stay!",
             category: .progress
         ),
-        HelpContent(
+        HelpCenterContent(
             title: "How do I pause or skip during a workout?",
             description: "Control your workout with pause, skip, and other options",
             content: "During a workout, you can pause by tapping the pause button or swiping right. You can skip rest periods by tapping the skip button or swiping left. You can also navigate between exercises using the previous/next buttons.",
             category: .workouts
         ),
-        HelpContent(
+        HelpCenterContent(
             title: "How do I connect with Apple Health?",
             description: "Sync your workouts with Apple Health",
             content: "To connect with Apple Health, go to Settings > Health Integration and tap 'Connect with Health'. Grant the necessary permissions to sync your workouts, calories, and exercise minutes automatically. Your health data is private and secure.",
             category: .settings
         ),
-        HelpContent(
+        HelpCenterContent(
             title: "How do I set up workout reminders?",
             description: "Get notified to complete your daily workout",
             content: "To set up reminders, go to Settings > Reminders & Notifications. Enable 'Daily Workout Reminder' and choose your preferred time. You can also enable streak reminders, gentle nudges, and weekly summaries.",
@@ -351,7 +351,7 @@ struct HelpContent: Identifiable {
         )
     ]
     
-    static let popular: [HelpContent] = [
+    static let popular: [HelpCenterContent] = [
         all[0],
         all[1],
         all[2],

@@ -1,5 +1,32 @@
 import SwiftUI
 
+// MARK: - Help Context
+
+enum HelpContext: String, Identifiable {
+    case workoutCustomization
+    case workoutHistory
+    case streakTracking
+    case achievements
+    case settings
+    case healthIntegration
+    case gestureControls
+    
+    var id: String {
+        rawValue
+    }
+}
+
+// MARK: - Help Content
+
+struct HelpContent: Identifiable {
+    let id = UUID()
+    let title: String
+    let description: String
+    let content: String
+    let icon: String
+    let color: Color
+}
+
 /// Agent 30: Contextual help manager that provides helpful hints and tooltips throughout the app
 /// Shows contextual help based on user actions and screen context
 class ContextualHelpManager: ObservableObject {
@@ -122,33 +149,6 @@ class ContextualHelpManager: ObservableObject {
             dismissedHints = Set(saved)
         }
     }
-}
-
-// MARK: - Help Context
-
-enum HelpContext: String, Identifiable {
-    case workoutCustomization
-    case workoutHistory
-    case streakTracking
-    case achievements
-    case settings
-    case healthIntegration
-    case gestureControls
-    
-    var id: String {
-        rawValue
-    }
-}
-
-// MARK: - Help Content
-
-struct HelpContent: Identifiable {
-    let id = UUID()
-    let title: String
-    let description: String
-    let content: String
-    let icon: String
-    let color: Color
 }
 
 // MARK: - Contextual Help Overlay View

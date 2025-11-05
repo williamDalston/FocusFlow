@@ -110,10 +110,11 @@ struct FadeSlideIn: ViewModifier {
                 x: isVisible ? 0 : direction.offset.x,
                 y: isVisible ? 0 : direction.offset.y
             )
+            .scaleEffect(isVisible ? 1.0 : 0.96)  // Subtle scale for premium feel
+            .blur(radius: isVisible ? 0 : 2)  // Subtle blur on entrance
             .onAppear {
                 withAnimation(
-                    Animation.spring(response: 0.6, dampingFraction: 0.8)
-                        .delay(delay)
+                    AnimationConstants.elegantSpring.delay(delay)
                 ) {
                     isVisible = true
                 }
@@ -301,13 +302,15 @@ struct GlowEffectModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .shadow(color: color.opacity(glowIntensity), radius: radius)
+            .shadow(color: color.opacity(glowIntensity * 0.8), radius: radius * 0.8, x: 0, y: 2)
+            .shadow(color: color.opacity(glowIntensity), radius: radius, x: 0, y: 4)
+            .shadow(color: color.opacity(glowIntensity * 0.6), radius: radius * 1.2, x: 0, y: 6)
             .onAppear {
                 withAnimation(
-                    Animation.easeInOut(duration: 1.5)
+                    Animation.easeInOut(duration: 2.0)
                         .repeatForever(autoreverses: true)
                 ) {
-                    glowIntensity = 0.6
+                    glowIntensity = 0.7
                 }
             }
     }
@@ -335,12 +338,12 @@ struct ScaleEntrance: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .scaleEffect(isVisible ? 1.0 : 0.8)
+            .scaleEffect(isVisible ? 1.0 : 0.85)  // More refined scale
             .opacity(isVisible ? 1.0 : 0)
+            .blur(radius: isVisible ? 0 : 1.5)  // Subtle blur on entrance
             .onAppear {
                 withAnimation(
-                    Animation.spring(response: springResponse, dampingFraction: 0.7)
-                        .delay(delay)
+                    AnimationConstants.elegantSpring.delay(delay)
                 ) {
                     isVisible = true
                 }

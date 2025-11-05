@@ -150,7 +150,7 @@ struct WorkoutTimerView: View {
         } message: {
             Text("Are you sure you want to stop this workout? This action can be undone.")
         }
-        .toast() // Agent 25: Enable toast notifications
+        .undoToast() // Agent 25: Enable undo toast notifications
         .onChange(of: engine.phase) { newPhase in
             // Phase transition animations (180-220ms ease-in-out per spec)
             withAnimation(.easeInOut(duration: 0.2)) {
@@ -1107,8 +1107,13 @@ struct WorkoutTimerView: View {
                         .modifier(SymbolBounceModifier(trigger: engine.currentExerciseIndex))
                         .modifier(SymbolPulseModifier(trigger: engine.phase == .exercise))
                         .scaleEffect(engine.phase == .exercise ? 1.0 : 0.9)
-                        .animation(AnimationConstants.smoothSpring, value: engine.phase)
-                        .shadow(color: (engine.phase == .exercise ? Theme.accentA : Theme.accentB).opacity(DesignSystem.Opacity.medium), radius: DesignSystem.Shadow.verySoft.radius * 1.5, x: 0, y: DesignSystem.Shadow.verySoft.y * 1.5)
+                        .animation(AnimationConstants.elegantSpring, value: engine.phase)
+                        .shadow(color: (engine.phase == .exercise ? Theme.accentA : Theme.accentB).opacity(DesignSystem.Opacity.glow * 0.8), 
+                               radius: DesignSystem.Shadow.medium.radius, 
+                               x: 0, y: DesignSystem.Shadow.medium.y)
+                        .shadow(color: (engine.phase == .exercise ? Theme.accentA : Theme.accentB).opacity(DesignSystem.Opacity.medium), 
+                               radius: DesignSystem.Shadow.verySoft.radius * 1.5, 
+                               x: 0, y: DesignSystem.Shadow.verySoft.y * 1.5)
                     
                     // Exercise name
                     Text(exercise.name)

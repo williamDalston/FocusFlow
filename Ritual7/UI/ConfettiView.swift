@@ -30,22 +30,34 @@ struct ConfettiView: UIViewRepresentable {
 
         func cell(_ color: UIColor, _ image: UIImage?) -> CAEmitterCell {
             let c = CAEmitterCell()
-            c.birthRate = 6
-            c.lifetime = 6
-            c.velocity = 180
-            c.velocityRange = 120
+            c.birthRate = 8  // Increased for more celebration
+            c.lifetime = 8  // Longer lifetime for more presence
+            c.velocity = 200  // Enhanced velocity
+            c.velocityRange = 140  // More variation
             c.emissionLongitude = .pi
-            c.emissionRange = .pi / 6
-            c.spin = 3.5
-            c.spinRange = 1.0
-            c.scale = 0.6
-            c.scaleRange = 0.3
+            c.emissionRange = .pi / 4  // Wider spread
+            c.spin = 4.0  // More spin for dynamic feel
+            c.spinRange = 1.5  // More variation
+            c.scale = 0.7  // Slightly larger
+            c.scaleRange = 0.4  // More size variation
             c.color = color.cgColor
             c.contents = image?.cgImage
+            c.alphaSpeed = -0.1  // Fade out smoothly
+            c.alphaRange = 0.2  // Some opacity variation
             return c
         }
 
-        let colors: [UIColor] = [.systemPink, .systemTeal, .systemYellow, .systemPurple, .white]
+        // Enhanced color palette with theme colors
+        let colors: [UIColor] = [
+            UIColor(Theme.accentA),
+            UIColor(Theme.accentB),
+            UIColor(Theme.accentC),
+            .systemPink,
+            .systemTeal,
+            .systemYellow,
+            .systemPurple,
+            .white
+        ]
         let square = UIImage(systemName: "square.fill")
         let circle = UIImage(systemName: "circle.fill")
         emitter.emitterCells = colors.flatMap { [

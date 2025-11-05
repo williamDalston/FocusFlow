@@ -1,9 +1,13 @@
 import SwiftUI
 
-/// Premium animated background with subtle grain.
+/// Premium animated background with subtle grain and parallax effects.
 /// Light on GPU; respects Reduce Motion.
 struct ThemeBackground: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var scrollOffset: CGFloat = 0
+    
+    // Optional scroll offset for parallax effects
+    var parallaxEnabled: Bool = true
 
     var body: some View {
         ZStack {
@@ -14,12 +18,17 @@ struct ThemeBackground: View {
         }
         .ignoresSafeArea(.all)
         .allowsHitTesting(false)  // Allow touches to pass through to content above
+        .onPreferenceChange(ScrollOffsetPreferenceKey.self) { offset in
+            if parallaxEnabled && !reduceMotion {
+                scrollOffset = offset
+            }
+        }
     }
 
     // MARK: Layers
 
     private var animatedGradient: some View {
-        // Refined gradient with sophisticated color transitions
+        // Refined gradient with sophisticated color transitions and subtle parallax
         LinearGradient(
             colors: [
                 Theme.accentA.opacity(0.98),
@@ -33,10 +42,12 @@ struct ThemeBackground: View {
         )
         .saturation(1.05)  // Slightly reduced for more sophisticated look
         .brightness(0.03)  // More subtle brightness adjustment
+        .offset(y: parallaxEnabled && !reduceMotion ? scrollOffset * 0.15 : 0)  // Subtle parallax
+        .animation(AnimationConstants.smoothEase, value: scrollOffset)
     }
 
     private var vignette: some View {
-        // Refined vignette with more subtle, elegant depth
+        // Refined vignette with more subtle, elegant depth and parallax
         RadialGradient(
             colors: [
                 Theme.enhancedShadow.opacity(0.25),  // More subtle
@@ -47,6 +58,8 @@ struct ThemeBackground: View {
             center: .center, startRadius: 0, endRadius: 1200  // Larger radius for softer effect
         )
         .blendMode(.multiply)
+        .offset(y: parallaxEnabled && !reduceMotion ? scrollOffset * 0.08 : 0)  // Subtle parallax
+        .animation(AnimationConstants.smoothEase, value: scrollOffset)
     }
 
     private var grain: some View {
@@ -70,7 +83,7 @@ struct ThemeBackground: View {
     }
     
     private var depthOfField: some View {
-        // Subtle depth of field effect for visual depth
+        // Subtle depth of field effect for visual depth with parallax
         RadialGradient(
             colors: [
                 Theme.accentA.opacity(0.06),
@@ -83,5 +96,10 @@ struct ThemeBackground: View {
         )
         .blendMode(.softLight)
         .opacity(0.6)
+        .offset(
+            x: parallaxEnabled && !reduceMotion ? scrollOffset * 0.05 : 0,
+            y: parallaxEnabled && !reduceMotion ? scrollOffset * 0.1 : 0
+        )  // Subtle parallax for depth
+        .animation(AnimationConstants.smoothEase, value: scrollOffset)
     }
 }

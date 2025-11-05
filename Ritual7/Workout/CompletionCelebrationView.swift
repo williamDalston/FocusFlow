@@ -332,18 +332,19 @@ struct CompletionCelebrationView: View {
     }
     
     private func startCelebrationAnimation() {
-        // Initial confetti burst
+        // Initial confetti burst with haptic
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             confettiTrigger1 = true
+            Haptics.workoutComplete()  // Celebration haptic pattern
         }
         
         // Phase 1: Circle appears with victory lap
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            withAnimation(AnimationConstants.smoothSpring) {
+            withAnimation(AnimationConstants.elegantSpring) {
                 animationPhase = 1
             }
             // Victory lap animation
-            withAnimation(.spring(response: 0.6, dampingFraction: 0.7)) {
+            withAnimation(AnimationConstants.bouncySpring) {
                 victoryLapScale = 1.0
                 victoryLapRotation = 360
             }
@@ -352,18 +353,20 @@ struct CompletionCelebrationView: View {
         // Second confetti burst
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
             confettiTrigger2 = true
+            Haptics.success()  // Success haptic
         }
         
         // Phase 2: Checkmark appears
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            withAnimation(AnimationConstants.smoothSpring) {
+            withAnimation(AnimationConstants.elegantSpring) {
                 animationPhase = 2
             }
+            Haptics.tap()  // Subtle haptic for checkmark
         }
         
         // Phase 3: Text appears
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-            withAnimation(AnimationConstants.quickEase) {
+            withAnimation(AnimationConstants.elegantSpring) {
                 animationPhase = 3
             }
         }
@@ -376,6 +379,7 @@ struct CompletionCelebrationView: View {
             // Third confetti burst when stats appear
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 confettiTrigger3 = true
+                Haptics.milestoneReached()  // Milestone haptic pattern
             }
         }
         
@@ -384,10 +388,11 @@ struct CompletionCelebrationView: View {
             withAnimation(AnimationConstants.elegantSpring) {
                 showAchievements = true
             }
+            Haptics.success()  // Achievement haptic
         }
         
         // Continuous subtle pulse for victory lap
-        withAnimation(.easeInOut(duration: 2.0).repeatForever(autoreverses: true)) {
+        withAnimation(AnimationConstants.elegantSpring.repeatForever(autoreverses: true)) {
             victoryLapScale = 1.05
         }
     }
