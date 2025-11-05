@@ -93,7 +93,7 @@ final class ASOAnalytics {
         logger.info("📊 ASO: Engagement - event: \(event), value: \(value ?? 0)")
         
         let defaults = UserDefaults.standard
-        var engagement = defaults.dictionary(forKey: userEngagementKey) as? [String: Any] ?? [:]
+        var engagement = defaults.dictionary(forKey: userEngagementKey) ?? [:]
         
         // Track event count
         let countKey = "\(event)_count"
@@ -114,7 +114,7 @@ final class ASOAnalytics {
     /// Get engagement statistics
     func getEngagementStats() -> [String: Any] {
         let defaults = UserDefaults.standard
-        return defaults.dictionary(forKey: userEngagementKey) as? [String: Any] ?? [:]
+        return defaults.dictionary(forKey: userEngagementKey) ?? [:]
     }
     
     // MARK: - Conversion Funnel Tracking

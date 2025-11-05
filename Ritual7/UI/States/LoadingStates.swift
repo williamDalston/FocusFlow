@@ -250,7 +250,7 @@ struct SkeletonChart: View {
                         ForEach(0..<7, id: \.self) { index in
                             RoundedRectangle(cornerRadius: 4, style: .continuous)
                                 .fill(.ultraThinMaterial)
-                                .frame(width: 30, height: barHeights[index])
+                                .frame(width: 30, height: index < barHeights.count ? barHeights[index] : 100)
                                 .overlay(ShimmerView())
                         }
                     }

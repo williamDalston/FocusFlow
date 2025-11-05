@@ -253,7 +253,7 @@ enum ErrorHandling {
             os_log("Memory recovery successful", log: .default, type: .info)
             return true
         } else {
-            os_log("Memory recovery partially successful - usage ratio: %{public}@", log: .default, type: .warning, String(memoryInfo.usageRatio))
+            os_log("Memory recovery partially successful - usage ratio: %{public}@", log: .default, type: .info, String(memoryInfo.usageRatio))
             return false
         }
     }
@@ -451,11 +451,14 @@ class GlobalErrorHandler: ObservableObject {
                 return
             }
             
-            self.currentError = error
-            self.showError = true
-            
-            // Haptic feedback for error
-            Haptics.error()
+            // Ensure MainActor isolation for property mutations
+            Task { @MainActor in
+                self.currentError = error
+                self.showError = true
+                
+                // Haptic feedback for error
+                Haptics.error()
+            }
         }
         
         observers.append(observer)

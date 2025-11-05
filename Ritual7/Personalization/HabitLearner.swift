@@ -82,9 +82,11 @@ final class HabitLearner: ObservableObject {
         
         // Calculate average days between workouts
         if sessions.count >= 2 {
-            let intervals: [TimeInterval] = (1..<sessions.count).map { index in
-                sessions[index - 1].date.timeIntervalSince(sessions[index].date)
+            let intervals: [TimeInterval] = (1..<sessions.count).compactMap { index in
+                guard index > 0 && index < sessions.count else { return nil }
+                return sessions[index - 1].date.timeIntervalSince(sessions[index].date)
             }
+            guard !intervals.isEmpty else { return }
             let averageInterval = intervals.reduce(0, +) / Double(intervals.count)
             habitPatterns.averageDaysBetweenWorkouts = averageInterval / (24 * 60 * 60)
         }

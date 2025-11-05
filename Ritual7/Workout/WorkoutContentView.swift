@@ -1007,7 +1007,7 @@ struct WorkoutContentView: View {
         
         // If a custom workout is selected, apply its exercises
         if let customWorkoutId = prefs.selectedCustomWorkoutId,
-           let customWorkout = preferencesStore.getCustomWorkout(id: customWorkoutId) {
+           preferencesStore.getCustomWorkout(id: customWorkoutId) != nil {
             // Note: WorkoutEngine exercises are set during initialization
             // For custom workouts, we would need to recreate the engine
             // This is a design limitation - custom workouts require restarting the workout

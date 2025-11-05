@@ -97,7 +97,9 @@ final class AchievementManager: ObservableObject {
         
         // Keep only last 5 recent unlocks
         if recentUnlocks.count > 5 {
-            recentUnlocks.removeFirst()
+            if !recentUnlocks.isEmpty {
+                recentUnlocks.removeFirst()
+            }
         }
         
         save()

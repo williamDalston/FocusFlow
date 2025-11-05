@@ -428,7 +428,12 @@ struct WorkoutHistoryView: View {
                                 }
                         }
                         .onDelete { indexSet in
-                            let sessionsToDelete = indexSet.map { section.sessions[$0] }
+                            // Filter out invalid indices to prevent crashes
+                            let validIndices = indexSet.filter { $0 >= 0 && $0 < section.sessions.count }
+                            let sessionsToDelete = validIndices.compactMap { index -> WorkoutSession? in
+                                guard index >= 0 && index < section.sessions.count else { return nil }
+                                return section.sessions[index]
+                            }
                             for session in sessionsToDelete {
                                 deleteSession(session)
                             }

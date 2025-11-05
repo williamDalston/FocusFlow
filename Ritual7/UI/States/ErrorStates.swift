@@ -267,14 +267,13 @@ struct ErrorBoundary<Content: View>: View {
                         self.showError = false
                     }
                 )
+                .onAppear {
+                    // Call onError callback when error appears
+                    showError = true
+                    onError?(error)
+                }
             } else {
                 content
-            }
-        }
-        .onChange(of: error) { newError in
-            if newError != nil {
-                showError = true
-                onError?(newError!)
             }
         }
     }
@@ -301,16 +300,9 @@ struct ErrorBoundaryModifier: ViewModifier {
                 content
             }
         }
-        .task {
-            // Catch errors from async operations
-            do {
-                // This is a placeholder - actual error catching would be implementation-specific
-            } catch {
-                self.error = error
-                onError?(error)
-                ErrorHandling.handleError(error, context: "ErrorBoundary")
-            }
-        }
+        // Note: Error catching is handled by the ErrorBoundary view itself
+        // This modifier is a wrapper that displays errors when they occur
+        // Actual error catching should be implemented in the views that use this modifier
     }
 }
 

@@ -148,12 +148,16 @@ final class WorkoutStore: ObservableObject {
     }
     
     func deleteSession(at offsets: IndexSet) {
-        let deletedSessions = offsets.map { sessions[$0] }
+        // Filter out invalid indices to prevent crashes
+        let validOffsets = offsets.filter { $0 >= 0 && $0 < sessions.count }
+        guard !validOffsets.isEmpty else { return }
+        
+        let deletedSessions = validOffsets.map { sessions[$0] }
         for session in deletedSessions {
             totalWorkouts = max(0, totalWorkouts - 1)
             totalMinutes = max(0, totalMinutes - session.duration / 60.0)
         }
-        sessions.remove(atOffsets: offsets)
+        sessions.remove(atOffsets: IndexSet(validOffsets))
         save()
     }
     

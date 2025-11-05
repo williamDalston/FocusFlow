@@ -976,7 +976,7 @@ struct WorkoutTimerView: View {
                         Image(systemName: "arrow.left")
                             .font(.title2)
                             .foregroundStyle(Theme.accentA)
-                            .symbolEffect(.bounce, value: showGestureHint)
+                            .modifier(SymbolBounceModifier(trigger: showGestureHint))
                         
                         Text("Swipe right to pause")
                             .font(Theme.subheadline)
@@ -985,7 +985,7 @@ struct WorkoutTimerView: View {
                         Image(systemName: "arrow.right")
                             .font(.title2)
                             .foregroundStyle(Theme.accentA)
-                            .symbolEffect(.bounce, value: showGestureHint)
+                            .modifier(SymbolBounceModifier(trigger: showGestureHint))
                     }
                     .padding(DesignSystem.Spacing.md)
                     .background(
@@ -1007,7 +1007,7 @@ struct WorkoutTimerView: View {
                         Image(systemName: "arrow.left")
                             .font(.title2)
                             .foregroundStyle(Theme.accentB)
-                            .symbolEffect(.bounce, value: showGestureHint)
+                            .modifier(SymbolBounceModifier(trigger: showGestureHint))
                         
                         Text("Swipe left to skip rest")
                             .font(Theme.subheadline)
@@ -1016,7 +1016,7 @@ struct WorkoutTimerView: View {
                         Image(systemName: "arrow.right")
                             .font(.title2)
                             .foregroundStyle(Theme.accentB)
-                            .symbolEffect(.bounce, value: showGestureHint)
+                            .modifier(SymbolBounceModifier(trigger: showGestureHint))
                     }
                     .padding(DesignSystem.Spacing.md)
                     .background(

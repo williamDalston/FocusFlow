@@ -56,13 +56,15 @@ struct ProgressChartView: View {
                     .loadingTransition(isLoading)
             } else {
                 // Chart based on selected timeframe
-                switch selectedTimeframe {
-                case .week:
-                    weeklyChart
-                case .month:
-                    monthlyChart
-                case .year:
-                    yearlyChart
+                Group {
+                    switch selectedTimeframe {
+                    case .week:
+                        weeklyChart
+                    case .month:
+                        monthlyChart
+                    case .year:
+                        yearlyChart
+                    }
                 }
                 .loadingTransition(isLoading)
             }
