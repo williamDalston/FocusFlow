@@ -22,7 +22,7 @@ class VoiceCuesManager: NSObject, ObservableObject {
     override private init() {
         synthesizer = AVSpeechSynthesizer()
         super.init()
-        synthesizer.delegate = VoiceCuesManager.shared
+        synthesizer.delegate = self
         loadSettings()
         selectBestVoice()
     }

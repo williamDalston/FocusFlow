@@ -261,18 +261,21 @@ enum ErrorHandling {
     // MARK: - Data Validation
     
     /// Validates workout session data
+    /// Uses consistent validation rules to prevent data inconsistencies
     static func validateSessionData(duration: TimeInterval, exercisesCompleted: Int) -> Result<Void, WorkoutError> {
-        guard duration > 0 else {
+        // Use constants for consistency - duration must be > minWorkoutDuration (currently 0.0)
+        // But we enforce a practical minimum of > 0 to prevent invalid sessions
+        guard duration > AppConstants.ValidationConstants.minWorkoutDuration else {
             return .failure(.invalidData(description: "Workout duration must be greater than 0"))
         }
         
         guard duration <= AppConstants.ValidationConstants.maxWorkoutDuration else {
-            return .failure(.invalidData(description: "Workout duration exceeds maximum allowed"))
+            return .failure(.invalidData(description: "Workout duration exceeds maximum allowed (\(Int(AppConstants.ValidationConstants.maxWorkoutDuration)) seconds)"))
         }
         
         guard exercisesCompleted >= AppConstants.ValidationConstants.minExercisesCompleted && 
               exercisesCompleted <= AppConstants.ValidationConstants.maxExercisesCompleted else {
-            return .failure(.invalidData(description: "Exercises completed must be between 0 and 12"))
+            return .failure(.invalidData(description: "Exercises completed must be between \(AppConstants.ValidationConstants.minExercisesCompleted) and \(AppConstants.ValidationConstants.maxExercisesCompleted)"))
         }
         
         return .success(())

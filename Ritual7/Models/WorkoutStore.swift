@@ -312,16 +312,29 @@ final class WorkoutStore: ObservableObject {
             let decoder = JSONDecoder()
             let loadedSessions = try decoder.decode([WorkoutSession].self, from: data)
             
-            // Validate loaded data
+            // Validate loaded data using the same validation function to ensure consistency
+            // This prevents validation mismatches between adding and loading sessions
             let validSessions = loadedSessions.filter { session in
-                session.duration > AppConstants.ValidationConstants.minWorkoutDuration && 
-                session.duration <= AppConstants.ValidationConstants.maxWorkoutDuration &&
-                session.exercisesCompleted >= AppConstants.ValidationConstants.minExercisesCompleted && 
-                session.exercisesCompleted <= AppConstants.ValidationConstants.maxExercisesCompleted
+                // Use the same validation function that addSession() uses
+                let validationResult = ErrorHandling.validateSessionData(
+                    duration: session.duration,
+                    exercisesCompleted: session.exercisesCompleted
+                )
+                switch validationResult {
+                case .success:
+                    return true
+                case .failure:
+                    return false
+                }
             }
             
             if validSessions.count != loadedSessions.count {
-                os_log("Filtered out %d invalid sessions", log: .default, type: .info, loadedSessions.count - validSessions.count)
+                let invalidCount = loadedSessions.count - validSessions.count
+                os_log("Filtered out %d invalid sessions during load", log: .default, type: .info, invalidCount)
+                ErrorHandling.handleError(
+                    ErrorHandling.WorkoutError.invalidData(description: "Filtered out \(invalidCount) invalid session(s) during load"),
+                    context: "WorkoutStore.load"
+                )
             }
             
             sessions = validSessions

@@ -16,8 +16,8 @@
 - [ ] App description (4,000 chars max) - ✅ Created in AppStoreDescription.md
 - [ ] Promotional text (170 chars max) - ✅ Created in APP_STORE_PROMOTIONAL_TEXT.md
 - [ ] Keywords (100 chars max) - ✅ Created in Keywords.txt
-- [ ] Support URL - [ ] Add your support website
-- [ ] Marketing URL - [ ] Add your marketing website (optional)
+- [ ] Support URL - ✅ https://williamDalston.github.io/ritual7-support
+- [ ] Marketing URL - ✅ https://williamDalston.github.io/ritual7
 - [ ] Privacy Policy URL - [ ] Add privacy policy URL
 
 ### App Store Assets
