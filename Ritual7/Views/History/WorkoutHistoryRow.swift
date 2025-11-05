@@ -43,7 +43,7 @@ struct WorkoutHistoryRow: View {
                             .foregroundStyle(.secondary)
                     }
                     
-                    if session.notes != nil && !session.notes!.isEmpty {
+                    if let notes = session.notes, !notes.isEmpty {
                         Label {
                             Text("Has notes")
                                 .font(Theme.caption2)

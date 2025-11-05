@@ -51,7 +51,7 @@ enum Quotes {
     }
     
     static func random() -> String {
-        return all.randomElement() ?? all[0]
+        return all.randomElement() ?? all.first ?? "Keep going! You've got this."
     }
     
     /// Get a motivational message based on streak

@@ -10,7 +10,10 @@ struct AutoGrowingTextEditor: View {
     @State private var dynamicHeight: CGFloat = 44
     
     private var hasError: Bool {
-        errorMessage != nil && !errorMessage!.isEmpty
+        if let error = errorMessage {
+            return !error.isEmpty
+        }
+        return false
     }
 
     var body: some View {

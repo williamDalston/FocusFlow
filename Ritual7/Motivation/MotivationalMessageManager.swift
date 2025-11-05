@@ -71,7 +71,7 @@ final class MotivationalMessageManager: ObservableObject {
             "Progress isn't made in your comfort zone. Take that first step. Your discipline is stronger than your excuses.",
             "You've come this far. Don't let today be the day you stop. Your consistency is your superpower—use it."
         ]
-        return messages.randomElement() ?? messages[0]
+        return messages.randomElement() ?? messages.first ?? "Keep pushing forward!"
     }
     
     /// Get motivational message for workout completion
@@ -122,7 +122,7 @@ final class MotivationalMessageManager: ObservableObject {
             ]
         }
         
-        return messages.randomElement() ?? messages[0]
+        return messages.randomElement() ?? messages.first ?? "Keep pushing forward!"
     }
 }
 
