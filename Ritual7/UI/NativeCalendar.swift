@@ -94,13 +94,13 @@ struct NativeCalendar: View {
             }
             .padding(.horizontal, 16)
         }
-        .padding(.vertical, horizontalSizeClass == .regular ? 20 : 16)
+        .padding(.vertical, horizontalSizeClass == .regular ? DesignSystem.Spacing.formFieldSpacing : DesignSystem.Spacing.lg)
         .background(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
                 .fill(.regularMaterial)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .stroke(.quaternary, lineWidth: 0.5)
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                        .stroke(.quaternary, lineWidth: DesignSystem.Border.subtle)
                 )
         )
     }

@@ -134,13 +134,45 @@ struct RepCounterView: View {
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
             .background(
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(.ultraThinMaterial)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12, style: .continuous)
-                            .stroke(Theme.accentA.opacity(0.3), lineWidth: 1)
-                    )
+                ZStack {
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                        .fill(.ultraThinMaterial)
+                    
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                        .fill(
+                            LinearGradient(
+                                colors: [
+                                    Theme.accentA.opacity(DesignSystem.Opacity.highlight * 0.5),
+                                    Color.clear
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .blendMode(.overlay)
+                }
+                .overlay(
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                        .stroke(
+                            LinearGradient(
+                                colors: [
+                                    Theme.accentA.opacity(DesignSystem.Opacity.light * 1.5),
+                                    Theme.accentA.opacity(DesignSystem.Opacity.subtle),
+                                    Theme.accentA.opacity(DesignSystem.Opacity.light * 1.5)
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: DesignSystem.Border.standard
+                        )
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                        .stroke(Theme.accentA.opacity(DesignSystem.Opacity.glow * 0.8), lineWidth: DesignSystem.Border.hairline)
+                        .blur(radius: 1)
+                )
             )
+            .softShadow()
         }
     }
     

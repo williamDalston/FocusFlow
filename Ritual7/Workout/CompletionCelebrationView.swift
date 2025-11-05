@@ -41,7 +41,7 @@ struct CompletionCelebrationView: View {
                     // Action buttons
                     actionButtons
                 }
-                .padding(32)
+                .padding(DesignSystem.Spacing.xxl)
             }
         }
         .onAppear {
@@ -150,14 +150,52 @@ struct CompletionCelebrationView: View {
                 }
                 .padding(12)
                 .background(
-                    RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        .fill(.white.opacity(0.1))
+                    ZStack {
+                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
+                            .fill(.white.opacity(DesignSystem.Opacity.subtle * 1.0))
+                        
+                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
+                            .fill(
+                                LinearGradient(
+                                    colors: [
+                                        Color.white.opacity(DesignSystem.Opacity.highlight * 1.2),
+                                        Color.clear
+                                    ],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                            .blendMode(.overlay)
+                    }
+                    .overlay(
+                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
+                            .stroke(
+                                LinearGradient(
+                                    colors: [
+                                        Color.white.opacity(DesignSystem.Opacity.light * 1.2),
+                                        Color.white.opacity(DesignSystem.Opacity.subtle),
+                                        Color.white.opacity(DesignSystem.Opacity.light * 1.2)
+                                    ],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ),
+                                lineWidth: DesignSystem.Border.subtle
+                            )
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
+                            .stroke(Color.white.opacity(DesignSystem.Opacity.glow * 0.8), lineWidth: DesignSystem.Border.hairline)
+                            .blur(radius: 1)
+                    )
                 )
+                .shadow(color: Color.white.opacity(DesignSystem.Opacity.subtle), 
+                       radius: DesignSystem.Shadow.verySoft.radius, 
+                       y: DesignSystem.Shadow.verySoft.y)
             }
         }
-        .padding(20)
+        .padding(DesignSystem.Spacing.formFieldSpacing)
         .background(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
                 .fill(.ultraThinMaterial)
         )
     }
@@ -175,11 +213,11 @@ struct CompletionCelebrationView: View {
                 .foregroundStyle(.white.opacity(0.8))
                 .multilineTextAlignment(.center)
         }
-        .padding(20)
+        .padding(DesignSystem.Spacing.formFieldSpacing)
         .frame(maxWidth: .infinity)
         .background(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(.white.opacity(0.1))
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                .fill(.white.opacity(DesignSystem.Opacity.subtle))
         )
     }
     
@@ -251,37 +289,38 @@ struct CompletionCelebrationView: View {
     }
     
     private func startCelebrationAnimation() {
+        // Agent 4: Use AnimationConstants for celebration animations
         // Phase 1: Circle appears
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+            withAnimation(AnimationConstants.smoothSpring) {
                 animationPhase = 1
             }
         }
         
         // Phase 2: Checkmark appears
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+            withAnimation(AnimationConstants.smoothSpring) {
                 animationPhase = 2
             }
         }
         
         // Phase 3: Text appears
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-            withAnimation(.easeIn(duration: 0.4)) {
+            withAnimation(AnimationConstants.quickEase) {
                 animationPhase = 3
             }
         }
         
         // Phase 4: Stats appear
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-            withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+            withAnimation(AnimationConstants.elegantSpring) {
                 showStats = true
             }
         }
         
         // Phase 5: Achievements appear
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-            withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+            withAnimation(AnimationConstants.elegantSpring) {
                 showAchievements = true
             }
         }

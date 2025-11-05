@@ -112,11 +112,11 @@ private struct PresetCard: View {
                     
                     Spacer()
                 }
-                .padding(16)
+                .padding(DesignSystem.Spacing.lg)
             }
             .overlay(
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .stroke(isSelected ? Theme.accentA : Theme.strokeOuter, lineWidth: isSelected ? 2 : 0.8)
+                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                    .stroke(isSelected ? Theme.accentA : Theme.strokeOuter, lineWidth: isSelected ? DesignSystem.Border.emphasis : DesignSystem.Border.subtle)
             )
         }
         .buttonStyle(.plain)

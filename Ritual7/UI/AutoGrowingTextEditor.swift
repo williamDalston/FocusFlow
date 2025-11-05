@@ -3,10 +3,15 @@ import SwiftUI
 struct AutoGrowingTextEditor: View {
     @Binding var text: String
     var placeholder: String = ""
+    var errorMessage: String? = nil
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @FocusState.Binding var isFocused: Bool
 
     @State private var dynamicHeight: CGFloat = 44
+    
+    private var hasError: Bool {
+        errorMessage != nil && !errorMessage!.isEmpty
+    }
 
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -27,12 +32,50 @@ struct AutoGrowingTextEditor: View {
                 .scrollDisabled(false) // Enable scrolling
                 .textSelection(.enabled) // Enable text selection
                 .overlay(
-                    RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .stroke(isFocused ? Theme.accentA : Theme.strokeOuter, lineWidth: isFocused ? 3.0 : 2.0)
-                        .background(
-                            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                                .fill(.ultraThinMaterial.opacity(0.5))
-                        )
+                    ZStack {
+                        // Background with glass effect
+                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.medium, style: .continuous)
+                            .fill(.ultraThinMaterial)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.medium, style: .continuous)
+                                    .fill(
+                                        LinearGradient(
+                                            colors: [
+                                                Theme.accentA.opacity(hasError ? 0.0 : (isFocused ? DesignSystem.Opacity.subtle * 0.5 : 0.0)),
+                                                Color.clear
+                                            ],
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        )
+                                    )
+                                    .blendMode(.overlay)
+                            )
+                        
+                        // Border with focus and error states
+                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.medium, style: .continuous)
+                            .stroke(
+                                LinearGradient(
+                                    colors: hasError
+                                        ? [.red.opacity(DesignSystem.Opacity.strong), .red.opacity(DesignSystem.Opacity.medium)]
+                                        : isFocused
+                                        ? [Theme.accentA.opacity(DesignSystem.Opacity.strong), Theme.accentB.opacity(DesignSystem.Opacity.medium)]
+                                        : [Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle), Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 0.5)],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ),
+                                lineWidth: hasError ? DesignSystem.Border.emphasis : (isFocused ? DesignSystem.Border.standard * 1.5 : DesignSystem.Border.standard)
+                            )
+                            .shadow(
+                                color: hasError
+                                    ? .red.opacity(DesignSystem.Opacity.glow * 0.6)
+                                    : isFocused
+                                    ? Theme.accentA.opacity(DesignSystem.Opacity.glow * 0.8)
+                                    : Color.clear,
+                                radius: hasError || isFocused ? 4 : 0,
+                                x: 0,
+                                y: 0
+                            )
+                    }
                 )
                 .onTapGesture {
                     // Ensure focus and cursor appear immediately
@@ -43,6 +86,21 @@ struct AutoGrowingTextEditor: View {
                 }
                 .onAppear { recalcHeight() }
                 // Removed iPad features overlay for simplicity
+            
+            // Error message
+            if hasError, let error = errorMessage {
+                HStack(spacing: DesignSystem.Spacing.xs) {
+                    Image(systemName: "exclamationmark.circle.fill")
+                        .font(Theme.caption2)
+                        .foregroundStyle(.red)
+                    Text(error)
+                        .font(Theme.caption2)
+                        .foregroundStyle(.red.opacity(DesignSystem.Opacity.strong))
+                }
+                .padding(.horizontal, DesignSystem.Spacing.sm)
+                .padding(.top, DesignSystem.Spacing.xs)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
         }
     }
 

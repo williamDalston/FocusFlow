@@ -144,7 +144,7 @@ struct WorkoutCustomizationView: View {
                         Image(systemName: "chevron.right")
                             .foregroundStyle(.secondary)
                     }
-                    .padding(16)
+                    .padding(DesignSystem.Spacing.lg)
                 }
             }
             .buttonStyle(.plain)
@@ -346,7 +346,7 @@ struct WorkoutCustomizationView: View {
                     ))
                     .tint(Theme.accentA)
                 }
-                .padding(16)
+                .padding(DesignSystem.Spacing.lg)
             }
         }
     }
@@ -418,7 +418,7 @@ struct WorkoutCustomizationView: View {
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
-                    .padding(16)
+                    .padding(DesignSystem.Spacing.lg)
                 }
             }
         }
@@ -468,7 +468,7 @@ struct WorkoutCustomizationView: View {
                             .padding(.top, 4)
                     }
                 }
-                .padding(16)
+                .padding(DesignSystem.Spacing.lg)
             }
         }
     }
@@ -516,7 +516,7 @@ struct WorkoutCustomizationView: View {
                         }
                     }
                 }
-                .padding(16)
+                .padding(DesignSystem.Spacing.lg)
             }
         }
     }
@@ -550,7 +550,7 @@ struct WorkoutCustomizationView: View {
                                 .foregroundStyle(.secondary)
                         }
                     }
-                    .padding(16)
+                    .padding(DesignSystem.Spacing.lg)
                 }
             }
         }

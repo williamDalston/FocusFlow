@@ -151,7 +151,8 @@ class HealthInsightsManager: ObservableObject {
         var count: Int = 0
         
         for workout in workouts {
-            if let avgHeartRate = workout.statistics(for: HKQuantityType.quantityType(forIdentifier: .heartRate)!)?.averageQuantity() {
+            if let heartRateType = HKQuantityType.quantityType(forIdentifier: .heartRate),
+               let avgHeartRate = workout.statistics(for: heartRateType)?.averageQuantity() {
                 let bpm = avgHeartRate.doubleValue(for: HKUnit(from: "count/min"))
                 totalHeartRate += bpm
                 count += 1
@@ -212,13 +213,15 @@ class HealthInsightsManager: ObservableObject {
         var secondHalfHR: [Double] = []
         
         for workout in firstHalf {
-            if let hr = workout.statistics(for: HKQuantityType.quantityType(forIdentifier: .heartRate)!)?.averageQuantity() {
+            if let heartRateType = HKQuantityType.quantityType(forIdentifier: .heartRate),
+               let hr = workout.statistics(for: heartRateType)?.averageQuantity() {
                 firstHalfHR.append(hr.doubleValue(for: HKUnit(from: "count/min")))
             }
         }
         
         for workout in secondHalf {
-            if let hr = workout.statistics(for: HKQuantityType.quantityType(forIdentifier: .heartRate)!)?.averageQuantity() {
+            if let heartRateType = HKQuantityType.quantityType(forIdentifier: .heartRate),
+               let hr = workout.statistics(for: heartRateType)?.averageQuantity() {
                 secondHalfHR.append(hr.doubleValue(for: HKUnit(from: "count/min")))
             }
         }

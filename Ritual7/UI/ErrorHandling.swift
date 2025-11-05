@@ -285,9 +285,9 @@ struct ErrorView: View {
             }
             .padding(.top, 8)
         }
-        .padding(24)
+        .padding(DesignSystem.Spacing.cardPadding)
         .background(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
                 .fill(.ultraThinMaterial)
         )
     }

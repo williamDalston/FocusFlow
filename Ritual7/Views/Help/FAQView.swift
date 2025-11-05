@@ -114,27 +114,27 @@ struct FAQCard: View {
                         .foregroundStyle(Theme.accentA)
                         .padding(.top, 4)
                 }
-                .padding(20)
+                .padding(DesignSystem.Spacing.formFieldSpacing)
                 
                 // Answer (expanded)
                 if isExpanded {
                     Divider()
-                        .padding(.horizontal, 20)
+                        .padding(.horizontal, DesignSystem.Spacing.formFieldSpacing)
                     
                     Text(faq.answer)
                         .font(.body)
                         .foregroundStyle(Theme.textSecondary)
                         .fixedSize(horizontal: false, vertical: true)
-                        .padding(20)
+                        .padding(DesignSystem.Spacing.formFieldSpacing)
                         .transition(.opacity.combined(with: .move(edge: .top)))
                 }
             }
             .background(
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
                     .fill(.ultraThinMaterial)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 16, style: .continuous)
-                            .stroke(isExpanded ? Theme.accentA : Theme.strokeOuter, lineWidth: isExpanded ? 1.5 : 0.8)
+                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                            .stroke(isExpanded ? Theme.accentA : Theme.strokeOuter, lineWidth: isExpanded ? DesignSystem.Border.emphasis : DesignSystem.Border.subtle)
                     )
             )
         }

@@ -44,9 +44,10 @@ struct HealthTrendsView: View {
         .task {
             await loadData()
         }
-        .refreshable {
+        .enhancedRefreshable {
             await loadData()
         }
+        .toastContainer()
     }
     
     // MARK: - Header Section
@@ -81,11 +82,11 @@ struct HealthTrendsView: View {
                         .tint(Theme.accentA)
                         .padding(.top, 8)
                     }
-                    .padding(24)
+                    .padding(DesignSystem.Spacing.cardPadding)
                 }
             } else {
                 if isLoading {
-                    ProgressView()
+                    LoadingStateView(message: "Loading health data...")
                         .frame(maxWidth: .infinity)
                         .padding()
                 }
@@ -147,7 +148,7 @@ struct HealthTrendsView: View {
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
-                        .padding(20)
+                        .padding(DesignSystem.Spacing.formFieldSpacing)
                     }
                 }
                 
@@ -175,7 +176,7 @@ struct HealthTrendsView: View {
                                     .foregroundStyle(.secondary)
                             }
                         }
-                        .padding(20)
+                        .padding(DesignSystem.Spacing.formFieldSpacing)
                     }
                 }
                 
@@ -200,7 +201,7 @@ struct HealthTrendsView: View {
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
-                    .padding(20)
+                    .padding(DesignSystem.Spacing.formFieldSpacing)
                 }
                 
                 // Recommendations
@@ -249,7 +250,7 @@ struct HealthTrendsView: View {
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
-                    .padding(20)
+                    .padding(DesignSystem.Spacing.formFieldSpacing)
                 }
                 
                 // Readiness Score
@@ -273,7 +274,7 @@ struct HealthTrendsView: View {
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
-                    .padding(20)
+                    .padding(DesignSystem.Spacing.formFieldSpacing)
                 }
                 
                 // Recovery Time
@@ -298,7 +299,7 @@ struct HealthTrendsView: View {
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
-                    .padding(20)
+                    .padding(DesignSystem.Spacing.formFieldSpacing)
                 }
                 
                 // Recommendations
@@ -343,7 +344,7 @@ struct HealthTrendsView: View {
                         }
                         .frame(height: 200)
                     }
-                    .padding(20)
+                    .padding(DesignSystem.Spacing.formFieldSpacing)
                 }
                 
                 // Calories Chart
@@ -369,7 +370,7 @@ struct HealthTrendsView: View {
                         }
                         .frame(height: 200)
                     }
-                    .padding(20)
+                    .padding(DesignSystem.Spacing.formFieldSpacing)
                 }
             } else if !isLoading {
                 Text("No trend data available")
@@ -567,7 +568,7 @@ private struct HealthTrendsRecommendationCard: View {
                         .padding(.top, 4)
                 }
             }
-            .padding(20)
+            .padding(DesignSystem.Spacing.formFieldSpacing)
         }
     }
     

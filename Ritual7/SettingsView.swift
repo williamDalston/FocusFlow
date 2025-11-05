@@ -176,7 +176,7 @@ struct SettingsView: View {
 
     private var soundSection: some View {
         Section {
-            VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
+            VStack(alignment: .leading, spacing: DesignSystem.Spacing.formFieldSpacing) {
                 HStack {
                     VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                         Text("Sound Effects")
@@ -214,12 +214,13 @@ struct SettingsView: View {
 
     private var appearanceSection: some View {
         Section {
-            VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
+            VStack(alignment: .leading, spacing: DesignSystem.Spacing.formFieldSpacing) {
                 // Color Theme Selector
-                VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
-                    HStack {
+                VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
+                    HStack(spacing: DesignSystem.Spacing.md) {
                         Text("Color Theme")
                             .font(Theme.body)
+                            .foregroundStyle(Theme.textPrimary)
                         Spacer()
                         // Color preview
                         HStack(spacing: DesignSystem.Spacing.xs) {
@@ -242,7 +243,7 @@ struct SettingsView: View {
                         }
                     }
                     .pickerStyle(.segmented)
-                    .tint(.white)
+                    .tint(Theme.accentA)
                     .onChange(of: theme.colorTheme) { newTheme in
                         Haptics.gentle()
                         // Force UI refresh
@@ -253,38 +254,41 @@ struct SettingsView: View {
                 
                 Divider()
                 
-                HStack {
+                HStack(spacing: DesignSystem.Spacing.md) {
                     VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                         Text("Match iOS Appearance")
                             .font(Theme.body)
+                            .foregroundStyle(Theme.textPrimary)
                         Text("Use your device's Light/Dark setting. Turn off to choose manually.")
                             .font(Theme.caption)
                             .foregroundStyle(.secondary)
                             .fixedSize(horizontal: false, vertical: true)
+                            .lineSpacing(DesignSystem.Typography.captionLineHeight - 1.0)
                     }
                     Spacer()
                     Toggle("", isOn: $matchSystem)
-                        .tint(.white)
+                        .tint(Theme.accentA)
                 }
 
                 if !matchSystem {
-                    VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
+                    VStack(alignment: .leading, spacing: DesignSystem.Spacing.formFieldSpacing) {
                         Picker("Appearance", selection: $forcedScheme) {
                             Text("Light").tag(ColorScheme.light)
                             Text("Dark").tag(ColorScheme.dark)
                         }
                         .pickerStyle(.segmented)
+                        .tint(Theme.accentA)
 
                         // Live preview so users instantly "get it".
                         GlassCard(material: .regularMaterial) {
-                            HStack(spacing: 12) {
+                            HStack(spacing: DesignSystem.Spacing.md) {
                                 Image(systemName: forcedScheme == .dark ? "moon.fill" : "sun.max.fill")
-                                    .font(.title3)
-                                VStack(alignment: .leading, spacing: 4) {
+                                    .font(Theme.title3)
+                                VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                                     Text(forcedScheme == .dark ? "Dark Mode Preview" : "Light Mode Preview")
-                                        .font(.headline)
+                                        .font(Theme.headline)
                                     Text("Cards, text, and accents adapt to this look.")
-                                        .font(.caption)
+                                        .font(Theme.caption)
                                         .foregroundStyle(.secondary)
                                         .fixedSize(horizontal: false, vertical: true)
                                 }
@@ -295,32 +299,32 @@ struct SettingsView: View {
                         
                         // Color theme preview
                         GlassCard(material: .regularMaterial) {
-                            VStack(spacing: 12) {
+                            VStack(spacing: DesignSystem.Spacing.md) {
                                 HStack {
                                     Text("Color Theme Preview")
-                                        .font(.headline)
+                                        .font(Theme.headline)
                                     Spacer()
-                                    HStack(spacing: 4) {
-                                        Circle().fill(Theme.accentA).frame(width: 8, height: 8)
-                                        Circle().fill(Theme.accentB).frame(width: 8, height: 8)
-                                        Circle().fill(Theme.accentC).frame(width: 8, height: 8)
+                                    HStack(spacing: DesignSystem.Spacing.xs) {
+                                        Circle().fill(Theme.accentA).frame(width: DesignSystem.IconSize.small, height: DesignSystem.IconSize.small)
+                                        Circle().fill(Theme.accentB).frame(width: DesignSystem.IconSize.small, height: DesignSystem.IconSize.small)
+                                        Circle().fill(Theme.accentC).frame(width: DesignSystem.IconSize.small, height: DesignSystem.IconSize.small)
                                     }
                                 }
                                 
-                                HStack(spacing: 8) {
-                                    RoundedRectangle(cornerRadius: 8)
+                                HStack(spacing: DesignSystem.Spacing.sm) {
+                                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
                                         .fill(Theme.accentA)
                                         .frame(height: 20)
-                                    RoundedRectangle(cornerRadius: 8)
+                                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
                                         .fill(Theme.accentB)
                                         .frame(height: 20)
-                                    RoundedRectangle(cornerRadius: 8)
+                                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
                                         .fill(Theme.accentC)
                                         .frame(height: 20)
                                 }
                                 
                                 Text("This is how your app will look with the selected theme.")
-                                    .font(.caption)
+                                    .font(Theme.caption)
                                     .foregroundStyle(.secondary)
                                     .multilineTextAlignment(.center)
                             }
@@ -339,19 +343,19 @@ struct SettingsView: View {
     
     private var watchSection: some View {
         Section {
-            VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
                 // Watch connection status
                 HStack {
                     Image(systemName: "applewatch")
-                        .font(.title2)
+                        .font(Theme.title2)
                         .foregroundStyle(watchManager.isWatchConnected ? Theme.accentA : .secondary)
                     
-                    VStack(alignment: .leading, spacing: 2) {
+                    VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                         Text("Apple Watch")
-                            .font(.body.weight(.semibold))
+                            .font(Theme.body.weight(.semibold))
                         
                         Text(watchStatusText)
-                            .font(.caption)
+                            .font(Theme.caption)
                             .foregroundStyle(.secondary)
                     }
                     
@@ -368,38 +372,38 @@ struct SettingsView: View {
                 
                 // Watch features info
                 if watchManager.isWatchConnected {
-                    VStack(alignment: .leading, spacing: 8) {
+                    VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
                         Text("Watch Features:")
-                            .font(.caption.weight(.semibold))
+                            .font(Theme.caption.weight(.semibold))
                             .foregroundStyle(Theme.accentA)
                         
-                        VStack(alignment: .leading, spacing: 4) {
+                        VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                             HStack {
                                 Image(systemName: "mic.fill")
-                                    .font(.caption)
+                                    .font(Theme.caption)
                                     .foregroundStyle(Theme.accentB)
                                 Text("Voice-to-text workout notes")
-                                    .font(.caption2)
+                                    .font(Theme.caption2)
                             }
                             
                             HStack {
                                 Image(systemName: "sparkles")
-                                    .font(.caption)
+                                    .font(Theme.caption)
                                     .foregroundStyle(Theme.accentB)
                                 Text("Quick preset buttons")
-                                    .font(.caption2)
+                                    .font(Theme.caption2)
                             }
                             
                             HStack {
                                 Image(systemName: "chart.line.uptrend.xyaxis")
-                                    .font(.caption)
+                                    .font(Theme.caption)
                                     .foregroundStyle(Theme.accentB)
                                 Text("Live streak on watch face")
-                                    .font(.caption2)
+                                    .font(Theme.caption2)
                             }
                         }
                     }
-                    .padding(.top, 4)
+                    .padding(.top, DesignSystem.Spacing.xs)
                 }
                 
                 // Sync button
@@ -410,10 +414,10 @@ struct SettingsView: View {
                     }
                     .font(.caption.weight(.medium))
                     .foregroundStyle(Theme.textOnDark)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
+                    .padding(.horizontal, DesignSystem.Spacing.md)
+                    .padding(.vertical, DesignSystem.Spacing.sm)
                     .background(
-                        RoundedRectangle(cornerRadius: 8)
+                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
                             .fill(Theme.accentA)
                     )
                 }
@@ -425,18 +429,20 @@ struct SettingsView: View {
 
     private var reminderSection: some View {
         Section {
-            VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
+            VStack(alignment: .leading, spacing: DesignSystem.Spacing.formFieldSpacing) {
                 HStack {
                     Toggle(isOn: $reminderEnabled) {
-                        VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs * 0.5) {
+                        VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                             Text("Daily Workout Reminder")
                                 .font(Theme.body)
+                                .foregroundStyle(Theme.textPrimary)
                             Text("Get reminded to complete your daily Ritual7.")
                                 .font(Theme.caption)
                                 .foregroundStyle(.secondary)
+                                .lineSpacing(DesignSystem.Typography.captionLineHeight - 1.0)
                         }
                     }
-                    .tint(.white)
+                    .tint(Theme.accentA)
 
                     Spacer(minLength: DesignSystem.Spacing.sm)
 
@@ -469,51 +475,57 @@ struct SettingsView: View {
                     Divider()
                     
                     // Agent 7: Additional notification options
-                    VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
+                    VStack(alignment: .leading, spacing: DesignSystem.Spacing.formFieldSpacing) {
                         Toggle(isOn: $streakReminderEnabled) {
-                            VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs * 0.5) {
+                            VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                                 Text("Streak Reminders")
                                     .font(Theme.body)
+                                    .foregroundStyle(Theme.textPrimary)
                                 Text("Get notified if you haven't worked out today and have an active streak.")
                                     .font(Theme.caption)
                                     .foregroundStyle(.secondary)
+                                    .lineSpacing(DesignSystem.Typography.captionLineHeight - 1.0)
                             }
                         }
-                        .tint(.white)
+                        .tint(Theme.accentA)
                         
                         Toggle(isOn: $noWorkoutNudgeEnabled) {
-                            VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs * 0.5) {
+                            VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                                 Text("Gentle Nudges")
                                     .font(Theme.body)
+                                    .foregroundStyle(Theme.textPrimary)
                                 Text("Receive a gentle reminder if you haven't worked out today.")
                                     .font(Theme.caption)
                                     .foregroundStyle(.secondary)
+                                    .lineSpacing(DesignSystem.Typography.captionLineHeight - 1.0)
                             }
                         }
-                        .tint(.white)
+                        .tint(Theme.accentA)
                         
                         Toggle(isOn: $weeklySummaryEnabled) {
-                            VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs * 0.5) {
+                            VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                                 Text("Weekly Progress Summary")
                                     .font(Theme.body)
+                                    .foregroundStyle(Theme.textPrimary)
                                 Text("Get a weekly summary of your workout progress every Sunday.")
                                     .font(Theme.caption)
                                     .foregroundStyle(.secondary)
+                                    .lineSpacing(DesignSystem.Typography.captionLineHeight - 1.0)
                             }
                         }
-                        .tint(.white)
+                        .tint(Theme.accentA)
                     }
                 }
                 
                 // Quiet Hours
                 Divider()
-                VStack(alignment: .leading, spacing: 12) {
+                VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
                     Toggle(isOn: $quietHoursEnabled) {
-                        VStack(alignment: .leading, spacing: 2) {
+                        VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                             Text("Quiet Hours")
-                                .font(.body.weight(.semibold))
+                                .font(Theme.body.weight(.semibold))
                             Text("Don't receive notifications during these hours.")
-                                .font(.caption)
+                                .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                         }
                     }

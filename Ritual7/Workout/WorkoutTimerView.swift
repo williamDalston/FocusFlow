@@ -101,7 +101,7 @@ struct WorkoutTimerView: View {
             ProgressView(value: engine.progress)
                 .tint(Theme.accentA)
                 .frame(height: 4)
-                .animation(.linear, value: engine.progress)
+                .animation(AnimationConstants.progressLinear, value: engine.progress)
         }
     }
     
@@ -310,6 +310,8 @@ struct WorkoutTimerView: View {
                         .bounce(trigger: engine.timeRemaining <= 1 && engine.timeRemaining > 0)
                         .accessibilityLabel("\(Int(engine.timeRemaining)) seconds remaining")
                         .accessibilityValue("\(engine.phase == .rest ? "Rest" : "Exercise")")
+                        .accessibilityAddTraits(.updatesFrequently)
+                        .dynamicTypeSize(...DynamicTypeSize.accessibility5)
                 }
             }
             .padding(.vertical, 16)
@@ -438,15 +440,19 @@ struct WorkoutTimerView: View {
                             .foregroundStyle(Theme.accentA)
                         
                         Text(nextExercise.name)
-                            .font(.title3.weight(.semibold))
+                            .font(Theme.title3.weight(.semibold))
                             .foregroundStyle(Theme.textPrimary)
+                            .multilineTextAlignment(.center)
+                            .lineLimit(2)
                         
                         Text(nextExercise.description)
-                            .font(.caption)
+                            .font(Theme.caption)
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
+                            .lineSpacing(DesignSystem.Typography.captionLineHeight - 1.0)
+                            .lineLimit(3)
                     }
-                    .padding(20)
+                    .padding(DesignSystem.Spacing.cardPadding)
                 }
             }
         }
@@ -461,9 +467,9 @@ struct WorkoutTimerView: View {
     // MARK: - Exercise Card
     
     private func exerciseCard(exercise: Exercise) -> some View {
-        VStack(spacing: 20) {
+        VStack(spacing: DesignSystem.Spacing.xl) {
             GlassCard(material: .ultraThinMaterial) {
-                VStack(spacing: 20) {
+                VStack(spacing: DesignSystem.Spacing.xl) {
                     // Exercise icon with Agent 11 animations
                     Image(systemName: exercise.icon)
                         .font(.system(size: 64))
@@ -485,25 +491,28 @@ struct WorkoutTimerView: View {
                     
                     // Exercise name
                     Text(exercise.name)
-                        .font(.title2.weight(.bold))
+                        .font(Theme.title2.weight(.bold))
                         .foregroundStyle(Theme.textPrimary)
                         .multilineTextAlignment(.center)
+                        .lineSpacing(DesignSystem.Typography.titleLineHeight - 1.0)
                     
                     // Description
                     Text(exercise.description)
-                        .font(.subheadline)
+                        .font(Theme.subheadline)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
+                        .lineSpacing(DesignSystem.Typography.bodyLineHeight - 1.0)
                     
                     // Agent 11: Rep counter
                     RepCounterView(repCounter: repCounter, exercise: exercise)
                     
                     // Instructions (shown during exercise)
                     Text(exercise.instructions)
-                        .font(.caption)
+                        .font(Theme.caption)
                         .foregroundStyle(Theme.textSecondary)
                         .multilineTextAlignment(.leading)
-                        .padding(.top, 8)
+                        .lineSpacing(DesignSystem.Typography.captionLineHeight - 1.0)
+                        .padding(.top, DesignSystem.Spacing.sm)
                         .transition(.opacity.combined(with: .move(edge: .bottom)))
                     
                     // Agent 11: Form feedback system
@@ -512,10 +521,10 @@ struct WorkoutTimerView: View {
                         timeRemaining: engine.timeRemaining
                     )
                 }
-                .padding(24)
+                .padding(DesignSystem.Spacing.cardPadding)
             }
             .background(
-                RoundedRectangle(cornerRadius: 24, style: .continuous)
+                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.card, style: .continuous)
                     .fill(
                         LinearGradient(
                             colors: [Color.clear],
@@ -540,7 +549,7 @@ struct WorkoutTimerView: View {
     // MARK: - Controls Section
     
     private var controlsSection: some View {
-        VStack(spacing: DesignSystem.Spacing.lg) {
+        VStack(spacing: DesignSystem.Spacing.xl) {
             if engine.phase == .idle {
                 // Start button
                 Button {
@@ -549,6 +558,7 @@ struct WorkoutTimerView: View {
                 } label: {
                     Label("Start Workout", systemImage: "play.fill")
                         .font(Theme.title3)
+                        .fontWeight(DesignSystem.Typography.headlineWeight)
                         .frame(maxWidth: .infinity)
                         .frame(height: DesignSystem.ButtonSize.large.height)
                 }
@@ -579,13 +589,13 @@ struct WorkoutTimerView: View {
                         Label(engine.isPaused ? "Resume" : "Pause", 
                               systemImage: engine.isPaused ? "play.fill" : "pause.fill")
                             .font(Theme.headline)
+                            .fontWeight(DesignSystem.Typography.headlineWeight)
                             .frame(maxWidth: .infinity)
                             .frame(height: DesignSystem.ButtonSize.standard.height)
                     }
                     .buttonStyle(SecondaryGlassButtonStyle())
-                    .keyboardShortcut(.space, modifiers: [])  // Spacebar to pause/resume for simulator testing
                     .accessibilityLabel(engine.isPaused ? "Resume workout" : "Pause workout")
-                    .accessibilityHint("Double tap to \(engine.isPaused ? "resume" : "pause") the workout. Press spacebar to pause or resume.")
+                    .accessibilityHint("Double tap to \(engine.isPaused ? "resume" : "pause") the workout")
                     
                     if engine.phase == .rest {
                         Button {
@@ -594,10 +604,14 @@ struct WorkoutTimerView: View {
                         } label: {
                             Label("Skip Rest", systemImage: "forward.fill")
                                 .font(Theme.headline)
+                                .fontWeight(DesignSystem.Typography.headlineWeight)
                                 .frame(maxWidth: .infinity)
                                 .frame(height: DesignSystem.ButtonSize.standard.height)
                         }
                         .buttonStyle(SecondaryGlassButtonStyle())
+                        .accessibilityLabel("Skip Rest")
+                        .accessibilityHint("Double tap to skip the rest period and move to the next exercise.")
+                        .accessibilityAddTraits(.isButton)
                     } else if engine.phase == .preparing {
                         Button {
                             Haptics.buttonPress()
@@ -605,10 +619,14 @@ struct WorkoutTimerView: View {
                         } label: {
                             Label("Skip Prep", systemImage: "forward.fill")
                                 .font(Theme.headline)
+                                .fontWeight(DesignSystem.Typography.headlineWeight)
                                 .frame(maxWidth: .infinity)
                                 .frame(height: DesignSystem.ButtonSize.standard.height)
                         }
                         .buttonStyle(SecondaryGlassButtonStyle())
+                        .accessibilityLabel("Skip Preparation")
+                        .accessibilityHint("Double tap to skip the preparation countdown and start the workout immediately.")
+                        .accessibilityAddTraits(.isButton)
                     }
                 }
                 
@@ -620,10 +638,14 @@ struct WorkoutTimerView: View {
                 } label: {
                     Text("Stop Workout")
                         .font(Theme.headline)
+                        .fontWeight(DesignSystem.Typography.headlineWeight)
                         .frame(maxWidth: .infinity)
                         .frame(height: DesignSystem.ButtonSize.standard.height)
                 }
                 .buttonStyle(.bordered)
+                .accessibilityLabel("Stop Workout")
+                .accessibilityHint("Double tap to stop the current workout and return to the main screen.")
+                .accessibilityAddTraits(.isButton)
             }
         }
     }
@@ -755,13 +777,29 @@ struct WorkoutTimerView: View {
                 .foregroundStyle(.black)
                 .padding(.top, 8)
                 }
-                .padding(32)
+                .padding(DesignSystem.Spacing.xxl)
                 .background(
-                    RoundedRectangle(cornerRadius: 24, style: .continuous)
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.card, style: .continuous)
                         .fill(.ultraThinMaterial)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.card, style: .continuous)
+                                .stroke(
+                                    LinearGradient(
+                                        colors: [
+                                            Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.5),
+                                            Theme.accentA.opacity(DesignSystem.Opacity.light * 0.5),
+                                            Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.5)
+                                        ],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    ),
+                                    lineWidth: DesignSystem.Border.subtle
+                                )
+                        )
                 )
-                .padding(.horizontal, 32)
-                .padding(.vertical, 32)
+                .cardShadow()
+                .padding(.horizontal, DesignSystem.Spacing.xxl)
+                .padding(.vertical, DesignSystem.Spacing.xxl)
             }
             .gesture(
                 DragGesture(minimumDistance: 50)

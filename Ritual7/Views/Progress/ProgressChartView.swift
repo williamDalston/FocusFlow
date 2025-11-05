@@ -19,7 +19,7 @@ struct ProgressChartView: View {
     var body: some View {
         VStack(spacing: DesignSystem.Spacing.xl) {
             // Header with export button (Agent 10)
-            HStack {
+            HStack(spacing: DesignSystem.Spacing.md) {
                 Text("Progress Charts")
                     .font(Theme.headline)
                     .foregroundStyle(Theme.textPrimary)
@@ -33,8 +33,12 @@ struct ProgressChartView: View {
                     Image(systemName: "square.and.arrow.up")
                         .font(Theme.body)
                         .foregroundStyle(Theme.accentA)
+                        .frame(width: DesignSystem.IconSize.medium, height: DesignSystem.IconSize.medium)
                 }
+                .accessibilityLabel("Export Chart")
+                .accessibilityHint("Double tap to export the chart")
             }
+            .padding(.bottom, DesignSystem.Spacing.xs)
             
             // Timeframe selector
             Picker("Timeframe", selection: $selectedTimeframe) {
@@ -43,6 +47,7 @@ struct ProgressChartView: View {
                 }
             }
             .pickerStyle(.segmented)
+            .tint(Theme.accentA)
             
             // Chart based on selected timeframe
             switch selectedTimeframe {
@@ -126,10 +131,11 @@ struct ProgressChartView: View {
     // MARK: - Weekly Chart
     
     private var weeklyChart: some View {
-        VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.xl) {
             Text("Workouts This Week")
                 .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
+                .padding(.bottom, DesignSystem.Spacing.xs)
             
             Chart(analytics.weeklyTrend) { day in
                 BarMark(
@@ -166,10 +172,11 @@ struct ProgressChartView: View {
     // MARK: - Monthly Chart
     
     private var monthlyChart: some View {
-        VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.xl) {
             Text("Workouts Last 30 Days")
                 .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
+                .padding(.bottom, DesignSystem.Spacing.xs)
             
             Chart(analytics.monthlyTrend) { day in
                 LineMark(
@@ -211,10 +218,11 @@ struct ProgressChartView: View {
     // MARK: - Yearly Chart
     
     private var yearlyChart: some View {
-        VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.xl) {
             Text("Workouts Last 12 Months")
                 .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
+                .padding(.bottom, DesignSystem.Spacing.xs)
             
             Chart(analytics.yearlyTrend) { month in
                 BarMark(
@@ -248,10 +256,11 @@ struct ExerciseCompletionChartView: View {
     @EnvironmentObject private var theme: ThemeStore
     
     var body: some View {
-        VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.xl) {
             Text("Exercise Completion Rate")
                 .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
+                .padding(.bottom, DesignSystem.Spacing.xs)
             
             Group {
                 if #available(iOS 17.0, *) {
@@ -340,7 +349,9 @@ struct WorkoutFrequencyChartView: View {
                 }
             }
             .pickerStyle(.segmented)
+            .tint(Theme.accentA)
             .padding(.horizontal, DesignSystem.Spacing.lg)
+            .padding(.bottom, DesignSystem.Spacing.xs)
             
             // Chart based on selected type
             switch selectedType {
@@ -363,10 +374,11 @@ struct WorkoutFrequencyChartView: View {
     }
     
     private var timeOfDayChart: some View {
-        VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.xl) {
             Text("Workout Time Distribution")
                 .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
+                .padding(.bottom, DesignSystem.Spacing.xs)
             
             let frequency = analytics.workoutFrequencyByTime
             Chart(TimeOfDay.allCases.filter { $0 != .unknown }) { time in
@@ -388,10 +400,11 @@ struct WorkoutFrequencyChartView: View {
     }
     
     private var dayOfWeekChart: some View {
-        VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.xl) {
             Text("Workout Day Distribution")
                 .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
+                .padding(.bottom, DesignSystem.Spacing.xs)
             
             let frequency = analytics.workoutFrequencyByDay
             Chart(DayOfWeek.allCases) { day in

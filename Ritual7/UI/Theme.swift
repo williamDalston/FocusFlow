@@ -224,7 +224,7 @@ enum Theme {
 
     // MARK: - Enhanced Gradients and Visual Effects
     
-    // Primary gradient with enhanced color depth
+    // Primary gradient with enhanced color depth and consistent stops
     static var accentGradient: LinearGradient {
         switch currentTheme {
         case .feminine:
@@ -240,33 +240,85 @@ enum Theme {
         }
     }
     
-    // Radial gradient for special effects
+    // Gradient overlay for depth (subtle overlay effect)
+    static var accentGradientOverlay: LinearGradient {
+        switch currentTheme {
+        case .feminine:
+            return LinearGradient(
+                colors: [
+                    feminineAccentA.opacity(0.15),
+                    feminineAccentB.opacity(0.12),
+                    feminineAccentC.opacity(0.10),
+                    Color.clear
+                ],
+                startPoint: .topLeading, endPoint: .bottomTrailing
+            )
+        case .masculine:
+            return LinearGradient(
+                colors: [
+                    masculineAccentA.opacity(0.15),
+                    masculineAccentB.opacity(0.12),
+                    masculineAccentC.opacity(0.10),
+                    Color.clear
+                ],
+                startPoint: .topLeading, endPoint: .bottomTrailing
+            )
+        }
+    }
+    
+    // Radial gradient for special effects with refined color stops
     static var accentRadialGradient: RadialGradient {
         switch currentTheme {
         case .feminine:
             return RadialGradient(
-                colors: [feminineAccentA.opacity(0.8), feminineAccentB.opacity(0.6), feminineAccentC.opacity(0.4)],
+                colors: [
+                    feminineAccentA.opacity(0.8),
+                    feminineAccentB.opacity(0.6),
+                    feminineAccentC.opacity(0.4),
+                    feminineAccentD.opacity(0.2),
+                    Color.clear
+                ],
                 center: .center, startRadius: 0, endRadius: 200
             )
         case .masculine:
             return RadialGradient(
-                colors: [masculineAccentA.opacity(0.8), masculineAccentB.opacity(0.6), masculineAccentC.opacity(0.4)],
+                colors: [
+                    masculineAccentA.opacity(0.8),
+                    masculineAccentB.opacity(0.6),
+                    masculineAccentC.opacity(0.4),
+                    masculineAccentD.opacity(0.2),
+                    Color.clear
+                ],
                 center: .center, startRadius: 0, endRadius: 200
             )
         }
     }
     
-    // Angular gradient for premium effects
+    // Angular gradient for premium effects with smooth color transitions
     static var accentAngularGradient: AngularGradient {
         switch currentTheme {
         case .feminine:
             return AngularGradient(
-                colors: [feminineAccentA, feminineAccentB, feminineAccentC, feminineAccentD, feminineAccentA],
+                colors: [
+                    feminineAccentA,
+                    feminineAccentB,
+                    feminineAccentC,
+                    feminineAccentD,
+                    feminineAccentE,
+                    feminineAccentA
+                ],
                 center: .center, startAngle: .degrees(0), endAngle: .degrees(360)
             )
         case .masculine:
             return AngularGradient(
-                colors: [masculineAccentA, masculineAccentB, masculineAccentC, masculineAccentD, masculineAccentA],
+                colors: [
+                    masculineAccentA,
+                    masculineAccentB,
+                    masculineAccentC,
+                    masculineAccentD,
+                    masculineAccentE,
+                    masculineAccentA
+                ],
                 center: .center, startAngle: .degrees(0), endAngle: .degrees(360)
             )
         }
@@ -295,6 +347,26 @@ enum Theme {
             return Color(hue: 0.75, saturation: 0.85, brightness: 0.95, opacity: 0.65)
         case .masculine:
             return Color(hue: 0.54, saturation: 0.88, brightness: 0.92, opacity: 0.70)
+        }
+    }
+    
+    // Inner glow color for premium feel
+    static var innerGlowColor: Color {
+        switch currentTheme {
+        case .feminine:
+            return Color(hue: 0.75, saturation: 0.80, brightness: 0.98, opacity: 0.55)
+        case .masculine:
+            return Color(hue: 0.54, saturation: 0.85, brightness: 0.95, opacity: 0.60)
+        }
+    }
+    
+    // Light ray color for emphasis effects
+    static var lightRayColor: Color {
+        switch currentTheme {
+        case .feminine:
+            return Color(hue: 0.75, saturation: 0.90, brightness: 1.0, opacity: 0.50)
+        case .masculine:
+            return Color(hue: 0.54, saturation: 0.92, brightness: 0.98, opacity: 0.55)
         }
     }
     

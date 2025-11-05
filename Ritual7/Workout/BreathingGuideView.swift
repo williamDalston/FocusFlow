@@ -3,10 +3,55 @@ import SwiftUI
 /// Agent 11: Breathing Guide View - Visual breathing guide during rest periods
 /// Provides animated breathing cues to help users recover and prepare for next exercise
 
+// Coordinator class to manage timer for struct-based view
+class BreathingAnimationCoordinator: ObservableObject {
+    @Published var breathingPhase: BreathingPhase = .inhale
+    @Published var scale: CGFloat = 1.0
+    
+    private var timer: Timer?
+    private let inhaleDuration: TimeInterval = 4.0
+    private let exhaleDuration: TimeInterval = 4.0
+    
+    func startAnimation() {
+        stopAnimation()
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
+                guard let self = self else { return }
+                let cycleTime = Date().timeIntervalSince1970.truncatingRemainder(dividingBy: self.inhaleDuration + self.exhaleDuration)
+                
+                if cycleTime < self.inhaleDuration {
+                    // Inhale phase
+                    if self.breathingPhase != .inhale {
+                        self.breathingPhase = .inhale
+                    }
+                    let progress = cycleTime / self.inhaleDuration
+                    self.scale = 1.0 + (progress * 0.4) // Scale from 1.0 to 1.4
+                } else {
+                    // Exhale phase
+                    if self.breathingPhase != .exhale {
+                        self.breathingPhase = .exhale
+                    }
+                    let progress = (cycleTime - self.inhaleDuration) / self.exhaleDuration
+                    self.scale = 1.4 - (progress * 0.4) // Scale from 1.4 to 1.0
+                }
+            }
+        }
+    }
+    
+    func stopAnimation() {
+        timer?.invalidate()
+        timer = nil
+    }
+    
+    deinit {
+        stopAnimation()
+    }
+}
+
 struct BreathingGuideView: View {
-    @State private var breathingPhase: BreathingPhase = .inhale
-    @State private var scale: CGFloat = 1.0
-    @State private var timer: Timer?
+    @StateObject private var coordinator = BreathingAnimationCoordinator()
     
     let exercise: Exercise?
     let duration: TimeInterval
@@ -24,7 +69,7 @@ struct BreathingGuideView: View {
                 Circle()
                     .fill(
                         LinearGradient(
-                            colors: breathingPhase == .inhale 
+                            colors: coordinator.breathingPhase == .inhale 
                                 ? [Theme.accentB.opacity(0.6), Theme.accentB.opacity(0.3)]
                                 : [Theme.accentB.opacity(0.3), Theme.accentB.opacity(0.6)],
                             startPoint: .topLeading,
@@ -32,12 +77,12 @@ struct BreathingGuideView: View {
                         )
                     )
                     .frame(width: 80, height: 80)
-                    .scaleEffect(scale)
+                    .scaleEffect(coordinator.scale)
             }
             
             // Breathing instruction
             VStack(spacing: 8) {
-                Text(breathingPhase == .inhale ? "Breathe In" : "Breathe Out")
+                Text(coordinator.breathingPhase == .inhale ? "Breathe In" : "Breathe Out")
                     .font(.title2.weight(.bold))
                     .foregroundStyle(.white)
                     .transition(.opacity)
@@ -60,18 +105,18 @@ struct BreathingGuideView: View {
                         .font(.title2)
                         .foregroundStyle(Theme.accentA)
                 }
-                .padding(16)
+                .padding(DesignSystem.Spacing.lg)
                 .background(
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .fill(.white.opacity(0.1))
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
+                        .fill(.white.opacity(DesignSystem.Opacity.subtle))
                 )
             }
         }
         .onAppear {
-            startBreathingAnimation()
+            coordinator.startAnimation()
         }
         .onDisappear {
-            stopBreathingAnimation()
+            coordinator.stopAnimation()
         }
     }
     
@@ -80,41 +125,6 @@ struct BreathingGuideView: View {
             return exercise.breathingCues
         }
         return "Breathe deeply and steadily. Inhale through your nose, exhale through your mouth."
-    }
-    
-    private func startBreathingAnimation() {
-        let inhaleDuration = 4.0 // 4 seconds to inhale
-        let exhaleDuration = 4.0 // 4 seconds to exhale
-        
-        // Ensure timer is created on main thread
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
-                guard let self = self else { return }
-                let cycleTime = Date().timeIntervalSince1970.truncatingRemainder(dividingBy: inhaleDuration + exhaleDuration)
-                
-                if cycleTime < inhaleDuration {
-                    // Inhale phase
-                    if self.breathingPhase != .inhale {
-                        self.breathingPhase = .inhale
-                    }
-                    let progress = cycleTime / inhaleDuration
-                    self.scale = 1.0 + (progress * 0.4) // Scale from 1.0 to 1.4
-                } else {
-                    // Exhale phase
-                    if self.breathingPhase != .exhale {
-                        self.breathingPhase = .exhale
-                    }
-                    let progress = (cycleTime - inhaleDuration) / exhaleDuration
-                    self.scale = 1.4 - (progress * 0.4) // Scale from 1.4 to 1.0
-                }
-            }
-        }
-    }
-    
-    private func stopBreathingAnimation() {
-        timer?.invalidate()
-        timer = nil
     }
 }
 

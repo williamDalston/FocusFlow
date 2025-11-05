@@ -175,13 +175,13 @@ struct HelpCard: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
-            .padding(20)
+            .padding(DesignSystem.Spacing.formFieldSpacing)
             .background(
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
                     .fill(.ultraThinMaterial)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 16, style: .continuous)
-                            .stroke(Theme.strokeOuter, lineWidth: 0.8)
+                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                            .stroke(Theme.strokeOuter, lineWidth: DesignSystem.Border.subtle)
                     )
             )
         }

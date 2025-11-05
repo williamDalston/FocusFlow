@@ -279,9 +279,15 @@ class HealthKitManager {
                     // Workaround: Use Objective-C runtime to call initializer directly
                     // This bypasses the compiler availability check while maintaining runtime compatibility
                     let selector = NSSelectorFromString("initWithHealthStore:configuration:error:")
-                    let method = class_getInstanceMethod(HKWorkoutSession.self, selector)!
+                    guard let method = class_getInstanceMethod(HKWorkoutSession.self, selector) else {
+                        // Method not found - this API may not be available on this iOS version
+                        throw HealthKitError.notAvailable
+                    }
                     typealias InitMethod = @convention(c) (AnyObject, Selector, HKHealthStore, HKWorkoutConfiguration, UnsafeMutablePointer<NSError?>) -> AnyObject?
                     let implementation = method_getImplementation(method)
+                    guard implementation != nil else {
+                        throw HealthKitError.notAvailable
+                    }
                     let initMethod = unsafeBitCast(implementation, to: InitMethod.self)
                     var error: NSError?
                     if let sessionObj = initMethod(HKWorkoutSession.self, selector, healthStore, configuration, &error) {

@@ -2,12 +2,24 @@ import SwiftUI
 
 // Primary, elevated, with master designer polish and enhanced visual effects.
 struct PrimaryProminentButtonStyle: ButtonStyle {
+    var isEnabled: Bool = true
+    var isLoading: Bool = false
+    
     func makeBody(configuration: Configuration) -> some View {
-        configuration.label
+        HStack(spacing: DesignSystem.Spacing.sm) {
+            if isLoading {
+                LoadingIndicator(size: 16, color: .black)
+                    .transition(.opacity.combined(with: .scale))
+                    .animation(AnimationConstants.smoothSpring, value: isLoading)
+            }
+            configuration.label
+                .opacity(isLoading ? 0.7 : 1.0)
+        }
             .font(.headline.weight(DesignSystem.Typography.headlineWeight))
             .padding(.vertical, DesignSystem.ButtonSize.standard.padding)
             .frame(maxWidth: .infinity)
             .frame(height: DesignSystem.ButtonSize.standard.height)
+            .opacity((!isEnabled || isLoading) ? DesignSystem.Opacity.disabled : 1.0)
             .background(
                 ZStack {
                     // Premium white background with subtle texture
@@ -88,21 +100,42 @@ struct PrimaryProminentButtonStyle: ButtonStyle {
             .shadow(color: Theme.glowColor.opacity(configuration.isPressed ? DesignSystem.Opacity.subtle * 0.3 : DesignSystem.Opacity.subtle * 0.9),
                     radius: configuration.isPressed ? DesignSystem.Shadow.pressed.radius * 0.5 : DesignSystem.Shadow.soft.radius * 0.7, 
                     y: configuration.isPressed ? DesignSystem.Shadow.pressed.y * 0.5 : DesignSystem.Shadow.soft.y * 0.7)
-            .scaleEffect(configuration.isPressed ? 0.98 : 1.0)  // More subtle scale
-            .brightness(configuration.isPressed ? -0.015 : 0)  // More subtle brightness change
+            // Agent 4: Disabled buttons don't animate - ensure conditional animation
+            .scaleEffect((configuration.isPressed && isEnabled && !isLoading) ? 0.98 : 1.0)  // More subtle scale
+            .brightness((configuration.isPressed && isEnabled && !isLoading) ? -0.015 : 0)  // More subtle brightness change
             .contentShape(Rectangle())  // Ensure entire button area is tappable
-            .animation(AnimationConstants.quickSpring, value: configuration.isPressed)
+            .allowsHitTesting(isEnabled && !isLoading)  // Disable interaction when disabled or loading
+            .animation((isEnabled && !isLoading) ? AnimationConstants.quickSpring : nil, value: configuration.isPressed)
+            .animation(AnimationConstants.quickEase, value: isLoading)
+            .onChange(of: configuration.isPressed) { pressed in
+                // Sync haptics with button press animations
+                if pressed && isEnabled && !isLoading {
+                    Haptics.buttonPress()
+                }
+            }
     }
 }
 
 // Secondary glass button with master designer polish and enhanced visual effects
 struct SecondaryGlassButtonStyle: ButtonStyle {
+    var isEnabled: Bool = true
+    var isLoading: Bool = false
+    
     func makeBody(configuration: Configuration) -> some View {
-        configuration.label
+        HStack(spacing: DesignSystem.Spacing.sm) {
+            if isLoading {
+                LoadingIndicator(size: 16, color: .white)
+                    .transition(.opacity.combined(with: .scale))
+                    .animation(AnimationConstants.smoothSpring, value: isLoading)
+            }
+            configuration.label
+                .opacity(isLoading ? 0.7 : 1.0)
+        }
             .font(.subheadline.weight(DesignSystem.Typography.headlineWeight))
             .padding(.vertical, DesignSystem.ButtonSize.small.padding)
             .frame(maxWidth: .infinity)
             .frame(height: DesignSystem.ButtonSize.small.height)
+            .opacity((!isEnabled || isLoading) ? DesignSystem.Opacity.disabled : 1.0)
             .background(
                 ZStack {
                     // Premium glass material
@@ -183,9 +216,32 @@ struct SecondaryGlassButtonStyle: ButtonStyle {
             .shadow(color: Theme.glowColor.opacity(configuration.isPressed ? DesignSystem.Opacity.subtle * 0.3 : DesignSystem.Opacity.subtle * 0.8),
                     radius: configuration.isPressed ? DesignSystem.Shadow.pressed.radius * 0.4 : DesignSystem.Shadow.soft.radius * 0.6, 
                     y: configuration.isPressed ? DesignSystem.Shadow.pressed.y * 0.4 : DesignSystem.Shadow.soft.y * 0.6)
-            .scaleEffect(configuration.isPressed ? 0.98 : 1.0)  // Consistent with primary
-            .brightness(configuration.isPressed ? -0.02 : 0)  // More subtle brightness change
+            // Agent 4: Disabled buttons don't animate - ensure conditional animation
+            .scaleEffect((configuration.isPressed && isEnabled && !isLoading) ? 0.98 : 1.0)  // Consistent with primary
+            .brightness((configuration.isPressed && isEnabled && !isLoading) ? -0.02 : 0)  // More subtle brightness change
             .contentShape(Rectangle())  // Ensure entire button area is tappable
-            .animation(AnimationConstants.quickSpring, value: configuration.isPressed)
+            .allowsHitTesting(isEnabled && !isLoading)  // Disable interaction when disabled or loading
+            .animation((isEnabled && !isLoading) ? AnimationConstants.quickSpring : nil, value: configuration.isPressed)
+            .animation(AnimationConstants.quickEase, value: isLoading)
+            .onChange(of: configuration.isPressed) { pressed in
+                // Sync haptics with button press animations
+                if pressed && isEnabled && !isLoading {
+                    Haptics.buttonPress()
+                }
+            }
+    }
+}
+
+// MARK: - Button Style Extensions for Easy Usage
+
+extension ButtonStyle where Self == PrimaryProminentButtonStyle {
+    static func primary(isEnabled: Bool = true, isLoading: Bool = false) -> PrimaryProminentButtonStyle {
+        PrimaryProminentButtonStyle(isEnabled: isEnabled, isLoading: isLoading)
+    }
+}
+
+extension ButtonStyle where Self == SecondaryGlassButtonStyle {
+    static func secondary(isEnabled: Bool = true, isLoading: Bool = false) -> SecondaryGlassButtonStyle {
+        SecondaryGlassButtonStyle(isEnabled: isEnabled, isLoading: isLoading)
     }
 }

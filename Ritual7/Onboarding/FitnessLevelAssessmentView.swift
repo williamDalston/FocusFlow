@@ -132,13 +132,13 @@ struct FitnessLevelAssessmentView: View {
                         .foregroundStyle(Theme.accentA)
                 }
             }
-            .padding(24)
+            .padding(DesignSystem.Spacing.cardPadding)
             .background(
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .fill(selectedIndex == index ? AnyShapeStyle(Theme.accentA.opacity(0.2)) : AnyShapeStyle(Material.ultraThinMaterial))
+                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                    .fill(selectedIndex == index ? AnyShapeStyle(Theme.accentA.opacity(DesignSystem.Opacity.light)) : AnyShapeStyle(Material.ultraThinMaterial))
                     .overlay(
-                        RoundedRectangle(cornerRadius: 16, style: .continuous)
-                            .stroke(selectedIndex == index ? Theme.accentA : .white.opacity(0.18), lineWidth: selectedIndex == index ? 2 : 1)
+                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                            .stroke(selectedIndex == index ? Theme.accentA : .white.opacity(DesignSystem.Opacity.borderSubtle), lineWidth: selectedIndex == index ? DesignSystem.Border.emphasis : DesignSystem.Border.standard)
                     )
             )
         }

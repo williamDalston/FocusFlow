@@ -11,33 +11,46 @@ struct DailyQuoteView: View {
                 HStack(spacing: 12) {
                     // Icon with rounded background and depth
                     ZStack {
-                        RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
                             .fill(
                                 LinearGradient(
                                     colors: [
-                                        Theme.accentA.opacity(0.25),
-                                        Theme.accentB.opacity(0.20),
-                                        Theme.accentC.opacity(0.15)
+                                        Theme.accentA.opacity(DesignSystem.Opacity.light * 1.25),
+                                        Theme.accentB.opacity(DesignSystem.Opacity.light),
+                                        Theme.accentC.opacity(DesignSystem.Opacity.subtle * 1.5)
                                     ],
                                     startPoint: .topLeading,
                                     endPoint: .bottomTrailing
                                 )
                             )
                             .frame(width: 44, height: 44)
-                            .shadow(color: Theme.accentA.opacity(0.3), radius: 8, x: 0, y: 4)
+                            .shadow(color: Theme.enhancedShadow.opacity(DesignSystem.Opacity.medium), 
+                                   radius: DesignSystem.Shadow.small.radius, 
+                                   y: DesignSystem.Shadow.small.y)
+                            .shadow(color: Theme.glowColor.opacity(DesignSystem.Opacity.subtle), 
+                                   radius: DesignSystem.Shadow.verySoft.radius, 
+                                   y: DesignSystem.Shadow.verySoft.y)
                             .overlay(
-                                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
                                     .stroke(
                                         LinearGradient(
                                             colors: [
-                                                Theme.accentA.opacity(0.4),
-                                                Theme.accentB.opacity(0.3)
+                                                Theme.accentA.opacity(DesignSystem.Opacity.medium * 1.3),
+                                                Theme.accentB.opacity(DesignSystem.Opacity.light * 1.5)
                                             ],
                                             startPoint: .topLeading,
                                             endPoint: .bottomTrailing
                                         ),
-                                        lineWidth: 1.5
+                                        lineWidth: DesignSystem.Border.standard
                                     )
+                            )
+                            .overlay(
+                                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                                    .stroke(
+                                        Theme.glowColor.opacity(DesignSystem.Opacity.glow),
+                                        lineWidth: DesignSystem.Border.hairline
+                                    )
+                                    .blur(radius: 1)
                             )
                         
                         Image(systemName: "quote.opening")
@@ -76,12 +89,20 @@ struct DailyQuoteView: View {
                 HStack {
                     Spacer()
                     ZStack {
-                        RoundedRectangle(cornerRadius: 8, style: .continuous)
-                            .fill(Theme.accentA.opacity(0.15))
+                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
+                            .fill(Theme.accentA.opacity(DesignSystem.Opacity.subtle * 1.5))
                             .frame(width: 32, height: 32)
+                            .shadow(color: Theme.accentA.opacity(DesignSystem.Opacity.subtle), 
+                                   radius: DesignSystem.Shadow.verySoft.radius, 
+                                   y: DesignSystem.Shadow.verySoft.y)
                             .overlay(
-                                RoundedRectangle(cornerRadius: 8, style: .continuous)
-                                    .stroke(Theme.accentA.opacity(0.3), lineWidth: 1)
+                                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
+                                    .stroke(Theme.accentA.opacity(DesignSystem.Opacity.light * 1.5), lineWidth: DesignSystem.Border.standard)
+                            )
+                            .overlay(
+                                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
+                                    .stroke(Theme.glowColor.opacity(DesignSystem.Opacity.glow * 0.8), lineWidth: DesignSystem.Border.hairline)
+                                    .blur(radius: 0.5)
                             )
                         
                         Image(systemName: "quote.closing")
@@ -90,7 +111,7 @@ struct DailyQuoteView: View {
                     }
                 }
             }
-            .padding(20)
+            .padding(DesignSystem.Spacing.formFieldSpacing)
         }
         .onAppear {
             messageManager.loadDailyQuote()
@@ -108,38 +129,45 @@ struct StreakCelebrationView: View {
             HStack(spacing: 10) {
                 // Flame icon with rounded background and depth
                 ZStack {
-                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.medium, style: .continuous)
                         .fill(
                             LinearGradient(
                                 colors: [
-                                    Color.orange.opacity(0.3),
-                                    Color.orange.opacity(0.25),
-                                    Color.orange.opacity(0.2)
+                                    Color.orange.opacity(DesignSystem.Opacity.medium * 1.5),
+                                    Color.orange.opacity(DesignSystem.Opacity.light * 1.25),
+                                    Color.orange.opacity(DesignSystem.Opacity.light)
                                 ],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
                             )
                         )
                         .frame(width: 52, height: 52)
-                        .shadow(color: Color.orange.opacity(0.4), radius: 12, x: 0, y: 6)
-                        .shadow(color: Color.orange.opacity(0.2), radius: 6, x: 0, y: 3)
+                        .shadow(color: Color.orange.opacity(DesignSystem.Opacity.medium * 1.3), 
+                               radius: DesignSystem.Shadow.medium.radius, 
+                               y: DesignSystem.Shadow.medium.y)
+                        .shadow(color: Color.orange.opacity(DesignSystem.Opacity.light), 
+                               radius: DesignSystem.Shadow.small.radius, 
+                               y: DesignSystem.Shadow.small.y)
+                        .shadow(color: Color.orange.opacity(DesignSystem.Opacity.glow * 1.2), 
+                               radius: DesignSystem.Shadow.verySoft.radius, 
+                               y: DesignSystem.Shadow.verySoft.y)
                         .overlay(
-                            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.medium, style: .continuous)
                                 .stroke(
                                     LinearGradient(
                                         colors: [
-                                            Color.orange.opacity(0.5),
-                                            Color.orange.opacity(0.3)
+                                            Color.orange.opacity(DesignSystem.Opacity.strong),
+                                            Color.orange.opacity(DesignSystem.Opacity.medium * 1.5)
                                         ],
                                         startPoint: .topLeading,
                                         endPoint: .bottomTrailing
                                     ),
-                                    lineWidth: 2
+                                    lineWidth: DesignSystem.Border.emphasis
                                 )
                         )
                         .overlay(
-                            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.medium, style: .continuous)
+                                .stroke(Color.white.opacity(DesignSystem.Opacity.light), lineWidth: DesignSystem.Border.hairline)
                                 .blur(radius: 1)
                         )
                     
@@ -193,12 +221,15 @@ struct StreakCelebrationView: View {
                     .padding(.horizontal, 12)
                     .padding(.vertical, 6)
                     .background(
-                        RoundedRectangle(cornerRadius: 8, style: .continuous)
-                            .fill(Theme.accentA.opacity(0.1))
+                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
+                            .fill(Theme.accentA.opacity(DesignSystem.Opacity.subtle * 1.0))
                             .overlay(
-                                RoundedRectangle(cornerRadius: 8, style: .continuous)
-                                    .stroke(Theme.accentA.opacity(0.2), lineWidth: 1)
+                                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
+                                    .stroke(Theme.accentA.opacity(DesignSystem.Opacity.light), lineWidth: DesignSystem.Border.standard)
                             )
+                            .shadow(color: Theme.accentA.opacity(DesignSystem.Opacity.subtle), 
+                                   radius: DesignSystem.Shadow.verySoft.radius, 
+                                   y: DesignSystem.Shadow.verySoft.y)
                     )
             }
         }
@@ -237,7 +268,7 @@ struct AchievementCelebrationView: View {
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
                 }
-                .padding(24)
+                .padding(DesignSystem.Spacing.cardPadding)
             }
         }
         .onAppear {
@@ -262,38 +293,48 @@ struct MotivationalMessageCard: View {
             HStack(spacing: 14) {
                 // Icon with rounded background and depth
                 ZStack {
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
                         .fill(
                             LinearGradient(
                                 colors: [
-                                    color.opacity(0.25),
-                                    color.opacity(0.20),
-                                    color.opacity(0.15)
+                                    color.opacity(DesignSystem.Opacity.light * 1.25),
+                                    color.opacity(DesignSystem.Opacity.light),
+                                    color.opacity(DesignSystem.Opacity.subtle * 1.5)
                                 ],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
                             )
                         )
                         .frame(width: 48, height: 48)
-                        .shadow(color: color.opacity(0.3), radius: 10, x: 0, y: 5)
+                        .shadow(color: Theme.enhancedShadow.opacity(DesignSystem.Opacity.medium), 
+                               radius: DesignSystem.Shadow.medium.radius, 
+                               y: DesignSystem.Shadow.medium.y)
+                        .shadow(color: color.opacity(DesignSystem.Opacity.glow * 1.2), 
+                               radius: DesignSystem.Shadow.soft.radius, 
+                               y: DesignSystem.Shadow.soft.y)
                         .overlay(
-                            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
                                 .stroke(
                                     LinearGradient(
                                         colors: [
-                                            color.opacity(0.4),
-                                            color.opacity(0.3)
+                                            color.opacity(DesignSystem.Opacity.medium * 1.3),
+                                            color.opacity(DesignSystem.Opacity.light * 1.5)
                                         ],
                                         startPoint: .topLeading,
                                         endPoint: .bottomTrailing
                                     ),
-                                    lineWidth: 1.5
+                                    lineWidth: DesignSystem.Border.standard
                                 )
                         )
                         .overlay(
-                            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                                .stroke(Color.white.opacity(DesignSystem.Opacity.light), lineWidth: DesignSystem.Border.hairline)
                                 .blur(radius: 0.5)
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                                .stroke(color.opacity(DesignSystem.Opacity.glow), lineWidth: DesignSystem.Border.hairline)
+                                .blur(radius: 1)
                         )
                     
                     Image(systemName: icon)
@@ -316,7 +357,7 @@ struct MotivationalMessageCard: View {
                 
                 Spacer()
             }
-            .padding(18)
+            .padding(DesignSystem.Spacing.md)
         }
     }
 }

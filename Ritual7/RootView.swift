@@ -101,6 +101,7 @@ struct RootView: View {
                 .accentColor(Theme.accentA)
             }
         }
+        .toastContainer()
         .onAppear {
             // Defer all heavy operations to avoid blocking UI
             // Use a small delay to ensure UI renders first
@@ -270,7 +271,7 @@ struct iPadSidebar: View {
     var body: some View {
         VStack(spacing: 0) {
             // Header
-            VStack(spacing: 16) {
+            VStack(spacing: DesignSystem.Spacing.lg) {
                 HStack {
                     Image(systemName: "figure.run")
                         .font(.title2)
@@ -284,8 +285,8 @@ struct iPadSidebar: View {
                 }
                 
                 // Quick stats
-                HStack(spacing: 20) {
-                    VStack(alignment: .leading, spacing: 4) {
+                HStack(spacing: DesignSystem.Spacing.formFieldSpacing) {
+                    VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                         Text("\(workoutStore.totalWorkouts)")
                             .font(.title2.weight(.bold))
                             .foregroundStyle(Theme.accentA)
@@ -294,7 +295,7 @@ struct iPadSidebar: View {
                             .foregroundStyle(.secondary)
                     }
                     
-                    VStack(alignment: .leading, spacing: 4) {
+                    VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                         Text("\(workoutStore.streak)")
                             .font(.title2.weight(.bold))
                             .foregroundStyle(Theme.accentB)
@@ -306,15 +307,15 @@ struct iPadSidebar: View {
                     Spacer()
                 }
             }
-            .padding(.horizontal, 20)
-            .padding(.top, 20)
-            .padding(.bottom, 24)
+            .padding(.horizontal, DesignSystem.Spacing.formFieldSpacing)
+            .padding(.top, DesignSystem.Spacing.formFieldSpacing)
+            .padding(.bottom, DesignSystem.Spacing.xl)
             
             Divider()
                 .overlay(Color.white.opacity(0.1))
             
             // Navigation
-            VStack(spacing: 8) {
+            VStack(spacing: DesignSystem.Spacing.sm) {
                 iPadSidebarButton(
                     title: "Workout",
                     icon: "figure.run",
@@ -346,30 +347,30 @@ struct iPadSidebar: View {
                     action: { selectedTab = 3 }
                 )
             }
-            .padding(.horizontal, 16)
-            .padding(.top, 20)
+            .padding(.horizontal, DesignSystem.Spacing.lg)
+            .padding(.top, DesignSystem.Spacing.formFieldSpacing)
             
             Spacer()
             
             // Recent workouts preview
             if !workoutStore.sessions.isEmpty {
-                VStack(alignment: .leading, spacing: 12) {
+                VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
                     Text("Recent")
                         .font(.headline)
                         .foregroundStyle(Theme.textPrimary)
-                        .padding(.horizontal, 20)
+                        .padding(.horizontal, DesignSystem.Spacing.formFieldSpacing)
                     
                     ScrollView {
-                        LazyVStack(spacing: 8) {
+                        LazyVStack(spacing: DesignSystem.Spacing.sm) {
                             ForEach(workoutStore.sessions.prefix(3)) { session in
                                 iPadRecentWorkoutCard(session: session)
                             }
                         }
-                        .padding(.horizontal, 20)
+                        .padding(.horizontal, DesignSystem.Spacing.formFieldSpacing)
                     }
                     .frame(maxHeight: 200)
                 }
-                .padding(.bottom, 20)
+                .padding(.bottom, DesignSystem.Spacing.formFieldSpacing)
             }
         }
         .background(.ultraThinMaterial)
@@ -432,7 +433,7 @@ struct iPadSidebarButton: View {
     
     var body: some View {
         Button(action: action) {
-            HStack(spacing: 12) {
+            HStack(spacing: DesignSystem.Spacing.md) {
                 Image(systemName: icon)
                     .font(.title3)
                     .foregroundStyle(isSelected ? Theme.textOnDark : Theme.textSecondary)
@@ -450,12 +451,22 @@ struct iPadSidebarButton: View {
                         .frame(width: 6, height: 6)
                 }
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 12)
+            .padding(.horizontal, DesignSystem.Spacing.lg)
+            .padding(.vertical, DesignSystem.Spacing.md)
             .background(
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
                     .fill(isSelected ? Theme.accentA : .clear)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                            .stroke(
+                                isSelected ? Theme.accentA.opacity(DesignSystem.Opacity.light * 1.5) : Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle),
+                                lineWidth: isSelected ? DesignSystem.Border.standard : DesignSystem.Border.hairline
+                            )
+                    )
             )
+            .shadow(color: isSelected ? Theme.accentA.opacity(DesignSystem.Opacity.subtle) : Color.clear, 
+                   radius: isSelected ? DesignSystem.Shadow.verySoft.radius : 0, 
+                   y: isSelected ? DesignSystem.Shadow.verySoft.y : 0)
         }
         .buttonStyle(.plain)
     }
@@ -467,13 +478,13 @@ struct iPadRecentWorkoutCard: View {
     let session: WorkoutSession
     
     var body: some View {
-        HStack(alignment: .top, spacing: 12) {
+        HStack(alignment: .top, spacing: DesignSystem.Spacing.md) {
             Circle()
                 .fill(Theme.accentA.opacity(0.2))
                 .frame(width: 8, height: 8)
-                .padding(.top, 6)
+                .padding(.top, DesignSystem.Spacing.sm)
             
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                 Text("\(session.exercisesCompleted) exercises")
                     .font(.caption)
                     .foregroundStyle(Theme.textPrimary)
@@ -487,12 +498,32 @@ struct iPadRecentWorkoutCard: View {
             
             Spacer()
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 8)
+        .padding(.horizontal, DesignSystem.Spacing.md)
+        .padding(.vertical, DesignSystem.Spacing.sm)
         .background(
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .fill(.ultraThinMaterial)
+            ZStack {
+                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
+                    .fill(.ultraThinMaterial)
+                
+                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Theme.accentA.opacity(DesignSystem.Opacity.highlight * 0.3),
+                                Color.clear
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .blendMode(.overlay)
+            }
+            .overlay(
+                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
+                    .stroke(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle), lineWidth: DesignSystem.Border.subtle)
+            )
         )
+        .softShadow()
     }
 }
 
@@ -503,7 +534,7 @@ struct iPadInsightsView: View {
     
     var body: some View {
         ScrollView {
-            VStack(spacing: 24) {
+            VStack(spacing: DesignSystem.Spacing.xl) {
                 Text("Insights")
                     .font(.largeTitle.weight(.bold))
                     .foregroundStyle(Theme.textPrimary)
@@ -512,7 +543,7 @@ struct iPadInsightsView: View {
                 LazyVGrid(columns: [
                     GridItem(.flexible()),
                     GridItem(.flexible())
-                ], spacing: 20) {
+                ], spacing: DesignSystem.Spacing.formFieldSpacing) {
                     iPadInsightCard(
                         title: "Total Workouts",
                         value: "\(workoutStore.totalWorkouts)",
@@ -543,14 +574,30 @@ struct iPadInsightsView: View {
                 }
                 
                 // Recent entries chart placeholder
-                VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
                     Text("Activity This Week")
                         .font(.headline)
                         .foregroundStyle(Theme.textPrimary)
                     
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
                         .fill(.ultraThinMaterial)
                         .frame(height: 200)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                                .stroke(
+                                    LinearGradient(
+                                        colors: [
+                                            Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.5),
+                                            Theme.accentA.opacity(DesignSystem.Opacity.light * 0.5),
+                                            Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.5)
+                                        ],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    ),
+                                    lineWidth: DesignSystem.Border.subtle
+                                )
+                        )
+                        .softShadow()
                         .overlay(
                             VStack {
                                 Image(systemName: "chart.bar.fill")
@@ -563,8 +610,8 @@ struct iPadInsightsView: View {
                         )
                 }
             }
-            .padding(.horizontal, 24)
-            .padding(.top, 20)
+            .padding(.horizontal, DesignSystem.Spacing.xl)
+            .padding(.top, DesignSystem.Spacing.formFieldSpacing)
         }
     }
     
@@ -579,7 +626,7 @@ struct iPadInsightCard: View {
     let color: Color
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
             HStack {
                 Image(systemName: icon)
                     .font(.title2)
@@ -588,7 +635,7 @@ struct iPadInsightCard: View {
                 Spacer()
             }
             
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                 Text(value)
                     .font(.title2.weight(.bold))
                     .foregroundStyle(Theme.textPrimary)
@@ -598,13 +645,13 @@ struct iPadInsightCard: View {
                     .foregroundStyle(.secondary)
             }
         }
-        .padding(20)
+        .padding(DesignSystem.Spacing.formFieldSpacing)
         .background(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
                 .fill(.ultraThinMaterial)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .stroke(color.opacity(0.3), lineWidth: 1)
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                        .stroke(color.opacity(DesignSystem.Opacity.medium), lineWidth: DesignSystem.Border.standard)
                 )
         )
     }
@@ -629,8 +676,8 @@ private struct PermissionBanner: View {
     let action: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 10) {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
+            HStack(spacing: DesignSystem.Spacing.md) {
                 Image(systemName: "bell.slash.fill").font(.title3)
                 Text(title).font(.headline)
                 Spacer()
@@ -645,10 +692,10 @@ private struct PermissionBanner: View {
                 .tint(.white)
                 .foregroundStyle(.black)
         }
-        .padding(16)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 16).stroke(.white.opacity(0.18), lineWidth: 1))
-        .shadow(color: .black.opacity(0.25), radius: 16, y: 10)
+        .padding(DesignSystem.Spacing.lg)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox).stroke(.white.opacity(DesignSystem.Opacity.borderSubtle), lineWidth: DesignSystem.Border.standard))
+        .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.medium), radius: DesignSystem.Shadow.medium.radius, y: DesignSystem.Shadow.medium.y)
     }
 }
 

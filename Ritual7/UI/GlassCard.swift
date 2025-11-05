@@ -24,14 +24,15 @@ public struct GlassCard<Content: View>: View {
                         .fill(material)
                     
                     // Enhanced gradient overlay for depth - different from background
+                    // Fine-tuned material opacity for perfect glass effect
                     RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.card, style: .continuous)
                         .fill(
                             LinearGradient(
                                 colors: [
-                                    Theme.accentB.opacity(0.15), // Slightly different color from background
-                                    Theme.accentA.opacity(0.12),
-                                    Theme.accentC.opacity(0.10),
-                                    Color.white.opacity(0.08),
+                                    Theme.accentB.opacity(DesignSystem.Opacity.subtle * 1.25), // Fine-tuned for perfect glass effect
+                                    Theme.accentA.opacity(DesignSystem.Opacity.subtle * 1.0),
+                                    Theme.accentC.opacity(DesignSystem.Opacity.subtle * 0.83),
+                                    Color.white.opacity(DesignSystem.Opacity.highlight * 0.8),
                                     Color.clear
                                 ],
                                 startPoint: .topLeading,
@@ -45,7 +46,8 @@ public struct GlassCard<Content: View>: View {
                         .fill(
                             LinearGradient(
                                 colors: [
-                                    Color.white.opacity(0.12),
+                                    Color.white.opacity(DesignSystem.Opacity.highlight * 1.2),
+                                    Color.white.opacity(DesignSystem.Opacity.highlight * 0.6),
                                     Color.clear
                                 ],
                                 startPoint: .top,
@@ -53,6 +55,38 @@ public struct GlassCard<Content: View>: View {
                             )
                         )
                         .blendMode(.overlay)
+                    
+                    // Refined inner glow for premium feel - subtle inner highlight
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.card, style: .continuous)
+                        .fill(
+                            RadialGradient(
+                                colors: [
+                                    Color.white.opacity(DesignSystem.Opacity.highlight * 0.8),
+                                    Color.clear
+                                ],
+                                center: .topLeading,
+                                startRadius: 0,
+                                endRadius: 120
+                            )
+                        )
+                        .blendMode(.overlay)
+                        .opacity(0.7)
+                    
+                    // Subtle reflection effect for premium glass feel
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.card, style: .continuous)
+                        .fill(
+                            LinearGradient(
+                                colors: [
+                                    Color.white.opacity(DesignSystem.Opacity.highlight * 1.2),
+                                    Color.clear,
+                                    Color.clear
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .blendMode(.screen)
+                        .opacity(0.5)
                 }
             )
             .frame(maxWidth: .infinity)
@@ -109,23 +143,26 @@ public struct GlassCard<Content: View>: View {
                     .blur(radius: 2.5)
                     .allowsHitTesting(false)
             )
-            // Enhanced multi-layer shadow system for stronger 3D effect
-            .shadow(color: Theme.enhancedShadow.opacity(DesignSystem.Opacity.medium * 1.5),
-                   radius: DesignSystem.Shadow.card.radius * 1.2,
-                   x: 0,
-                   y: DesignSystem.Shadow.card.y * 1.3)
-            .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.light * 1.2),
-                   radius: DesignSystem.Shadow.medium.radius * 1.1,
-                   x: 0,
-                   y: DesignSystem.Shadow.medium.y * 1.2)
-            .shadow(color: Theme.glowColor.opacity(DesignSystem.Opacity.subtle * 1.2),
-                   radius: DesignSystem.Shadow.soft.radius * 1.1,
-                   x: 0,
-                   y: DesignSystem.Shadow.soft.y * 1.1)
-            .shadow(color: Theme.accentA.opacity(0.15),
-                   radius: 8,
-                   x: 0,
-                   y: 4)
+            // Inner glow for sophisticated depth
+            .overlay(
+                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.card, style: .continuous)
+                    .stroke(
+                        LinearGradient(
+                            colors: [
+                                Theme.glowColor.opacity(DesignSystem.Opacity.glow * 0.8),
+                                Color.clear,
+                                Color.clear
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: DesignSystem.Border.hairline
+                    )
+                    .blur(radius: 1.5)
+                    .allowsHitTesting(false)
+            )
+            // Enhanced multi-layer shadow system using DesignSystem shadow extensions
+            .cardShadow()
     }
 }
 

@@ -39,11 +39,11 @@ struct ComparisonView: View {
         }
         .padding()
         .background(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
                 .fill(.ultraThinMaterial)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .stroke(Theme.strokeOuter, lineWidth: 0.8)
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                        .stroke(Theme.strokeOuter, lineWidth: DesignSystem.Border.subtle)
                 )
         )
     }
@@ -227,10 +227,10 @@ struct ComparisonView: View {
         }
         .padding()
         .background(
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
                 .fill(.ultraThinMaterial)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
                         .stroke(Theme.strokeOuter, lineWidth: 0.5)
                 )
         )

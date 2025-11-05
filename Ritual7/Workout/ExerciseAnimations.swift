@@ -19,18 +19,18 @@ struct CountdownAnimation: View {
                     .scaleEffect(scale)
                     .opacity(opacity)
                     .onAppear {
-                        // Optimized animation sequence - use Task for better performance
-                        withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                        // Agent 4: Optimized animation sequence using AnimationConstants
+                        withAnimation(AnimationConstants.bouncySpring) {
                             scale = 1.2
                             opacity = 1.0
                         }
                         Task { @MainActor in
                             try? await Task.sleep(nanoseconds: 200_000_000) // 0.2s
-                            withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                            withAnimation(AnimationConstants.bouncySpring) {
                                 scale = 1.0
                             }
                             try? await Task.sleep(nanoseconds: 500_000_000) // 0.5s
-                            withAnimation(.easeOut(duration: 0.3)) {
+                            withAnimation(AnimationConstants.quickEase) {
                                 opacity = 0.0
                                 scale = 0.5
                             }
@@ -49,18 +49,18 @@ struct CountdownAnimation: View {
                     .scaleEffect(scale)
                     .opacity(opacity)
                     .onAppear {
-                        // Optimized animation sequence - use Task for better performance
-                        withAnimation(.spring(response: 0.4, dampingFraction: 0.5)) {
+                        // Agent 4: Optimized animation sequence using AnimationConstants
+                        withAnimation(AnimationConstants.bouncySpring) {
                             scale = 1.3
                             opacity = 1.0
                         }
                         Task { @MainActor in
                             try? await Task.sleep(nanoseconds: 300_000_000) // 0.3s
-                            withAnimation(.spring(response: 0.4, dampingFraction: 0.5)) {
+                            withAnimation(AnimationConstants.bouncySpring) {
                                 scale = 1.0
                             }
                             try? await Task.sleep(nanoseconds: 700_000_000) // 0.7s
-                            withAnimation(.easeOut(duration: 0.3)) {
+                            withAnimation(AnimationConstants.quickEase) {
                                 opacity = 0.0
                                 scale = 0.5
                             }
@@ -68,6 +68,7 @@ struct CountdownAnimation: View {
                     }
             }
         }
+        .allowsHitTesting(false)  // Allow touches to pass through to content below
     }
 }
 
@@ -92,7 +93,7 @@ struct ExerciseDemonstrationView: View {
                 )
                 .scaleEffect(animationPhase % 2 == 0 ? 1.0 : 1.1)
                 .applySymbolEffect(.bounce, value: animationPhase)
-                .animation(.spring(response: 0.6, dampingFraction: 0.7), value: animationPhase)
+                .animation(AnimationConstants.smoothSpring, value: animationPhase)
             
             // Form guidance indicator
             FormGuidanceIndicator(exercise: exercise)
@@ -107,10 +108,10 @@ struct ExerciseDemonstrationView: View {
     
     private func startAnimation() {
         // Ensure timer is created on main thread
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
-                guard let self = self else { return }
+        // Timer.scheduledTimer already runs on the main runloop
+        DispatchQueue.main.async {
+            self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+                // Timer already runs on main thread, so we can update state directly
                 self.animationPhase += 1
             }
         }
@@ -143,7 +144,7 @@ struct FormGuidanceIndicator: View {
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
                 .background(
-                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
                         .fill(.ultraThinMaterial)
                 )
                 .transition(.scale.combined(with: .opacity))
@@ -151,7 +152,7 @@ struct FormGuidanceIndicator: View {
         }
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                withAnimation {
+                withAnimation(AnimationConstants.smoothSpring) {
                     showGuidance = true
                 }
             }
@@ -208,20 +209,21 @@ struct ExerciseTransitionView: View {
                         .foregroundStyle(.white.opacity(0.8))
                         .opacity(showTransition ? 1.0 : 0.0)
                 }
-                .padding(32)
+                .padding(DesignSystem.Spacing.xxl)
                 .background(
-                    RoundedRectangle(cornerRadius: 24, style: .continuous)
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
                         .fill(.ultraThinMaterial)
                 )
                 .transition(.scale.combined(with: .opacity))
             }
         }
         .onAppear {
-            withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+            // Agent 4: Use AnimationConstants for smooth transitions
+            withAnimation(AnimationConstants.smoothSpring) {
                 showTransition = true
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                withAnimation {
+                withAnimation(AnimationConstants.quickEase) {
                     showTransition = false
                 }
             }
@@ -257,9 +259,9 @@ struct MilestoneCelebrationView: View {
                         .foregroundStyle(.white)
                         .multilineTextAlignment(.center)
                 }
-                .padding(32)
+                .padding(DesignSystem.Spacing.xxl)
                 .background(
-                    RoundedRectangle(cornerRadius: 24, style: .continuous)
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
                         .fill(.ultraThinMaterial)
                 )
                 .scaleEffect(scale)
@@ -268,7 +270,8 @@ struct MilestoneCelebrationView: View {
             }
         }
         .onAppear {
-            withAnimation(.spring(response: 0.5, dampingFraction: 0.6)) {
+            // Agent 4: Use AnimationConstants for celebration animations
+            withAnimation(AnimationConstants.bouncySpring) {
                 showCelebration = true
                 scale = 1.0
             }
@@ -298,6 +301,7 @@ struct PrepCountdownView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .allowsHitTesting(false)  // Allow touches to pass through - this is just a visual countdown
     }
 }
 

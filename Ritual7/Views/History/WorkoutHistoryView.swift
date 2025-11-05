@@ -139,7 +139,7 @@ struct WorkoutHistoryView: View {
     // MARK: - Search and Filter Bar
     
     private var searchAndFilterBar: some View {
-        VStack(spacing: DesignSystem.Spacing.md) {
+        VStack(spacing: DesignSystem.Spacing.lg) {
             // Search bar
             HStack(spacing: DesignSystem.Spacing.md) {
                 Image(systemName: "magnifyingglass")
@@ -171,7 +171,7 @@ struct WorkoutHistoryView: View {
             // Filter chips
             if selectedDateRange != .all || !searchText.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: DesignSystem.Spacing.sm) {
+                    HStack(spacing: DesignSystem.Spacing.md) {
                         if selectedDateRange != .all {
                             FilterChip(
                                 title: selectedDateRange.displayName,
@@ -226,36 +226,19 @@ struct WorkoutHistoryView: View {
     // MARK: - Empty State
     
     private var emptyStateView: some View {
-        VStack(spacing: DesignSystem.Spacing.xl) {
-            Image(systemName: store.sessions.isEmpty ? "figure.run" : "magnifyingglass")
-                .font(.system(size: 64))
-                .foregroundStyle(.secondary)
-            
-            Text(store.sessions.isEmpty ? "No Workouts Yet" : "No Results Found")
-                .font(Theme.title2)
-                .foregroundStyle(Theme.textPrimary)
-            
-            Text(store.sessions.isEmpty ? 
-                 "Complete your first workout to see history here." :
-                 "Try adjusting your filters or search terms.")
-                .font(Theme.subheadline)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-            
-            if !store.sessions.isEmpty {
-                Button {
+        Group {
+            if store.sessions.isEmpty {
+                EmptyStateView.noWorkouts {
+                    // This will be handled by the parent view
+                }
+            } else {
+                EmptyStateView.noHistoryFound {
                     selectedDateRange = .all
                     searchText = ""
-                    Haptics.tap()
-                } label: {
-                    Text("Clear Filters")
-                        .font(Theme.subheadline)
-                        .foregroundStyle(Theme.accentA)
                 }
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding(DesignSystem.Spacing.xxl)
     }
     
     // MARK: - Workout List
@@ -271,9 +254,11 @@ struct WorkoutHistoryView: View {
             
             // Sessions list
             Section {
-                ForEach(filteredSessions) { session in
+                ForEach(Array(filteredSessions.enumerated()), id: \.element.id) { index, session in
                     WorkoutHistoryRow(session: session)
                         .contentShape(Rectangle())
+                        .staggeredEntrance(index: index, delay: 0.04)
+                        .cardLift()
                         .onTapGesture {
                             selectedSession = session
                             Haptics.buttonPress()

@@ -6,13 +6,14 @@ struct WeeklyCalendarView: View {
     @EnvironmentObject private var theme: ThemeStore
     
     var body: some View {
-        VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.xl) {
             Text("Workout Calendar")
                 .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
+                .padding(.bottom, DesignSystem.Spacing.xs)
             
             // Last 8 weeks
-            VStack(spacing: DesignSystem.Spacing.md) {
+            VStack(spacing: DesignSystem.Spacing.lg) {
                 // Week labels
                 HStack(spacing: 0) {
                     Text("")

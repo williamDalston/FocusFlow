@@ -120,10 +120,12 @@ struct AchievementCard: View {
     let isUnlocked: Bool
     let progress: Double
     @EnvironmentObject private var theme: ThemeStore
+    @State private var hasAppeared = false
+    @State private var showCelebration = false
     
     var body: some View {
         VStack(spacing: DesignSystem.Spacing.md) {
-            // Icon
+            // Icon with unlock animation
             ZStack {
                 Circle()
                     .fill(
@@ -132,6 +134,13 @@ struct AchievementCard: View {
                         : Color.gray.opacity(DesignSystem.Opacity.subtle * 0.5)
                     )
                     .frame(width: DesignSystem.Spacing.xxxl * 1.25, height: DesignSystem.Spacing.xxxl * 1.25)
+                    .scaleEffect(isUnlocked && showCelebration ? 1.1 : 1.0)
+                    .shadow(
+                        color: isUnlocked ? achievement.color.opacity(DesignSystem.Opacity.glow * 1.5) : Color.clear,
+                        radius: isUnlocked ? 12 : 0,
+                        x: 0,
+                        y: 0
+                    )
                 
                 Image(systemName: achievement.icon)
                     .font(.title2)
@@ -140,6 +149,14 @@ struct AchievementCard: View {
                         ? achievement.color
                         : Color.gray.opacity(DesignSystem.Opacity.medium)
                     )
+                    .scaleEffect(isUnlocked && showCelebration ? 1.15 : 1.0)
+            }
+            .onChange(of: showCelebration) { _ in
+                if showCelebration {
+                    withAnimation(AnimationConstants.elegantSpring.repeatCount(3, autoreverses: true)) {
+                        // Animation handled by scaleEffect
+                    }
+                }
             }
             
             // Title
@@ -225,6 +242,19 @@ struct AchievementCard: View {
         )
         .cardShadow()
         .opacity(isUnlocked ? 1.0 : DesignSystem.Opacity.strong)
+        .scaleEffect(hasAppeared ? 1.0 : 0.95)
+        .opacity(hasAppeared ? 1.0 : 0.0)
+        .animation(AnimationConstants.smoothSpring.delay(0.1), value: hasAppeared)
+        .onAppear {
+            hasAppeared = true
+            // Trigger celebration animation when unlocked
+            if isUnlocked {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    showCelebration = true
+                    Haptics.success()
+                }
+            }
+        }
     }
     
     private var rarityBadge: some View {
@@ -233,14 +263,35 @@ struct AchievementCard: View {
                 .font(Theme.caption2)
             Text(rarityText)
                 .font(Theme.caption2)
+                .fontWeight(.semibold)
         }
-        .foregroundStyle(rarityColor)
+        .foregroundStyle(
+            LinearGradient(
+                colors: [rarityColor, rarityColor.opacity(0.9)],
+                startPoint: .leading,
+                endPoint: .trailing
+            )
+        )
         .padding(.horizontal, DesignSystem.Spacing.sm)
         .padding(.vertical, DesignSystem.Spacing.xs)
         .background(
             Capsule()
-                .fill(rarityColor.opacity(DesignSystem.Opacity.subtle))
+                .fill(
+                    LinearGradient(
+                        colors: [
+                            rarityColor.opacity(DesignSystem.Opacity.subtle * 1.5),
+                            rarityColor.opacity(DesignSystem.Opacity.subtle)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .overlay(
+                    Capsule()
+                        .stroke(rarityColor.opacity(DesignSystem.Opacity.light), lineWidth: DesignSystem.Border.hairline)
+                )
         )
+        .shadow(color: rarityColor.opacity(DesignSystem.Opacity.glow * 0.8), radius: 4, x: 0, y: 2)
     }
     
     private var rarityIcon: String {

@@ -90,8 +90,8 @@ struct FirstWorkoutTutorialView: View {
                                 .frame(maxWidth: .infinity)
                                 .foregroundStyle(.white)
                                 .padding(.vertical, 16)
-                                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-                                .overlay(RoundedRectangle(cornerRadius: 16).stroke(.white.opacity(0.18), lineWidth: 1))
+                                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous))
+                                .overlay(RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox).stroke(.white.opacity(DesignSystem.Opacity.borderSubtle), lineWidth: DesignSystem.Border.standard))
                         }
                     }
                     
@@ -112,11 +112,11 @@ struct FirstWorkoutTutorialView: View {
                             .frame(maxWidth: .infinity)
                             .foregroundStyle(.black)
                             .padding(.vertical, 16)
-                            .background(.white, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                            .background(.white, in: RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous))
                     }
                 }
-                .padding(.horizontal, 24)
-                .padding(.bottom, 40)
+                .padding(.horizontal, DesignSystem.Spacing.cardPadding)
+                .padding(.bottom, DesignSystem.Spacing.xxxl)
             }
         }
         .navigationBarTitleDisplayMode(.inline)
@@ -138,9 +138,9 @@ struct FirstWorkoutTutorialView: View {
                 Image(systemName: step.icon)
                     .font(.system(size: horizontalSizeClass == .regular ? 80 : 64, weight: .bold))
                     .foregroundStyle(.white)
-                    .padding(horizontalSizeClass == .regular ? 24 : 20)
-                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
-                    .overlay(RoundedRectangle(cornerRadius: 22).stroke(.white.opacity(0.18), lineWidth: 1))
+                    .padding(horizontalSizeClass == .regular ? DesignSystem.Spacing.cardPadding : DesignSystem.Spacing.formFieldSpacing)
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous))
+                    .overlay(RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large).stroke(.white.opacity(DesignSystem.Opacity.borderSubtle), lineWidth: DesignSystem.Border.standard))
                 
                 // Title
                 Text(step.title)
@@ -171,10 +171,10 @@ struct FirstWorkoutTutorialView: View {
                         }
                     }
                 }
-                .padding(24)
-                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-                .overlay(RoundedRectangle(cornerRadius: 16).stroke(.white.opacity(0.18), lineWidth: 1))
-                .padding(.horizontal, 24)
+                .padding(DesignSystem.Spacing.cardPadding)
+                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox).stroke(.white.opacity(DesignSystem.Opacity.borderSubtle), lineWidth: DesignSystem.Border.standard))
+                .padding(.horizontal, DesignSystem.Spacing.cardPadding)
                 
                 Spacer()
             }

@@ -58,7 +58,7 @@ enum DesignSystem {
         static let divider: CGFloat = 0.5
     }
     
-    // MARK: - Shadow System (Refined for Elegant Depth)
+    // MARK: - Shadow System (Enhanced for Sophisticated Depth)
     
     enum Shadow {
         // Base shadows with refined, softer depth
@@ -72,6 +72,8 @@ enum DesignSystem {
         static let card: (radius: CGFloat, y: CGFloat) = (32, 16)  // Softer, more elegant
         static let button: (radius: CGFloat, y: CGFloat) = (28, 14)  // Refined for sophistication
         static let elevated: (radius: CGFloat, y: CGFloat) = (24, 12)  // Softer elevation
+        static let floating: (radius: CGFloat, y: CGFloat) = (36, 18)  // For floating elements
+        static let modal: (radius: CGFloat, y: CGFloat) = (44, 22)  // For modal presentations
         
         // Pressed/interactive states (refined for subtle feedback)
         static let pressed: (radius: CGFloat, y: CGFloat) = (10, 5)  // Slightly softer
@@ -79,6 +81,11 @@ enum DesignSystem {
         // Soft shadows for subtle elevation (refined)
         static let soft: (radius: CGFloat, y: CGFloat) = (20, 10)  // More refined
         static let verySoft: (radius: CGFloat, y: CGFloat) = (12, 6)  // Softer, more elegant
+        
+        // Ambient shadows for depth (no Y offset)
+        static let ambientSmall: CGFloat = 4
+        static let ambientMedium: CGFloat = 8
+        static let ambientLarge: CGFloat = 12
     }
     
     // MARK: - Opacity Scale (Refined for Sophisticated Elegance)
@@ -213,35 +220,131 @@ extension View {
     }
 }
 
-// MARK: - Shadow Extensions (Multi-Layer Premium Shadows)
+// MARK: - Border Extensions
 
 extension View {
-    /// Apply premium multi-layer card shadow with depth
+    /// Apply standard card border
+    func cardBorder() -> some View {
+        self.overlay(
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.card, style: .continuous)
+                .stroke(
+                    LinearGradient(
+                        colors: [
+                            Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.8),
+                            Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.0)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    lineWidth: DesignSystem.Border.card
+                )
+        )
+    }
+    
+    /// Apply subtle border
+    func subtleBorder() -> some View {
+        self.overlay(
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.card, style: .continuous)
+                .stroke(
+                    Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle),
+                    lineWidth: DesignSystem.Border.subtle
+                )
+        )
+    }
+    
+    /// Apply enhanced multi-stop border
+    func enhancedBorder() -> some View {
+        self.overlay(
+            EnhancedBorder(cornerRadius: DesignSystem.CornerRadius.card)
+        )
+    }
+}
+
+// MARK: - Shadow Extensions (Enhanced Multi-Layer Premium Shadows)
+
+extension View {
+    /// Apply premium multi-layer card shadow with sophisticated depth hierarchy
     func cardShadow() -> some View {
         self
+            // Ambient shadow for base depth
+            .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.subtle * 0.8), 
+                   radius: DesignSystem.Shadow.ambientMedium, 
+                   x: 0, y: 0)
+            // Primary directional shadow
             .shadow(color: Theme.enhancedShadow.opacity(DesignSystem.Opacity.medium * 1.2), 
                    radius: DesignSystem.Shadow.card.radius, 
                    y: DesignSystem.Shadow.card.y)
+            // Secondary shadow for depth
             .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.light), 
                    radius: DesignSystem.Shadow.medium.radius, 
                    y: DesignSystem.Shadow.medium.y)
+            // Accent glow shadow
             .shadow(color: Theme.glowColor.opacity(DesignSystem.Opacity.subtle), 
                    radius: DesignSystem.Shadow.soft.radius, 
                    y: DesignSystem.Shadow.soft.y)
     }
     
-    /// Apply premium multi-layer button shadow
+    /// Apply premium multi-layer button shadow with depth hierarchy
     func buttonShadow() -> some View {
         self
+            // Ambient shadow
+            .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.subtle * 0.6), 
+                   radius: DesignSystem.Shadow.ambientSmall, 
+                   x: 0, y: 0)
+            // Primary directional shadow
             .shadow(color: Theme.enhancedShadow.opacity(DesignSystem.Opacity.medium * 1.1), 
                    radius: DesignSystem.Shadow.button.radius, 
                    y: DesignSystem.Shadow.button.y)
+            // Secondary shadow
             .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.light * 0.9), 
                    radius: DesignSystem.Shadow.medium.radius * 0.8, 
                    y: DesignSystem.Shadow.medium.y * 0.8)
+            // Accent glow shadow
             .shadow(color: Theme.glowColor.opacity(DesignSystem.Opacity.subtle * 0.8), 
                    radius: DesignSystem.Shadow.soft.radius * 0.6, 
                    y: DesignSystem.Shadow.soft.y * 0.6)
+    }
+    
+    /// Apply elevated element shadow (for raised components)
+    func elevatedShadow() -> some View {
+        self
+            .shadow(color: Theme.enhancedShadow.opacity(DesignSystem.Opacity.medium), 
+                   radius: DesignSystem.Shadow.elevated.radius, 
+                   y: DesignSystem.Shadow.elevated.y)
+            .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.light * 0.8), 
+                   radius: DesignSystem.Shadow.medium.radius * 0.7, 
+                   y: DesignSystem.Shadow.medium.y * 0.7)
+            .shadow(color: Theme.glowColor.opacity(DesignSystem.Opacity.subtle * 0.6), 
+                   radius: DesignSystem.Shadow.soft.radius * 0.5, 
+                   y: DesignSystem.Shadow.soft.y * 0.5)
+    }
+    
+    /// Apply floating element shadow (for floating UI elements)
+    func floatingShadow() -> some View {
+        self
+            .shadow(color: Theme.enhancedShadow.opacity(DesignSystem.Opacity.medium * 1.3), 
+                   radius: DesignSystem.Shadow.floating.radius, 
+                   y: DesignSystem.Shadow.floating.y)
+            .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.light * 1.1), 
+                   radius: DesignSystem.Shadow.large.radius, 
+                   y: DesignSystem.Shadow.large.y)
+            .shadow(color: Theme.glowColor.opacity(DesignSystem.Opacity.subtle * 1.0), 
+                   radius: DesignSystem.Shadow.soft.radius, 
+                   y: DesignSystem.Shadow.soft.y)
+    }
+    
+    /// Apply modal shadow (for modal presentations)
+    func modalShadow() -> some View {
+        self
+            .shadow(color: Theme.enhancedShadow.opacity(DesignSystem.Opacity.strong * 1.2), 
+                   radius: DesignSystem.Shadow.modal.radius, 
+                   y: DesignSystem.Shadow.modal.y)
+            .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.medium * 1.1), 
+                   radius: DesignSystem.Shadow.xlarge.radius, 
+                   y: DesignSystem.Shadow.xlarge.y)
+            .shadow(color: Theme.glowColor.opacity(DesignSystem.Opacity.light * 0.8), 
+                   radius: DesignSystem.Shadow.medium.radius, 
+                   y: DesignSystem.Shadow.medium.y)
     }
     
     /// Apply soft subtle shadow for elevated elements
@@ -251,7 +354,7 @@ extension View {
                    y: DesignSystem.Shadow.verySoft.y)
     }
     
-    /// Apply pressed state shadow
+    /// Apply pressed state shadow (reduced shadow for pressed elements)
     func pressedShadow() -> some View {
         self.shadow(color: Theme.enhancedShadow.opacity(DesignSystem.Opacity.light), 
                    radius: DesignSystem.Shadow.pressed.radius, 

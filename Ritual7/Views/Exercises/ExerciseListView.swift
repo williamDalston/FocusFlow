@@ -112,7 +112,7 @@ struct ExerciseListView: View {
     // MARK: - Search and Filter Bar
     
     private var searchAndFilterBar: some View {
-        VStack(spacing: DesignSystem.Spacing.md) {
+        VStack(spacing: DesignSystem.Spacing.lg) {
             // Search bar
             HStack(spacing: DesignSystem.Spacing.md) {
                 Image(systemName: "magnifyingglass")
@@ -144,7 +144,7 @@ struct ExerciseListView: View {
             // Filter chips
             if selectedMuscleGroup != nil || !searchText.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: DesignSystem.Spacing.sm) {
+                    HStack(spacing: DesignSystem.Spacing.md) {
                         if let muscleGroup = selectedMuscleGroup {
                             ExerciseFilterChip(
                                 title: muscleGroup.displayName,
@@ -199,32 +199,11 @@ struct ExerciseListView: View {
     // MARK: - Empty State
     
     private var emptyStateView: some View {
-        VStack(spacing: DesignSystem.Spacing.xl) {
-            Image(systemName: "magnifyingglass")
-                .font(.system(size: 64))
-                .foregroundStyle(.secondary)
-            
-            Text("No Exercises Found")
-                .font(Theme.title2)
-                .foregroundStyle(Theme.textPrimary)
-            
-            Text("Try adjusting your filters or search terms.")
-                .font(Theme.subheadline)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-            
-            Button {
-                selectedMuscleGroup = nil
-                searchText = ""
-                Haptics.tap()
-            } label: {
-                Text("Clear Filters")
-                    .font(Theme.subheadline)
-                    .foregroundStyle(Theme.accentA)
-            }
+        EmptyStateView.noExercisesFound {
+            selectedMuscleGroup = nil
+            searchText = ""
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding(DesignSystem.Spacing.xxl)
     }
     
     // MARK: - Exercise List
@@ -240,9 +219,11 @@ struct ExerciseListView: View {
             
             // Exercises list
             Section {
-                ForEach(filteredExercises) { exercise in
+                ForEach(Array(filteredExercises.enumerated()), id: \.element.id) { index, exercise in
                     ExerciseCard(exercise: exercise)
                         .contentShape(Rectangle())
+                        .staggeredEntrance(index: index, delay: 0.05)
+                        .cardLift()
                         .onTapGesture {
                             selectedExercise = exercise
                             Haptics.tap()
@@ -269,12 +250,27 @@ struct ExerciseCard: View {
             // Icon
             ZStack {
                 Circle()
-                    .fill(Theme.accentA.opacity(DesignSystem.Opacity.subtle))
-                    .frame(width: DesignSystem.IconSize.xxlarge, height: DesignSystem.IconSize.xxlarge)
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Theme.accentA.opacity(DesignSystem.Opacity.subtle),
+                                Theme.accentB.opacity(DesignSystem.Opacity.subtle * 0.8)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(width: DesignSystem.IconSize.xxlarge + 8, height: DesignSystem.IconSize.xxlarge + 8)
                 
                 Image(systemName: exercise.icon)
                     .font(.title2)
-                    .foregroundStyle(Theme.accentA)
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [Theme.accentA, Theme.accentB],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
             }
             
             // Content
@@ -331,16 +327,45 @@ struct ExerciseCard: View {
         .padding(.horizontal, DesignSystem.Spacing.md)
         .padding(.vertical, DesignSystem.Spacing.md)
         .background(
-            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.medium, style: .continuous)
-                .fill(.ultraThinMaterial)
-                .overlay(
-                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.medium, style: .continuous)
-                        .stroke(Theme.strokeOuter, lineWidth: DesignSystem.Border.subtle)
-                )
+            ZStack {
+                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.medium, style: .continuous)
+                    .fill(.ultraThinMaterial)
+                
+                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.medium, style: .continuous)
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Theme.accentA.opacity(DesignSystem.Opacity.highlight * 0.3),
+                                Color.clear
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .blendMode(.overlay)
+            }
+            .overlay(
+                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.medium, style: .continuous)
+                    .stroke(
+                        LinearGradient(
+                            colors: [
+                                Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.5),
+                                Theme.accentA.opacity(DesignSystem.Opacity.light * 0.5),
+                                Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.5)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: DesignSystem.Border.subtle
+                    )
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.medium, style: .continuous)
+                    .stroke(Theme.glowColor.opacity(DesignSystem.Opacity.glow * 0.6), lineWidth: DesignSystem.Border.hairline)
+                    .blur(radius: 1)
+            )
         )
-        .shadow(color: Theme.enhancedShadow.opacity(DesignSystem.Opacity.subtle * 0.5), 
-               radius: DesignSystem.Shadow.small.radius * 0.5, 
-               y: DesignSystem.Shadow.small.y * 0.5)
+        .softShadow()
     }
 }
 
@@ -430,7 +455,7 @@ struct MuscleGroupFilterView: View {
                             HStack {
                                 Image(systemName: "circle")
                                     .foregroundStyle(Theme.accentA)
-                                    .frame(width: 24)
+                                    .frame(width: DesignSystem.IconSize.statBox)
                                 
                                 Text("All Muscle Groups")
                                     .font(Theme.body)
@@ -455,7 +480,7 @@ struct MuscleGroupFilterView: View {
                                 HStack {
                                     Image(systemName: "figure.strengthtraining.traditional")
                                         .foregroundStyle(Theme.accentA)
-                                        .frame(width: 24)
+                                        .frame(width: DesignSystem.IconSize.statBox)
                                     
                                     Text(muscleGroup.displayName)
                                         .font(Theme.body)

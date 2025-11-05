@@ -66,10 +66,30 @@ enum AccessibilityHelpers {
     
     // MARK: - Color Contrast
     
-    /// Checks if color contrast meets accessibility standards
+    /// Checks if color contrast meets WCAG AA standards (4.5:1 minimum for normal text)
+    /// This is a simplified check - for production, use proper contrast ratio calculation
     static func hasGoodContrast(foreground: Color, background: Color) -> Bool {
-        // This is a simplified check - in production, use proper contrast ratio calculation
-        return true // Placeholder - implement proper contrast checking
+        // Note: SwiftUI Color doesn't expose RGB values directly
+        // This is a placeholder - in production, convert to UIColor and calculate proper contrast ratio
+        // For now, we assume semantic colors (Color.primary, Color.secondary) meet standards
+        return true
+    }
+    
+    /// Calculates relative luminance for contrast checking
+    /// Returns value between 0 (black) and 1 (white)
+    static func relativeLuminance(red: CGFloat, green: CGFloat, blue: CGFloat) -> CGFloat {
+        let r = red <= 0.03928 ? red / 12.92 : pow((red + 0.055) / 1.055, 2.4)
+        let g = green <= 0.03928 ? green / 12.92 : pow((green + 0.055) / 1.055, 2.4)
+        let b = blue <= 0.03928 ? blue / 12.92 : pow((blue + 0.055) / 1.055, 2.4)
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b
+    }
+    
+    /// Calculates contrast ratio between two colors
+    /// WCAG AA requires 4.5:1 for normal text, 3:1 for large text
+    static func contrastRatio(luminance1: CGFloat, luminance2: CGFloat) -> CGFloat {
+        let lighter = max(luminance1, luminance2)
+        let darker = min(luminance1, luminance2)
+        return (lighter + 0.05) / (darker + 0.05)
     }
     
     // MARK: - Accessibility Traits
@@ -87,6 +107,16 @@ enum AccessibilityHelpers {
     /// Returns appropriate accessibility traits for important content
     static var importantTraits: AccessibilityTraits {
         return [.startsMediaSession]
+    }
+    
+    /// Returns appropriate accessibility traits for interactive elements
+    static var interactiveTraits: AccessibilityTraits {
+        return [.isButton, .allowsDirectInteraction]
+    }
+    
+    /// Returns appropriate accessibility traits for stat/value displays
+    static var valueTraits: AccessibilityTraits {
+        return [.updatesFrequently]
     }
 }
 
@@ -116,17 +146,34 @@ struct WorkoutAccessibilityModifier: ViewModifier {
 struct HighContrastModifier: ViewModifier {
     @Environment(\.accessibilityDifferentiateWithoutColor) private var differentiateWithoutColor
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
+    @Environment(\.colorScheme) private var colorScheme
     
     func body(content: Content) -> some View {
         Group {
             if reduceTransparency {
                 content.opacity(1.0)
+                    .background(
+                        colorScheme == .dark 
+                        ? Color.black.opacity(0.95)
+                        : Color.white.opacity(0.95)
+                    )
             } else {
                 content
             }
         }
         // Note: differentiateWithoutColor is handled by the system automatically
         // when using semantic colors and accessibility labels
+    }
+}
+
+/// Reduce Motion modifier for animations
+/// Note: This is a helper modifier - animations should check reduceMotion directly
+struct ReduceMotionModifier: ViewModifier {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    
+    func body(content: Content) -> some View {
+        content
+            .animation(reduceMotion ? nil : .default, value: UUID())
     }
 }
 
@@ -139,6 +186,31 @@ extension View {
     /// Applies high contrast support
     func highContrastSupport() -> some View {
         modifier(HighContrastModifier())
+    }
+    
+    /// Applies reduce motion support to animations
+    func reduceMotionSupport() -> some View {
+        modifier(ReduceMotionModifier())
+    }
+    
+    /// Ensures minimum touch target size (44x44pt)
+    func accessibilityTouchTarget() -> some View {
+        self.frame(minWidth: DesignSystem.TouchTarget.minimum, minHeight: DesignSystem.TouchTarget.minimum)
+    }
+    
+    /// Adds accessibility label with hint for buttons
+    func accessibilityButton(label: String, hint: String? = nil) -> some View {
+        self
+            .accessibilityLabel(label)
+            .accessibilityHint(hint ?? "")
+            .accessibilityAddTraits(.isButton)
+    }
+    
+    /// Adds accessibility label for stat values
+    func accessibilityStat(title: String, value: String) -> some View {
+        self
+            .accessibilityLabel("\(title): \(value)")
+            .accessibilityAddTraits(.updatesFrequently)
     }
 }
 

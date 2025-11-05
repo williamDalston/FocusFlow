@@ -49,7 +49,7 @@ struct GoalSettingView: View {
     private var weeklyGoalSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Weekly Goal")
-                .font(.headline.weight(.semibold))
+                .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
             
             GlassCard(material: .ultraThinMaterial) {
@@ -59,21 +59,21 @@ struct GoalSettingView: View {
                         VStack(spacing: 12) {
                             HStack {
                                 Text("Progress")
-                                    .font(.subheadline.weight(.medium))
+                                    .font(Theme.subheadline.weight(.medium))
                                     .foregroundStyle(.secondary)
                                 Spacer()
                                 Text("\(goalManager.weeklyProgress) / \(goalManager.weeklyGoal)")
-                                    .font(.title3.weight(.bold))
+                                    .font(Theme.title3)
                                     .foregroundStyle(Theme.textPrimary)
                             }
                             
                             // Progress Bar
                             GeometryReader { geometry in
                                 ZStack(alignment: .leading) {
-                                    RoundedRectangle(cornerRadius: 8, style: .continuous)
-                                        .fill(Color.gray.opacity(0.2))
+                                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
+                                        .fill(Color.gray.opacity(DesignSystem.Opacity.light))
                                     
-                                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
                                         .fill(Theme.accentA.gradient)
                                         .frame(width: geometry.size.width * goalManager.weeklyProgressPercentage)
                                         .animation(.spring(response: 0.6), value: goalManager.weeklyProgressPercentage)
@@ -84,10 +84,10 @@ struct GoalSettingView: View {
                             if !goalManager.isWeeklyGoalAchieved {
                                 HStack {
                                     Image(systemName: "info.circle")
-                                        .font(.caption)
+                                        .font(Theme.caption)
                                         .foregroundStyle(.secondary)
                                     Text("\(goalManager.weeklyWorkoutsRemaining) workout(s) remaining")
-                                        .font(.caption)
+                                        .font(Theme.caption)
                                         .foregroundStyle(.secondary)
                                     Spacer()
                                 }
@@ -96,7 +96,7 @@ struct GoalSettingView: View {
                                     Image(systemName: "checkmark.circle.fill")
                                         .foregroundStyle(.green)
                                     Text("Goal Achieved! 🎉")
-                                        .font(.subheadline.weight(.semibold))
+                                        .font(Theme.subheadline.weight(.semibold))
                                         .foregroundStyle(.green)
                                 }
                             }
@@ -109,17 +109,17 @@ struct GoalSettingView: View {
                     } label: {
                         HStack {
                             Text(goalManager.weeklyGoal == 0 ? "Set Weekly Goal" : "\(goalManager.weeklyGoal) workouts per week")
-                                .font(.body.weight(.medium))
+                                .font(Theme.body.weight(.medium))
                                 .foregroundStyle(Theme.textPrimary)
                             Spacer()
                             Image(systemName: "chevron.right")
-                                .font(.caption)
+                                .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                         }
                         .padding()
                         .background(
-                            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                .fill(Theme.accentA.opacity(0.1))
+                            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
+                                .fill(Theme.accentA.opacity(DesignSystem.Opacity.subtle))
                         )
                     }
                 }
@@ -143,7 +143,7 @@ struct GoalSettingView: View {
     private var monthlyGoalSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Monthly Goal")
-                .font(.headline.weight(.semibold))
+                .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
             
             GlassCard(material: .ultraThinMaterial) {
@@ -153,21 +153,21 @@ struct GoalSettingView: View {
                         VStack(spacing: 12) {
                             HStack {
                                 Text("Progress")
-                                    .font(.subheadline.weight(.medium))
+                                    .font(Theme.subheadline.weight(.medium))
                                     .foregroundStyle(.secondary)
                                 Spacer()
                                 Text("\(goalManager.monthlyProgress) / \(goalManager.monthlyGoal)")
-                                    .font(.title3.weight(.bold))
+                                    .font(Theme.title3)
                                     .foregroundStyle(Theme.textPrimary)
                             }
                             
                             // Progress Bar
                             GeometryReader { geometry in
                                 ZStack(alignment: .leading) {
-                                    RoundedRectangle(cornerRadius: 8, style: .continuous)
-                                        .fill(Color.gray.opacity(0.2))
+                                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
+                                        .fill(Color.gray.opacity(DesignSystem.Opacity.light))
                                     
-                                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
                                         .fill(Theme.accentB.gradient)
                                         .frame(width: geometry.size.width * goalManager.monthlyProgressPercentage)
                                         .animation(.spring(response: 0.6), value: goalManager.monthlyProgressPercentage)
@@ -178,10 +178,10 @@ struct GoalSettingView: View {
                             if !goalManager.isMonthlyGoalAchieved {
                                 HStack {
                                     Image(systemName: "info.circle")
-                                        .font(.caption)
+                                        .font(Theme.caption)
                                         .foregroundStyle(.secondary)
                                     Text("\(goalManager.monthlyWorkoutsRemaining) workout(s) remaining")
-                                        .font(.caption)
+                                        .font(Theme.caption)
                                         .foregroundStyle(.secondary)
                                     Spacer()
                                 }
@@ -190,7 +190,7 @@ struct GoalSettingView: View {
                                     Image(systemName: "checkmark.circle.fill")
                                         .foregroundStyle(.green)
                                     Text("Goal Achieved! 🎉")
-                                        .font(.subheadline.weight(.semibold))
+                                        .font(Theme.subheadline.weight(.semibold))
                                         .foregroundStyle(.green)
                                 }
                             }
@@ -203,11 +203,11 @@ struct GoalSettingView: View {
                     } label: {
                         HStack {
                             Text(goalManager.monthlyGoal == 0 ? "Set Monthly Goal" : "\(goalManager.monthlyGoal) workouts per month")
-                                .font(.body.weight(.medium))
+                                .font(Theme.body.weight(.medium))
                                 .foregroundStyle(Theme.textPrimary)
                             Spacer()
                             Image(systemName: "chevron.right")
-                                .font(.caption)
+                                .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                         }
                         .padding()
@@ -237,7 +237,7 @@ struct GoalSettingView: View {
     private var goalPredictionsSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Goal Predictions")
-                .font(.headline.weight(.semibold))
+                .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
             
             GlassCard(material: .ultraThinMaterial) {
@@ -271,7 +271,7 @@ struct GoalSettingView: View {
     private var adaptiveSuggestionsSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Smart Suggestions")
-                .font(.headline.weight(.semibold))
+                .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
             
             GlassCard(material: .ultraThinMaterial) {
@@ -331,7 +331,7 @@ private struct WeeklyGoalPickerView: View {
                                 }
                                 if goal == suggestion && goal != currentGoal {
                                     Text("Suggested")
-                                        .font(.caption)
+                                        .font(Theme.caption)
                                         .foregroundStyle(.secondary)
                                 }
                             }
@@ -377,7 +377,7 @@ private struct MonthlyGoalPickerView: View {
                                 }
                                 if goal == suggestion && goal != currentGoal && abs(goal - suggestion) <= 2 {
                                     Text("Suggested")
-                                        .font(.caption)
+                                        .font(Theme.caption)
                                         .foregroundStyle(.secondary)
                                 }
                             }
@@ -412,11 +412,11 @@ private struct GoalPredictionCard: View {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("\(prediction.percentage)%")
-                        .font(.title2.weight(.bold))
+                        .font(Theme.title2)
                         .foregroundStyle(prediction.achievable ? .green : .orange)
                     
                     Text(prediction.achievable ? "On Track" : "Needs Effort")
-                        .font(.caption)
+                        .font(Theme.caption)
                         .foregroundStyle(.secondary)
                 }
                 
@@ -424,19 +424,19 @@ private struct GoalPredictionCard: View {
                 
                 VStack(alignment: .trailing, spacing: 4) {
                     Text(prediction.confidence.description)
-                        .font(.caption.weight(.medium))
+                        .font(Theme.caption.weight(.medium))
                         .foregroundStyle(.secondary)
                     
                     Text("Confidence")
-                        .font(.caption2)
+                        .font(Theme.caption2)
                         .foregroundStyle(.secondary)
                 }
             }
         }
         .padding()
         .background(
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(prediction.achievable ? Color.green.opacity(0.1) : Color.orange.opacity(0.1))
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
+                .fill(prediction.achievable ? Color.green.opacity(DesignSystem.Opacity.subtle) : Color.orange.opacity(DesignSystem.Opacity.subtle))
         )
     }
 }
@@ -453,11 +453,11 @@ private struct SuggestionRow: View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
-                    .font(.subheadline.weight(.semibold))
+                    .font(Theme.subheadline.weight(.semibold))
                     .foregroundStyle(Theme.textPrimary)
                 
                 Text("Suggested: \(suggestion) workouts")
-                    .font(.caption)
+                    .font(Theme.caption)
                     .foregroundStyle(.secondary)
             }
             
@@ -468,12 +468,12 @@ private struct SuggestionRow: View {
                     action()
                 } label: {
                     Text("Apply")
-                        .font(.caption.weight(.semibold))
+                        .font(Theme.caption.weight(.semibold))
                         .foregroundStyle(.white)
                         .padding(.horizontal, 12)
                         .padding(.vertical, 6)
                         .background(
-                            RoundedRectangle(cornerRadius: 8, style: .continuous)
+                            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
                                 .fill(Theme.accentA)
                         )
                 }

@@ -105,9 +105,9 @@ struct OnboardingView: View {
                 .font(isIPad ? Theme.title2 : Theme.title3)
                 .foregroundStyle(Theme.textSecondaryOnDark)
                 .multilineTextAlignment(.center)
-                .lineSpacing(DesignSystem.Spacing.xs)
+                .lineSpacing(DesignSystem.Typography.bodyLineHeight - 1.0)
                 .padding(.horizontal, isIPad ? DesignSystem.Spacing.xxxl : DesignSystem.Spacing.xxl)
-                .padding(.top, DesignSystem.Spacing.md)
+                .padding(.top, DesignSystem.Spacing.lg)
                 .minimumScaleFactor(0.85)
             
             Spacer()
@@ -150,9 +150,9 @@ struct OnboardingView: View {
                 .font(isIPad ? Theme.title2 : Theme.title3)
                 .foregroundStyle(Theme.textSecondaryOnDark)
                 .multilineTextAlignment(.center)
-                .lineSpacing(DesignSystem.Spacing.xs)
+                .lineSpacing(DesignSystem.Typography.bodyLineHeight - 1.0)
                 .padding(.horizontal, isIPad ? DesignSystem.Spacing.xxxl : DesignSystem.Spacing.xxl)
-                .padding(.top, DesignSystem.Spacing.md)
+                .padding(.top, DesignSystem.Spacing.lg)
                 .minimumScaleFactor(0.85)
             
             // Toggle card with consistent styling
@@ -165,7 +165,7 @@ struct OnboardingView: View {
                 .tint(Theme.accentA)
             }
             .padding(.horizontal, isIPad ? DesignSystem.Screen.sidePaddingIPad : DesignSystem.Screen.sidePadding)
-            .padding(.top, DesignSystem.Spacing.lg)
+            .padding(.top, DesignSystem.Spacing.xl)
 
             // Time picker card (conditional)
             if reminderEnabled {
@@ -193,7 +193,7 @@ struct OnboardingView: View {
                     }
                 }
                 .padding(.horizontal, isIPad ? DesignSystem.Screen.sidePaddingIPad : DesignSystem.Screen.sidePadding)
-                .padding(.top, DesignSystem.Spacing.md)
+                .padding(.top, DesignSystem.Spacing.lg)
                 .transition(.opacity.combined(with: .move(edge: .top)))
             }
 

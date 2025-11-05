@@ -64,4 +64,26 @@ enum Haptics {
         let generator = UIImpactFeedbackGenerator(style: .soft)
         generator.impactOccurred()
     }
+    
+    // Agent 7: Additional haptics for states and feedback
+    static func error() {
+        // Error haptic feedback
+        let generator = UINotificationFeedbackGenerator()
+        generator.prepare()
+        generator.notificationOccurred(.error)
+    }
+    
+    static func warning() {
+        // Warning haptic feedback
+        let generator = UINotificationFeedbackGenerator()
+        generator.prepare()
+        generator.notificationOccurred(.warning)
+    }
+    
+    static func refresh() {
+        // Light haptic for pull-to-refresh
+        let generator = UIImpactFeedbackGenerator(style: .light)
+        generator.prepare()
+        generator.impactOccurred()
+    }
 }

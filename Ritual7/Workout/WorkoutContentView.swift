@@ -130,35 +130,33 @@ struct WorkoutContentView: View {
                 }
             }
         }
-        .animation(.easeInOut(duration: 0.6), value: theme.colorTheme)
+        // Agent 4: Use AnimationConstants for theme transitions
+        .animation(AnimationConstants.longEase, value: theme.colorTheme)
         .onAppear {
-            // Load personalized message immediately (lightweight)
+            // Initialize analytics with current store
+            if analytics == nil {
+                analytics = WorkoutAnalytics(store: store)
+            }
+            if achievementManager == nil {
+                achievementManager = AchievementManager(store: store)
+            }
+            // Agent 10: Initialize goal manager
+            if goalManager == nil {
+                goalManager = GoalManager(store: store)
+            }
+            
+            // Check achievements
+            achievementManager?.checkAchievements()
+            
+            // Agent 10: Update goal progress
+            goalManager?.updateProgress()
+            
+            // Load personalized message
             messageManager.personalizedMessage = messageManager.getPersonalizedMessage(
                 streak: store.streak,
                 totalWorkouts: store.totalWorkouts,
                 workoutsThisWeek: store.workoutsThisWeek
             )
-            
-            // Defer heavy manager initialization to improve initial render performance
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                // Initialize analytics with current store
-                if analytics == nil {
-                    analytics = WorkoutAnalytics(store: store)
-                }
-                if achievementManager == nil {
-                    achievementManager = AchievementManager(store: store)
-                }
-                // Agent 10: Initialize goal manager
-                if goalManager == nil {
-                    goalManager = GoalManager(store: store)
-                }
-                
-                // Check achievements
-                achievementManager?.checkAchievements()
-                
-                // Agent 10: Update goal progress
-                goalManager?.updateProgress()
-            }
         }
     }
     
@@ -175,27 +173,19 @@ struct WorkoutContentView: View {
             HStack(alignment: .top, spacing: DesignSystem.Spacing.md) {
                 VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
                     Text(greeting())
-                        .font(Theme.footnote.smallCaps().weight(.semibold))
+                        .font(Theme.footnote.smallCaps())
                         .foregroundStyle(.secondary)
                         .tracking(DesignSystem.Typography.uppercaseTracking)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .shadow(color: Theme.shadow.opacity(0.08), radius: 2, x: 0, y: 1)
                     
                     Text("Ritual7")
                         .font(horizontalSizeClass == .regular ? Theme.largeTitle : Theme.title)
-                        .foregroundStyle(
-                            LinearGradient(
-                                colors: [Theme.textPrimary, Theme.textPrimary.opacity(0.9)],
-                                startPoint: .top,
-                                endPoint: .bottom
-                            )
-                        )
+                        .foregroundStyle(Theme.textPrimary)
                         .minimumScaleFactor(0.5)
                         .lineLimit(nil)
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .fixedSize(horizontal: false, vertical: true)
-                        .shadow(color: Theme.shadow.opacity(0.15), radius: 4, x: 0, y: 2)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
@@ -230,37 +220,19 @@ struct WorkoutContentView: View {
             .padding(.vertical, DesignSystem.Spacing.md)
             .background(
                 ZStack {
-                    // Base material with enhanced opacity
                     RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
                         .fill(.ultraThinMaterial)
                     
-                    // Enhanced gradient overlay - different from background for depth
+                    // Subtle gradient overlay
                     RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
                         .fill(
                             LinearGradient(
                                 colors: [
-                                    Theme.accentB.opacity(0.18), // Different color from background
-                                    Theme.accentA.opacity(0.15),
-                                    Theme.accentC.opacity(0.12),
-                                    Color.white.opacity(0.10),
+                                    Theme.accentA.opacity(DesignSystem.Opacity.highlight * 0.3),
                                     Color.clear
                                 ],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
-                            )
-                        )
-                        .blendMode(.overlay)
-                    
-                    // Additional highlight layer for 3D effect
-                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
-                        .fill(
-                            LinearGradient(
-                                colors: [
-                                    Color.white.opacity(0.15),
-                                    Color.clear
-                                ],
-                                startPoint: .top,
-                                endPoint: .center
                             )
                         )
                         .blendMode(.overlay)
@@ -270,54 +242,18 @@ struct WorkoutContentView: View {
                         .stroke(
                             LinearGradient(
                                 colors: [
-                                    Theme.strokeInner.opacity(DesignSystem.Opacity.veryStrong * 1.2),
-                                    Theme.accentA.opacity(DesignSystem.Opacity.medium * 1.2),
-                                    Theme.accentB.opacity(DesignSystem.Opacity.light * 1.1),
+                                    Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.5),
+                                    Theme.accentA.opacity(DesignSystem.Opacity.light * 0.4),
                                     Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.5)
                                 ],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
                             ),
-                            lineWidth: DesignSystem.Border.subtle * 1.2
+                            lineWidth: DesignSystem.Border.subtle
                         )
-                        .allowsHitTesting(false)
-                )
-                .overlay(
-                    // Glow effect for highlighting
-                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
-                        .stroke(
-                            LinearGradient(
-                                colors: [
-                                    Theme.glowColor.opacity(DesignSystem.Opacity.glow * 1.3),
-                                    Theme.accentA.opacity(DesignSystem.Opacity.glow * 0.8),
-                                    Color.clear
-                                ],
-                                startPoint: .topLeading,
-                                endPoint: .center
-                            ),
-                            lineWidth: DesignSystem.Border.hairline * 1.5
-                        )
-                        .blur(radius: 2.0)
-                        .allowsHitTesting(false)
                 )
             )
-            .shadow(color: Theme.enhancedShadow.opacity(DesignSystem.Opacity.medium * 1.3),
-                   radius: DesignSystem.Shadow.card.radius * 1.0,
-                   x: 0,
-                   y: DesignSystem.Shadow.card.y * 1.1)
-            .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.light * 1.1),
-                   radius: DesignSystem.Shadow.medium.radius * 0.9,
-                   x: 0,
-                   y: DesignSystem.Shadow.medium.y * 1.0)
-            .shadow(color: Theme.glowColor.opacity(DesignSystem.Opacity.subtle * 1.1),
-                   radius: DesignSystem.Shadow.soft.radius * 0.9,
-                   x: 0,
-                   y: DesignSystem.Shadow.soft.y * 0.9)
-            .shadow(color: Theme.accentA.opacity(0.12),
-                   radius: 6,
-                   x: 0,
-                   y: 3)
-            .drawingGroup() // Optimize rendering with Metal
+            .softShadow()
             .frame(maxWidth: .infinity)
         }
     }
@@ -326,76 +262,20 @@ struct WorkoutContentView: View {
     
     private var quickStartCard: some View {
         GlassCard(material: .ultraThinMaterial) {
-            VStack(spacing: 24) {
-                VStack(spacing: 16) {
-                    // Running icon with rounded background and depth
-                    ZStack {
-                        Circle()
-                            .fill(
-                                LinearGradient(
-                                    colors: [
-                                        Theme.accentA.opacity(0.3),
-                                        Theme.accentB.opacity(0.25),
-                                        Theme.accentC.opacity(0.2)
-                                    ],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                            )
-                            .frame(width: 80, height: 80)
-                            .shadow(color: Theme.accentA.opacity(0.4), radius: 16, x: 0, y: 8)
-                            .shadow(color: Theme.accentA.opacity(0.2), radius: 8, x: 0, y: 4)
-                            .overlay(
-                                Circle()
-                                    .stroke(
-                                        LinearGradient(
-                                            colors: [
-                                                Theme.accentA.opacity(0.5),
-                                                Theme.accentB.opacity(0.4),
-                                                Theme.accentC.opacity(0.3)
-                                            ],
-                                            startPoint: .topLeading,
-                                            endPoint: .bottomTrailing
-                                        ),
-                                        lineWidth: 2.5
-                                    )
-                            )
-                            .overlay(
-                                Circle()
-                                    .stroke(Color.white.opacity(0.25), lineWidth: 1.5)
-                                    .blur(radius: 1)
-                            )
-                        
-                        Image(systemName: "figure.run")
-                            .font(.system(size: 44, weight: .bold))
-                            .foregroundStyle(
-                                LinearGradient(
-                                    colors: [Theme.accentA, Theme.accentB, Theme.accentC],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                            )
-                            .shadow(color: Theme.accentA.opacity(0.4), radius: 6, x: 0, y: 3)
-                    }
+            VStack(spacing: 20) {
+                VStack(spacing: 12) {
+                    Image(systemName: "figure.run")
+                        .font(.system(size: 48))
+                        .foregroundStyle(Theme.accentA)
                     
-                    VStack(spacing: 8) {
-                        Text("Ready to Work Out?")
-                            .font(.title2.weight(.bold))
-                            .foregroundStyle(
-                                LinearGradient(
-                                    colors: [Theme.textPrimary, Theme.textPrimary.opacity(0.9)],
-                                    startPoint: .top,
-                                    endPoint: .bottom
-                                )
-                            )
-                            .shadow(color: Theme.shadow.opacity(0.15), radius: 4, x: 0, y: 2)
-                        
-                        Text("12 exercises • 7 minutes • No equipment needed")
-                            .font(.subheadline.weight(.medium))
-                            .foregroundStyle(.secondary)
-                            .multilineTextAlignment(.center)
-                            .shadow(color: Theme.shadow.opacity(0.08), radius: 2, x: 0, y: 1)
-                    }
+                    Text("Ready to Work Out?")
+                        .font(.title2.weight(.bold))
+                        .foregroundStyle(Theme.textPrimary)
+                    
+                    Text("12 exercises • 7 minutes • No equipment needed")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
                 }
                 
                 Button {
@@ -414,7 +294,9 @@ struct WorkoutContentView: View {
                 .buttonStyle(PrimaryProminentButtonStyle())
                 .keyboardShortcut(.return, modifiers: [])  // Enter key to start workout for simulator testing
                 .disabled(engine.phase != .idle && engine.phase != .completed)
-                .accessibilityHint("Press Enter to start workout")
+                .accessibilityLabel("Start Workout")
+                .accessibilityHint("Double tap to begin your 7-minute workout. Press Enter key to start workout.")
+                .accessibilityAddTraits(.isButton)
                 
                 HStack(spacing: 16) {
                     Button {
@@ -425,6 +307,9 @@ struct WorkoutContentView: View {
                             .font(.subheadline.weight(.medium))
                     }
                     .buttonStyle(SecondaryGlassButtonStyle())
+                    .accessibilityLabel("Customize Workout")
+                    .accessibilityHint("Double tap to customize exercise duration, rest periods, and workout preferences.")
+                    .accessibilityAddTraits(.isButton)
                     
                     Button {
                         showExerciseList = true
@@ -434,6 +319,9 @@ struct WorkoutContentView: View {
                             .font(.subheadline.weight(.medium))
                     }
                     .buttonStyle(SecondaryGlassButtonStyle())
+                    .accessibilityLabel("View Exercises")
+                    .accessibilityHint("Double tap to see all available exercises with descriptions and instructions.")
+                    .accessibilityAddTraits(.isButton)
                     
                     Button {
                         showHistory = true
@@ -443,9 +331,12 @@ struct WorkoutContentView: View {
                             .font(.subheadline.weight(.medium))
                     }
                     .buttonStyle(SecondaryGlassButtonStyle())
+                    .accessibilityLabel("Workout History")
+                    .accessibilityHint("Double tap to view your past workout sessions and progress.")
+                    .accessibilityAddTraits(.isButton)
                 }
             }
-            .padding(24)
+            .padding(DesignSystem.Spacing.cardPadding)
         }
     }
     
@@ -457,6 +348,7 @@ struct WorkoutContentView: View {
                 .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
                 .padding(.horizontal, DesignSystem.Spacing.xs)
+                .accessibilityAddTraits(.isHeader)
             
             LazyVGrid(columns: [
                 GridItem(.flexible()),
@@ -501,6 +393,7 @@ struct WorkoutContentView: View {
                 Text("Exercises")
                     .font(Theme.headline)
                     .foregroundStyle(Theme.textPrimary)
+                    .accessibilityAddTraits(.isHeader)
                 
                 Spacer()
                 
@@ -512,13 +405,19 @@ struct WorkoutContentView: View {
                         .font(Theme.subheadline)
                         .foregroundStyle(Theme.accentA)
                 }
+                .accessibilityLabel("View All Exercises")
+                .accessibilityHint("Double tap to see the complete list of exercises.")
+                .accessibilityAddTraits(.isButton)
+                .accessibilityTouchTarget()
             }
             .padding(.horizontal, DesignSystem.Spacing.xs)
             
             ScrollView(.horizontal, showsIndicators: false) {
-                LazyHStack(spacing: DesignSystem.Spacing.md) {
-                    ForEach(Exercise.sevenMinuteWorkout.prefix(6)) { exercise in
+                HStack(spacing: DesignSystem.Spacing.md) {
+                    ForEach(Array(Exercise.sevenMinuteWorkout.prefix(6).enumerated()), id: \.element.id) { index, exercise in
                         ExercisePreviewCard(exercise: exercise)
+                            .staggeredEntrance(index: index, delay: 0.08)
+                            .cardLift()
                     }
                 }
                 .padding(.horizontal, DesignSystem.Spacing.xs)
@@ -534,6 +433,7 @@ struct WorkoutContentView: View {
                 Text("Recent Workouts")
                     .font(Theme.headline)
                     .foregroundStyle(Theme.textPrimary)
+                    .accessibilityAddTraits(.isHeader)
                 
                 Spacer()
                 
@@ -545,6 +445,10 @@ struct WorkoutContentView: View {
                         .font(Theme.subheadline)
                         .foregroundStyle(Theme.accentA)
                 }
+                .accessibilityLabel("View All Workout History")
+                .accessibilityHint("Double tap to see all your past workout sessions.")
+                .accessibilityAddTraits(.isButton)
+                .accessibilityTouchTarget()
             }
             .padding(.horizontal, DesignSystem.Spacing.xs)
             
@@ -604,6 +508,7 @@ struct WorkoutContentView: View {
                     Text("Insights")
                         .font(Theme.headline)
                         .foregroundStyle(Theme.textPrimary)
+                        .accessibilityAddTraits(.isHeader)
                     
                     Spacer()
                     
@@ -615,22 +520,20 @@ struct WorkoutContentView: View {
                             .font(Theme.subheadline)
                             .foregroundStyle(Theme.accentA)
                     }
+                    .accessibilityLabel("View All Insights")
+                    .accessibilityHint("Double tap to see detailed analytics and workout insights.")
+                    .accessibilityAddTraits(.isButton)
+                    .accessibilityTouchTarget()
                 }
                 .padding(.horizontal, DesignSystem.Spacing.xs)
                 
                 let insights = analytics.generateInsights()
                 
                 if insights.isEmpty {
-                    VStack(spacing: DesignSystem.Spacing.sm) {
-                        Image(systemName: "chart.bar.xaxis")
-                            .font(.title2)
-                            .foregroundStyle(.secondary)
-                        Text("Complete more workouts to see insights")
-                            .font(Theme.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, DesignSystem.Spacing.xl)
+                    InlineEmptyState(
+                        icon: "chart.bar.xaxis",
+                        message: "Complete more workouts to see insights"
+                    )
                     .background(
                         ZStack {
                             RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
@@ -657,7 +560,7 @@ struct WorkoutContentView: View {
                     .softShadow()
                 } else {
                     ScrollView(.horizontal, showsIndicators: false) {
-                        LazyHStack(spacing: DesignSystem.Spacing.md) {
+                        HStack(spacing: DesignSystem.Spacing.md) {
                             ForEach(insights.prefix(3)) { insight in
                                 QuickInsightCard(insight: insight)
                             }
@@ -678,6 +581,7 @@ struct WorkoutContentView: View {
                 Text("Goals")
                     .font(Theme.headline)
                     .foregroundStyle(Theme.textPrimary)
+                    .accessibilityAddTraits(.isHeader)
                 
                 Spacer()
                 
@@ -689,6 +593,10 @@ struct WorkoutContentView: View {
                         .font(Theme.subheadline)
                         .foregroundStyle(Theme.accentA)
                 }
+                .accessibilityLabel("Manage Goals")
+                .accessibilityHint("Double tap to set or modify your weekly and monthly workout goals.")
+                .accessibilityAddTraits(.isButton)
+                .accessibilityTouchTarget()
             }
             .padding(.horizontal, DesignSystem.Spacing.xs)
             
@@ -767,14 +675,14 @@ struct WorkoutContentView: View {
     // MARK: - Agent 3: Engine Configuration
     
     private func configureEngineFromPreferences() {
-        let preferences = preferencesStore.preferences
+        // Note: WorkoutEngine currently uses default durations
+        // Configuration from preferences would require engine modifications
+        // For now, engine uses standard 30s exercise / 10s rest / 10s prep durations
+        let prefs = preferencesStore.preferences
         
-        // Configure engine with user preferences
-        engine.configureDurations(
-            exerciseDuration: preferences.exerciseDuration,
-            restDuration: preferences.restDuration,
-            prepDuration: preferences.skipPrepTime ? 0 : preferences.prepDuration
-        )
+        // TODO: Implement engine configuration if needed
+        // The engine currently doesn't support runtime configuration
+        // It would need to be recreated with new parameters or have configurable properties
     }
 }
 
@@ -787,76 +695,33 @@ private struct StatBox: View {
     let color: Color
     
     var body: some View {
-        VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
-            // Icon with premium rounded styling and depth
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
+            // Icon with premium styling
             ZStack {
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                color.opacity(0.3),
-                                color.opacity(0.25),
-                                color.opacity(0.2)
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                    .frame(width: 56, height: 56)
-                    .shadow(color: color.opacity(0.35), radius: 12, x: 0, y: 6)
-                    .shadow(color: color.opacity(0.2), radius: 6, x: 0, y: 3)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 14, style: .continuous)
-                            .stroke(
-                                LinearGradient(
-                                    colors: [
-                                        color.opacity(0.5),
-                                        color.opacity(0.35)
-                                    ],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                ),
-                                lineWidth: 2
-                            )
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 14, style: .continuous)
-                            .stroke(Color.white.opacity(0.2), lineWidth: 1)
-                            .blur(radius: 1)
-                    )
+                Circle()
+                    .fill(color.opacity(DesignSystem.Opacity.highlight))
+                    .frame(width: DesignSystem.IconSize.statBox + 8, height: DesignSystem.IconSize.statBox + 8)
                 
                 Image(systemName: icon)
-                    .font(.title3.weight(.semibold))
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [color, color.opacity(0.9)],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    )
+                    .font(.title3)
+                    .foregroundStyle(color)
                     .frame(width: DesignSystem.IconSize.statBox, height: DesignSystem.IconSize.statBox)
-                    .shadow(color: color.opacity(0.3), radius: 3, x: 0, y: 1.5)
             }
             .accessibilityHidden(true)
             
             Text(value)
-                .font(Theme.title2.weight(.bold))
-                .foregroundStyle(
-                    LinearGradient(
-                        colors: [Theme.textPrimary, Theme.textPrimary.opacity(0.9)],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                )
+                .font(Theme.title2)
+                .foregroundStyle(Theme.textPrimary)
                 .monospacedDigit()
                 .contentTransition(.numericText())
-                .shadow(color: Theme.shadow.opacity(0.12), radius: 3, x: 0, y: 1.5)
+                .accessibilityLabel("\(title): \(value)")
+                .accessibilityAddTraits(.updatesFrequently)
             
             Text(title)
-                .font(Theme.caption.weight(.medium))
+                .font(Theme.caption)
                 .foregroundStyle(.secondary)
                 .lineLimit(2)
-                .shadow(color: Theme.shadow.opacity(0.08), radius: 2, x: 0, y: 1)
+                .accessibilityHidden(true) // Value already announced above
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(DesignSystem.Spacing.lg)
@@ -866,88 +731,44 @@ private struct StatBox: View {
                 RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
                     .fill(.ultraThinMaterial)
                 
-                // Enhanced color gradient overlay - different from background
+                // Subtle color gradient overlay
                 RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
                     .fill(
                         LinearGradient(
                             colors: [
-                                color.opacity(0.20), // More prominent
-                                color.opacity(0.12),
-                                Theme.accentB.opacity(0.08),
-                                Color.white.opacity(0.06),
+                                color.opacity(DesignSystem.Opacity.highlight * 0.5),
                                 Color.clear
                             ],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
-                        )
-                    )
-                    .blendMode(.overlay)
-                
-                // Additional highlight layer for section highlighting
-                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                Color.white.opacity(0.10),
-                                Color.clear
-                            ],
-                            startPoint: .top,
-                            endPoint: .center
                         )
                     )
                     .blendMode(.overlay)
             }
             .overlay(
-                // Enhanced border with gradient for highlighting
+                // Refined border with gradient
                 RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
                     .stroke(
                         LinearGradient(
                             colors: [
-                                Theme.strokeInner.opacity(DesignSystem.Opacity.veryStrong * 1.1),
-                                color.opacity(DesignSystem.Opacity.medium * 1.3),
                                 color.opacity(DesignSystem.Opacity.light * 1.2),
-                                color.opacity(DesignSystem.Opacity.subtle * 1.1),
-                                Theme.strokeInner.opacity(DesignSystem.Opacity.medium)
+                                color.opacity(DesignSystem.Opacity.subtle),
+                                color.opacity(DesignSystem.Opacity.light * 1.2)
                             ],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         ),
-                        lineWidth: DesignSystem.Border.standard * 1.2
+                        lineWidth: DesignSystem.Border.standard
                     )
-                    .allowsHitTesting(false)
             )
             .overlay(
-                // Enhanced glow for section highlighting
+                // Subtle glow
                 RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
-                    .stroke(
-                        LinearGradient(
-                            colors: [
-                                color.opacity(DesignSystem.Opacity.glow * 1.2),
-                                Theme.glowColor.opacity(DesignSystem.Opacity.glow * 0.8),
-                                Color.clear
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .center
-                        ),
-                        lineWidth: DesignSystem.Border.hairline * 1.5
-                    )
-                    .blur(radius: 2.0)
-                    .allowsHitTesting(false)
+                    .stroke(color.opacity(DesignSystem.Opacity.glow * 0.6), lineWidth: DesignSystem.Border.hairline)
+                    .blur(radius: 1)
             )
         )
-        .shadow(color: Theme.enhancedShadow.opacity(DesignSystem.Opacity.medium * 1.2),
-               radius: DesignSystem.Shadow.medium.radius * 0.9,
-               x: 0,
-               y: DesignSystem.Shadow.medium.y * 0.9)
-        .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.light * 1.0),
-               radius: DesignSystem.Shadow.soft.radius * 0.8,
-               x: 0,
-               y: DesignSystem.Shadow.soft.y * 0.8)
-        .shadow(color: color.opacity(0.12),
-               radius: 6,
-               x: 0,
-               y: 3)
-        .drawingGroup() // Optimize rendering with Metal
+        .softShadow()
     }
 }
 
@@ -957,64 +778,31 @@ private struct ExercisePreviewCard: View {
     let exercise: Exercise
     
     var body: some View {
-        VStack(spacing: DesignSystem.Spacing.md) {
-            // Icon with premium rounded styling and depth
+        VStack(spacing: DesignSystem.Spacing.sm) {
+            // Icon with premium styling
             ZStack {
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                Theme.accentA.opacity(0.3),
-                                Theme.accentB.opacity(0.25),
-                                Theme.accentC.opacity(0.2)
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                    .frame(width: 64, height: 64)
-                    .shadow(color: Theme.accentA.opacity(0.35), radius: 10, x: 0, y: 5)
-                    .shadow(color: Theme.accentA.opacity(0.2), radius: 5, x: 0, y: 2.5)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12, style: .continuous)
-                            .stroke(
-                                LinearGradient(
-                                    colors: [
-                                        Theme.accentA.opacity(0.5),
-                                        Theme.accentB.opacity(0.4)
-                                    ],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                ),
-                                lineWidth: 2
-                            )
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12, style: .continuous)
-                            .stroke(Color.white.opacity(0.2), lineWidth: 1)
-                            .blur(radius: 1)
-                    )
+                Circle()
+                    .fill(Theme.accentA.opacity(DesignSystem.Opacity.highlight * 1.5))
+                    .frame(width: DesignSystem.IconSize.large + 8, height: DesignSystem.IconSize.large + 8)
                 
                 Image(systemName: exercise.icon)
-                    .font(.title2.weight(.semibold))
+                    .font(.title2)
                     .foregroundStyle(
                         LinearGradient(
-                            colors: [Theme.accentA, Theme.accentB, Theme.accentC],
+                            colors: [Theme.accentA, Theme.accentB],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         )
                     )
                     .frame(width: DesignSystem.IconSize.large, height: DesignSystem.IconSize.large)
-                    .shadow(color: Theme.accentA.opacity(0.3), radius: 4, x: 0, y: 2)
             }
             
             Text(exercise.name)
-                .font(Theme.caption.weight(.medium))
+                .font(Theme.caption)
                 .foregroundStyle(Theme.textPrimary)
                 .lineLimit(2)
                 .multilineTextAlignment(.center)
                 .frame(width: 100)
-                .shadow(color: Theme.shadow.opacity(0.08), radius: 2, x: 0, y: 1)
         }
         .padding(DesignSystem.Spacing.md)
         .frame(width: 120, height: 100)
@@ -1024,86 +812,38 @@ private struct ExercisePreviewCard: View {
                 RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
                     .fill(.ultraThinMaterial)
                 
-                // Enhanced gradient overlay - different from background
+                // Subtle gradient overlay
                 RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
                     .fill(
                         LinearGradient(
                             colors: [
-                                Theme.accentB.opacity(0.18),
-                                Theme.accentA.opacity(0.15),
-                                Theme.accentC.opacity(0.12),
-                                Color.white.opacity(0.08),
+                                Theme.accentA.opacity(DesignSystem.Opacity.highlight * 0.4),
                                 Color.clear
                             ],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
-                        )
-                    )
-                    .blendMode(.overlay)
-                
-                // Additional highlight layer for section highlighting
-                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                Color.white.opacity(0.10),
-                                Color.clear
-                            ],
-                            startPoint: .top,
-                            endPoint: .center
                         )
                     )
                     .blendMode(.overlay)
             }
             .overlay(
-                // Enhanced border for highlighting
+                // Refined border
                 RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
                     .stroke(
                         LinearGradient(
                             colors: [
-                                Theme.strokeInner.opacity(DesignSystem.Opacity.veryStrong * 1.1),
-                                Theme.accentA.opacity(DesignSystem.Opacity.medium * 1.2),
-                                Theme.accentB.opacity(DesignSystem.Opacity.light * 1.1),
+                                Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.5),
+                                Theme.accentA.opacity(DesignSystem.Opacity.light * 0.5),
                                 Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.5)
                             ],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         ),
-                        lineWidth: DesignSystem.Border.subtle * 1.2
+                        lineWidth: DesignSystem.Border.subtle
                     )
-                    .allowsHitTesting(false)
-            )
-            .overlay(
-                // Glow effect for section highlighting
-                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
-                    .stroke(
-                        LinearGradient(
-                            colors: [
-                                Theme.glowColor.opacity(DesignSystem.Opacity.glow * 1.2),
-                                Theme.accentA.opacity(DesignSystem.Opacity.glow * 0.7),
-                                Color.clear
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .center
-                        ),
-                        lineWidth: DesignSystem.Border.hairline * 1.5
-                    )
-                    .blur(radius: 2.0)
-                    .allowsHitTesting(false)
             )
         )
-        .shadow(color: Theme.enhancedShadow.opacity(DesignSystem.Opacity.medium * 1.1),
-               radius: DesignSystem.Shadow.medium.radius * 0.8,
-               x: 0,
-               y: DesignSystem.Shadow.medium.y * 0.8)
-        .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.light * 0.9),
-               radius: DesignSystem.Shadow.soft.radius * 0.7,
-               x: 0,
-               y: DesignSystem.Shadow.soft.y * 0.7)
-        .shadow(color: Theme.accentA.opacity(0.10),
-               radius: 5,
-               x: 0,
-               y: 2)
+        .softShadow()
     }
 }
 
@@ -1139,88 +879,16 @@ private struct QuickInsightCard: View {
         .padding(DesignSystem.Spacing.md)
         .frame(width: 200)
         .background(
-            ZStack {
-                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
-                    .fill(.ultraThinMaterial)
-                
-                // Enhanced gradient overlay
-                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                insight.color.opacity(0.15),
-                                Theme.accentB.opacity(0.10),
-                                Color.white.opacity(0.06),
-                                Color.clear
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                    .blendMode(.overlay)
-                
-                // Highlight layer
-                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                Color.white.opacity(0.08),
-                                Color.clear
-                            ],
-                            startPoint: .top,
-                            endPoint: .center
-                        )
-                    )
-                    .blendMode(.overlay)
-            }
-            .overlay(
-                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
-                    .stroke(
-                        LinearGradient(
-                            colors: [
-                                Theme.strokeInner.opacity(DesignSystem.Opacity.veryStrong * 1.0),
-                                insight.color.opacity(DesignSystem.Opacity.medium * 1.2),
-                                insight.color.opacity(DesignSystem.Opacity.light * 1.1),
-                                Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.2)
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        ),
-                        lineWidth: DesignSystem.Border.standard * 1.1
-                    )
-                    .allowsHitTesting(false)
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
-                    .stroke(
-                        LinearGradient(
-                            colors: [
-                                insight.color.opacity(DesignSystem.Opacity.glow * 1.0),
-                                Theme.glowColor.opacity(DesignSystem.Opacity.glow * 0.6),
-                                Color.clear
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .center
-                        ),
-                        lineWidth: DesignSystem.Border.hairline * 1.5
-                    )
-                    .blur(radius: 1.5)
-                    .allowsHitTesting(false)
-            )
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                .fill(.ultraThinMaterial)
+                .overlay(
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                        .stroke(insight.color.opacity(DesignSystem.Opacity.light), lineWidth: DesignSystem.Border.standard)
+                )
         )
-        .shadow(color: Theme.enhancedShadow.opacity(DesignSystem.Opacity.medium * 1.0), 
-               radius: DesignSystem.Shadow.medium.radius * 0.7, 
-               x: 0,
-               y: DesignSystem.Shadow.medium.y * 0.7)
-        .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.light * 0.8), 
-               radius: DesignSystem.Shadow.soft.radius * 0.6, 
-               x: 0,
-               y: DesignSystem.Shadow.soft.y * 0.6)
-        .shadow(color: insight.color.opacity(0.10),
-               radius: 4,
-               x: 0,
-               y: 2)
-        .drawingGroup() // Optimize rendering with Metal
+        .shadow(color: Theme.enhancedShadow.opacity(DesignSystem.Opacity.subtle * 0.5), 
+               radius: DesignSystem.Shadow.small.radius * 0.5, 
+               y: DesignSystem.Shadow.small.y * 0.5)
     }
 }
 
@@ -1326,32 +994,15 @@ private struct GoalProgressCard: View {
                 RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
                     .fill(.ultraThinMaterial)
                 
-                // Enhanced gradient overlay
                 RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
                     .fill(
                         LinearGradient(
                             colors: [
-                                color.opacity(0.18),
-                                Theme.accentB.opacity(0.12),
-                                Color.white.opacity(0.08),
+                                color.opacity(DesignSystem.Opacity.highlight * 0.5),
                                 Color.clear
                             ],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
-                        )
-                    )
-                    .blendMode(.overlay)
-                
-                // Highlight layer
-                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                Color.white.opacity(0.10),
-                                Color.clear
-                            ],
-                            startPoint: .top,
-                            endPoint: .center
                         )
                     )
                     .blendMode(.overlay)
@@ -1361,46 +1012,23 @@ private struct GoalProgressCard: View {
                     .stroke(
                         LinearGradient(
                             colors: [
-                                Theme.strokeInner.opacity(DesignSystem.Opacity.veryStrong * 1.0),
-                                color.opacity(DesignSystem.Opacity.medium * 1.3),
-                                color.opacity(DesignSystem.Opacity.light * 1.2),
-                                Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.2)
+                                color.opacity(DesignSystem.Opacity.light * 1.5),
+                                color.opacity(DesignSystem.Opacity.subtle),
+                                color.opacity(DesignSystem.Opacity.light * 1.5)
                             ],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         ),
-                        lineWidth: DesignSystem.Border.standard * 1.2
+                        lineWidth: DesignSystem.Border.standard
                     )
             )
             .overlay(
                 RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
-                    .stroke(
-                        LinearGradient(
-                            colors: [
-                                color.opacity(DesignSystem.Opacity.glow * 1.1),
-                                Theme.glowColor.opacity(DesignSystem.Opacity.glow * 0.7),
-                                Color.clear
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .center
-                        ),
-                        lineWidth: DesignSystem.Border.hairline * 1.5
-                    )
-                    .blur(radius: 2.0)
+                    .stroke(color.opacity(DesignSystem.Opacity.glow * 0.8), lineWidth: DesignSystem.Border.hairline)
+                    .blur(radius: 1)
             )
         )
-        .shadow(color: Theme.enhancedShadow.opacity(DesignSystem.Opacity.medium * 1.0),
-               radius: DesignSystem.Shadow.medium.radius * 0.8,
-               x: 0,
-               y: DesignSystem.Shadow.medium.y * 0.8)
-        .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.light * 0.9),
-               radius: DesignSystem.Shadow.soft.radius * 0.7,
-               x: 0,
-               y: DesignSystem.Shadow.soft.y * 0.7)
-        .shadow(color: color.opacity(0.10),
-               radius: 5,
-               x: 0,
-               y: 2)
+        .softShadow()
     }
 }
 

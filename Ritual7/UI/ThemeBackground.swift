@@ -10,6 +10,7 @@ struct ThemeBackground: View {
             animatedGradient
             vignette
             grain
+            depthOfField
         }
         .ignoresSafeArea(.all)
         .allowsHitTesting(false)  // Allow touches to pass through to content above
@@ -39,10 +40,11 @@ struct ThemeBackground: View {
         RadialGradient(
             colors: [
                 Theme.enhancedShadow.opacity(0.25),  // More subtle
+                Theme.enhancedShadow.opacity(0.12),  // Refined middle stop
                 Theme.enhancedShadow.opacity(0.08),  // More refined
                 .clear
             ],
-            center: .center, startRadius: 0, endRadius: 1000  // Larger radius for softer effect
+            center: .center, startRadius: 0, endRadius: 1200  // Larger radius for softer effect
         )
         .blendMode(.multiply)
     }
@@ -50,9 +52,36 @@ struct ThemeBackground: View {
     private var grain: some View {
         // Refined grain texture for subtle sophistication
         Rectangle()
-            .fill(Color.white.opacity(0.015))  // More subtle grain
+            .fill(
+                // Subtle grain pattern using noise-like effect
+                LinearGradient(
+                    colors: [
+                        Color.white.opacity(0.015),
+                        Color.white.opacity(0.008),
+                        Color.white.opacity(0.015)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
             .allowsHitTesting(false)
             .blendMode(.overlay)
             .opacity(0.25)  // More refined opacity
+    }
+    
+    private var depthOfField: some View {
+        // Subtle depth of field effect for visual depth
+        RadialGradient(
+            colors: [
+                Theme.accentA.opacity(0.06),
+                Color.clear,
+                Theme.accentC.opacity(0.04)
+            ],
+            center: .topTrailing,
+            startRadius: 0,
+            endRadius: 800
+        )
+        .blendMode(.softLight)
+        .opacity(0.6)
     }
 }
