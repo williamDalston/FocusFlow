@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Transform your fitness in just 7 minutes with science-backed HIIT workouts. No equipment needed. Beautiful design. Apple Watch support.">
+    <title>Ritual7 - 7-Minute HIIT Workout App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 60px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .hero {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        h1 {
+            color: #667eea;
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .tagline {
+            font-size: 1.5em;
+            color: #666;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 18px 40px;
+            border-radius: 12px;
+            font-size: 1.2em;
+            font-weight: 600;
+            text-decoration: none;
+            margin: 20px 10px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            text-decoration: none;
+            color: white;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+        
+        .feature {
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .feature h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+        
+        .feature p {
+            color: #666;
+            font-size: 0.95em;
+        }
+        
+        .benefits {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 40px;
+            border-radius: 12px;
+            margin: 40px 0;
+        }
+        
+        .benefits h2 {
+            color: #667eea;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 2em;
+        }
+        
+        .benefit-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .benefit-item {
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .benefit-item::before {
+            content: "✅";
+            font-size: 1.2em;
+        }
+        
+        .platforms {
+            text-align: center;
+            margin: 40px 0;
+            padding: 30px;
+            background: #e7f3ff;
+            border-radius: 12px;
+        }
+        
+        .platforms h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        
+        .platform-icons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .platform-icon {
+            font-size: 2.5em;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px solid #f0f0f0;
+            color: #666;
+        }
+        
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5em;
+            }
+            
+            .tagline {
+                font-size: 1.2em;
+            }
+            
+            .container {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero">
+            <h1>Ritual7</h1>
+            <p class="tagline">Transform Your Fitness in Just 7 Minutes</p>
+            <p style="color: #666; margin-bottom: 30px; font-size: 1.1em;">
+                Science-backed HIIT workouts. No equipment needed. Beautiful design. Apple Watch support.
+            </p>
+            <a href="https://apps.apple.com/app/ritual7" class="cta-button">
+                📱 Download on App Store
+            </a>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">🏋️</div>
+                <h3>Science-Backed</h3>
+                <p>12 exercises based on research from the American College of Sports Medicine</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <h3>7 Minutes</h3>
+                <p>Complete full-body workout in just 7 minutes - perfect for busy schedules</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">🏠</div>
+                <h3>No Equipment</h3>
+                <p>Work out anywhere - no gym membership or equipment needed</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">⌚</div>
+                <h3>Apple Watch</h3>
+                <p>Full workout experience on your wrist with seamless sync</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">📊</div>
+                <h3>Track Progress</h3>
+                <p>Beautiful analytics, streaks, and achievements to stay motivated</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">🎨</div>
+                <h3>Beautiful Design</h3>
+                <p>Modern, intuitive interface that makes working out enjoyable</p>
+            </div>
+        </div>
+        
+        <div class="benefits">
+            <h2>Why Choose Ritual7?</h2>
+            <div class="benefit-list">
+                <div class="benefit-item">Time Efficient</div>
+                <div class="benefit-item">No Equipment Required</div>
+                <div class="benefit-item">Science-Backed Routine</div>
+                <div class="benefit-item">Progress Tracking</div>
+                <div class="benefit-item">Apple Watch Support</div>
+                <div class="benefit-item">HealthKit Integration</div>
+                <div class="benefit-item">Fully Accessible</div>
+                <div class="benefit-item">Beautiful Design</div>
+            </div>
+        </div>
+        
+        <div class="platforms">
+            <h3>Available On</h3>
+            <div class="platform-icons">
+                <div>
+                    <div class="platform-icon">📱</div>
+                    <div>iPhone</div>
+                </div>
+                <div>
+                    <div class="platform-icon">📱</div>
+                    <div>iPad</div>
+                </div>
+                <div>
+                    <div class="platform-icon">⌚</div>
+                    <div>Apple Watch</div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin: 40px 0;">
+            <a href="https://apps.apple.com/app/ritual7" class="cta-button">
+                Start Your 7-Minute Journey Today
+            </a>
+        </div>
+        
+        <div class="footer">
+            <p>© 2024 Ritual7. Transform your fitness in just 7 minutes.</p>
+            <p style="margin-top: 10px;">
+                <a href="https://williamDalston.github.io/ritual7-docs">Support</a> | 
+                <a href="mailto:support@ritual7.app">Contact</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+

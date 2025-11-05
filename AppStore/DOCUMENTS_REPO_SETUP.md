@@ -18,12 +18,27 @@ Create a **separate, public repository** for your support and marketing pages. T
 6. **Initialize:** ✅ Check "Add a README file"
 7. Click **"Create repository"**
 
-### Step 2: Upload Support Page
+### Step 2: Upload Pages
+
+**Option A: Support and Marketing in Same Repository**
 
 1. In your new repository, click **"Add file"** → **"Upload files"**
-2. Upload the `support.html` file from this project
-3. **Rename it to:** `index.html` (this makes it the default page)
-4. Click **"Commit changes"**
+2. Upload both `support.html` and `marketing.html` from this project
+3. **Rename `support.html` to:** `index.html` (this makes it the default/support page)
+4. **Keep `marketing.html` as:** `marketing.html` (or create a subfolder)
+5. Click **"Commit changes"**
+
+**Option B: Separate Repositories (Recommended)**
+
+**For Support Page:**
+1. Create repository: `ritual7-docs` (or `ritual7-support`)
+2. Upload `support.html` and rename to `index.html`
+3. Support URL: `https://williamDalston.github.io/ritual7-docs`
+
+**For Marketing Page:**
+1. Create repository: `ritual7` (or `ritual7-marketing`)
+2. Upload `marketing.html` and rename to `index.html`
+3. Marketing URL: `https://williamDalston.github.io/ritual7`
 
 ### Step 3: Enable GitHub Pages
 
@@ -33,20 +48,29 @@ Create a **separate, public repository** for your support and marketing pages. T
 4. Choose **"main"** branch and **"/ (root)"** folder
 5. Click **"Save"**
 
-### Step 4: Get Your Support URL
+### Step 4: Get Your URLs
 
-Your support page will be available at:
+**If using separate repositories:**
+
+**Support URL:**
 ```
 https://williamDalston.github.io/ritual7-docs
 ```
 
-*(Replace `ritual7-docs` with your actual repository name)*
+**Marketing URL:**
+```
+https://williamDalston.github.io/ritual7
+```
+
+*(Replace repository names with your actual repository names)*
 
 ### Step 5: Verify It Works
 
 1. Wait 2-3 minutes for GitHub Pages to deploy
-2. Visit your URL: `https://williamDalston.github.io/ritual7-docs`
-3. You should see your support page
+2. Visit your URLs:
+   - Support: `https://williamDalston.github.io/ritual7-docs`
+   - Marketing: `https://williamDalston.github.io/ritual7`
+3. You should see your pages
 
 ---
 
@@ -76,11 +100,17 @@ If you want to keep the current one as-is and create a new private one:
 
 ## 📝 Files in Documents Repository
 
-Your documents repository should **ONLY contain:**
-
-- ✅ `index.html` (support page)
+**Support Repository (`ritual7-docs`):**
+- ✅ `index.html` (support page - renamed from `support.html`)
 - ✅ `README.md` (optional - repository description)
-- ✅ `app-ads.txt` (if needed for AdMob)
+
+**Marketing Repository (`ritual7`):**
+- ✅ `index.html` (marketing page - renamed from `marketing.html`)
+- ✅ `README.md` (optional - repository description)
+
+**Both repositories should ONLY contain:**
+- ✅ Simple HTML pages
+- ✅ `app-ads.txt` (if needed for AdMob - can be in either repo)
 
 **DO NOT include:**
 - ❌ Any Swift/SwiftUI code
@@ -90,28 +120,49 @@ Your documents repository should **ONLY contain:**
 
 ---
 
-## 🎯 Final Support URL
+## 🎯 Final URLs
 
-Once set up, your support URL will be:
+Once set up, your URLs will be:
 
+**Support URL:**
 ```
 https://williamDalston.github.io/ritual7-docs
 ```
 
-*(Or whatever you name your repository)*
+**Marketing URL:**
+```
+https://williamDalston.github.io/ritual7
+```
 
-Use this URL in **App Store Connect** → **App Information** → **Support URL**
+*(Replace repository names with your actual repository names)*
+
+**Use these URLs in App Store Connect:**
+- **App Information** → **Support URL**: `https://williamDalston.github.io/ritual7-docs`
+- **App Information** → **Marketing URL**: `https://williamDalston.github.io/ritual7`
 
 ---
 
 ## ✅ Checklist
 
-- [ ] Created new public repository for documents
+**Support Repository:**
+- [ ] Created new public repository: `ritual7-docs`
 - [ ] Uploaded `support.html` (renamed to `index.html`)
 - [ ] Enabled GitHub Pages
 - [ ] Verified support page works
+
+**Marketing Repository:**
+- [ ] Created new public repository: `ritual7`
+- [ ] Uploaded `marketing.html` (renamed to `index.html`)
+- [ ] Enabled GitHub Pages
+- [ ] Verified marketing page works
+
+**App Repository:**
 - [ ] Made app code repository private
+- [ ] Verified code is protected
+
+**App Store Connect:**
 - [ ] Added support URL to App Store Connect
+- [ ] Added marketing URL to App Store Connect
 
 ---
 
