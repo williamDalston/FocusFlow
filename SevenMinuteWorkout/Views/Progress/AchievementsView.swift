@@ -122,40 +122,40 @@ struct AchievementCard: View {
     @EnvironmentObject private var theme: ThemeStore
     
     var body: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: DesignSystem.Spacing.md) {
             // Icon
             ZStack {
                 Circle()
                     .fill(
                         isUnlocked
-                        ? achievement.color.opacity(0.2)
-                        : Color.gray.opacity(0.1)
+                        ? achievement.color.opacity(DesignSystem.Opacity.subtle)
+                        : Color.gray.opacity(DesignSystem.Opacity.subtle * 0.5)
                     )
-                    .frame(width: 60, height: 60)
+                    .frame(width: DesignSystem.Spacing.xxxl * 1.25, height: DesignSystem.Spacing.xxxl * 1.25)
                 
                 Image(systemName: achievement.icon)
                     .font(.title2)
                     .foregroundStyle(
                         isUnlocked
                         ? achievement.color
-                        : Color.gray.opacity(0.5)
+                        : Color.gray.opacity(DesignSystem.Opacity.medium)
                     )
             }
             
             // Title
             Text(achievement.title)
-                .font(.headline.weight(.semibold))
+                .font(Theme.headline)
                 .foregroundStyle(
                     isUnlocked
                     ? Theme.textPrimary
-                    : Color.gray.opacity(0.7)
+                    : Color.gray.opacity(DesignSystem.Opacity.strong)
                 )
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
             
             // Description
             Text(achievement.description)
-                .font(.caption)
+                .font(Theme.caption)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
                 .lineLimit(3)
@@ -164,19 +164,21 @@ struct AchievementCard: View {
             if !isUnlocked && progress > 0 {
                 GeometryReader { geometry in
                     ZStack(alignment: .leading) {
-                        RoundedRectangle(cornerRadius: 4)
-                            .fill(Color.gray.opacity(0.2))
+                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small * 0.5)
+                            .fill(Color.gray.opacity(DesignSystem.Opacity.subtle))
                         
-                        RoundedRectangle(cornerRadius: 4)
-                            .fill(achievement.color.opacity(0.5))
+                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small * 0.5)
+                            .fill(achievement.color.opacity(DesignSystem.Opacity.medium))
                             .frame(width: geometry.size.width * progress)
+                            .animation(AnimationConstants.smoothSpring, value: progress)
                     }
                 }
-                .frame(height: 4)
+                .frame(height: DesignSystem.Spacing.xs)
                 
                 Text("\(Int(progress * 100))%")
-                    .font(.caption2)
+                    .font(Theme.caption2)
                     .foregroundStyle(.secondary)
+                    .monospacedDigit()
             }
             
             // Rarity badge
@@ -192,50 +194,52 @@ struct AchievementCard: View {
                         description: achievement.description,
                         icon: achievement.icon
                     )
+                    Haptics.tap()
                 } label: {
                     Label("Share", systemImage: "square.and.arrow.up")
-                        .font(.caption.weight(.semibold))
+                        .font(Theme.caption)
                         .foregroundStyle(achievement.color)
                 }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
             }
         }
-        .padding()
+        .cardPadding()
         .frame(maxWidth: .infinity)
         .background(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
                 .fill(
                     isUnlocked
                     ? .ultraThinMaterial
-                    : Color.gray.opacity(0.05)
+                    : Color.gray.opacity(DesignSystem.Opacity.subtle * 0.25)
                 )
                 .overlay(
-                    RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
                         .stroke(
                             isUnlocked
-                            ? achievement.color.opacity(0.3)
-                            : Color.gray.opacity(0.2),
-                            lineWidth: isUnlocked ? 1.5 : 0.5
+                            ? achievement.color.opacity(DesignSystem.Opacity.subtle * 1.5)
+                            : Color.gray.opacity(DesignSystem.Opacity.subtle),
+                            lineWidth: isUnlocked ? DesignSystem.Border.emphasis : DesignSystem.Border.subtle
                         )
                 )
         )
-        .opacity(isUnlocked ? 1.0 : 0.7)
+        .cardShadow()
+        .opacity(isUnlocked ? 1.0 : DesignSystem.Opacity.strong)
     }
     
     private var rarityBadge: some View {
-        HStack(spacing: 4) {
+        HStack(spacing: DesignSystem.Spacing.xs) {
             Image(systemName: rarityIcon)
-                .font(.caption2)
+                .font(Theme.caption2)
             Text(rarityText)
-                .font(.caption2.weight(.semibold))
+                .font(Theme.caption2)
         }
         .foregroundStyle(rarityColor)
-        .padding(.horizontal, 8)
-        .padding(.vertical, 4)
+        .padding(.horizontal, DesignSystem.Spacing.sm)
+        .padding(.vertical, DesignSystem.Spacing.xs)
         .background(
             Capsule()
-                .fill(rarityColor.opacity(0.2))
+                .fill(rarityColor.opacity(DesignSystem.Opacity.subtle))
         )
     }
     

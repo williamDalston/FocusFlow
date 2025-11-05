@@ -1,6 +1,11 @@
 import Foundation
 
 /// Agent 3 & 16: Custom Workout - User-created workout configurations
+///
+/// This model represents a user-defined workout routine with customizable exercises,
+/// durations, and rest periods. Supports both simple (uniform durations) and advanced
+/// (per-exercise customization) workout configurations.
+///
 /// Agent 16: Enhanced with custom exercise order, per-exercise rest periods, and sets
 struct CustomWorkout: Identifiable, Codable, Hashable {
     let id: UUID
@@ -64,7 +69,11 @@ struct CustomWorkout: Identifiable, Codable, Hashable {
         self.useCustomRest = useCustomRest
     }
     
+    // MARK: - Agent 16: Per-Exercise Customization Methods
+    
     /// Agent 16: Get rest duration for a specific exercise
+    /// - Parameter exerciseId: The UUID of the exercise
+    /// - Returns: The rest duration for this exercise (custom if set, otherwise default)
     func getRestDuration(for exerciseId: UUID) -> TimeInterval {
         if useCustomRest, let customRest = customRestDurations[exerciseId] {
             return customRest
@@ -73,6 +82,8 @@ struct CustomWorkout: Identifiable, Codable, Hashable {
     }
     
     /// Agent 16: Get exercise duration for a specific exercise
+    /// - Parameter exerciseId: The UUID of the exercise
+    /// - Returns: The exercise duration for this exercise (custom if set, otherwise default)
     func getExerciseDuration(for exerciseId: UUID) -> TimeInterval {
         if useCustomDurations, let customDuration = customExerciseDurations[exerciseId] {
             return customDuration
@@ -81,6 +92,8 @@ struct CustomWorkout: Identifiable, Codable, Hashable {
     }
     
     /// Agent 16: Get sets count for a specific exercise
+    /// - Parameter exerciseId: The UUID of the exercise
+    /// - Returns: The number of sets for this exercise (defaults to 1 if not set)
     func getSets(for exerciseId: UUID) -> Int {
         return exerciseSets[exerciseId] ?? 1
     }

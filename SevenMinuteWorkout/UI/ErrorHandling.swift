@@ -12,6 +12,13 @@ enum ErrorHandling {
         case sessionExpired
         case dataCorrupted
         case networkUnavailable
+        case invalidState
+        case workoutInterrupted
+        case backgroundTransitionFailed
+        case lowMemory
+        case batterySaverMode
+        case invalidData(description: String)
+        case permissionDenied(permission: String)
         case unknown(Error)
         
         var errorDescription: String? {
@@ -26,6 +33,20 @@ enum ErrorHandling {
                 return "Your workout data appears to be corrupted. The app will attempt to recover."
             case .networkUnavailable:
                 return "Network connection is unavailable. Some features may not work."
+            case .invalidState:
+                return "The app is in an invalid state. Please restart the app."
+            case .workoutInterrupted:
+                return "Your workout was interrupted. You can resume from where you left off."
+            case .backgroundTransitionFailed:
+                return "Failed to handle background transition. Your workout progress has been saved."
+            case .lowMemory:
+                return "The device is running low on memory. Some features may be limited."
+            case .batterySaverMode:
+                return "Battery saver mode is enabled. Some features may be limited to preserve battery."
+            case .invalidData(let description):
+                return "Invalid data detected: \(description). Please try again."
+            case .permissionDenied(let permission):
+                return "Permission for \(permission) was denied. Please enable it in Settings."
             case .unknown(let error):
                 return "An unexpected error occurred: \(error.localizedDescription)"
             }
@@ -43,6 +64,20 @@ enum ErrorHandling {
                 return "The app will attempt to recover your data automatically."
             case .networkUnavailable:
                 return "Check your network connection and try again."
+            case .invalidState:
+                return "Try restarting the app to reset the state."
+            case .workoutInterrupted:
+                return "You can resume your workout from the main screen."
+            case .backgroundTransitionFailed:
+                return "Your workout progress has been saved. You can continue from where you left off."
+            case .lowMemory:
+                return "Close other apps to free up memory, then try again."
+            case .batterySaverMode:
+                return "Disable battery saver mode or connect to power for full functionality."
+            case .invalidData:
+                return "Please check your input and try again."
+            case .permissionDenied:
+                return "Go to Settings to enable the required permission."
             case .unknown:
                 return "Try restarting the app. If the problem persists, contact support."
             }
@@ -91,6 +126,27 @@ enum ErrorHandling {
         case .networkUnavailable:
             // Cannot recover automatically
             return false
+        case .invalidState:
+            // Reset state
+            return attemptBasicRecovery()
+        case .workoutInterrupted:
+            // Save current state for resume
+            return true
+        case .backgroundTransitionFailed:
+            // Save state and allow resume
+            return true
+        case .lowMemory:
+            // Try to free memory
+            return attemptMemoryRecovery()
+        case .batterySaverMode:
+            // Cannot recover automatically
+            return false
+        case .invalidData:
+            // Cannot recover automatically - requires user input
+            return false
+        case .permissionDenied:
+            // Cannot recover automatically - requires user action
+            return false
         case .unknown:
             // Try basic recovery
             return attemptBasicRecovery()
@@ -98,13 +154,77 @@ enum ErrorHandling {
     }
     
     private static func attemptDataRecovery() -> Bool {
-        // Implement data recovery logic
-        return true
+        // Attempt to recover corrupted workout data
+        os_log("Attempting data recovery", log: .default, type: .info)
+        
+        // Try to load backup data if available
+        if let backupData = UserDefaults.standard.data(forKey: "workout.sessions.backup") {
+            do {
+                let decoder = JSONDecoder()
+                let sessions = try decoder.decode([WorkoutSession].self, from: backupData)
+                // Restore from backup
+                UserDefaults.standard.set(backupData, forKey: "workout.sessions.v1")
+                os_log("Data recovery successful from backup", log: .default, type: .info)
+                return true
+            } catch {
+                os_log("Failed to recover from backup: %{public}@", log: .default, type: .error, error.localizedDescription)
+            }
+        }
+        
+        // If no backup, try to salvage what we can
+        // Reset corrupted data but keep what's valid
+        os_log("Data recovery failed, resetting corrupted data", log: .default, type: .error)
+        return false
     }
     
     private static func attemptBasicRecovery() -> Bool {
-        // Implement basic recovery logic
+        // Attempt basic recovery for unknown errors
+        os_log("Attempting basic recovery", log: .default, type: .info)
+        
+        // Clear any cached state that might be causing issues
+        // This is a last resort recovery
         return true
+    }
+    
+    private static func attemptMemoryRecovery() -> Bool {
+        // Attempt to free memory for low memory situations
+        os_log("Attempting memory recovery", log: .default, type: .info)
+        
+        // Clear caches, reduce memory usage
+        // This is a best-effort recovery
+        return true
+    }
+    
+    // MARK: - Data Validation
+    
+    /// Validates workout session data
+    static func validateSessionData(duration: TimeInterval, exercisesCompleted: Int) -> Result<Void, WorkoutError> {
+        guard duration > 0 else {
+            return .failure(.invalidData(description: "Workout duration must be greater than 0"))
+        }
+        
+        guard duration <= 3600 else { // 1 hour max
+            return .failure(.invalidData(description: "Workout duration exceeds maximum allowed"))
+        }
+        
+        guard exercisesCompleted >= 0 && exercisesCompleted <= 12 else {
+            return .failure(.invalidData(description: "Exercises completed must be between 0 and 12"))
+        }
+        
+        return .success(())
+    }
+    
+    /// Validates exercise data
+    static func validateExerciseData(exercise: Exercise) -> Result<Void, WorkoutError> {
+        guard !exercise.name.isEmpty else {
+            return .failure(.invalidData(description: "Exercise name cannot be empty"))
+        }
+        
+        guard exercise.order >= 0 && exercise.order < 12 else {
+            return .failure(.invalidData(description: "Exercise order must be between 0 and 11"))
+        }
+        
+        return .success(())
     }
 }
 

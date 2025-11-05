@@ -1,9 +1,9 @@
 # Privacy Policy for 7-Minute Workout
 
-**Last Updated:** [Date]  
+**Last Updated:** November 5, 2024  
 **App Name:** 7-Minute Workout  
-**Developer:** [Your Name/Company]  
-**Contact:** [Your Email]
+**Developer:** William Alston  
+**Contact:** [Your Email Address]
 
 ---
 
@@ -160,7 +160,7 @@ Your continued use of the app after changes constitutes acceptance of the update
 If you have questions about this Privacy Policy or our data practices, please contact us:
 
 **Email:** [Your Email Address]  
-**Website:** [Your Website URL]  
+**Website:** [Your Website URL - if applicable]  
 **Address:** [Your Address - if applicable]
 
 ---

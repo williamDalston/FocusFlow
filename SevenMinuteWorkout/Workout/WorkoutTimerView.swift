@@ -102,21 +102,45 @@ struct WorkoutTimerView: View {
                 }
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("appDidEnterBackground"))) { _ in
+            // Agent 6: Handle background transition
+            engine.handleBackgroundTransition()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("appDidBecomeActive"))) { _ in
+            // Agent 6: Handle foreground transition
+            engine.handleForegroundTransition()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
+            // Agent 6: Handle interruption (phone call, etc.)
+            engine.handleInterruption()
+        }
         .sheet(isPresented: $showCompletionCelebration) {
             // Agent 11: Enhanced completion celebration
             let calendar = Calendar.current
             let today = Date()
             let hasWorkoutToday = store.sessions.contains { calendar.isDate($0.date, inSameDayAs: today) }
             
+            // Agent 2: Check personal best and achievements
+            let duration = engine.currentSessionDuration ?? 420
+            let exercisesCompleted = engine.exercises.count
+            let isPersonalBest = store.isPersonalBest(duration: duration, exercisesCompleted: exercisesCompleted)
+            
+            // Get unlocked achievements from AchievementManager
+            // Check achievements with a fresh manager instance (will load from persistence)
+            let achievementManager = AchievementManager(store: store)
+            achievementManager.checkAchievements()
+            // Convert Achievement enum to String array for WorkoutCompletionStats
+            let unlockedAchievements = achievementManager.unlockedAchievements.map { $0.rawValue }
+            
             let stats = WorkoutCompletionStats(
-                duration: engine.currentSessionDuration ?? 420,
-                exercisesCompleted: engine.exercises.count,
+                duration: duration,
+                exercisesCompleted: exercisesCompleted,
                 estimatedCalories: engine.exercises.count * 5,
                 repsCompleted: repCounter.currentReps,
                 currentStreak: store.streak,
                 isStreakDay: hasWorkoutToday,
-                isPersonalBest: false, // TODO: Check if personal best
-                unlockedAchievements: [] // TODO: Get unlocked achievements
+                isPersonalBest: isPersonalBest,
+                unlockedAchievements: unlockedAchievements
             )
             CompletionCelebrationView(
                 workoutStats: stats,
@@ -202,7 +226,7 @@ struct WorkoutTimerView: View {
             if engine.phase == .preparing {
                 if let firstExercise = engine.nextExercise {
                     Text("First up: \(firstExercise.name)")
-                        .font(.headline)
+                        .font(Theme.headline)
                         .foregroundStyle(.secondary)
                 }
             } else if engine.phase == .exercise || engine.phase == .rest {
@@ -439,36 +463,36 @@ struct WorkoutTimerView: View {
                 .buttonStyle(PrimaryProminentButtonStyle())
             } else if engine.phase == .completed {
                 // Workout completed
-                VStack(spacing: 12) {
+                VStack(spacing: DesignSystem.Spacing.md) {
                     Image(systemName: "checkmark.circle.fill")
-                        .font(.system(size: 64))
+                        .font(.system(size: DesignSystem.IconSize.huge))
                         .foregroundStyle(.green)
                     
                     Text("Workout Complete!")
-                        .font(.title2.weight(.bold))
+                        .font(Theme.title2)
                         .foregroundStyle(Theme.textPrimary)
                 }
-                .padding(.vertical, 24)
+                .padding(.vertical, DesignSystem.Spacing.xl)
             } else {
                 // Pause/Resume and Skip Rest buttons
-                HStack(spacing: 12) {
-                Button {
-                    if engine.isPaused {
-                        engine.resume()
-                    } else {
-                        engine.pause()
+                HStack(spacing: DesignSystem.Spacing.md) {
+                    Button {
+                        if engine.isPaused {
+                            engine.resume()
+                        } else {
+                            engine.pause()
+                        }
+                        Haptics.tap()
+                    } label: {
+                        Label(engine.isPaused ? "Resume" : "Pause", 
+                              systemImage: engine.isPaused ? "play.fill" : "pause.fill")
+                            .font(Theme.headline)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: DesignSystem.ButtonSize.standard.height)
                     }
-                    Haptics.tap()
-                } label: {
-                    Label(engine.isPaused ? "Resume" : "Pause", 
-                          systemImage: engine.isPaused ? "play.fill" : "pause.fill")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 50)
-                }
-                .buttonStyle(SecondaryGlassButtonStyle())
-                .accessibilityLabel(engine.isPaused ? "Resume workout" : "Pause workout")
-                .accessibilityHint("Double tap to \(engine.isPaused ? "resume" : "pause") the workout")
+                    .buttonStyle(SecondaryGlassButtonStyle())
+                    .accessibilityLabel(engine.isPaused ? "Resume workout" : "Pause workout")
+                    .accessibilityHint("Double tap to \(engine.isPaused ? "resume" : "pause") the workout")
                     
                     if engine.phase == .rest {
                         Button {
@@ -476,9 +500,9 @@ struct WorkoutTimerView: View {
                             Haptics.tap()
                         } label: {
                             Label("Skip Rest", systemImage: "forward.fill")
-                                .font(.headline)
+                                .font(Theme.headline)
                                 .frame(maxWidth: .infinity)
-                                .frame(height: 50)
+                                .frame(height: DesignSystem.ButtonSize.standard.height)
                         }
                         .buttonStyle(SecondaryGlassButtonStyle())
                     } else if engine.phase == .preparing {
@@ -487,9 +511,9 @@ struct WorkoutTimerView: View {
                             Haptics.tap()
                         } label: {
                             Label("Skip Prep", systemImage: "forward.fill")
-                                .font(.headline)
+                                .font(Theme.headline)
                                 .frame(maxWidth: .infinity)
-                                .frame(height: 50)
+                                .frame(height: DesignSystem.ButtonSize.standard.height)
                         }
                         .buttonStyle(SecondaryGlassButtonStyle())
                     }
@@ -499,11 +523,12 @@ struct WorkoutTimerView: View {
                 Button(role: .destructive) {
                     engine.stop()
                     dismiss()
+                    Haptics.tap()
                 } label: {
                     Text("Stop Workout")
-                        .font(.headline)
+                        .font(Theme.headline)
                         .frame(maxWidth: .infinity)
-                        .frame(height: 50)
+                        .frame(height: DesignSystem.ButtonSize.standard.height)
                 }
                 .buttonStyle(.bordered)
             }
@@ -537,26 +562,27 @@ struct WorkoutTimerView: View {
             Color.black.opacity(0.7)
                 .ignoresSafeArea()
             
-            VStack(spacing: 24) {
+            VStack(spacing: DesignSystem.Spacing.xl) {
                 Image(systemName: "checkmark.circle.fill")
-                    .font(.system(size: 80))
+                    .font(.system(size: DesignSystem.IconSize.huge * 1.25))
                     .foregroundStyle(.green)
                 
                 Text("Journey Complete!")
-                    .font(.largeTitle.weight(.bold))
+                    .font(Theme.largeTitle)
                     .foregroundStyle(.white)
                 
                 Text("You've reached your destination for today.")
-                    .font(.title3)
-                    .foregroundStyle(.white.opacity(0.9))
+                    .font(Theme.title3)
+                    .foregroundStyle(.white.opacity(DesignSystem.Opacity.veryStrong))
                     .multilineTextAlignment(.center)
                 
                 // Streak message
                 if store.streak > 0 {
                     Text("You're on a \(store.streak) day streak! 🔥")
-                        .font(.title3.weight(.semibold))
+                        .font(Theme.title3)
                         .foregroundStyle(.orange)
-                        .padding(.top, 8)
+                        .monospacedDigit()
+                        .padding(.top, DesignSystem.Spacing.sm)
                 }
                 
                 // Stats grid
@@ -565,7 +591,7 @@ struct WorkoutTimerView: View {
                 let seconds = Int(duration) % 60
                 let calories = engine.exercises.count * 5 // Rough estimate: 5 calories per exercise
                 
-                HStack(spacing: 20) {
+                HStack(spacing: DesignSystem.Spacing.xl) {
                     CompletionStatCard(
                         value: String(format: "%d:%02d", minutes, seconds),
                         label: "Time",
@@ -584,7 +610,7 @@ struct WorkoutTimerView: View {
                         icon: "flame.fill"
                     )
                 }
-                .padding(.top, 16)
+                .padding(.top, DesignSystem.Spacing.lg)
                 
                 // Share button
                 Button {
@@ -693,24 +719,26 @@ private struct CompletionStatCard: View {
     let icon: String
     
     var body: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: DesignSystem.Spacing.sm) {
             Image(systemName: icon)
                 .font(.title2)
-                .foregroundStyle(.white.opacity(0.9))
+                .foregroundStyle(.white.opacity(DesignSystem.Opacity.veryStrong))
+                .frame(width: DesignSystem.IconSize.statBox, height: DesignSystem.IconSize.statBox)
             
             Text(value)
-                .font(.title2.weight(.bold))
+                .font(Theme.title2)
                 .foregroundStyle(.white)
+                .monospacedDigit()
             
             Text(label)
-                .font(.caption)
-                .foregroundStyle(.white.opacity(0.8))
+                .font(Theme.caption)
+                .foregroundStyle(.white.opacity(DesignSystem.Opacity.veryStrong))
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 16)
+        .padding(.vertical, DesignSystem.Spacing.lg)
         .background(
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(.white.opacity(0.1))
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                .fill(.white.opacity(DesignSystem.Opacity.subtle * 0.5))
         )
     }
 }

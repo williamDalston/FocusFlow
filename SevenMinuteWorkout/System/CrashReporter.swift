@@ -79,10 +79,29 @@ final class CrashReporter {
         // Call custom handler if set (e.g., Firebase Crashlytics)
         customCrashHandler?(error, errorInfo)
         
-        // TODO: Integrate with crash reporting service
-        // Example: Firebase Crashlytics
-        // Crashlytics.crashlytics().record(error: error)
-        // Crashlytics.crashlytics().setCustomValue(context, forKey: "error_context")
+        // Agent 2: Integration point for crash reporting service
+        // To integrate with Firebase Crashlytics:
+        // 1. Add Firebase SDK to project
+        // 2. Import FirebaseCrashlytics
+        // 3. Uncomment and configure:
+        //    Crashlytics.crashlytics().record(error: error)
+        //    if let context = context {
+        //        for (key, value) in context {
+        //            Crashlytics.crashlytics().setCustomValue(value, forKey: key)
+        //        }
+        //    }
+        //
+        // To integrate with Sentry:
+        // 1. Add Sentry SDK to project
+        // 2. Import Sentry
+        // 3. Uncomment and configure:
+        //    SentrySDK.capture(error: error) { scope in
+        //        if let context = context {
+        //            for (key, value) in context {
+        //                scope.setContext(value: value, key: key)
+        //            }
+        //        }
+        //    }
     }
     
     /// Logs a message with a specific level
@@ -139,9 +158,8 @@ final class CrashReporter {
     func recordNonFatalError(_ error: Error, context: [String: Any]? = nil) {
         logError(error, context: context)
         
-        // TODO: Integrate with crash reporting service
-        // Example: Firebase Crashlytics
-        // Crashlytics.crashlytics().record(error: error)
+        // Agent 2: Integration point for non-fatal error reporting
+        // See logError method for integration examples with Firebase Crashlytics or Sentry
     }
     
     // MARK: - User Context
@@ -149,19 +167,21 @@ final class CrashReporter {
     /// Sets user identifier for crash reports
     /// - Parameter userId: User identifier (optional for privacy)
     func setUserIdentifier(_ userId: String?) {
-        // TODO: Integrate with crash reporting service
-        // Example: Firebase Crashlytics
-        // Crashlytics.crashlytics().setUserID(userId)
+        // Agent 2: Integration point for user identification
+        // Firebase Crashlytics: Crashlytics.crashlytics().setUserID(userId)
+        // Sentry: SentrySDK.setUser(User(userId: userId))
     }
     
     /// Sets custom user properties
     /// - Parameter properties: Dictionary of user properties
     func setUserProperties(_ properties: [String: String]) {
-        // TODO: Integrate with crash reporting service
-        // Example: Firebase Crashlytics
-        // for (key, value) in properties {
-        //     Crashlytics.crashlytics().setCustomValue(value, forKey: key)
-        // }
+        // Agent 2: Integration point for user properties
+        // Firebase Crashlytics:
+        //   for (key, value) in properties {
+        //       Crashlytics.crashlytics().setCustomValue(value, forKey: key)
+        //   }
+        // Sentry:
+        //   SentrySDK.setUser(User(data: properties))
     }
     
     // MARK: - Breadcrumbs
@@ -175,10 +195,12 @@ final class CrashReporter {
             os_log("📍 Breadcrumb: %{public}@", log: .default, type: .debug, message)
         }
         
-        // TODO: Integrate with crash reporting service
-        // Example: Sentry
-        // SentrySDK.addBreadcrumb(Breadcrumb(level: .info, category: "user_action"))
-        // breadcrumb.message = message
+        // Agent 2: Integration point for breadcrumbs
+        // Sentry:
+        //   let breadcrumb = Breadcrumb(level: .info, category: "user_action")
+        //   breadcrumb.message = message
+        //   SentrySDK.addBreadcrumb(breadcrumb)
+        // Firebase Crashlytics: Breadcrumbs are automatically captured
     }
 }
 

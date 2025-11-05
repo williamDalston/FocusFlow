@@ -21,11 +21,6 @@ final class WorkoutStore: ObservableObject {
     private let healthKitManager = HealthKitManager.shared
     private let healthKitStore = HealthKitStore.shared
     
-    init() {
-        load()
-        recalcStreakIfNeeded()
-        setupWatchConnectivity()
-    }
     
     private func setupWatchConnectivity() {
         watchSessionManager = WatchSessionManager.shared
@@ -35,6 +30,18 @@ final class WorkoutStore: ObservableObject {
     // MARK: - Public API
     
     func addSession(duration: TimeInterval, exercisesCompleted: Int, notes: String? = nil, startDate: Date? = nil) {
+        // Validate session data
+        let validationResult = ErrorHandling.validateSessionData(duration: duration, exercisesCompleted: exercisesCompleted)
+        
+        switch validationResult {
+        case .failure(let error):
+            ErrorHandling.handleError(error, context: "addSession")
+            os_log("Failed to add session: Invalid data", log: .default, type: .error)
+            return
+        case .success:
+            break
+        }
+        
         let sessionDate = startDate ?? Date()
         let newSession = WorkoutSession(
             date: sessionDate,
@@ -46,6 +53,10 @@ final class WorkoutStore: ObservableObject {
         bumpStreakIfNeeded()
         totalWorkouts += 1
         totalMinutes += duration / 60.0
+        
+        // Create backup before saving
+        createBackup()
+        
         save()
         
         // Agent 7: Check for achievements
@@ -164,24 +175,82 @@ final class WorkoutStore: ObservableObject {
     
     // MARK: - Persistence
     
-    private func load() {
-        let d = UserDefaults.standard
-        
-        // Load sessions
-        if let data = d.data(forKey: sessionsKey) {
-            if let decoded = try? JSONDecoder().decode([WorkoutSession].self, from: data) {
-                sessions = decoded
-            } else {
-                sessions = []
-            }
-        } else {
-            sessions = []
+    // MARK: - Data Backup & Recovery
+    
+    /// Creates a backup of current session data
+    private func createBackup() {
+        do {
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(sessions)
+            UserDefaults.standard.set(data, forKey: "workout.sessions.backup")
+        } catch {
+            os_log("Failed to create backup: %{public}@", log: .default, type: .error, error.localizedDescription)
         }
-        
-        // Load statistics
-        streak = d.integer(forKey: streakKey)
-        totalWorkouts = d.integer(forKey: totalWorkoutsKey)
-        totalMinutes = d.double(forKey: totalMinutesKey)
+    }
+    
+    /// Attempts to recover from corrupted data
+    private func attemptDataRecovery() -> Bool {
+        // Try to load from backup
+        if let backupData = UserDefaults.standard.data(forKey: "workout.sessions.backup") {
+            do {
+                let decoder = JSONDecoder()
+                let recoveredSessions = try decoder.decode([WorkoutSession].self, from: backupData)
+                sessions = recoveredSessions
+                recalculateStatistics()
+                os_log("Data recovery successful from backup", log: .default, type: .info)
+                return true
+            } catch {
+                os_log("Failed to recover from backup: %{public}@", log: .default, type: .error, error.localizedDescription)
+            }
+        }
+        return false
+    }
+    
+    /// Recalculates statistics from sessions
+    private func recalculateStatistics() {
+        totalWorkouts = sessions.count
+        totalMinutes = sessions.reduce(0) { $0 + $1.duration / 60.0 }
+        recalcStreakIfNeeded()
+    }
+    
+    private func load() {
+        // Try to load data with error handling
+        do {
+            guard let data = UserDefaults.standard.data(forKey: sessionsKey) else {
+                // No data saved yet, this is normal for first launch
+                return
+            }
+            
+            let decoder = JSONDecoder()
+            let loadedSessions = try decoder.decode([WorkoutSession].self, from: data)
+            
+            // Validate loaded data
+            let validSessions = loadedSessions.filter { session in
+                session.duration > 0 && session.duration <= 3600 &&
+                session.exercisesCompleted >= 0 && session.exercisesCompleted <= 12
+            }
+            
+            if validSessions.count != loadedSessions.count {
+                os_log("Filtered out %d invalid sessions", log: .default, type: .info, loadedSessions.count - validSessions.count)
+            }
+            
+            sessions = validSessions
+            recalculateStatistics()
+            
+        } catch {
+            // Data corruption detected, attempt recovery
+            os_log("Data corruption detected, attempting recovery: %{public}@", log: .default, type: .error, error.localizedDescription)
+            ErrorHandling.handleError(ErrorHandling.WorkoutError.dataCorrupted, context: "WorkoutStore.load")
+            
+            if !attemptDataRecovery() {
+                // Recovery failed, reset to empty state
+                os_log("Data recovery failed, resetting to empty state", log: .default, type: .error)
+                sessions = []
+                streak = 0
+                totalWorkouts = 0
+                totalMinutes = 0
+            }
+        }
     }
     
     private func save() {
@@ -244,6 +313,55 @@ final class WorkoutStore: ObservableObject {
         save()
     }
     
+    // MARK: - Agent 2: Personal Best Tracking
+    
+    private let personalBestKey = "workout.personalBest.v1"
+    
+    /// Personal best duration (in seconds)
+    @Published private(set) var personalBestDuration: TimeInterval = 0
+    
+    /// Personal best exercises completed
+    @Published private(set) var personalBestExercises: Int = 0
+    
+    /// Checks if a workout session is a personal best
+    /// - Parameters:
+    ///   - duration: Workout duration in seconds
+    ///   - exercisesCompleted: Number of exercises completed
+    /// - Returns: Tuple of (isDurationBest, isExercisesBest)
+    func checkPersonalBest(duration: TimeInterval, exercisesCompleted: Int) -> (isDurationBest: Bool, isExercisesBest: Bool) {
+        var isDurationBest = false
+        var isExercisesBest = false
+        
+        // Check duration personal best (faster is better, so we check if current is faster)
+        // For consistency, we'll track longest duration as "best" (more complete workout)
+        if duration > personalBestDuration {
+            isDurationBest = true
+            personalBestDuration = duration
+            UserDefaults.standard.set(personalBestDuration, forKey: personalBestKey)
+        }
+        
+        // Check exercises personal best
+        if exercisesCompleted > personalBestExercises {
+            isExercisesBest = true
+            personalBestExercises = exercisesCompleted
+            UserDefaults.standard.set(personalBestExercises, forKey: "\(personalBestKey).exercises")
+        }
+        
+        return (isDurationBest, isExercisesBest)
+    }
+    
+    /// Checks if current workout is any kind of personal best
+    func isPersonalBest(duration: TimeInterval, exercisesCompleted: Int) -> Bool {
+        let result = checkPersonalBest(duration: duration, exercisesCompleted: exercisesCompleted)
+        return result.isDurationBest || result.isExercisesBest
+    }
+    
+    private func loadPersonalBest() {
+        let d = UserDefaults.standard
+        personalBestDuration = d.double(forKey: personalBestKey)
+        personalBestExercises = d.integer(forKey: "\(personalBestKey).exercises")
+    }
+    
     // MARK: - Agent 7: Achievement Checking
     
     private func checkAchievements(workoutTime: Date) {
@@ -266,6 +384,13 @@ final class WorkoutStore: ObservableObject {
         for achievement in newAchievements {
             NotificationManager.scheduleAchievementNotification(achievement)
         }
+    }
+    
+    init() {
+        load()
+        loadPersonalBest()
+        recalcStreakIfNeeded()
+        setupWatchConnectivity()
     }
 }
 

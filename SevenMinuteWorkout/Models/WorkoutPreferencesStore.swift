@@ -2,7 +2,21 @@ import Foundation
 import SwiftUI
 
 /// Agent 3 & 16: Workout Preferences Store - Manages user workout customization preferences
-/// Agent 16: Enhanced with personalization support
+///
+/// This class handles persistence and management of user workout preferences including:
+/// - Workout duration settings (exercise, rest, prep)
+/// - Selected presets and custom workouts
+/// - Fitness level settings
+/// - Personalization preferences (Agent 16)
+///
+/// Agent 16: Enhanced with personalization support including habit learning and
+/// adaptive recommendations.
+///
+/// Usage:
+/// ```swift
+/// let preferencesStore = WorkoutPreferencesStore(workoutStore: workoutStore)
+/// preferencesStore.updateExerciseDuration(45.0)
+/// ```
 @MainActor
 final class WorkoutPreferencesStore: ObservableObject {
     @Published var preferences: WorkoutPreferences
@@ -63,7 +77,7 @@ final class WorkoutPreferencesStore: ObservableObject {
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name("workoutCompleted"), object: nil)
     }
     
     // MARK: - Preferences Management

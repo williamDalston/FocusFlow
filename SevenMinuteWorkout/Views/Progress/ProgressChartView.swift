@@ -17,20 +17,21 @@ struct ProgressChartView: View {
     }
     
     var body: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: DesignSystem.Spacing.xl) {
             // Header with export button (Agent 10)
             HStack {
                 Text("Progress Charts")
-                    .font(.headline.weight(.semibold))
+                    .font(Theme.headline)
                     .foregroundStyle(Theme.textPrimary)
                 
                 Spacer()
                 
                 Button {
                     showingExportSheet = true
+                    Haptics.tap()
                 } label: {
                     Image(systemName: "square.and.arrow.up")
-                        .font(.body)
+                        .font(Theme.body)
                         .foregroundStyle(Theme.accentA)
                 }
             }
@@ -58,15 +59,16 @@ struct ProgressChartView: View {
                 selectedDataPointInfo(dataPoint: selected)
             }
         }
-        .padding()
+        .cardPadding()
         .background(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
                 .fill(.ultraThinMaterial)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .stroke(Theme.strokeOuter, lineWidth: 0.8)
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
+                        .stroke(Theme.strokeOuter, lineWidth: DesignSystem.Border.subtle)
                 )
         )
+        .cardShadow()
         .sheet(isPresented: $showingExportSheet) {
             ChartExportSheet(analytics: analytics, timeframe: selectedTimeframe)
         }
@@ -75,44 +77,48 @@ struct ProgressChartView: View {
     // MARK: - Agent 10: Selected Data Point Info
     
     private func selectedDataPointInfo(dataPoint: DailyWorkoutCount) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
             HStack {
                 Image(systemName: "info.circle.fill")
                     .foregroundStyle(Theme.accentA)
+                    .font(Theme.subheadline)
                 Text("Selected Date")
-                    .font(.subheadline.weight(.semibold))
+                    .font(Theme.subheadline)
                     .foregroundStyle(Theme.textPrimary)
                 
                 Spacer()
                 
                 Button {
                     selectedDataPoint = nil
+                    Haptics.tap()
                 } label: {
                     Image(systemName: "xmark.circle.fill")
+                        .font(Theme.subheadline)
                         .foregroundStyle(.secondary)
                 }
             }
             
             HStack {
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                     Text(dataPoint.date.formatted(date: .abbreviated, time: .omitted))
-                        .font(.caption)
+                        .font(Theme.caption)
                         .foregroundStyle(.secondary)
                     Text("\(dataPoint.count) workout\(dataPoint.count == 1 ? "" : "s")")
-                        .font(.title3.weight(.bold))
+                        .font(Theme.title3)
                         .foregroundStyle(Theme.textPrimary)
+                        .monospacedDigit()
                 }
                 
                 Spacer()
             }
         }
-        .padding()
+        .cardPadding()
         .background(
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(Theme.accentA.opacity(0.1))
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                .fill(Theme.accentA.opacity(DesignSystem.Opacity.subtle * 0.5))
                 .overlay(
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .stroke(Theme.accentA.opacity(0.3), lineWidth: 1)
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                        .stroke(Theme.accentA.opacity(DesignSystem.Opacity.subtle * 1.5), lineWidth: DesignSystem.Border.standard)
                 )
         )
     }

@@ -79,9 +79,12 @@ struct SettingsView: View {
                     .navigationBarTitleDisplayMode(.large)
                     .toolbar {
                         ToolbarItem(placement: .topBarTrailing) {
-                            Button("Done") { dismiss() }
-                                .fontWeight(.semibold)
-                                .foregroundStyle(Theme.textOnDark)
+                            Button("Done") {
+                                dismiss()
+                                Haptics.tap()
+                            }
+                            .font(Theme.headline)
+                            .foregroundStyle(Theme.textOnDark)
                         }
                     }
                 }
@@ -173,13 +176,13 @@ struct SettingsView: View {
 
     private var soundSection: some View {
         Section {
-            VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
                 HStack {
-                    VStack(alignment: .leading, spacing: 4) {
+                    VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                         Text("Sound Effects")
-                            .font(.body.weight(.semibold))
+                            .font(Theme.body)
                         Text("Play sounds during workout transitions and countdown.")
-                            .font(.caption)
+                            .font(Theme.caption)
                             .foregroundStyle(.secondary)
                             .fixedSize(horizontal: false, vertical: true)
                     }
@@ -191,11 +194,11 @@ struct SettingsView: View {
                 Divider()
                 
                 HStack {
-                    VStack(alignment: .leading, spacing: 4) {
+                    VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                         Text("Vibration")
-                            .font(.body.weight(.semibold))
+                            .font(Theme.body)
                         Text("Haptic feedback during workout.")
-                            .font(.caption)
+                            .font(Theme.caption)
                             .foregroundStyle(.secondary)
                             .fixedSize(horizontal: false, vertical: true)
                     }
@@ -211,24 +214,24 @@ struct SettingsView: View {
 
     private var appearanceSection: some View {
         Section {
-            VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
                 // Color Theme Selector
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
                     HStack {
                         Text("Color Theme")
-                            .font(.body.weight(.semibold))
+                            .font(Theme.body)
                         Spacer()
                         // Color preview
-                        HStack(spacing: 4) {
+                        HStack(spacing: DesignSystem.Spacing.xs) {
                             Circle()
                                 .fill(Theme.accentA)
-                                .frame(width: 12, height: 12)
+                                .frame(width: DesignSystem.Spacing.md, height: DesignSystem.Spacing.md)
                             Circle()
                                 .fill(Theme.accentB)
-                                .frame(width: 12, height: 12)
+                                .frame(width: DesignSystem.Spacing.md, height: DesignSystem.Spacing.md)
                             Circle()
                                 .fill(Theme.accentC)
-                                .frame(width: 12, height: 12)
+                                .frame(width: DesignSystem.Spacing.md, height: DesignSystem.Spacing.md)
                         }
                     }
                     
@@ -246,16 +249,16 @@ struct SettingsView: View {
                         theme.objectWillChange.send()
                     }
                 }
-                .padding(.vertical, 4)
+                .padding(.vertical, DesignSystem.Spacing.xs)
                 
                 Divider()
                 
                 HStack {
-                    VStack(alignment: .leading, spacing: 4) {
+                    VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                         Text("Match iOS Appearance")
-                            .font(.body.weight(.semibold))
+                            .font(Theme.body)
                         Text("Use your device's Light/Dark setting. Turn off to choose manually.")
-                            .font(.caption)
+                            .font(Theme.caption)
                             .foregroundStyle(.secondary)
                             .fixedSize(horizontal: false, vertical: true)
                     }
@@ -265,7 +268,7 @@ struct SettingsView: View {
                 }
 
                 if !matchSystem {
-                    VStack(alignment: .leading, spacing: 12) {
+                    VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
                         Picker("Appearance", selection: $forcedScheme) {
                             Text("Light").tag(ColorScheme.light)
                             Text("Dark").tag(ColorScheme.dark)
@@ -422,20 +425,20 @@ struct SettingsView: View {
 
     private var reminderSection: some View {
         Section {
-            VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
                 HStack {
                     Toggle(isOn: $reminderEnabled) {
-                        VStack(alignment: .leading, spacing: 2) {
+                        VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs * 0.5) {
                             Text("Daily Workout Reminder")
-                                .font(.body.weight(.semibold))
+                                .font(Theme.body)
                             Text("Get reminded to complete your daily 7-minute workout.")
-                                .font(.caption)
+                                .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                         }
                     }
                     .tint(.white)
 
-                    Spacer(minLength: 8)
+                    Spacer(minLength: DesignSystem.Spacing.sm)
 
                     statusChip
                 }
@@ -443,6 +446,7 @@ struct SettingsView: View {
                 if reminderEnabled {
                     HStack {
                         Text("Time")
+                            .font(Theme.body)
                             .foregroundStyle(.secondary)
                         Spacer()
                         DatePicker(
@@ -460,40 +464,40 @@ struct SettingsView: View {
                         .labelsHidden()
                         .tint(.white)
                     }
-                    .padding(.horizontal, 2)
+                    .padding(.horizontal, DesignSystem.Spacing.xs * 0.5)
                     
                     Divider()
                     
                     // Agent 7: Additional notification options
-                    VStack(alignment: .leading, spacing: 12) {
+                    VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
                         Toggle(isOn: $streakReminderEnabled) {
-                            VStack(alignment: .leading, spacing: 2) {
+                            VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs * 0.5) {
                                 Text("Streak Reminders")
-                                    .font(.body.weight(.semibold))
+                                    .font(Theme.body)
                                 Text("Get notified if you haven't worked out today and have an active streak.")
-                                    .font(.caption)
+                                    .font(Theme.caption)
                                     .foregroundStyle(.secondary)
                             }
                         }
                         .tint(.white)
                         
                         Toggle(isOn: $noWorkoutNudgeEnabled) {
-                            VStack(alignment: .leading, spacing: 2) {
+                            VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs * 0.5) {
                                 Text("Gentle Nudges")
-                                    .font(.body.weight(.semibold))
+                                    .font(Theme.body)
                                 Text("Receive a gentle reminder if you haven't worked out today.")
-                                    .font(.caption)
+                                    .font(Theme.caption)
                                     .foregroundStyle(.secondary)
                             }
                         }
                         .tint(.white)
                         
                         Toggle(isOn: $weeklySummaryEnabled) {
-                            VStack(alignment: .leading, spacing: 2) {
+                            VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs * 0.5) {
                                 Text("Weekly Progress Summary")
-                                    .font(.body.weight(.semibold))
+                                    .font(Theme.body)
                                 Text("Get a weekly summary of your workout progress every Sunday.")
-                                    .font(.caption)
+                                    .font(Theme.caption)
                                     .foregroundStyle(.secondary)
                             }
                         }
@@ -574,17 +578,31 @@ struct SettingsView: View {
     private var healthKitSection: some View {
         Section {
             if healthKitStore.isAvailable {
-                HStack {
+                HStack(spacing: DesignSystem.Spacing.md) {
                     Image(systemName: "heart.text.square.fill")
-                        .font(.title2)
-                        .foregroundStyle(healthKitStore.isAuthorized ? Theme.accentA : .secondary)
+                        .font(.system(size: DesignSystem.IconSize.large))
+                        .foregroundStyle(
+                            healthKitStore.isAuthorized 
+                                ? LinearGradient(
+                                    colors: [Theme.accentA, Theme.accentB],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                                : LinearGradient(
+                                    colors: [Color.secondary, Color.secondary],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                        )
+                        .frame(width: DesignSystem.IconSize.large, height: DesignSystem.IconSize.large)
                     
-                    VStack(alignment: .leading, spacing: 2) {
+                    VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                         Text("Health Integration")
-                            .font(.body.weight(.semibold))
+                            .font(.body.weight(DesignSystem.Typography.headlineWeight))
+                            .foregroundStyle(Theme.textPrimary)
                         
                         Text(healthKitStatusText)
-                            .font(.caption)
+                            .font(.caption.weight(DesignSystem.Typography.captionWeight))
                             .foregroundStyle(.secondary)
                     }
                     
@@ -592,12 +610,18 @@ struct SettingsView: View {
                     
                     if healthKitStore.isAuthorized {
                         Image(systemName: "checkmark.circle.fill")
+                            .font(.system(size: DesignSystem.IconSize.medium))
                             .foregroundStyle(.green)
+                            .accessibilityLabel("Connected")
                     } else {
                         Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: DesignSystem.IconSize.medium))
                             .foregroundStyle(.orange)
+                            .accessibilityLabel("Not Connected")
                     }
                 }
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("Health Integration, \(healthKitStatusText)")
                 
                 if !healthKitStore.isAuthorized {
                     Button {
@@ -605,75 +629,73 @@ struct SettingsView: View {
                     } label: {
                         Label("Connect with Health", systemImage: "heart.fill")
                             .frame(maxWidth: .infinity)
+                            .frame(height: DesignSystem.ButtonSize.standard.height)
                     }
                     .buttonStyle(.bordered)
+                    .accessibilityLabel("Connect with Health")
+                    .accessibilityHint("Double tap to connect your workouts with Apple Health")
                 } else {
                     Button {
                         openHealthSettings()
                     } label: {
                         Label("Manage in Settings", systemImage: "gearshape")
                             .frame(maxWidth: .infinity)
+                            .frame(height: DesignSystem.ButtonSize.standard.height)
                     }
                     .buttonStyle(.bordered)
+                    .accessibilityLabel("Manage in Settings")
+                    .accessibilityHint("Double tap to open Health app settings")
                 }
                 
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
                     Text("What's synced:")
-                        .font(.caption.weight(.semibold))
+                        .font(.caption.weight(DesignSystem.Typography.headlineWeight))
                         .foregroundStyle(Theme.accentA)
                     
-                    VStack(alignment: .leading, spacing: 4) {
-                        HStack {
-                            Image(systemName: "figure.run")
-                                .font(.caption)
-                                .foregroundStyle(Theme.accentB)
-                            Text("Workout sessions")
-                                .font(.caption2)
-                        }
+                    VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
+                        SyncFeatureRow(
+                            icon: "figure.run",
+                            text: "Workout sessions"
+                        )
                         
-                        HStack {
-                            Image(systemName: "flame.fill")
-                                .font(.caption)
-                                .foregroundStyle(Theme.accentB)
-                            Text("Calories burned")
-                                .font(.caption2)
-                        }
+                        SyncFeatureRow(
+                            icon: "flame.fill",
+                            text: "Calories burned"
+                        )
                         
-                        HStack {
-                            Image(systemName: "clock.fill")
-                                .font(.caption)
-                                .foregroundStyle(Theme.accentB)
-                            Text("Exercise minutes")
-                                .font(.caption2)
-                        }
+                        SyncFeatureRow(
+                            icon: "clock.fill",
+                            text: "Exercise minutes"
+                        )
                         
-                        HStack {
-                            Image(systemName: "chart.line.uptrend.xyaxis")
-                                .font(.caption)
-                                .foregroundStyle(Theme.accentB)
-                            Text("Activity rings")
-                                .font(.caption2)
-                        }
+                        SyncFeatureRow(
+                            icon: "chart.line.uptrend.xyaxis",
+                            text: "Activity rings"
+                        )
                     }
                 }
-                .padding(.vertical, 8)
+                .padding(.vertical, DesignSystem.Spacing.sm)
             } else {
-                HStack {
+                HStack(spacing: DesignSystem.Spacing.md) {
                     Image(systemName: "heart.slash.fill")
-                        .font(.title2)
+                        .font(.system(size: DesignSystem.IconSize.large))
                         .foregroundStyle(.secondary)
+                        .frame(width: DesignSystem.IconSize.large, height: DesignSystem.IconSize.large)
                     
-                    VStack(alignment: .leading, spacing: 2) {
+                    VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                         Text("Health Integration")
-                            .font(.body.weight(.semibold))
+                            .font(.body.weight(DesignSystem.Typography.headlineWeight))
+                            .foregroundStyle(Theme.textPrimary)
                         
                         Text("HealthKit is not available on this device")
-                            .font(.caption)
+                            .font(.caption.weight(DesignSystem.Typography.captionWeight))
                             .foregroundStyle(.secondary)
                     }
                     
                     Spacer()
                 }
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("Health Integration, HealthKit is not available on this device")
             }
         } header: {
             Text("Health Integration").textCase(.none)
@@ -683,6 +705,28 @@ struct SettingsView: View {
             } else {
                 Text("HealthKit is only available on iOS devices.")
             }
+        }
+    }
+    
+    // MARK: - Sync Feature Row Helper
+    
+    private struct SyncFeatureRow: View {
+        let icon: String
+        let text: String
+        
+        var body: some View {
+            HStack(spacing: DesignSystem.Spacing.sm) {
+                Image(systemName: icon)
+                    .font(.system(size: DesignSystem.IconSize.small))
+                    .foregroundStyle(Theme.accentB)
+                    .frame(width: DesignSystem.IconSize.small, height: DesignSystem.IconSize.small)
+                
+                Text(text)
+                    .font(.caption2.weight(DesignSystem.Typography.bodyWeight))
+                    .foregroundStyle(Theme.textPrimary)
+            }
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel(text)
         }
     }
     
@@ -752,22 +796,25 @@ struct SettingsView: View {
             switch notifStatus {
             case .authorized, .provisional, .ephemeral:
                 Label("On", systemImage: "checkmark.seal.fill")
-                    .font(.caption.weight(.bold))
-                    .padding(.horizontal, 10).padding(.vertical, 6)
+                    .font(Theme.caption)
+                    .padding(.horizontal, DesignSystem.Spacing.md)
+                    .padding(.vertical, DesignSystem.Spacing.xs * 0.75)
                     .background(.ultraThinMaterial, in: Capsule())
-                    .overlay(Capsule().stroke(Theme.strokeOuter, lineWidth: 0.6))
+                    .overlay(Capsule().stroke(Theme.strokeOuter, lineWidth: DesignSystem.Border.subtle))
             case .denied:
                 Label("Off", systemImage: "bell.slash.fill")
-                    .font(.caption.weight(.bold))
-                    .padding(.horizontal, 10).padding(.vertical, 6)
+                    .font(Theme.caption)
+                    .padding(.horizontal, DesignSystem.Spacing.md)
+                    .padding(.vertical, DesignSystem.Spacing.xs * 0.75)
                     .background(.ultraThinMaterial, in: Capsule())
-                    .overlay(Capsule().stroke(Theme.strokeOuter, lineWidth: 0.6))
+                    .overlay(Capsule().stroke(Theme.strokeOuter, lineWidth: DesignSystem.Border.subtle))
             default:
                 Label("Ask", systemImage: "questionmark.diamond.fill")
-                    .font(.caption.weight(.bold))
-                    .padding(.horizontal, 10).padding(.vertical, 6)
+                    .font(Theme.caption)
+                    .padding(.horizontal, DesignSystem.Spacing.md)
+                    .padding(.vertical, DesignSystem.Spacing.xs * 0.75)
                     .background(.ultraThinMaterial, in: Capsule())
-                    .overlay(Capsule().stroke(Theme.strokeOuter, lineWidth: 0.6))
+                    .overlay(Capsule().stroke(Theme.strokeOuter, lineWidth: DesignSystem.Border.subtle))
             }
         }
         .foregroundStyle(Theme.textOnDark)

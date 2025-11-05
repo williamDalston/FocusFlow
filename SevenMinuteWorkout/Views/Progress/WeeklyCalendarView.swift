@@ -238,30 +238,31 @@ struct MonthlyCalendarView: View {
         
         let dayNumber = calendar.component(.day, from: date)
         
-        return VStack(spacing: 2) {
+        return VStack(spacing: DesignSystem.Spacing.xs * 0.5) {
             Text("\(dayNumber)")
-                .font(.caption2.weight(isToday ? .bold : .regular))
+                .font(Theme.caption2)
                 .foregroundStyle(isCurrentMonth ? Theme.textPrimary : .secondary)
             
             if workoutCount > 0 {
                 Circle()
                     .fill(backgroundColor)
-                    .frame(width: 20, height: 20)
+                    .frame(width: DesignSystem.Spacing.xl, height: DesignSystem.Spacing.xl)
                     .overlay(
                         Text("\(workoutCount)")
-                            .font(.caption2.weight(.bold))
+                            .font(Theme.caption2)
                             .foregroundStyle(workoutCount >= 3 ? .white : Theme.textPrimary)
+                            .monospacedDigit()
                     )
             } else {
                 Circle()
                     .fill(backgroundColor)
-                    .frame(width: 20, height: 20)
+                    .frame(width: DesignSystem.Spacing.xl, height: DesignSystem.Spacing.xl)
             }
         }
-        .frame(height: 50)
+        .frame(height: DesignSystem.Spacing.xxxl * 1.04)
         .overlay(
-            RoundedRectangle(cornerRadius: 4)
-                .stroke(isToday ? Theme.accentA : Color.clear, lineWidth: 2)
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small * 0.5)
+                .stroke(isToday ? Theme.accentA : Color.clear, lineWidth: DesignSystem.Border.emphasis)
         )
     }
     

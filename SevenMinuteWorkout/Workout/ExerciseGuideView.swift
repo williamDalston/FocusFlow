@@ -11,24 +11,25 @@ struct ExerciseGuideView: View {
             ThemeBackground()
             
             ScrollView {
-                VStack(spacing: 24) {
+                VStack(spacing: DesignSystem.Spacing.xl) {
                     // Exercise header
-                    VStack(spacing: 16) {
+                    VStack(spacing: DesignSystem.Spacing.lg) {
                         Image(systemName: exercise.icon)
-                            .font(.system(size: 80))
+                            .font(.system(size: DesignSystem.IconSize.huge * 1.25, weight: .bold))
                             .foregroundStyle(Theme.accentA)
                             .accessibilityLabel("Exercise icon for \(exercise.name)")
                         
                         Text(exercise.name)
-                            .font(.largeTitle.weight(.bold))
+                            .font(Theme.largeTitle)
                             .foregroundStyle(Theme.textPrimary)
                             .accessibilityAddTraits(.isHeader)
                         
                         Text(exercise.description)
-                            .font(.title3)
+                            .font(Theme.title3)
                             .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.center)
                     }
-                    .padding(.top, 32)
+                    .padding(.top, DesignSystem.Spacing.xxl)
                     .frame(maxWidth: .infinity)
                     .accessibilityElement(children: .combine)
                     
@@ -56,8 +57,8 @@ struct ExerciseGuideView: View {
                     // Duration info
                     durationCard
                 }
-                .padding(.horizontal, 24)
-                .padding(.bottom, 32)
+                .contentPadding()
+                .padding(.bottom, DesignSystem.Spacing.xxl)
             }
         }
         .navigationBarTitleDisplayMode(.inline)
@@ -65,7 +66,9 @@ struct ExerciseGuideView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("Done") {
                     dismiss()
+                    Haptics.tap()
                 }
+                .font(Theme.headline)
                 .foregroundStyle(Theme.accentA)
                 .accessibilityLabel("Done")
             }
@@ -76,24 +79,24 @@ struct ExerciseGuideView: View {
     
     private var instructionsCard: some View {
         GlassCard(material: .ultraThinMaterial) {
-            VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
                 HStack {
                     Image(systemName: "list.bullet.rectangle")
                         .font(.title2)
                         .foregroundStyle(Theme.accentA)
                     
                     Text("How to Perform")
-                        .font(.title2.weight(.semibold))
+                        .font(Theme.title2)
                         .foregroundStyle(Theme.textPrimary)
                     
                     Spacer()
                     
                     // Difficulty badge
                     Text(exercise.difficultyLevel)
-                        .font(.caption.weight(.semibold))
+                        .font(Theme.caption)
                         .foregroundStyle(.white)
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 4)
+                        .padding(.horizontal, DesignSystem.Spacing.md)
+                        .padding(.vertical, DesignSystem.Spacing.xs)
                         .background(
                             Capsule()
                                 .fill(Theme.accentB)
@@ -101,50 +104,50 @@ struct ExerciseGuideView: View {
                 }
                 
                 Text(exercise.instructions)
-                    .font(.body)
+                    .font(Theme.body)
                     .foregroundStyle(Theme.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
                     .accessibilityLabel("Instructions: \(exercise.instructions)")
             }
-            .padding(24)
+            .cardPadding()
         }
     }
     
     private var breathingCard: some View {
         GlassCard(material: .ultraThinMaterial) {
-            VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
                 HStack {
                     Image(systemName: "wind")
                         .font(.title2)
                         .foregroundStyle(Theme.accentC)
                     
                     Text("Breathing")
-                        .font(.title2.weight(.semibold))
+                        .font(Theme.title2)
                         .foregroundStyle(Theme.textPrimary)
                     
                     Spacer()
                 }
                 
                 Text(exercise.breathingCues)
-                    .font(.body)
+                    .font(Theme.body)
                     .foregroundStyle(Theme.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
                     .accessibilityLabel("Breathing cues: \(exercise.breathingCues)")
             }
-            .padding(24)
+            .cardPadding()
         }
     }
     
     private var muscleGroupsCard: some View {
         GlassCard(material: .ultraThinMaterial) {
-            VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
                 HStack {
                     Image(systemName: "figure.strengthtraining.traditional")
                         .font(.title2)
                         .foregroundStyle(Theme.accentA)
                     
                     Text("Targets")
-                        .font(.title2.weight(.semibold))
+                        .font(Theme.title2)
                         .foregroundStyle(Theme.textPrimary)
                     
                     Spacer()
@@ -153,164 +156,164 @@ struct ExerciseGuideView: View {
                 // Muscle group tags in a flow layout
                 muscleGroupTags
             }
-            .padding(24)
+            .cardPadding()
         }
     }
     
     private var commonMistakesCard: some View {
         GlassCard(material: .ultraThinMaterial) {
-            VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
                 HStack {
                     Image(systemName: "exclamationmark.triangle.fill")
                         .font(.title2)
                         .foregroundStyle(.orange)
                     
                     Text("Common Mistakes")
-                        .font(.title2.weight(.semibold))
+                        .font(Theme.title2)
                         .foregroundStyle(Theme.textPrimary)
                     
                     Spacer()
                 }
                 
-                VStack(alignment: .leading, spacing: 12) {
+                VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
                     ForEach(exercise.commonMistakes, id: \.self) { mistake in
-                        HStack(alignment: .top, spacing: 12) {
+                        HStack(alignment: .top, spacing: DesignSystem.Spacing.md) {
                             Image(systemName: "xmark.circle.fill")
-                                .font(.system(size: 16))
+                                .font(.system(size: DesignSystem.IconSize.small))
                                 .foregroundStyle(.orange)
-                                .padding(.top, 2)
+                                .padding(.top, DesignSystem.Spacing.xs * 0.5)
                             
                             Text(mistake)
-                                .font(.body)
+                                .font(Theme.body)
                                 .foregroundStyle(Theme.textSecondary)
                         }
                     }
                 }
             }
-            .padding(24)
+            .cardPadding()
         }
     }
     
     private var modificationsCard: some View {
         GlassCard(material: .ultraThinMaterial) {
-            VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
                 HStack {
                     Image(systemName: "slider.horizontal.3")
                         .font(.title2)
                         .foregroundStyle(Theme.accentB)
                     
                     Text("Modifications")
-                        .font(.title2.weight(.semibold))
+                        .font(Theme.title2)
                         .foregroundStyle(Theme.textPrimary)
                     
                     Spacer()
                 }
                 
-                VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
                     ForEach(Array(exercise.modifications.keys.sorted()), id: \.self) { level in
                         if let modification = exercise.modifications[level] {
-                            VStack(alignment: .leading, spacing: 8) {
+                            VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
                                 Text(level)
-                                    .font(.headline)
+                                    .font(Theme.headline)
                                     .foregroundStyle(Theme.accentB)
                                 
                                 Text(modification)
-                                    .font(.body)
+                                    .font(Theme.body)
                                     .foregroundStyle(Theme.textSecondary)
                             }
-                            .padding(.vertical, 8)
-                            .padding(.horizontal, 12)
+                            .padding(.vertical, DesignSystem.Spacing.sm)
+                            .padding(.horizontal, DesignSystem.Spacing.md)
                             .background(
-                                RoundedRectangle(cornerRadius: 8, style: .continuous)
-                                    .fill(Theme.accentB.opacity(0.1))
+                                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.medium, style: .continuous)
+                                    .fill(Theme.accentB.opacity(DesignSystem.Opacity.subtle * 0.67))
                             )
                         }
                     }
                 }
             }
-            .padding(24)
+            .cardPadding()
         }
     }
     
     private var safetyCard: some View {
         GlassCard(material: .ultraThinMaterial) {
-            VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
                 HStack {
                     Image(systemName: "shield.fill")
                         .font(.title2)
                         .foregroundStyle(.red)
                     
                     Text("Safety")
-                        .font(.title2.weight(.semibold))
+                        .font(Theme.title2)
                         .foregroundStyle(Theme.textPrimary)
                     
                     Spacer()
                 }
                 
-                VStack(alignment: .leading, spacing: 12) {
+                VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
                     ForEach(exercise.safetyWarnings, id: \.self) { warning in
-                        HStack(alignment: .top, spacing: 12) {
+                        HStack(alignment: .top, spacing: DesignSystem.Spacing.md) {
                             Image(systemName: "exclamationmark.shield.fill")
-                                .font(.system(size: 16))
+                                .font(.system(size: DesignSystem.IconSize.small))
                                 .foregroundStyle(.red)
-                                .padding(.top, 2)
+                                .padding(.top, DesignSystem.Spacing.xs * 0.5)
                             
                             Text(warning)
-                                .font(.body)
+                                .font(Theme.body)
                                 .foregroundStyle(Theme.textSecondary)
                         }
                     }
                 }
             }
-            .padding(24)
+            .cardPadding()
         }
     }
     
     private var tipsCard: some View {
         GlassCard(material: .ultraThinMaterial) {
-            VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
                 HStack {
                     Image(systemName: "lightbulb.fill")
                         .font(.title2)
                         .foregroundStyle(.yellow)
                     
                     Text("Tips")
-                        .font(.title2.weight(.semibold))
+                        .font(Theme.title2)
                         .foregroundStyle(Theme.textPrimary)
                     
                     Spacer()
                 }
                 
-                VStack(alignment: .leading, spacing: 12) {
+                VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
                     ForEach(tipsForExercise(exercise.name), id: \.self) { tip in
-                        HStack(alignment: .top, spacing: 12) {
+                        HStack(alignment: .top, spacing: DesignSystem.Spacing.md) {
                             Image(systemName: "circle.fill")
-                                .font(.system(size: 6))
+                                .font(.system(size: DesignSystem.Spacing.xs * 0.75))
                                 .foregroundStyle(Theme.accentA)
-                                .padding(.top, 6)
+                                .padding(.top, DesignSystem.Spacing.xs * 0.75)
                             
                             Text(tip)
-                                .font(.body)
+                                .font(Theme.body)
                                 .foregroundStyle(Theme.textSecondary)
                         }
                     }
                 }
             }
-            .padding(24)
+            .cardPadding()
         }
     }
     
     private var muscleGroupTags: some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))], alignment: .leading, spacing: 8) {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))], alignment: .leading, spacing: DesignSystem.Spacing.sm) {
             ForEach(exercise.muscleGroups, id: \.self) { muscle in
                 Text(muscle)
-                    .font(.caption.weight(.medium))
+                    .font(Theme.caption)
                     .foregroundStyle(Theme.accentA)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
+                    .padding(.horizontal, DesignSystem.Spacing.md)
+                    .padding(.vertical, DesignSystem.Spacing.xs * 0.75)
                     .background(
                         Capsule()
-                            .fill(Theme.accentA.opacity(0.15))
+                            .fill(Theme.accentA.opacity(DesignSystem.Opacity.subtle * 0.75))
                     )
             }
         }
@@ -318,24 +321,24 @@ struct ExerciseGuideView: View {
     
     private var durationCard: some View {
         GlassCard(material: .ultraThinMaterial) {
-            HStack {
+            HStack(spacing: DesignSystem.Spacing.md) {
                 Image(systemName: "clock.fill")
                     .font(.title2)
                     .foregroundStyle(Theme.accentB)
                 
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                     Text("Duration")
-                        .font(.headline)
+                        .font(Theme.headline)
                         .foregroundStyle(Theme.textPrimary)
                     
                     Text("30 seconds")
-                        .font(.subheadline)
+                        .font(Theme.subheadline)
                         .foregroundStyle(.secondary)
                 }
                 
                 Spacer()
             }
-            .padding(24)
+            .cardPadding()
         }
     }
     

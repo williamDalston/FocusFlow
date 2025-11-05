@@ -485,10 +485,10 @@ struct WorkoutContentView: View {
     
     @ViewBuilder
     private func goalsSection(goalManager: GoalManager) -> some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
             HStack {
                 Text("Goals")
-                    .font(.headline.weight(.semibold))
+                    .font(Theme.headline)
                     .foregroundStyle(Theme.textPrimary)
                 
                 Spacer()
@@ -498,14 +498,14 @@ struct WorkoutContentView: View {
                     Haptics.tap()
                 } label: {
                     Text("Manage")
-                        .font(.subheadline.weight(.semibold))
+                        .font(Theme.subheadline)
                         .foregroundStyle(Theme.accentA)
                 }
             }
-            .padding(.horizontal, 4)
+            .padding(.horizontal, DesignSystem.Spacing.xs)
             
             if goalManager.weeklyGoal > 0 || goalManager.monthlyGoal > 0 {
-                VStack(spacing: 12) {
+                VStack(spacing: DesignSystem.Spacing.md) {
                     if goalManager.weeklyGoal > 0 {
                         GoalProgressCard(
                             title: "Weekly Goal",
@@ -533,30 +533,31 @@ struct WorkoutContentView: View {
                     showGoals = true
                     Haptics.tap()
                 } label: {
-                    HStack {
+                    HStack(spacing: DesignSystem.Spacing.md) {
                         Image(systemName: "target")
                             .font(.title3)
                             .foregroundStyle(Theme.accentA)
-                        VStack(alignment: .leading, spacing: 4) {
+                            .frame(width: DesignSystem.IconSize.statBox, height: DesignSystem.IconSize.statBox)
+                        VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                             Text("Set Your Goals")
-                                .font(.subheadline.weight(.semibold))
+                                .font(Theme.subheadline)
                                 .foregroundStyle(Theme.textPrimary)
                             Text("Track your progress with weekly and monthly goals")
-                                .font(.caption)
+                                .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                         }
                         Spacer()
                         Image(systemName: "chevron.right")
-                            .font(.caption)
+                            .font(Theme.caption)
                             .foregroundStyle(.secondary)
                     }
-                    .padding()
+                    .cardPadding()
                     .background(
-                        RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
                             .fill(.ultraThinMaterial)
                             .overlay(
-                                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                    .stroke(Theme.accentA.opacity(0.3), lineWidth: 1)
+                                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                                    .stroke(Theme.accentA.opacity(DesignSystem.Opacity.subtle * 1.5), lineWidth: DesignSystem.Border.standard)
                             )
                     )
                 }
@@ -616,6 +617,7 @@ private struct StatBox: View {
                 .font(.title3)
                 .foregroundStyle(color)
                 .frame(width: DesignSystem.IconSize.statBox, height: DesignSystem.IconSize.statBox)
+                .accessibilityHidden(true)
             
             Text(value)
                 .font(Theme.title2)
@@ -679,147 +681,9 @@ private struct ExercisePreviewCard: View {
     }
 }
 
-// MARK: - Workout History Row
-
-private struct WorkoutHistoryRow: View {
-    let session: WorkoutSession
-    
-    var body: some View {
-        HStack(spacing: DesignSystem.Spacing.md) {
-            Image(systemName: "checkmark.circle.fill")
-                .foregroundStyle(.green)
-                .font(.title3)
-            
-            VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
-                Text("\(session.exercisesCompleted) exercises completed")
-                    .font(Theme.subheadline)
-                    .foregroundStyle(.primary)
-                
-                Text(session.date.formatted(date: .abbreviated, time: .shortened))
-                    .font(Theme.caption)
-                    .foregroundStyle(.secondary)
-            }
-            
-            Spacer()
-            
-            Text(formatDuration(session.duration))
-                .font(Theme.caption)
-                .foregroundStyle(Theme.accentA)
-                .monospacedDigit()
-        }
-        .padding(.horizontal, DesignSystem.Spacing.md)
-        .padding(.vertical, DesignSystem.Spacing.sm * 1.25)
-        .background(
-            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.medium, style: .continuous)
-                .fill(Color(.systemGray6))
-                .overlay(
-                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.medium, style: .continuous)
-                        .stroke(Color(.systemGray4), lineWidth: DesignSystem.Border.subtle)
-                )
-        )
-    }
-    
-    private func formatDuration(_ duration: TimeInterval) -> String {
-        let minutes = Int(duration) / 60
-        let seconds = Int(duration) % 60
-        return String(format: "%d:%02d", minutes, seconds)
-    }
-}
-
-// MARK: - Exercise List View
-
-struct ExerciseListView: View {
-    @Environment(\.dismiss) private var dismiss
-    @State private var selectedExercise: Exercise?
-    
-    var body: some View {
-        List {
-            ForEach(Exercise.sevenMinuteWorkout) { exercise in
-                Button {
-                    selectedExercise = exercise
-                    Haptics.tap()
-                } label: {
-                    HStack(spacing: DesignSystem.Spacing.lg) {
-                        Image(systemName: exercise.icon)
-                            .font(.title2)
-                            .foregroundStyle(Theme.accentA)
-                            .frame(width: DesignSystem.IconSize.xlarge, height: DesignSystem.IconSize.xlarge)
-                        
-                        VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
-                            Text(exercise.name)
-                                .font(Theme.headline)
-                                .foregroundStyle(.primary)
-                            
-                            Text(exercise.description)
-                                .font(Theme.caption)
-                                .foregroundStyle(.secondary)
-                                .lineLimit(2)
-                        }
-                        
-                        Spacer()
-                        
-                        Text("\(exercise.order)")
-                            .font(Theme.caption)
-                            .foregroundStyle(.secondary)
-                            .monospacedDigit()
-                            .frame(width: DesignSystem.Spacing.xxl, height: DesignSystem.Spacing.xxl)
-                            .background(
-                                Circle()
-                                    .fill(Theme.accentA.opacity(DesignSystem.Opacity.subtle))
-                            )
-                    }
-                    .padding(.vertical, DesignSystem.Spacing.xs)
-                }
-                .buttonStyle(.plain)
-            }
-        }
-        .navigationTitle("Exercises")
-        .navigationBarTitleDisplayMode(.large)
-        .sheet(item: $selectedExercise) { exercise in
-            NavigationStack {
-                ExerciseGuideView(exercise: exercise)
-            }
-        }
-    }
-}
-
-// MARK: - Workout History View
-
-struct WorkoutHistoryView: View {
-    @EnvironmentObject private var store: WorkoutStore
-    @Environment(\.dismiss) private var dismiss
-    
-    var body: some View {
-        List {
-            if store.sessions.isEmpty {
-                ContentUnavailableView(
-                    "No Workouts Yet",
-                    systemImage: "figure.run",
-                    description: Text("Complete your first workout to see history here.")
-                )
-            } else {
-                ForEach(store.sessions) { session in
-                    WorkoutHistoryRow(session: session)
-                }
-                .onDelete { indexSet in
-                    store.deleteSession(at: indexSet)
-                    Haptics.tap()
-                }
-            }
-        }
-        .navigationTitle("Workout History")
-        .navigationBarTitleDisplayMode(.large)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button("Done") {
-                    dismiss()
-                    Haptics.tap()
-                }
-                .font(Theme.headline)
-            }
-        }
-    }
-}
+// MARK: - Workout History Row (removed - now in Views/History/WorkoutHistoryRow.swift)
+// MARK: - Exercise List View (removed - now in Views/Exercises/ExerciseListView.swift)
+// MARK: - Workout History View (removed - now in Views/History/WorkoutHistoryView.swift)
 
 // MARK: - Agent 2: Quick Insight Card
 
@@ -913,42 +777,44 @@ private struct GoalProgressCard: View {
     let color: Color
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
             HStack {
                 Text(title)
-                    .font(.subheadline.weight(.semibold))
+                    .font(Theme.subheadline)
                     .foregroundStyle(Theme.textPrimary)
                 
                 Spacer()
                 
                 if isAchieved {
-                    HStack(spacing: 4) {
+                    HStack(spacing: DesignSystem.Spacing.xs) {
                         Image(systemName: "checkmark.circle.fill")
                             .foregroundStyle(.green)
+                            .font(Theme.caption)
                         Text("Achieved!")
-                            .font(.caption.weight(.semibold))
+                            .font(Theme.caption)
                             .foregroundStyle(.green)
                     }
                 } else {
                     Text("\(current) / \(goal)")
-                        .font(.caption.weight(.semibold))
+                        .font(Theme.caption)
                         .foregroundStyle(.secondary)
+                        .monospacedDigit()
                 }
             }
             
             // Progress Bar
             GeometryReader { geometry in
                 ZStack(alignment: .leading) {
-                    RoundedRectangle(cornerRadius: 6, style: .continuous)
-                        .fill(Color.gray.opacity(0.2))
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small * 0.75, style: .continuous)
+                        .fill(Color.gray.opacity(DesignSystem.Opacity.subtle))
                     
-                    RoundedRectangle(cornerRadius: 6, style: .continuous)
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small * 0.75, style: .continuous)
                         .fill(color.gradient)
                         .frame(width: geometry.size.width * progress)
-                        .animation(.spring(response: 0.6), value: progress)
+                        .animation(AnimationConstants.smoothSpring, value: progress)
                 }
             }
-            .frame(height: 8)
+            .frame(height: DesignSystem.Spacing.sm)
             
             if !isAchieved {
                 Text("\(Int(progress * 100))% complete")

@@ -445,4 +445,95 @@ final class WorkoutEngine: ObservableObject {
             await sound.vibrate(.long)
         }
     }
+    
+    // MARK: - Edge Case Handling
+    
+    /// Handles workout interruption (phone call, notification, etc.)
+    func handleInterruption() {
+        guard phase != .idle && phase != .completed else { return }
+        
+        // Pause the workout if it's not already paused
+        if !isPaused {
+            pause()
+        }
+        
+        // Log the interruption
+        os_log("Workout interrupted", log: .default, type: .info)
+        ErrorHandling.handleError(ErrorHandling.WorkoutError.workoutInterrupted, context: "WorkoutEngine.handleInterruption")
+    }
+    
+    /// Handles background transition
+    func handleBackgroundTransition() {
+        guard phase != .idle && phase != .completed else { return }
+        
+        // Save current state for resume
+        saveWorkoutState()
+        
+        // Pause the workout
+        if !isPaused {
+            pause()
+        }
+    }
+    
+    /// Handles foreground transition
+    func handleForegroundTransition() {
+        guard phase != .idle && phase != .completed else { return }
+        
+        // Restore workout state if needed
+        if isPaused {
+            // User can resume if they want
+            os_log("Workout ready to resume", log: .default, type: .info)
+        }
+    }
+    
+    /// Saves current workout state for recovery
+    private func saveWorkoutState() {
+        let state: [String: Any] = [
+            "phase": String(describing: phase),
+            "currentExerciseIndex": currentExerciseIndex,
+            "timeRemaining": timeRemaining,
+            "sessionStartTime": sessionStartTime?.timeIntervalSince1970 ?? 0,
+            "totalPausedTime": totalPausedTime,
+            "timestamp": Date().timeIntervalSince1970
+        ]
+        
+        UserDefaults.standard.set(state, forKey: "workout.state.recovery")
+    }
+    
+    /// Attempts to restore workout state after interruption
+    func restoreWorkoutState() -> Bool {
+        guard let state = UserDefaults.standard.dictionary(forKey: "workout.state.recovery") else {
+            return false
+        }
+        
+        // Check if state is recent (within 1 hour)
+        if let timestamp = state["timestamp"] as? TimeInterval {
+            let stateDate = Date(timeIntervalSince1970: timestamp)
+            if Date().timeIntervalSince(stateDate) > 3600 {
+                // State is too old, don't restore
+                UserDefaults.standard.removeObject(forKey: "workout.state.recovery")
+                return false
+            }
+        }
+        
+        // Restore state
+        if let phaseString = state["phase"] as? String,
+           let index = state["currentExerciseIndex"] as? Int,
+           let timeRemaining = state["timeRemaining"] as? TimeInterval {
+            
+            // Restore basic state
+            currentExerciseIndex = index
+            self.timeRemaining = timeRemaining
+            
+            // Restore exercise if valid
+            if index < exercises.count {
+                currentExercise = exercises[index]
+            }
+            
+            os_log("Workout state restored", log: .default, type: .info)
+            return true
+        }
+        
+        return false
+    }
 }

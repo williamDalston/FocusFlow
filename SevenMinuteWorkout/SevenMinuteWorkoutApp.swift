@@ -25,6 +25,17 @@ struct SevenMinuteWorkoutApp: App {
                     PerformanceOptimizer.optimizeStartup()
                     PerformanceOptimizer.preloadCriticalAssets()
                     
+                    // Agent 8: Monitor app launch
+                    PerformanceMonitor.monitorAppLaunch()
+                    
+                    // Agent 8: Run performance validation in debug mode
+                    #if DEBUG
+                    PerformanceOptimizer.deferHeavyOperations {
+                        let results = PerformanceValidation.validatePerformance()
+                        PerformanceValidation.logResults(results)
+                    }
+                    #endif
+                    
                     // Register shortcuts for Siri integration
                     WorkoutShortcuts.registerWorkoutShortcut()
                 }
@@ -39,10 +50,16 @@ struct SevenMinuteWorkoutApp: App {
                 
                 // Agent 8: Optimize memory usage when app becomes active
                 PerformanceOptimizer.optimizeMemoryUsage()
+                
+                // Agent 6: Handle foreground transition
+                NotificationCenter.default.post(name: NSNotification.Name("appDidBecomeActive"), object: nil)
             case .inactive: break
             case .background:
                 // Agent 8: Optimize background processing
                 PerformanceOptimizer.optimizeBackgroundProcessing()
+                
+                // Agent 6: Handle background transition
+                NotificationCenter.default.post(name: NSNotification.Name("appDidEnterBackground"), object: nil)
             @unknown default: break
             }
         }

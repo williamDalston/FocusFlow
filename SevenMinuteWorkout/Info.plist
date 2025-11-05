@@ -17,7 +17,7 @@
 	<array>
 		<dict>
 			<key>UIApplicationShortcutItemIconType</key>
-			<string>UIApplicationShortcutIconTypeCompose</string>
+			<string>UIApplicationShortcutIconTypePlay</string>
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>Start Workout</string>
 			<key>UIApplicationShortcutItemType</key>

@@ -2,34 +2,52 @@ import SwiftUI
 import HealthKit
 
 /// Agent 5: HealthKit Permissions View - UI for requesting HealthKit permissions
+/// Enhanced with DesignSystem constants, accessibility, and smooth animations
 struct HealthKitPermissionsView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @StateObject private var healthKitStore = HealthKitStore.shared
     @State private var isRequesting = false
     @State private var errorMessage: String?
+    @State private var showAnimation = false
     
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: 24) {
-                    // Icon
+                VStack(spacing: DesignSystem.Spacing.xxl) {
+                    // Icon with animation
                     Image(systemName: "heart.text.square.fill")
-                        .font(.system(size: 64))
-                        .foregroundStyle(Theme.accentA)
-                        .padding(.top, 32)
+                        .font(.system(size: DesignSystem.IconSize.huge, weight: .bold))
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [Theme.accentA, Theme.accentB],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .padding(.top, DesignSystem.Spacing.xxl)
+                        .scaleEffect(showAnimation ? 1.0 : 0.8)
+                        .opacity(showAnimation ? 1.0 : 0.0)
+                        .animation(
+                            .spring(response: DesignSystem.AnimationDuration.smooth, dampingFraction: 0.7),
+                            value: showAnimation
+                        )
                     
                     // Title
                     Text("Connect with Health")
-                        .font(.title.weight(.bold))
+                        .font(.system(size: horizontalSizeClass == .regular ? 34 : 28, weight: DesignSystem.Typography.titleWeight))
                         .foregroundStyle(Theme.textPrimary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, DesignSystem.Spacing.lg)
                     
                     // Description
-                    VStack(spacing: 16) {
+                    VStack(spacing: DesignSystem.Spacing.lg) {
                         Text("Connect your workouts with Apple Health to:")
-                            .font(.headline)
+                            .font(.headline.weight(DesignSystem.Typography.headlineWeight))
                             .foregroundStyle(Theme.textPrimary)
+                            .multilineTextAlignment(.center)
                         
-                        VStack(alignment: .leading, spacing: 12) {
+                        VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
                             FeatureRow(
                                 icon: "figure.run",
                                 text: "Track workouts in the Activity app"
@@ -50,11 +68,11 @@ struct HealthKitPermissionsView: View {
                                 text: "View workout history in Health app"
                             )
                         }
-                        .padding(.horizontal)
+                        .padding(.horizontal, DesignSystem.Spacing.lg)
                     }
                     
                     // Privacy note
-                    VStack(spacing: 8) {
+                    VStack(spacing: DesignSystem.Spacing.sm) {
                         Image(systemName: "lock.shield.fill")
                             .font(.title3)
                             .foregroundStyle(.secondary)
@@ -63,50 +81,70 @@ struct HealthKitPermissionsView: View {
                             .font(.caption)
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
-                            .padding(.horizontal)
+                            .lineSpacing(DesignSystem.Spacing.xs)
+                            .padding(.horizontal, DesignSystem.Spacing.md)
                     }
-                    .padding(.vertical, 8)
-                    .padding(.horizontal, 16)
+                    .padding(.vertical, DesignSystem.Spacing.md)
+                    .padding(.horizontal, DesignSystem.Spacing.lg)
                     .background(
-                        RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
                             .fill(Color(.systemGray6))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
+                                    .stroke(Color(.systemGray4), lineWidth: DesignSystem.Border.subtle)
+                            )
                     )
                     
                     // Error message
                     if let errorMessage = errorMessage {
-                        Text(errorMessage)
-                            .font(.caption)
-                            .foregroundStyle(.red)
-                            .padding(.horizontal)
+                        HStack(spacing: DesignSystem.Spacing.sm) {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .font(.caption)
+                            Text(errorMessage)
+                                .font(.caption)
+                        }
+                        .foregroundStyle(.red)
+                        .padding(.horizontal, DesignSystem.Spacing.lg)
+                        .padding(.vertical, DesignSystem.Spacing.sm)
+                        .background(
+                            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.medium, style: .continuous)
+                                .fill(Color.red.opacity(DesignSystem.Opacity.subtle))
+                        )
+                        .transition(.opacity.combined(with: .move(edge: .top)))
                     }
                     
                     // Action buttons
-                    VStack(spacing: 12) {
+                    VStack(spacing: DesignSystem.Spacing.md) {
                         Button {
                             requestAuthorization()
                         } label: {
                             Label("Connect with Health", systemImage: "heart.fill")
-                                .fontWeight(.semibold)
+                                .fontWeight(DesignSystem.Typography.headlineWeight)
                                 .frame(maxWidth: .infinity)
-                                .frame(height: 56)
+                                .frame(height: DesignSystem.ButtonSize.large.height)
                         }
                         .buttonStyle(PrimaryProminentButtonStyle())
                         .disabled(isRequesting || !healthKitStore.isAvailable)
+                        .accessibilityLabel("Connect with Health")
+                        .accessibilityHint("Double tap to connect your workouts with Apple Health")
                         
                         Button {
                             dismiss()
                         } label: {
                             Text("Not Now")
-                                .fontWeight(.medium)
+                                .fontWeight(DesignSystem.Typography.bodyWeight)
                                 .frame(maxWidth: .infinity)
-                                .frame(height: 44)
+                                .frame(height: DesignSystem.ButtonSize.standard.height)
                         }
                         .buttonStyle(SecondaryGlassButtonStyle())
+                        .accessibilityLabel("Not Now")
+                        .accessibilityHint("Double tap to skip connecting with Health for now")
                     }
-                    .padding(.horizontal)
-                    .padding(.bottom, 32)
+                    .padding(.horizontal, DesignSystem.Spacing.lg)
+                    .padding(.bottom, DesignSystem.Spacing.xxl)
                 }
-                .padding(.horizontal, 24)
+                .padding(.horizontal, DesignSystem.Spacing.xl)
+                .padding(.bottom, DesignSystem.Spacing.xxxl)
             }
             .navigationTitle("Health Integration")
             .navigationBarTitleDisplayMode(.inline)
@@ -115,11 +153,18 @@ struct HealthKitPermissionsView: View {
                     Button("Skip") {
                         dismiss()
                     }
+                    .accessibilityLabel("Skip")
+                    .accessibilityHint("Double tap to skip connecting with Health")
                 }
             }
             .onAppear {
                 healthKitStore.checkAuthorizationStatus()
+                // Trigger animation
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    showAnimation = true
+                }
             }
+            .dynamicTypeSize(...DynamicTypeSize.accessibility5)
         }
     }
     
@@ -152,18 +197,27 @@ private struct FeatureRow: View {
     let text: String
     
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: DesignSystem.Spacing.md) {
             Image(systemName: icon)
-                .font(.title3)
-                .foregroundStyle(Theme.accentA)
-                .frame(width: 24)
+                .font(.system(size: DesignSystem.IconSize.large))
+                .foregroundStyle(
+                    LinearGradient(
+                        colors: [Theme.accentA, Theme.accentB],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .frame(width: DesignSystem.IconSize.large, height: DesignSystem.IconSize.large)
             
             Text(text)
-                .font(.body)
+                .font(.body.weight(DesignSystem.Typography.bodyWeight))
                 .foregroundStyle(Theme.textPrimary)
+                .lineSpacing(DesignSystem.Spacing.xs)
             
             Spacer()
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(text)
     }
 }
 
