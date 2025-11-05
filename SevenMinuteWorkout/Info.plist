@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-2214618538122354~6506191141</string>
+	<key>UIApplicationSceneManifest</key>
+	<false/>
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIColorName</key>
+		<string></string>
+		<key>UIImageName</key>
+		<string></string>
+	</dict>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>UIApplicationShortcutItemIconType</key>
+			<string>UIApplicationShortcutIconTypeCompose</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Start Workout</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.williamalston.SevenMinuteWorkout.startworkout</string>
+		</dict>
+	</array>
+	<key>NSHealthShareUsageDescription</key>
+	<string>We use HealthKit to read your weight and activity level to provide better calorie estimates and personalized recommendations for your workouts.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>We use HealthKit to save your workout sessions, including exercise minutes and calories burned, so you can track your progress in the Health and Activity apps.</string>
+</dict>
+</plist>

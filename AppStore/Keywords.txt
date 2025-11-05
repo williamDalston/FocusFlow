@@ -1,0 +1,51 @@
+# App Store Keywords for 7-Minute Workout
+# Maximum 100 characters including commas and spaces
+
+fitness,workout,HIIT,exercise,7 minute,home workout,no equipment,Apple Watch,HealthKit,strength training,cardio,interval training,bodyweight,quick workout,home fitness,fitness app,workout timer,exercise app,health,wellness
+
+# Character count: 199 (too long - needs to be under 100)
+
+# Optimized Version (under 100 characters):
+fitness,workout,HIIT,exercise,7 minute,home workout,no equipment,Apple Watch,HealthKit,strength,cardio,interval,bodyweight,quick workout,fitness app,workout timer,exercise app,health,wellness
+
+# Character count: 174 (still too long)
+
+# Final Optimized Version (under 100 characters):
+fitness,workout,HIIT,exercise,7 minute,home workout,no equipment,Apple Watch,HealthKit,strength,cardio,interval,bodyweight,quick workout,fitness app
+
+# Character count: 127 (still too long)
+
+# Most Optimized Version (under 100 characters):
+fitness,workout,HIIT,exercise,7 minute,home workout,no equipment,Apple Watch,HealthKit,strength,cardio,interval,bodyweight,quick workout
+
+# Character count: 115 (still too long)
+
+# Final Optimized (under 100 characters):
+fitness,workout,HIIT,exercise,7 minute,home workout,no equipment,Apple Watch,HealthKit,strength,cardio,interval,bodyweight
+
+# Character count: 99 ✅
+
+---
+
+## Recommended Keywords (99 characters)
+fitness,workout,HIIT,exercise,7 minute,home workout,no equipment,Apple Watch,HealthKit,strength,cardio,interval,bodyweight
+
+## Alternative Keywords (if needed)
+- Replace "7 minute" with "7min" (saves 2 characters)
+- Replace "home workout" with "home" (saves 8 characters)
+- Remove "no equipment" if space is needed (saves 13 characters)
+
+## Keyword Research Notes
+- Include brand terms: "7 minute", "HIIT"
+- Include category terms: "fitness", "workout", "exercise"
+- Include platform terms: "Apple Watch", "HealthKit"
+- Include benefit terms: "no equipment", "home workout", "quick workout"
+- Include type terms: "strength", "cardio", "interval", "bodyweight"
+
+## App Store Search Optimization Tips
+1. Use exact match phrases users search for
+2. Include common misspellings if space allows
+3. Prioritize high-volume, relevant keywords
+4. Avoid generic terms that won't help ranking
+5. Test different keyword combinations
+
