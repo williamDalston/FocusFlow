@@ -182,8 +182,9 @@ class RecoveryAnalyzer: ObservableObject {
             }
             
             if recentHR.count >= 3 {
-                let firstHalf = recentHR.prefix(recentHR.count / 2).reduce(0, +) / Double(recentHR.count / 2)
-                let secondHalf = recentHR.suffix(recentHR.count / 2).reduce(0, +) / Double(recentHR.count / 2)
+                let halfCount = max(1, recentHR.count / 2)
+                let firstHalf = recentHR.prefix(halfCount).reduce(0, +) / Double(halfCount)
+                let secondHalf = recentHR.suffix(halfCount).reduce(0, +) / Double(halfCount)
                 
                 if secondHalf > firstHalf * 1.1 {
                     heartRateTrend = .increasing

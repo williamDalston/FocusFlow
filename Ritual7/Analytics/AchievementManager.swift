@@ -215,8 +215,14 @@ final class AchievementManager: ObservableObject {
             let progress = progressForAchievement(achievement)
             let remaining = calculateRemaining(for: achievement)
             
-            if progress > 0 && (closest == nil || progress > closest!.progress) {
-                closest = (achievement, remaining, progress)
+            if progress > 0 {
+                if let currentClosest = closest {
+                    if progress > currentClosest.progress {
+                        closest = (achievement, remaining, progress)
+                    }
+                } else {
+                    closest = (achievement, remaining, progress)
+                }
             }
         }
         

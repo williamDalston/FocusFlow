@@ -204,6 +204,7 @@ class HealthInsightsManager: ObservableObject {
         
         // Split workouts into two halves
         let sortedWorkouts = workouts.sorted { $0.startDate < $1.startDate }
+        guard sortedWorkouts.count >= 2 else { return .insufficientData }
         let midpoint = sortedWorkouts.count / 2
         let firstHalf = Array(sortedWorkouts[..<midpoint])
         let secondHalf = Array(sortedWorkouts[midpoint...])
