@@ -248,14 +248,14 @@ struct ErrorView: View {
     var body: some View {
         VStack(spacing: 20) {
             Image(systemName: "exclamationmark.triangle.fill")
-                .font(.system(size: 48))
+                .font(.system(size: DesignSystem.IconSize.xxlarge, weight: .bold))
                 .foregroundStyle(.orange)
             
             Text("Oops!")
-                .font(.title2.weight(.bold))
+                .font(Theme.title2)
             
             Text(error.localizedDescription)
-                .font(.body)
+                .font(Theme.body)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)

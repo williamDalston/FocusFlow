@@ -74,10 +74,14 @@ class SoundManager: ObservableObject {
         do {
             try engine.start()
             
-            let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: frameCount)!
+            guard let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: frameCount) else {
+                throw SoundError.failedToCreateBuffer
+            }
             buffer.frameLength = frameCount
             
-            let channelData = buffer.floatChannelData![0]
+            guard let channelData = buffer.floatChannelData?[0] else {
+                throw SoundError.failedToCreateBuffer
+            }
             
             for frame in 0..<Int(frameCount) {
                 let time = Double(frame) / sampleRate
@@ -141,5 +145,16 @@ enum VibrationPattern {
     case double
     case triple
     case long
+}
+
+enum SoundError: LocalizedError {
+    case failedToCreateBuffer
+    
+    var errorDescription: String? {
+        switch self {
+        case .failedToCreateBuffer:
+            return "Failed to create audio buffer"
+        }
+    }
 }
 

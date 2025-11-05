@@ -18,7 +18,7 @@ struct SuccessStateView: View {
     var body: some View {
         VStack(spacing: DesignSystem.Spacing.lg) {
             Image(systemName: icon)
-                .font(.system(size: 64, weight: .medium))
+                .font(.system(size: DesignSystem.IconSize.huge, weight: .medium))
                 .foregroundStyle(.green)
                 .scaleEffect(scale)
                 .opacity(opacity)
@@ -87,7 +87,7 @@ class ToastManager: ObservableObject {
         }
     }
     
-    func show(_ message: String, icon: String = "checkmark.circle.fill", type: ToastType = .success, duration: TimeInterval = 2.0) {
+    func show(_ message: String, icon: String = "checkmark.circle.fill", type: Toast.ToastType = .success, duration: TimeInterval = 2.0) {
         toastTask?.cancel()
         
         let toast = Toast(message: message, icon: icon, duration: duration, type: type)
@@ -120,7 +120,7 @@ struct ToastView: View {
     var body: some View {
         HStack(spacing: DesignSystem.Spacing.md) {
             Image(systemName: toast.icon)
-                .font(.system(size: 20, weight: .semibold))
+                .font(.system(size: DesignSystem.IconSize.medium, weight: .semibold))
                 .foregroundStyle(toast.color)
             
             Text(toast.message)

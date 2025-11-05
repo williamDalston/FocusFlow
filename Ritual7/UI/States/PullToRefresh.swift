@@ -59,7 +59,7 @@ struct CustomRefreshIndicator: View {
                 LoadingIndicator(size: 24, color: Theme.accentA)
             } else {
                 Image(systemName: "arrow.down")
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.system(size: DesignSystem.IconSize.small, weight: .semibold))
                     .foregroundStyle(Theme.accentA)
                     .rotationEffect(.degrees(rotation))
             }

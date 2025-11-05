@@ -201,7 +201,7 @@ struct WorkoutHistoryView: View {
                         } label: {
                             HStack(spacing: DesignSystem.Spacing.xs) {
                                 Image(systemName: "xmark.circle.fill")
-                                    .font(.caption)
+                                    .font(Theme.caption)
                                 Text("Clear All")
                                     .font(Theme.caption)
                             }
@@ -399,7 +399,7 @@ struct FilterChip: View {
                     .font(Theme.caption)
                 if isActive {
                     Image(systemName: "xmark.circle.fill")
-                        .font(.caption2)
+                        .font(Theme.caption2)
                 }
             }
             .foregroundStyle(isActive ? Theme.textPrimary : .secondary)
@@ -479,7 +479,7 @@ struct SummaryCard: View {
     var body: some View {
         VStack(spacing: DesignSystem.Spacing.sm) {
             Image(systemName: icon)
-                .font(.title3)
+                .font(Theme.title3)
                 .foregroundStyle(color)
             
             Text(value)
@@ -521,7 +521,7 @@ struct WorkoutSessionDetailView: View {
                         // Header
                         VStack(spacing: DesignSystem.Spacing.lg) {
                             Image(systemName: "checkmark.circle.fill")
-                                .font(.system(size: 64))
+                                .font(.system(size: DesignSystem.IconSize.huge, weight: .bold))
                                 .foregroundStyle(.green)
                             
                             Text("Workout Complete")
@@ -644,7 +644,7 @@ struct DetailStatRow: View {
     var body: some View {
         HStack(spacing: DesignSystem.Spacing.lg) {
             Image(systemName: icon)
-                .font(.title2)
+                .font(Theme.title2)
                 .foregroundStyle(color)
                 .frame(width: DesignSystem.IconSize.xlarge, height: DesignSystem.IconSize.xlarge)
             
@@ -747,7 +747,7 @@ struct ExportButton: View {
         } label: {
             HStack(spacing: DesignSystem.Spacing.md) {
                 Image(systemName: format.icon)
-                    .font(.title3)
+                    .font(Theme.title3)
                     .foregroundStyle(Theme.accentA)
                 
                 VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
@@ -763,7 +763,7 @@ struct ExportButton: View {
                 Spacer()
                 
                 Image(systemName: "chevron.right")
-                    .font(.caption)
+                    .font(Theme.caption)
                     .foregroundStyle(.secondary)
             }
             .padding(DesignSystem.Spacing.lg)

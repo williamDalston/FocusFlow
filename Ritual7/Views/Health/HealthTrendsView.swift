@@ -58,11 +58,11 @@ struct HealthTrendsView: View {
                 GlassCard(material: .ultraThinMaterial) {
                     VStack(spacing: 12) {
                         Image(systemName: "heart.text.square.fill")
-                            .font(.system(size: 48))
+                            .font(.system(size: DesignSystem.IconSize.xxlarge, weight: .bold))
                             .foregroundStyle(Theme.accentA)
                         
                         Text("Enable HealthKit")
-                            .font(.title2.weight(.bold))
+                            .font(Theme.title2)
                             .foregroundStyle(Theme.textPrimary)
                         
                         Text("Connect with Apple Health to get personalized health insights and track your fitness progress.")
@@ -162,7 +162,7 @@ struct HealthTrendsView: View {
                             
                             HStack(alignment: .lastTextBaseline, spacing: 8) {
                                 Text("\(Int(avgHR))")
-                                    .font(.system(size: 48, weight: .bold))
+                                    .font(.system(size: DesignSystem.IconSize.xxlarge, weight: .bold))
                                     .foregroundStyle(Theme.accentA)
                                 
                                 Text("BPM")

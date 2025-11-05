@@ -14,7 +14,7 @@ struct CountdownAnimation: View {
         ZStack {
             if count > 0 {
                 Text("\(count)")
-                    .font(.system(size: 120, weight: .bold, design: .rounded))
+                    .font(.system(size: DesignSystem.IconSize.huge * 1.875, weight: .bold, design: .rounded)) // 120pt for countdown display
                     .foregroundStyle(.white)
                     .scaleEffect(scale)
                     .opacity(opacity)
@@ -38,7 +38,7 @@ struct CountdownAnimation: View {
                     }
             } else if count == 0 {
                 Text("GO!")
-                    .font(.system(size: 100, weight: .bold, design: .rounded))
+                    .font(.system(size: DesignSystem.IconSize.huge * 1.5625, weight: .bold, design: .rounded)) // 100pt for "GO!" display
                     .foregroundStyle(
                         LinearGradient(
                             colors: [Theme.accentA, Theme.accentB],
@@ -83,7 +83,7 @@ struct ExerciseDemonstrationView: View {
         VStack(spacing: 20) {
             // Animated exercise icon
             Image(systemName: exercise.icon)
-                .font(.system(size: 80, weight: .bold))
+                .font(.system(size: DesignSystem.IconSize.huge * 1.25, weight: .bold)) // 80pt for exercise icon
                 .foregroundStyle(
                     LinearGradient(
                         colors: [Theme.accentA, Theme.accentB],
@@ -194,7 +194,7 @@ struct ExerciseTransitionView: View {
                 VStack(spacing: 24) {
                     // New exercise icon appearing
                     Image(systemName: toExercise.icon)
-                        .font(.system(size: 64, weight: .bold))
+                        .font(.system(size: DesignSystem.IconSize.huge, weight: .bold))
                         .foregroundStyle(Theme.accentA)
                         .scaleEffect(showTransition ? 1.0 : 0.5)
                         .opacity(showTransition ? 1.0 : 0.0)
@@ -243,7 +243,7 @@ struct MilestoneCelebrationView: View {
             if showCelebration {
                 VStack(spacing: 16) {
                     Image(systemName: "star.fill")
-                        .font(.system(size: 64))
+                        .font(.system(size: DesignSystem.IconSize.huge, weight: .bold))
                         .foregroundStyle(
                             LinearGradient(
                                 colors: [.yellow, .orange],

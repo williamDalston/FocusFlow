@@ -28,7 +28,7 @@ struct FormFeedbackSystem: View {
                 }
                 
                 Text(tips[currentTipIndex])
-                    .font(.caption)
+                    .font(Theme.caption)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }

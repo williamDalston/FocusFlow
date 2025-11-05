@@ -31,7 +31,7 @@ struct EmptyStateView: View {
         VStack(spacing: DesignSystem.Spacing.xl) {
             // Icon with animation
             Image(systemName: icon)
-                .font(.system(size: 64, weight: .light))
+                .font(.system(size: DesignSystem.IconSize.huge, weight: .light))
                 .foregroundStyle(
                     LinearGradient(
                         colors: [
@@ -188,7 +188,7 @@ struct InlineEmptyState: View {
     var body: some View {
         VStack(spacing: DesignSystem.Spacing.md) {
             Image(systemName: icon)
-                .font(.system(size: 32, weight: .light))
+                .font(.system(size: DesignSystem.IconSize.xlarge, weight: .light))
                 .foregroundStyle(.secondary)
             
             Text(message)

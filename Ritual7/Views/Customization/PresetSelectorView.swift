@@ -55,7 +55,7 @@ private struct PresetCard: View {
                 HStack(spacing: 16) {
                     // Icon
                     Image(systemName: preset.icon)
-                        .font(.system(size: 32))
+                        .font(.system(size: DesignSystem.IconSize.xlarge, weight: .bold))
                         .foregroundStyle(isSelected ? Theme.accentA : Theme.textSecondary)
                         .frame(width: 48, height: 48)
                         .background(

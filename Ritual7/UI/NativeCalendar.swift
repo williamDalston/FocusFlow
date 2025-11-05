@@ -32,7 +32,7 @@ struct NativeCalendar: View {
                     Image(systemName: "chevron.left")
                         .font(.title2.weight(.medium))
                         .foregroundStyle(.primary)
-                        .frame(width: 44, height: 44) // Proper touch target
+                        .frame(width: DesignSystem.TouchTarget.minimum, height: DesignSystem.TouchTarget.minimum) // Proper touch target
                 }
                 .buttonStyle(.plain)
                 
@@ -48,7 +48,7 @@ struct NativeCalendar: View {
                     Image(systemName: "chevron.right")
                         .font(.title2.weight(.medium))
                         .foregroundStyle(.primary)
-                        .frame(width: 44, height: 44) // Proper touch target
+                        .frame(width: DesignSystem.TouchTarget.minimum, height: DesignSystem.TouchTarget.minimum) // Proper touch target
                 }
                 .buttonStyle(.plain)
             }
@@ -116,7 +116,9 @@ struct NativeCalendar: View {
             return []
         }
         
-        let firstDayOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: currentMonth))!
+        guard let firstDayOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: currentMonth)) else {
+            return []
+        }
         let firstWeekday = calendar.component(.weekday, from: firstDayOfMonth)
         let numberOfDays = range.count
         

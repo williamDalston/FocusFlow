@@ -174,7 +174,7 @@ struct ExerciseListView: View {
                         } label: {
                             HStack(spacing: DesignSystem.Spacing.xs) {
                                 Image(systemName: "xmark.circle.fill")
-                                    .font(.caption)
+                                    .font(Theme.caption)
                                 Text("Clear All")
                                     .font(Theme.caption)
                             }
@@ -263,7 +263,7 @@ struct ExerciseCard: View {
                     .frame(width: DesignSystem.IconSize.xxlarge + 8, height: DesignSystem.IconSize.xxlarge + 8)
                 
                 Image(systemName: exercise.icon)
-                    .font(.title2)
+                    .font(Theme.title2)
                     .foregroundStyle(
                         LinearGradient(
                             colors: [Theme.accentA, Theme.accentB],
@@ -321,7 +321,7 @@ struct ExerciseCard: View {
             
             // Chevron
             Image(systemName: "chevron.right")
-                .font(.caption)
+                .font(Theme.caption)
                 .foregroundStyle(.secondary)
         }
         .padding(.horizontal, DesignSystem.Spacing.md)
@@ -416,7 +416,7 @@ struct ExerciseFilterChip: View {
                     .font(Theme.caption)
                 if isActive {
                     Image(systemName: "xmark.circle.fill")
-                        .font(.caption2)
+                        .font(Theme.caption2)
                 }
             }
             .foregroundStyle(isActive ? Theme.textPrimary : .secondary)
@@ -466,7 +466,7 @@ struct MuscleGroupFilterView: View {
                                 if selectedMuscleGroup == nil {
                                     Image(systemName: "checkmark")
                                         .foregroundStyle(Theme.accentA)
-                                        .font(.headline)
+                                        .font(Theme.headline)
                                 }
                             }
                         }
@@ -491,7 +491,7 @@ struct MuscleGroupFilterView: View {
                                     if selectedMuscleGroup == muscleGroup {
                                         Image(systemName: "checkmark")
                                             .foregroundStyle(Theme.accentA)
-                                            .font(.headline)
+                                            .font(Theme.headline)
                                     }
                                 }
                             }

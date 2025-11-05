@@ -479,7 +479,7 @@ private struct SuggestionRow: View {
                 }
             } else {
                 Text("Current")
-                    .font(.caption)
+                    .font(Theme.caption)
                     .foregroundStyle(.secondary)
             }
         }

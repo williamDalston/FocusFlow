@@ -265,15 +265,15 @@ struct WorkoutContentView: View {
             VStack(spacing: 20) {
                 VStack(spacing: 12) {
                     Image(systemName: "figure.run")
-                        .font(.system(size: 48))
+                        .font(.system(size: DesignSystem.IconSize.xxlarge, weight: .bold))
                         .foregroundStyle(Theme.accentA)
                     
                     Text("Ready to Work Out?")
-                        .font(.title2.weight(.bold))
+                        .font(Theme.title2)
                         .foregroundStyle(Theme.textPrimary)
                     
                     Text("12 exercises • 7 minutes • No equipment needed")
-                        .font(.subheadline)
+                        .font(Theme.subheadline)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
                 }
@@ -304,7 +304,7 @@ struct WorkoutContentView: View {
                         Haptics.tap()
                     } label: {
                         Label("Customize", systemImage: "slider.horizontal.3")
-                            .font(.subheadline.weight(.medium))
+                            .font(Theme.subheadline.weight(.medium))
                     }
                     .buttonStyle(SecondaryGlassButtonStyle())
                     .accessibilityLabel("Customize Workout")
@@ -316,7 +316,7 @@ struct WorkoutContentView: View {
                         Haptics.tap()
                     } label: {
                         Label("View Exercises", systemImage: "list.bullet")
-                            .font(.subheadline.weight(.medium))
+                            .font(Theme.subheadline.weight(.medium))
                     }
                     .buttonStyle(SecondaryGlassButtonStyle())
                     .accessibilityLabel("View Exercises")
@@ -328,7 +328,7 @@ struct WorkoutContentView: View {
                         Haptics.tap()
                     } label: {
                         Label("History", systemImage: "clock")
-                            .font(.subheadline.weight(.medium))
+                            .font(Theme.subheadline.weight(.medium))
                     }
                     .buttonStyle(SecondaryGlassButtonStyle())
                     .accessibilityLabel("Workout History")
@@ -455,7 +455,7 @@ struct WorkoutContentView: View {
             if store.sessions.isEmpty {
                 VStack(spacing: DesignSystem.Spacing.sm) {
                     Image(systemName: "figure.run")
-                        .font(.title2)
+                        .font(Theme.title2)
                         .foregroundStyle(.secondary)
                     Text("Complete your first workout to see history here.")
                         .font(Theme.subheadline)
@@ -631,7 +631,7 @@ struct WorkoutContentView: View {
                 } label: {
                     HStack(spacing: DesignSystem.Spacing.md) {
                         Image(systemName: "target")
-                            .font(.title3)
+                            .font(Theme.title3)
                             .foregroundStyle(Theme.accentA)
                             .frame(width: DesignSystem.IconSize.statBox, height: DesignSystem.IconSize.statBox)
                         VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
@@ -984,7 +984,7 @@ private struct GoalProgressCard: View {
             
             if !isAchieved {
                 Text("\(Int(progress * 100))% complete")
-                    .font(.caption2)
+                    .font(Theme.caption2)
                     .foregroundStyle(.secondary)
             }
         }

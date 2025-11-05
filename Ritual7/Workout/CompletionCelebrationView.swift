@@ -68,7 +68,7 @@ struct CompletionCelebrationView: View {
                     .opacity(animationPhase >= 1 ? 1.0 : 0.0)
                 
                 Image(systemName: "checkmark")
-                    .font(.system(size: 64, weight: .bold))
+                    .font(.system(size: DesignSystem.IconSize.huge, weight: .bold))
                     .foregroundStyle(.white)
                     .scaleEffect(animationPhase >= 2 ? 1.0 : 0.5)
                     .opacity(animationPhase >= 2 ? 1.0 : 0.0)

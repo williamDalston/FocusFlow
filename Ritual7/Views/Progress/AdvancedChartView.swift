@@ -59,11 +59,11 @@ struct AdvancedChartView: View {
         }
         .padding()
         .background(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
                 .fill(.ultraThinMaterial)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .stroke(Theme.strokeOuter, lineWidth: 0.8)
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                        .stroke(Theme.strokeOuter, lineWidth: DesignSystem.Border.subtle)
                 )
         )
         .sheet(isPresented: $showingExportSheet) {
@@ -100,9 +100,9 @@ struct AdvancedChartView: View {
                             Text("\(day.count)")
                                 .font(.caption.weight(.bold))
                                 .foregroundStyle(.white)
-                                .padding(4)
+                                .padding(DesignSystem.Spacing.xs)
                                 .background(
-                                    RoundedRectangle(cornerRadius: 4, style: .continuous)
+                                    RoundedRectangle(cornerRadius: DesignSystem.Spacing.xs, style: .continuous)
                                         .fill(Theme.accentA)
                                 )
                         }
@@ -236,9 +236,9 @@ struct AdvancedChartView: View {
                             Text("\(month.count)")
                                 .font(.caption.weight(.bold))
                                 .foregroundStyle(.white)
-                                .padding(4)
+                                .padding(DesignSystem.Spacing.xs)
                                 .background(
-                                    RoundedRectangle(cornerRadius: 4, style: .continuous)
+                                    RoundedRectangle(cornerRadius: DesignSystem.Spacing.xs, style: .continuous)
                                         .fill(Theme.accentC)
                                 )
                         }
@@ -295,11 +295,11 @@ struct AdvancedChartView: View {
         }
         .padding()
         .background(
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(Theme.accentA.opacity(0.1))
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
+                .fill(Theme.accentA.opacity(DesignSystem.Opacity.subtle))
                 .overlay(
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .stroke(Theme.accentA.opacity(0.3), lineWidth: 1)
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
+                        .stroke(Theme.accentA.opacity(DesignSystem.Opacity.medium), lineWidth: DesignSystem.Border.standard)
                 )
         )
     }

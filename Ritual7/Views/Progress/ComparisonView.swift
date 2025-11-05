@@ -231,7 +231,7 @@ struct ComparisonView: View {
                 .fill(.ultraThinMaterial)
                 .overlay(
                     RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
-                        .stroke(Theme.strokeOuter, lineWidth: 0.5)
+                        .stroke(Theme.strokeOuter, lineWidth: DesignSystem.Border.subtle)
                 )
         )
     }

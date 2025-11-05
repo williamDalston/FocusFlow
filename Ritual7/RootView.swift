@@ -437,7 +437,7 @@ struct iPadSidebarButton: View {
                 Image(systemName: icon)
                     .font(.title3)
                     .foregroundStyle(isSelected ? Theme.textOnDark : Theme.textSecondary)
-                    .frame(width: 24)
+                    .frame(width: DesignSystem.IconSize.statBox)
                 
                 Text(title)
                     .font(.body.weight(.medium))
@@ -448,7 +448,7 @@ struct iPadSidebarButton: View {
                 if isSelected {
                     Circle()
                         .fill(.white)
-                        .frame(width: 6, height: 6)
+                        .frame(width: DesignSystem.Spacing.sm, height: DesignSystem.Spacing.sm)
                 }
             }
             .padding(.horizontal, DesignSystem.Spacing.lg)
@@ -481,7 +481,7 @@ struct iPadRecentWorkoutCard: View {
         HStack(alignment: .top, spacing: DesignSystem.Spacing.md) {
             Circle()
                 .fill(Theme.accentA.opacity(0.2))
-                .frame(width: 8, height: 8)
+                .frame(width: DesignSystem.IconSize.small, height: DesignSystem.IconSize.small)
                 .padding(.top, DesignSystem.Spacing.sm)
             
             VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {

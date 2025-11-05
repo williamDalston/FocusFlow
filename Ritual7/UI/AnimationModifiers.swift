@@ -305,14 +305,14 @@ enum AnimationConstants {
     // Helper to conditionally apply animation
     static func spring(response: Double, dampingFraction: Double, respectReduceMotion: Bool = true) -> Animation {
         if respectReduceMotion && UIAccessibility.isReduceMotionEnabled {
-            return .none
+            return Animation.linear(duration: 0)
         }
         return Animation.spring(response: response, dampingFraction: dampingFraction)
     }
     
     static func ease(duration: Double, respectReduceMotion: Bool = true) -> Animation {
         if respectReduceMotion && UIAccessibility.isReduceMotionEnabled {
-            return .none
+            return Animation.linear(duration: 0)
         }
         return Animation.easeInOut(duration: duration)
     }

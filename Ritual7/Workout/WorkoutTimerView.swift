@@ -288,7 +288,7 @@ struct WorkoutTimerView: View {
                 // Timer text with premium styling
                 VStack(spacing: DesignSystem.Spacing.sm) {
                     Text(timeString)
-                        .font(.system(size: 68, weight: .bold, design: .rounded))
+                        .font(.system(size: DesignSystem.IconSize.huge * 1.0625, weight: .bold, design: .rounded)) // 68pt timer display
                         .foregroundStyle(
                             LinearGradient(
                                 colors: [
@@ -389,19 +389,19 @@ struct WorkoutTimerView: View {
                             .frame(height: 200)
                     } else {
                         Image(systemName: "figure.run")
-                            .font(.system(size: 64))
+                            .font(.system(size: DesignSystem.IconSize.huge, weight: .bold))
                             .foregroundStyle(Theme.accentA)
                             .modifier(SymbolBounceModifier(trigger: engine.timeRemaining))
                     }
                     
                     Text("Prepare to Start")
-                        .font(.title2.weight(.bold))
+                        .font(Theme.title2)
                         .foregroundStyle(Theme.textPrimary)
                         .multilineTextAlignment(.center)
                     
                     if let firstExercise = engine.nextExercise {
                         Text("First stage: \(firstExercise.name)")
-                            .font(.subheadline)
+                            .font(Theme.subheadline)
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
                     }
@@ -432,11 +432,11 @@ struct WorkoutTimerView: View {
                 GlassCard(material: .ultraThinMaterial) {
                     VStack(spacing: 16) {
                         Text("Next Exercise")
-                            .font(.headline)
+                            .font(Theme.headline)
                             .foregroundStyle(Theme.textPrimary)
                         
                         Image(systemName: nextExercise.icon)
-                            .font(.system(size: 48))
+                            .font(.system(size: DesignSystem.IconSize.xxlarge, weight: .bold))
                             .foregroundStyle(Theme.accentA)
                         
                         Text(nextExercise.name)
@@ -472,7 +472,7 @@ struct WorkoutTimerView: View {
                 VStack(spacing: DesignSystem.Spacing.xl) {
                     // Exercise icon with Agent 11 animations
                     Image(systemName: exercise.icon)
-                        .font(.system(size: 64))
+                        .font(.system(size: DesignSystem.IconSize.huge, weight: .bold))
                         .foregroundStyle(
                             LinearGradient(
                                 colors: [
@@ -754,7 +754,7 @@ struct WorkoutTimerView: View {
                     }
                 } label: {
                     Label("Share Workout", systemImage: "square.and.arrow.up")
-                        .font(.headline)
+                        .font(Theme.headline)
                         .frame(maxWidth: .infinity)
                         .frame(height: 50)
                 }
@@ -768,7 +768,7 @@ struct WorkoutTimerView: View {
                     dismiss()
                 } label: {
                     Text("Start a New Journey")
-                        .font(.headline)
+                        .font(Theme.headline)
                         .frame(maxWidth: .infinity)
                         .frame(height: 50)
                 }
@@ -873,7 +873,7 @@ private struct CompletionStatCard: View {
                     .frame(width: DesignSystem.IconSize.statBox + 8, height: DesignSystem.IconSize.statBox + 8)
                 
                 Image(systemName: icon)
-                    .font(.title2)
+                    .font(Theme.title2)
                     .foregroundStyle(.white.opacity(DesignSystem.Opacity.veryStrong))
                     .frame(width: DesignSystem.IconSize.statBox, height: DesignSystem.IconSize.statBox)
             }
@@ -933,7 +933,7 @@ private struct StatCard: View {
                     .frame(width: DesignSystem.IconSize.statBox + 8, height: DesignSystem.IconSize.statBox + 8)
                 
                 Image(systemName: icon)
-                    .font(.title2)
+                    .font(Theme.title2)
                     .foregroundStyle(color)
                     .frame(width: DesignSystem.IconSize.statBox, height: DesignSystem.IconSize.statBox)
             }

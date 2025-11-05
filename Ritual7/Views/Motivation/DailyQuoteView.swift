@@ -23,7 +23,7 @@ struct DailyQuoteView: View {
                                     endPoint: .bottomTrailing
                                 )
                             )
-                            .frame(width: 44, height: 44)
+                            .frame(width: DesignSystem.TouchTarget.minimum, height: DesignSystem.TouchTarget.minimum)
                             .shadow(color: Theme.enhancedShadow.opacity(DesignSystem.Opacity.medium), 
                                    radius: DesignSystem.Shadow.small.radius, 
                                    y: DesignSystem.Shadow.small.y)
@@ -54,7 +54,7 @@ struct DailyQuoteView: View {
                             )
                         
                         Image(systemName: "quote.opening")
-                            .font(.title3.weight(.semibold))
+                            .font(Theme.title3)
                             .foregroundStyle(
                                 LinearGradient(
                                     colors: [Theme.accentA, Theme.accentB],
@@ -65,7 +65,7 @@ struct DailyQuoteView: View {
                     }
                     
                     Text("Daily Motivation")
-                        .font(.headline.weight(.bold))
+                        .font(Theme.headline)
                         .foregroundStyle(
                             LinearGradient(
                                 colors: [Theme.textPrimary, Theme.textPrimary.opacity(0.8)],
@@ -73,25 +73,25 @@ struct DailyQuoteView: View {
                                 endPoint: .trailing
                             )
                         )
-                        .shadow(color: Theme.shadow.opacity(0.1), radius: 2, x: 0, y: 1)
+                        .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.subtle * 0.83), radius: DesignSystem.Shadow.verySoft.radius * 0.17, x: 0, y: DesignSystem.Shadow.verySoft.y * 0.17)
                     
                     Spacer()
                 }
                 
                 Text(messageManager.dailyQuote)
-                    .font(.body.weight(.medium))
+                    .font(Theme.body.weight(.medium))
                     .foregroundStyle(Theme.textPrimary)
                     .fixedSize(horizontal: false, vertical: true)
                     .multilineTextAlignment(.leading)
-                    .lineSpacing(4)
-                    .shadow(color: Theme.shadow.opacity(0.05), radius: 1, x: 0, y: 0.5)
+                    .lineSpacing(DesignSystem.Spacing.xs)
+                        .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.subtle * 0.42), radius: DesignSystem.Shadow.verySoft.radius * 0.08, x: 0, y: DesignSystem.Shadow.verySoft.y * 0.08)
                 
                 HStack {
                     Spacer()
                     ZStack {
                         RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
                             .fill(Theme.accentA.opacity(DesignSystem.Opacity.subtle * 1.5))
-                            .frame(width: 32, height: 32)
+                            .frame(width: DesignSystem.IconSize.xlarge, height: DesignSystem.IconSize.xlarge)
                             .shadow(color: Theme.accentA.opacity(DesignSystem.Opacity.subtle), 
                                    radius: DesignSystem.Shadow.verySoft.radius, 
                                    y: DesignSystem.Shadow.verySoft.y)
@@ -106,7 +106,7 @@ struct DailyQuoteView: View {
                             )
                         
                         Image(systemName: "quote.closing")
-                            .font(.caption.weight(.semibold))
+                            .font(Theme.caption.weight(.semibold))
                             .foregroundStyle(Theme.accentA)
                     }
                 }
@@ -141,7 +141,7 @@ struct StreakCelebrationView: View {
                                 endPoint: .bottomTrailing
                             )
                         )
-                        .frame(width: 52, height: 52)
+                        .frame(width: DesignSystem.IconSize.xxlarge, height: DesignSystem.IconSize.xxlarge)
                         .shadow(color: Color.orange.opacity(DesignSystem.Opacity.medium * 1.3), 
                                radius: DesignSystem.Shadow.medium.radius, 
                                y: DesignSystem.Shadow.medium.y)
@@ -172,7 +172,7 @@ struct StreakCelebrationView: View {
                         )
                     
                     Image(systemName: "flame.fill")
-                        .font(.title2.weight(.bold))
+                        .font(Theme.title2)
                         .foregroundStyle(
                             LinearGradient(
                                 colors: [Color.orange, Color.orange.opacity(0.8)],
@@ -181,12 +181,12 @@ struct StreakCelebrationView: View {
                             )
                         )
                         .scaleEffect(showFire ? 1.15 : 1.0)
-                        .shadow(color: Color.orange.opacity(0.5), radius: 4, x: 0, y: 2)
+                        .shadow(color: Color.orange.opacity(DesignSystem.Opacity.strong), radius: DesignSystem.Shadow.verySoft.radius * 0.33, x: 0, y: DesignSystem.Shadow.verySoft.y * 0.33)
                 }
                 
                 VStack(alignment: .leading, spacing: 2) {
                     Text("\(streak)")
-                        .font(.title.weight(.bold))
+                        .font(Theme.title)
                         .foregroundStyle(
                             LinearGradient(
                                 colors: [Theme.textPrimary, Theme.textPrimary.opacity(0.9)],
@@ -195,12 +195,12 @@ struct StreakCelebrationView: View {
                             )
                         )
                         .monospacedDigit()
-                        .shadow(color: Theme.shadow.opacity(0.15), radius: 3, x: 0, y: 1)
+                        .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.subtle * 1.25), radius: DesignSystem.Shadow.verySoft.radius * 0.25, x: 0, y: DesignSystem.Shadow.verySoft.y * 0.17)
                     
                     Text("day streak")
-                        .font(.subheadline.weight(.semibold))
+                        .font(Theme.subheadline.weight(.semibold))
                         .foregroundStyle(.secondary)
-                        .shadow(color: Theme.shadow.opacity(0.1), radius: 2, x: 0, y: 1)
+                        .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.subtle * 0.83), radius: DesignSystem.Shadow.verySoft.radius * 0.17, x: 0, y: DesignSystem.Shadow.verySoft.y * 0.17)
                 }
                 
                 Spacer()
@@ -209,7 +209,7 @@ struct StreakCelebrationView: View {
             
             if streak >= 7 {
                 Text(Quotes.forStreak(streak))
-                    .font(.caption.weight(.medium))
+                    .font(Theme.caption.weight(.medium))
                     .foregroundStyle(
                         LinearGradient(
                             colors: [Theme.accentA, Theme.accentB],
@@ -255,16 +255,16 @@ struct AchievementCelebrationView: View {
                 
                 VStack(spacing: 12) {
                     Image(systemName: achievement.icon)
-                        .font(.system(size: 64))
+                        .font(.system(size: DesignSystem.IconSize.huge, weight: .bold))
                         .foregroundStyle(Theme.accentA)
                         .scaleEffect(scale)
                     
                     Text(achievement.title)
-                        .font(.title2.weight(.bold))
+                        .font(Theme.title2)
                         .foregroundStyle(Theme.textPrimary)
                     
                     Text(achievement.message)
-                        .font(.body)
+                        .font(Theme.body)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
                 }
@@ -305,7 +305,7 @@ struct MotivationalMessageCard: View {
                                 endPoint: .bottomTrailing
                             )
                         )
-                        .frame(width: 48, height: 48)
+                        .frame(width: DesignSystem.IconSize.xxlarge, height: DesignSystem.IconSize.xxlarge)
                         .shadow(color: Theme.enhancedShadow.opacity(DesignSystem.Opacity.medium), 
                                radius: DesignSystem.Shadow.medium.radius, 
                                y: DesignSystem.Shadow.medium.y)
@@ -338,7 +338,7 @@ struct MotivationalMessageCard: View {
                         )
                     
                     Image(systemName: icon)
-                        .font(.title3.weight(.semibold))
+                        .font(Theme.title3)
                         .foregroundStyle(
                             LinearGradient(
                                 colors: [color, color.opacity(0.9)],
@@ -346,14 +346,14 @@ struct MotivationalMessageCard: View {
                                 endPoint: .bottom
                             )
                         )
-                        .shadow(color: color.opacity(0.3), radius: 2, x: 0, y: 1)
+                        .shadow(color: color.opacity(DesignSystem.Opacity.medium), radius: DesignSystem.Shadow.verySoft.radius * 0.17, x: 0, y: DesignSystem.Shadow.verySoft.y * 0.17)
                 }
                 
                 Text(message)
-                    .font(.body.weight(.medium))
+                    .font(Theme.body.weight(.medium))
                     .foregroundStyle(Theme.textPrimary)
                     .fixedSize(horizontal: false, vertical: true)
-                    .shadow(color: Theme.shadow.opacity(0.08), radius: 1.5, x: 0, y: 0.5)
+                    .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.subtle * 0.67), radius: DesignSystem.Shadow.verySoft.radius * 0.125, x: 0, y: DesignSystem.Shadow.verySoft.y * 0.08)
                 
                 Spacer()
             }

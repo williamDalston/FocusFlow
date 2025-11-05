@@ -153,7 +153,9 @@ class HealthKitManager {
             
             // Active energy burned
             if let energyBurned = totalEnergyBurned {
-                let energyType = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned)!
+                guard let energyType = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned) else {
+                    throw HealthKitError.notAvailable
+                }
                 let energyQuantity = HKQuantity(unit: HKUnit.kilocalorie(), doubleValue: energyBurned)
                 let energySample = HKQuantitySample(
                     type: energyType,
@@ -165,7 +167,9 @@ class HealthKitManager {
             }
             
             // Exercise minutes
-            let exerciseTimeType = HKQuantityType.quantityType(forIdentifier: .appleExerciseTime)!
+            guard let exerciseTimeType = HKQuantityType.quantityType(forIdentifier: .appleExerciseTime) else {
+                throw HealthKitError.notAvailable
+            }
             let exerciseMinutes = duration / 60.0
             let exerciseQuantity = HKQuantity(unit: HKUnit.minute(), doubleValue: exerciseMinutes)
             let exerciseSample = HKQuantitySample(
@@ -285,9 +289,7 @@ class HealthKitManager {
                     }
                     typealias InitMethod = @convention(c) (AnyObject, Selector, HKHealthStore, HKWorkoutConfiguration, UnsafeMutablePointer<NSError?>) -> AnyObject?
                     let implementation = method_getImplementation(method)
-                    guard implementation != nil else {
-                        throw HealthKitError.notAvailable
-                    }
+                    // IMP is a non-optional OpaquePointer, so it's always valid if method exists
                     let initMethod = unsafeBitCast(implementation, to: InitMethod.self)
                     var error: NSError?
                     if let sessionObj = initMethod(HKWorkoutSession.self, selector, healthStore, configuration, &error) {
