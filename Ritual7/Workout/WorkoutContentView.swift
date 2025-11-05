@@ -678,11 +678,11 @@ struct WorkoutContentView: View {
         // Note: WorkoutEngine currently uses default durations
         // Configuration from preferences would require engine modifications
         // For now, engine uses standard 30s exercise / 10s rest / 10s prep durations
-        let prefs = preferencesStore.preferences
         
         // TODO: Implement engine configuration if needed
         // The engine currently doesn't support runtime configuration
         // It would need to be recreated with new parameters or have configurable properties
+        // When implemented, use: let prefs = preferencesStore.preferences
     }
 }
 
