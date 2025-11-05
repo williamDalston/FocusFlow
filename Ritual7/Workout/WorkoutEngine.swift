@@ -156,7 +156,14 @@ final class WorkoutEngine: ObservableObject {
         haptics: HapticFeedbackProvider = DefaultHapticFeedback(),
         sound: SoundFeedbackProvider = DefaultSoundFeedback()
     ) {
-        self.exercises = exercises
+        // Ensure exercises array is not empty
+        if exercises.isEmpty {
+            os_log("Empty exercises array provided, using default workout", log: .default, type: .error)
+            self.exercises = Exercise.sevenMinuteWorkout
+        } else {
+            self.exercises = exercises
+        }
+        
         // Initialize timer on main actor if not provided
         if let timer = timer {
             self.timer = timer

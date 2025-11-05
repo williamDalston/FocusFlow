@@ -44,11 +44,11 @@ final class MotivationalMessageManager: ObservableObject {
         
         // Weekly progress messages
         if workoutsThisWeek >= 7 {
-            messages.append("🌟 Perfect week! You've worked out every day!")
+            messages.append("🌟 Seven days of dedication! You've honored your commitment every single day. This is what transformation looks like.")
         } else if workoutsThisWeek >= 5 {
-            messages.append("🔥 Great week! \(workoutsThisWeek) workouts completed!")
+            messages.append("🔥 \(workoutsThisWeek) workouts this week! You're building momentum and proving that consistency creates change.")
         } else if workoutsThisWeek >= 3 {
-            messages.append("💪 Good progress! \(workoutsThisWeek) workouts this week!")
+            messages.append("💪 \(workoutsThisWeek) workouts completed this week! Each one is a step closer to the person you're becoming. Keep going!")
         }
         
         // Milestone messages
@@ -62,12 +62,14 @@ final class MotivationalMessageManager: ObservableObject {
     /// Get encouragement message for when user hasn't worked out today
     func getNoWorkoutTodayMessage() -> String {
         let messages = [
-            "You've got this! Time for your daily Ritual7.",
-            "Don't let your streak break! Start your workout now.",
-            "Remember why you started. Your future self will thank you.",
-            "Just 7 minutes. That's all it takes to stay on track.",
-            "Your body can do it. It's your mind you need to convince.",
-            "Push through. You're stronger than you think."
+            "The best time to honor your commitment is now. Your future self is counting on the choices you make today.",
+            "Remember why you started. That reason still matters, and it's waiting for you to take action right now.",
+            "Just 7 minutes can change your entire day. You have the power to choose growth over comfort.",
+            "Your body is ready. Your mind is capable. The only thing standing between you and your workout is a single decision.",
+            "Every champion chooses to show up even when they don't feel like it. Today is your chance to be a champion.",
+            "The version of you who completes this workout is stronger than the version who doesn't. Which one will you choose?",
+            "Progress isn't made in your comfort zone. Take that first step. Your discipline is stronger than your excuses.",
+            "You've come this far. Don't let today be the day you stop. Your consistency is your superpower—use it."
         ]
         return messages.randomElement() ?? messages[0]
     }
@@ -93,26 +95,30 @@ final class MotivationalMessageManager: ObservableObject {
         switch hour {
         case 5..<12:
             messages = [
-                "Good morning! Start your day with Ritual7.",
-                "Morning energy boost! Time for your workout.",
-                "Rise and shine! Your body is ready for movement."
+                "Good morning! Start your day by investing in yourself. Your Ritual7 is waiting.",
+                "Morning is when champions are made. Take these 7 minutes to set the tone for an extraordinary day.",
+                "Rise and shine! Your body is ready for movement, your mind is ready for growth. Time to honor your commitment.",
+                "Every sunrise is a new beginning. Make this morning count with your workout."
             ]
         case 12..<17:
             messages = [
-                "Afternoon energy dip? Boost it with a quick workout!",
-                "Perfect time for a midday movement break.",
-                "Revitalize your afternoon with Ritual7."
+                "Afternoon energy dip? Transform it into strength. Your Ritual7 will recharge both body and mind.",
+                "Perfect time for a midday reset. Give yourself the gift of movement and renewed energy.",
+                "Revitalize your afternoon with purpose. This workout is a choice to prioritize your well-being.",
+                "The middle of the day is when discipline shines brightest. Show yourself what you're made of."
             ]
         case 17..<22:
             messages = [
-                "Evening workout time! Finish your day strong.",
-                "Unwind with movement. Your Ritual7 awaits.",
-                "End your day on a high note with a workout."
+                "Evening workout time! Finish your day knowing you chose growth over comfort. That's how champions end their day.",
+                "Unwind with intention. Your Ritual7 is a celebration of what your body can do, not a punishment.",
+                "End your day on a high note. Every workout completed is a victory, and this one is yours to claim.",
+                "Evening is when you prove to yourself that your commitment matters more than your fatigue."
             ]
         default:
             messages = [
-                "Late night workout? Your dedication is inspiring!",
-                "Night owl power! Time for your workout."
+                "Late night dedication! Your commitment to yourself doesn't watch the clock. That's what makes you unstoppable.",
+                "Night owl power! While others sleep, you're building your future self. Your discipline is inspiring.",
+                "The late hours are when true dedication shows. You're here, ready to invest in yourself. That's powerful."
             ]
         }
         

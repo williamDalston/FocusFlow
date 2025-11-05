@@ -79,11 +79,12 @@ enum Theme {
     
     // Feminine Theme - Refined with sophisticated color harmony
     // Based on color theory: harmonious purple-blue palette with refined saturation
-    private static let feminineAccentA = Color(hue: 0.75, saturation: 0.72, brightness: 0.75) // elegant lavender - sophisticated
-    private static let feminineAccentB = Color(hue: 0.58, saturation: 0.78, brightness: 0.80) // refined periwinkle - sophisticated
-    private static let feminineAccentC = Color(hue: 0.80, saturation: 0.68, brightness: 0.70) // deep amethyst - sophisticated
-    private static let feminineAccentD = Color(hue: 0.70, saturation: 0.65, brightness: 0.78) // soft violet - sophisticated
-    private static let feminineAccentE = Color(hue: 0.56, saturation: 0.75, brightness: 0.82) // light periwinkle - sophisticated
+    // Lightened for better visual appeal and less darkness
+    private static let feminineAccentA = Color(hue: 0.75, saturation: 0.68, brightness: 0.85) // elegant lavender - lighter and brighter
+    private static let feminineAccentB = Color(hue: 0.58, saturation: 0.74, brightness: 0.88) // refined periwinkle - lighter and brighter
+    private static let feminineAccentC = Color(hue: 0.80, saturation: 0.64, brightness: 0.80) // deep amethyst - lighter
+    private static let feminineAccentD = Color(hue: 0.70, saturation: 0.62, brightness: 0.86) // soft violet - lighter
+    private static let feminineAccentE = Color(hue: 0.56, saturation: 0.72, brightness: 0.90) // light periwinkle - lighter
     
     // Masculine Theme - Refined with sophisticated color harmony
     // Based on color theory: harmonious blue-teal palette with refined saturation

@@ -285,7 +285,10 @@ class HealthKitManager {
                     let initMethod = unsafeBitCast(implementation, to: InitMethod.self)
                     var error: NSError?
                     if let sessionObj = initMethod(HKWorkoutSession.self, selector, healthStore, configuration, &error) {
-                        session = sessionObj as! HKWorkoutSession
+                        guard let workoutSession = sessionObj as? HKWorkoutSession else {
+                            throw HealthKitError.notAvailable
+                        }
+                        session = workoutSession
                     } else if let error = error {
                         throw error
                     } else {

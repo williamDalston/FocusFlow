@@ -28,18 +28,18 @@ enum DesignSystem {
     // MARK: - Corner Radius
     
     enum CornerRadius {
-        static let small: CGFloat = 8
-        static let medium: CGFloat = 12
-        static let large: CGFloat = 16
-        static let xlarge: CGFloat = 20
-        static let xxlarge: CGFloat = 24
+        static let small: CGFloat = 10
+        static let medium: CGFloat = 16
+        static let large: CGFloat = 22
+        static let xlarge: CGFloat = 28
+        static let xxlarge: CGFloat = 32
         static let circular: CGFloat = 9999
         
-        // Semantic radii
-        static let card: CGFloat = 20
-        static let button: CGFloat = 14
-        static let statBox: CGFloat = 12
-        static let badge: CGFloat = 8
+        // Semantic radii - increased for softer, more polished look
+        static let card: CGFloat = 28
+        static let button: CGFloat = 18
+        static let statBox: CGFloat = 16
+        static let badge: CGFloat = 10
     }
     
     // MARK: - Border Widths (Refined for Visual Precision)

@@ -86,23 +86,28 @@ struct BreathingGuideView: View {
         let inhaleDuration = 4.0 // 4 seconds to inhale
         let exhaleDuration = 4.0 // 4 seconds to exhale
         
-        timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [self] _ in
-            let cycleTime = Date().timeIntervalSince1970.truncatingRemainder(dividingBy: inhaleDuration + exhaleDuration)
-            
-            if cycleTime < inhaleDuration {
-                // Inhale phase
-                if breathingPhase != .inhale {
-                    breathingPhase = .inhale
+        // Ensure timer is created on main thread
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
+                guard let self = self else { return }
+                let cycleTime = Date().timeIntervalSince1970.truncatingRemainder(dividingBy: inhaleDuration + exhaleDuration)
+                
+                if cycleTime < inhaleDuration {
+                    // Inhale phase
+                    if self.breathingPhase != .inhale {
+                        self.breathingPhase = .inhale
+                    }
+                    let progress = cycleTime / inhaleDuration
+                    self.scale = 1.0 + (progress * 0.4) // Scale from 1.0 to 1.4
+                } else {
+                    // Exhale phase
+                    if self.breathingPhase != .exhale {
+                        self.breathingPhase = .exhale
+                    }
+                    let progress = (cycleTime - inhaleDuration) / exhaleDuration
+                    self.scale = 1.4 - (progress * 0.4) // Scale from 1.4 to 1.0
                 }
-                let progress = cycleTime / inhaleDuration
-                scale = 1.0 + (progress * 0.4) // Scale from 1.0 to 1.4
-            } else {
-                // Exhale phase
-                if breathingPhase != .exhale {
-                    breathingPhase = .exhale
-                }
-                let progress = (cycleTime - inhaleDuration) / exhaleDuration
-                scale = 1.4 - (progress * 0.4) // Scale from 1.4 to 1.0
             }
         }
     }

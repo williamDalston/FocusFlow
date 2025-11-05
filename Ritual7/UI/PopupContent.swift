@@ -24,51 +24,114 @@ struct PopupContent<Content: View>: View {
         content
             .padding(padding)
             .background(
-                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                    .fill(.ultraThinMaterial)
-                    .overlay(
-                        // Outer border with theme gradient
-                        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                            .stroke(
-                                LinearGradient(
-                                    colors: [
-                                        Theme.accentA.opacity(DesignSystem.Opacity.light),
-                                        Theme.accentB.opacity(DesignSystem.Opacity.subtle),
-                                        Theme.accentC.opacity(DesignSystem.Opacity.light * 0.8)
-                                    ],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                ),
-                                lineWidth: borderWidth
+                ZStack {
+                    // Base material
+                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                        .fill(.ultraThinMaterial)
+                    
+                    // Enhanced gradient overlay - different from background
+                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                        .fill(
+                            LinearGradient(
+                                colors: [
+                                    Theme.accentB.opacity(0.15),
+                                    Theme.accentA.opacity(0.12),
+                                    Theme.accentC.opacity(0.10),
+                                    Color.white.opacity(0.08),
+                                    Color.clear
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
                             )
-                    )
-                    .overlay(
-                        // Inner highlight for depth
-                        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                            .stroke(
-                                LinearGradient(
-                                    colors: [
-                                        Color.white.opacity(DesignSystem.Opacity.highlight),
-                                        Color.clear
-                                    ],
-                                    startPoint: .topLeading,
-                                    endPoint: .center
-                                ),
-                                lineWidth: borderWidth * 0.5
+                        )
+                        .blendMode(.overlay)
+                    
+                    // Additional highlight layer for 3D effect
+                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                        .fill(
+                            LinearGradient(
+                                colors: [
+                                    Color.white.opacity(0.12),
+                                    Color.clear
+                                ],
+                                startPoint: .top,
+                                endPoint: .center
                             )
-                            .blur(radius: 0.5)
-                    )
+                        )
+                        .blendMode(.overlay)
+                }
+                .overlay(
+                    // Enhanced outer border with theme gradient
+                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                        .stroke(
+                            LinearGradient(
+                                colors: [
+                                    Theme.strokeInner.opacity(DesignSystem.Opacity.veryStrong * 1.2),
+                                    Theme.accentA.opacity(DesignSystem.Opacity.medium * 1.2),
+                                    Theme.accentB.opacity(DesignSystem.Opacity.light * 1.1),
+                                    Theme.accentC.opacity(DesignSystem.Opacity.light * 0.9),
+                                    Theme.strokeInner.opacity(DesignSystem.Opacity.medium)
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: borderWidth
+                        )
+                        .allowsHitTesting(false)
+                )
+                .overlay(
+                    // Enhanced inner highlight for depth
+                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                        .stroke(
+                            LinearGradient(
+                                colors: [
+                                    Color.white.opacity(DesignSystem.Opacity.highlight * 1.5),
+                                    Color.clear
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .center
+                            ),
+                            lineWidth: borderWidth * 0.6
+                        )
+                        .blur(radius: 1.0)
+                        .allowsHitTesting(false)
+                )
+                .overlay(
+                    // Glow effect for highlighting
+                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                        .stroke(
+                            LinearGradient(
+                                colors: [
+                                    Theme.glowColor.opacity(DesignSystem.Opacity.glow * 1.3),
+                                    Theme.accentA.opacity(DesignSystem.Opacity.glow * 0.8),
+                                    Color.clear
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .center
+                            ),
+                            lineWidth: borderWidth * 0.5
+                        )
+                        .blur(radius: 2.0)
+                        .allowsHitTesting(false)
+                )
             )
-            // Multi-layer shadow system for popup effect
-            .shadow(color: Theme.enhancedShadow.opacity(DesignSystem.Opacity.medium * 1.2),
-                   radius: DesignSystem.Shadow.card.radius,
-                   y: DesignSystem.Shadow.card.y)
-            .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.light),
-                   radius: DesignSystem.Shadow.medium.radius,
-                   y: DesignSystem.Shadow.medium.y)
-            .shadow(color: Theme.glowColor.opacity(DesignSystem.Opacity.subtle * 0.8),
-                   radius: DesignSystem.Shadow.soft.radius,
-                   y: DesignSystem.Shadow.soft.y)
+            // Enhanced multi-layer shadow system for stronger 3D popup effect
+            .shadow(color: Theme.enhancedShadow.opacity(DesignSystem.Opacity.medium * 1.5),
+                   radius: DesignSystem.Shadow.card.radius * 1.2,
+                   x: 0,
+                   y: DesignSystem.Shadow.card.y * 1.3)
+            .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.light * 1.2),
+                   radius: DesignSystem.Shadow.medium.radius * 1.1,
+                   x: 0,
+                   y: DesignSystem.Shadow.medium.y * 1.2)
+            .shadow(color: Theme.glowColor.opacity(DesignSystem.Opacity.subtle * 1.2),
+                   radius: DesignSystem.Shadow.soft.radius * 1.1,
+                   x: 0,
+                   y: DesignSystem.Shadow.soft.y * 1.1)
+            .shadow(color: Theme.accentA.opacity(0.15),
+                   radius: 8,
+                   x: 0,
+                   y: 4)
     }
 }
 
@@ -115,6 +178,7 @@ struct PopupContainer<Content: View>: View {
                                 ),
                                 lineWidth: DesignSystem.Border.subtle
                             )
+                            .allowsHitTesting(false)
                     )
                     .overlay(
                         // Inner highlight for depth
@@ -131,6 +195,7 @@ struct PopupContainer<Content: View>: View {
                                 lineWidth: DesignSystem.Border.hairline
                             )
                             .blur(radius: 0.5)
+                            .allowsHitTesting(false)
                     )
             )
             .clipShape(RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.xlarge, style: .continuous))
@@ -144,9 +209,6 @@ struct PopupContainer<Content: View>: View {
             .shadow(color: Theme.glowColor.opacity(DesignSystem.Opacity.subtle * 0.9),
                    radius: DesignSystem.Shadow.soft.radius * 1.1,
                    y: DesignSystem.Shadow.soft.y * 1.1)
-            .padding(.horizontal, edgePadding)
-            .padding(.top, max(topPadding, 8)) // Ensure space from safe area/nav bar
-            .padding(.bottom, max(bottomPadding, 8))
     }
 }
 

@@ -19,17 +19,19 @@ public struct GlassCard<Content: View>: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(
                 ZStack {
-                    // Base material background
+                    // Base material background with enhanced opacity
                     RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.card, style: .continuous)
                         .fill(material)
                     
-                    // Subtle gradient overlay for depth
+                    // Enhanced gradient overlay for depth - different from background
                     RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.card, style: .continuous)
                         .fill(
                             LinearGradient(
                                 colors: [
-                                    Theme.accentA.opacity(DesignSystem.Opacity.highlight),
-                                    Theme.accentB.opacity(DesignSystem.Opacity.highlight * 0.5),
+                                    Theme.accentB.opacity(0.15), // Slightly different color from background
+                                    Theme.accentA.opacity(0.12),
+                                    Theme.accentC.opacity(0.10),
+                                    Color.white.opacity(0.08),
                                     Color.clear
                                 ],
                                 startPoint: .topLeading,
@@ -37,19 +39,33 @@ public struct GlassCard<Content: View>: View {
                             )
                         )
                         .blendMode(.overlay)
+                    
+                    // Additional highlight layer for 3D effect
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.card, style: .continuous)
+                        .fill(
+                            LinearGradient(
+                                colors: [
+                                    Color.white.opacity(0.12),
+                                    Color.clear
+                                ],
+                                startPoint: .top,
+                                endPoint: .center
+                            )
+                        )
+                        .blendMode(.overlay)
                 }
             )
             .frame(maxWidth: .infinity)
-            // Inner highlight with refined gradient (top layer for premium feel)
+            // Enhanced inner highlight with refined gradient for 3D depth
             .overlay(
                 RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.card, style: .continuous)
                     .stroke(
                         LinearGradient(
                             colors: [
-                                Theme.strokeInner.opacity(DesignSystem.Opacity.veryStrong),
-                                Theme.accentA.opacity(DesignSystem.Opacity.medium),
-                                Theme.accentB.opacity(DesignSystem.Opacity.light),
-                                Theme.accentC.opacity(DesignSystem.Opacity.light * 0.8),
+                                Theme.strokeInner.opacity(DesignSystem.Opacity.veryStrong * 1.2),
+                                Theme.accentA.opacity(DesignSystem.Opacity.medium * 1.3),
+                                Theme.accentB.opacity(DesignSystem.Opacity.light * 1.2),
+                                Theme.accentC.opacity(DesignSystem.Opacity.light),
                                 Theme.strokeInner.opacity(DesignSystem.Opacity.medium)
                             ],
                             startPoint: .topLeading,
@@ -57,6 +73,7 @@ public struct GlassCard<Content: View>: View {
                         ),
                         lineWidth: DesignSystem.Border.card
                     )
+                    .allowsHitTesting(false)
             )
             // Outer stroke for definition
             .overlay(
@@ -64,34 +81,51 @@ public struct GlassCard<Content: View>: View {
                     .stroke(
                         LinearGradient(
                             colors: [
-                                Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.5),
-                                Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 0.8)
+                                Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.8),
+                                Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.0)
                             ],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         ),
                         lineWidth: DesignSystem.Border.hairline
                     )
+                    .allowsHitTesting(false)
             )
-            // Premium glow effect for depth
+            // Enhanced premium glow effect for depth and 3D appearance
             .overlay(
                 RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.card, style: .continuous)
                     .stroke(
                         LinearGradient(
                             colors: [
-                                Theme.glowColor.opacity(DesignSystem.Opacity.glow),
-                                Theme.accentA.opacity(DesignSystem.Opacity.glow * 0.6),
+                                Theme.glowColor.opacity(DesignSystem.Opacity.glow * 1.5),
+                                Theme.accentA.opacity(DesignSystem.Opacity.glow * 1.0),
                                 Color.clear
                             ],
                             startPoint: .topLeading,
                             endPoint: .center
                         ),
-                        lineWidth: DesignSystem.Border.hairline
+                        lineWidth: DesignSystem.Border.hairline * 1.5
                     )
-                    .blur(radius: 1.5)
+                    .blur(radius: 2.5)
+                    .allowsHitTesting(false)
             )
-            // Premium multi-layer shadow system
-            .cardShadow()
+            // Enhanced multi-layer shadow system for stronger 3D effect
+            .shadow(color: Theme.enhancedShadow.opacity(DesignSystem.Opacity.medium * 1.5),
+                   radius: DesignSystem.Shadow.card.radius * 1.2,
+                   x: 0,
+                   y: DesignSystem.Shadow.card.y * 1.3)
+            .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.light * 1.2),
+                   radius: DesignSystem.Shadow.medium.radius * 1.1,
+                   x: 0,
+                   y: DesignSystem.Shadow.medium.y * 1.2)
+            .shadow(color: Theme.glowColor.opacity(DesignSystem.Opacity.subtle * 1.2),
+                   radius: DesignSystem.Shadow.soft.radius * 1.1,
+                   x: 0,
+                   y: DesignSystem.Shadow.soft.y * 1.1)
+            .shadow(color: Theme.accentA.opacity(0.15),
+                   radius: 8,
+                   x: 0,
+                   y: 4)
     }
 }
 

@@ -19,16 +19,17 @@ struct CountdownAnimation: View {
                     .scaleEffect(scale)
                     .opacity(opacity)
                     .onAppear {
+                        // Optimized animation sequence - use Task for better performance
                         withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
                             scale = 1.2
                             opacity = 1.0
                         }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                        Task { @MainActor in
+                            try? await Task.sleep(nanoseconds: 200_000_000) // 0.2s
                             withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
                                 scale = 1.0
                             }
-                        }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                            try? await Task.sleep(nanoseconds: 500_000_000) // 0.5s
                             withAnimation(.easeOut(duration: 0.3)) {
                                 opacity = 0.0
                                 scale = 0.5
@@ -48,16 +49,17 @@ struct CountdownAnimation: View {
                     .scaleEffect(scale)
                     .opacity(opacity)
                     .onAppear {
+                        // Optimized animation sequence - use Task for better performance
                         withAnimation(.spring(response: 0.4, dampingFraction: 0.5)) {
                             scale = 1.3
                             opacity = 1.0
                         }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        Task { @MainActor in
+                            try? await Task.sleep(nanoseconds: 300_000_000) // 0.3s
                             withAnimation(.spring(response: 0.4, dampingFraction: 0.5)) {
                                 scale = 1.0
                             }
-                        }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                            try? await Task.sleep(nanoseconds: 700_000_000) // 0.7s
                             withAnimation(.easeOut(duration: 0.3)) {
                                 opacity = 0.0
                                 scale = 0.5
@@ -104,8 +106,13 @@ struct ExerciseDemonstrationView: View {
     }
     
     private func startAnimation() {
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-            animationPhase += 1
+        // Ensure timer is created on main thread
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+                guard let self = self else { return }
+                self.animationPhase += 1
+            }
         }
     }
     
@@ -275,10 +282,17 @@ struct PrepCountdownView: View {
     let timeRemaining: TimeInterval
     @State private var countdownValue: Int = 3
     
+    private var countdownCount: Int {
+        guard timeRemaining > 0 && timeRemaining <= 3 else {
+            return timeRemaining <= 0 ? 0 : 3
+        }
+        return max(1, Int(timeRemaining.rounded(.up)))
+    }
+    
     var body: some View {
         ZStack {
             if timeRemaining <= 3 && timeRemaining > 0 {
-                CountdownAnimation(count: Int(timeRemaining))
+                CountdownAnimation(count: countdownCount)
             } else if timeRemaining <= 0 {
                 CountdownAnimation(count: 0)
             }
