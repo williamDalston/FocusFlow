@@ -64,6 +64,7 @@ class ToastManager: ObservableObject {
     
     @Published var currentToast: Toast?
     private var toastTask: Task<Void, Never>?
+    private var undoAction: (() -> Void)?
     
     struct Toast: Identifiable {
         let id = UUID()
@@ -71,6 +72,7 @@ class ToastManager: ObservableObject {
         let icon: String
         let duration: TimeInterval
         let type: ToastType
+        let hasUndo: Bool
         
         enum ToastType {
             case success
@@ -87,10 +89,11 @@ class ToastManager: ObservableObject {
         }
     }
     
-    func show(_ message: String, icon: String = "checkmark.circle.fill", type: Toast.ToastType = .success, duration: TimeInterval = 2.0) {
+    func show(message: String, icon: String = "checkmark.circle.fill", type: Toast.ToastType = .success, duration: TimeInterval = 2.0, onUndo: (() -> Void)? = nil) {
         toastTask?.cancel()
         
-        let toast = Toast(message: message, icon: icon, duration: duration, type: type)
+        undoAction = onUndo
+        let toast = Toast(message: message, icon: icon, duration: duration, type: type, hasUndo: onUndo != nil)
         currentToast = toast
         
         toastTask = Task { @MainActor in
@@ -101,6 +104,11 @@ class ToastManager: ObservableObject {
                 }
             }
         }
+    }
+    
+    func performUndo() {
+        undoAction?()
+        dismiss()
     }
     
     func dismiss() {
@@ -128,6 +136,23 @@ struct ToastView: View {
                 .foregroundStyle(Theme.textPrimary)
             
             Spacer()
+            
+            if toast.hasUndo {
+                Button {
+                    ToastManager.shared.performUndo()
+                    Haptics.buttonPress()
+                } label: {
+                    Text("Undo")
+                        .font(Theme.caption.weight(.semibold))
+                        .foregroundStyle(toast.color)
+                        .padding(.horizontal, DesignSystem.Spacing.sm)
+                        .padding(.vertical, DesignSystem.Spacing.xs)
+                        .background(
+                            Capsule()
+                                .fill(toast.color.opacity(DesignSystem.Opacity.subtle))
+                        )
+                }
+            }
         }
         .padding(DesignSystem.Spacing.md)
         .padding(.horizontal, DesignSystem.Spacing.md)

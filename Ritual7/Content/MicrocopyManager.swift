@@ -97,60 +97,7 @@ class MicrocopyManager {
     }
     
     // MARK: - Button Labels
-    
-    /// Clear, action-oriented button labels
-    enum ButtonLabel {
-        case startWorkout
-        case customize
-        case viewExercises
-        case viewHistory
-        case pause
-        case resume
-        case skipRest
-        case skipPrep
-        case stopWorkout
-        case done
-        case next
-        case back
-        case share
-        case startNew
-        case viewHelp
-        
-        var text: String {
-            switch self {
-            case .startWorkout:
-                return "Start Workout"
-            case .customize:
-                return "Customize"
-            case .viewExercises:
-                return "View Exercises"
-            case .viewHistory:
-                return "View History"
-            case .pause:
-                return "Pause"
-            case .resume:
-                return "Resume"
-            case .skipRest:
-                return "Skip Rest"
-            case .skipPrep:
-                return "Skip Prep"
-            case .stopWorkout:
-                return "Stop Workout"
-            case .done:
-                return "Done"
-            case .next:
-                return "Next"
-            case .back:
-                return "Back"
-            case .share:
-                return "Share"
-            case .startNew:
-                return "Start New Workout"
-            case .viewHelp:
-                return "Help & Support"
-            }
-        }
-    }
+    // Note: ButtonLabel is defined as a top-level type below for easier access
     
     // MARK: - Tooltips & Help Text
     
@@ -258,6 +205,60 @@ class MicrocopyManager {
 }
 
 // MARK: - Supporting Types
+
+/// Clear, action-oriented button labels
+enum ButtonLabel {
+    case startWorkout
+    case customize
+    case viewExercises
+    case viewHistory
+    case pause
+    case resume
+    case skipRest
+    case skipPrep
+    case stopWorkout
+    case done
+    case next
+    case back
+    case share
+    case startNew
+    case viewHelp
+    
+    var text: String {
+        switch self {
+        case .startWorkout:
+            return "Start Workout"
+        case .customize:
+            return "Customize"
+        case .viewExercises:
+            return "View Exercises"
+        case .viewHistory:
+            return "View History"
+        case .pause:
+            return "Pause"
+        case .resume:
+            return "Resume"
+        case .skipRest:
+            return "Skip Rest"
+        case .skipPrep:
+            return "Skip Prep"
+        case .stopWorkout:
+            return "Stop Workout"
+        case .done:
+            return "Done"
+        case .next:
+            return "Next"
+        case .back:
+            return "Back"
+        case .share:
+            return "Share"
+        case .startNew:
+            return "Start New Workout"
+        case .viewHelp:
+            return "Help & Support"
+        }
+    }
+}
 
 enum Milestone {
     case firstWorkout

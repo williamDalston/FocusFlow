@@ -280,3 +280,4 @@ The app will no longer crash due to missing privacy usage descriptions.
 
 **Note:** The crash was caused by missing `NSUserTrackingUsageDescription` in Info.plist. This has been fixed, and all other privacy APIs are properly configured.
 
+

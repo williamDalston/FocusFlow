@@ -46,7 +46,7 @@ final class OptimisticUpdateManager: ObservableObject {
                 onError(error)
             }
             pendingOperations.remove(id)
-            throw error
+            return nil
         }
     }
     

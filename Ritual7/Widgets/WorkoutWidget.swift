@@ -61,17 +61,17 @@ struct WorkoutTimelineProvider: TimelineProvider {
     
     private func getStreak() -> Int {
         // Read from UserDefaults or shared container
-        return UserDefaults(suiteName: "group.com.williamalston.Ritual7")?.integer(forKey: "workoutStreak") ?? 0
+        return UserDefaults(suiteName: "group.com.williamalston.workout")?.integer(forKey: "workoutStreak") ?? 0
     }
     
     private func getWorkoutsToday() -> Int {
         let today = Calendar.current.startOfDay(for: Date())
-        let workouts = UserDefaults(suiteName: "group.com.williamalston.Ritual7")?.array(forKey: "workoutDates") as? [Date] ?? []
+        let workouts = UserDefaults(suiteName: "group.com.williamalston.workout")?.array(forKey: "workoutDates") as? [Date] ?? []
         return workouts.filter { Calendar.current.startOfDay(for: $0) == today }.count
     }
     
     private func getTotalWorkouts() -> Int {
-        return UserDefaults(suiteName: "group.com.williamalston.Ritual7")?.integer(forKey: "totalWorkouts") ?? 0
+        return UserDefaults(suiteName: "group.com.williamalston.workout")?.integer(forKey: "totalWorkouts") ?? 0
     }
 }
 

@@ -598,7 +598,7 @@ struct WorkoutContentView: View {
                     HStack(spacing: DesignSystem.Spacing.sm) {
                         Image(systemName: "play.fill")
                             .font(.system(size: DesignSystem.IconSize.medium, weight: .bold))
-                        Text(MicrocopyManager.shared.ButtonLabel.startWorkout.text)
+                        Text(ButtonLabel.startWorkout.text)
                             .font(Theme.headline)
                             .fontWeight(.bold)
                     }
@@ -617,7 +617,7 @@ struct WorkoutContentView: View {
                         showCustomization = true
                         Haptics.tap()
                     } label: {
-                        Label(MicrocopyManager.shared.ButtonLabel.customize.text, systemImage: "slider.horizontal.3")
+                        Label(ButtonLabel.customize.text, systemImage: "slider.horizontal.3")
                             .font(Theme.subheadline.weight(.medium))
                     }
                     .buttonStyle(SecondaryGlassButtonStyle())
@@ -629,7 +629,7 @@ struct WorkoutContentView: View {
                         showExerciseList = true
                         Haptics.tap()
                     } label: {
-                        Label(MicrocopyManager.shared.ButtonLabel.viewExercises.text, systemImage: "list.bullet")
+                        Label(ButtonLabel.viewExercises.text, systemImage: "list.bullet")
                             .font(Theme.subheadline.weight(.medium))
                     }
                     .buttonStyle(SecondaryGlassButtonStyle())
@@ -641,7 +641,7 @@ struct WorkoutContentView: View {
                         showHistory = true
                         Haptics.tap()
                     } label: {
-                        Label(MicrocopyManager.shared.ButtonLabel.viewHistory.text, systemImage: "clock")
+                        Label(ButtonLabel.viewHistory.text, systemImage: "clock")
                             .font(Theme.subheadline.weight(.medium))
                     }
                     .buttonStyle(SecondaryGlassButtonStyle())
@@ -967,9 +967,10 @@ struct WorkoutContentView: View {
             // Configure from preferences
             exerciseEngine.exerciseDuration = preferencesStore.preferences.exerciseDuration
             exerciseEngine.restDuration = preferencesStore.preferences.restDuration
-            exerciseEngine.prepDuration = 0 // Skip prep time for single exercises
+            // Give user time to put down phone (3 seconds prep time)
+            exerciseEngine.prepDuration = 3.0
             showTimerView = true
-            // Start immediately
+            // Start with prep phase to allow user to prepare
             exerciseEngine.start()
         }
     }
@@ -1551,7 +1552,10 @@ private struct ExercisePreviewCard: View {
     let onTap: () -> Void
     
     var body: some View {
-        Button(action: onTap) {
+        Button(action: {
+            Haptics.buttonPress()
+            onTap()
+        }) {
             ZStack(alignment: .topTrailing) {
                 VStack(spacing: DesignSystem.Spacing.sm) {
                     // Icon with premium styling
@@ -1635,9 +1639,20 @@ private struct ExercisePreviewCard: View {
             )
             .softShadow()
         }
-        .buttonStyle(.plain)
+        .buttonStyle(ExerciseCardButtonStyle())
         .accessibilityLabel("Start \(exercise.name)")
-        .accessibilityHint("Double tap to begin this exercise")
+        .accessibilityHint("Double tap to begin this exercise with a 3 second preparation time")
+        .accessibilityAddTraits(.isButton)
+    }
+}
+
+// MARK: - Exercise Card Button Style
+
+private struct ExerciseCardButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
+            .animation(AnimationConstants.quickSpring, value: configuration.isPressed)
     }
 }
 

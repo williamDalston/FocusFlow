@@ -822,7 +822,7 @@ struct SettingsView: View {
             NavigationLink {
                 HelpCenterView()
             } label: {
-                Label(MicrocopyManager.shared.ButtonLabel.viewHelp.text, systemImage: "questionmark.circle.fill")
+                Label(ButtonLabel.viewHelp.text, systemImage: "questionmark.circle.fill")
             }
             
             NavigationLink {

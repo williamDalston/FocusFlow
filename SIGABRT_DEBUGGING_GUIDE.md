@@ -241,3 +241,4 @@ atos -o <YourBinary> -arch arm64 -l <slide> 0x1053dac04 0x1053dac14
 
 **Note:** The most likely remaining issue is `@Published` properties being modified from background threads. Enable Main Thread Checker to catch this automatically.
 
+

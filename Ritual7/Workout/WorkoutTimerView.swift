@@ -54,7 +54,7 @@ struct WorkoutTimerView: View {
                     .background(.ultraThinMaterial)
                     .shadow(color: .black.opacity(0.1), radius: 8, y: -2)
                     // Agent 29: Ensure proper safe area padding for modern devices
-                    .safeAreaPadding(.bottom, DesignSystem.Spacing.xs)
+                    .safeAreaPaddingCompat(.bottom, DesignSystem.Spacing.xs)
                 }
             }
             completionOverlayIfNeeded
@@ -66,43 +66,47 @@ struct WorkoutTimerView: View {
             }
             
             // Agent 24: Contextual hints for first-time users
-            VStack {
-                if showWorkoutTimerHint {
-                    ContextualHintView(
-                        feature: .workoutTimer,
-                        onDismiss: {
-                            showWorkoutTimerHint = false
-                            onboardingManager.markHintAsSeen(for: .workoutTimer)
-                        }
-                    )
-                    .transition(.move(edge: .top).combined(with: .opacity))
+            // DISABLED during active workout phases to prevent blocking view
+            // Only show hints during idle or completed phases
+            if engine.phase == .idle || engine.phase == .completed {
+                VStack {
+                    if showWorkoutTimerHint {
+                        ContextualHintView(
+                            feature: .workoutTimer,
+                            onDismiss: {
+                                showWorkoutTimerHint = false
+                                onboardingManager.markHintAsSeen(for: .workoutTimer)
+                            }
+                        )
+                        .transition(.move(edge: .top).combined(with: .opacity))
+                    }
+                    
+                    if showPauseHint {
+                        ContextualHintView(
+                            feature: .pause,
+                            onDismiss: {
+                                showPauseHint = false
+                                onboardingManager.markHintAsSeen(for: .pause)
+                            }
+                        )
+                        .transition(.move(edge: .top).combined(with: .opacity))
+                    }
+                    
+                    if showProgressHint {
+                        ContextualHintView(
+                            feature: .progress,
+                            onDismiss: {
+                                showProgressHint = false
+                                onboardingManager.markHintAsSeen(for: .progress)
+                            }
+                        )
+                        .transition(.move(edge: .top).combined(with: .opacity))
+                    }
+                    
+                    Spacer()
                 }
-                
-                if showPauseHint {
-                    ContextualHintView(
-                        feature: .pause,
-                        onDismiss: {
-                            showPauseHint = false
-                            onboardingManager.markHintAsSeen(for: .pause)
-                        }
-                    )
-                    .transition(.move(edge: .top).combined(with: .opacity))
-                }
-                
-                if showProgressHint {
-                    ContextualHintView(
-                        feature: .progress,
-                        onDismiss: {
-                            showProgressHint = false
-                            onboardingManager.markHintAsSeen(for: .progress)
-                        }
-                    )
-                    .transition(.move(edge: .top).combined(with: .opacity))
-                }
-                
-                Spacer()
+                .padding(.top, DesignSystem.Spacing.lg)
             }
-            .padding(.top, DesignSystem.Spacing.lg)
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -112,13 +116,22 @@ struct WorkoutTimerView: View {
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("Done") {
+                    Haptics.buttonPress()
                     // Agent 25: Show confirmation before stopping
                     if engine.phase != .idle && engine.phase != .completed {
                         showingStopConfirmation = true
                     } else {
-                        dismiss()
+                        // If completion celebration sheet is showing, dismiss it first
+                        if showCompletionCelebration {
+                            showCompletionCelebration = false
+                            // Dismiss the view after a brief delay to allow sheet animation
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                dismiss()
+                            }
+                        } else {
+                            dismiss()
+                        }
                     }
-                    Haptics.buttonPress()
                 }
                 .foregroundStyle(Theme.accentA)
                 .accessibilityLabel("Done")
@@ -191,7 +204,15 @@ struct WorkoutTimerView: View {
                 let duration = engine.currentSessionDuration ?? AppConstants.TimingConstants.defaultWorkoutDuration
                 // Get start date from engine
                 let startDate = engine.sessionStartDate ?? Date().addingTimeInterval(-duration)
-                store.addSession(duration: duration, exercisesCompleted: 12, startDate: startDate)
+                let exercisesCompleted = engine.exercises.count
+                
+                store.addSession(duration: duration, exercisesCompleted: exercisesCompleted, startDate: startDate)
+                
+                // Update personal best asynchronously to avoid SwiftUI warnings
+                Task { @MainActor in
+                    _ = store.updatePersonalBest(duration: duration, exercisesCompleted: exercisesCompleted)
+                }
+                
                 showCompletionConfetti = true
                 showCompletionCelebration = true
                 
@@ -214,25 +235,15 @@ struct WorkoutTimerView: View {
                 // Agent 11: Start rep counting for new exercise
                 if let exercise = engine.currentExercise {
                     repCounter.startTracking(for: exercise)
-                }
-                
-                // Agent 24: Show pause hint when control bar first appears
-                if onboardingManager.shouldShowHint(for: .pause) && !showPauseHint && previousPhase == .idle {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                        withAnimation(AnimationConstants.smoothSpring) {
-                            showPauseHint = true
-                        }
+                    // Trigger voice cue immediately when phase changes to exercise
+                    // Wait for voice to finish before starting timer (handled in engine)
+                    voiceCues.speakExerciseTransition(to: exercise, phase: .exercise) {
+                        // Voice finished - timer will start now (handled in engine)
                     }
                 }
                 
-                // Agent 24: Show progress hint on first exercise
-                if onboardingManager.shouldShowHint(for: .progress) && !showProgressHint {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                        withAnimation(AnimationConstants.smoothSpring) {
-                            showProgressHint = true
-                        }
-                    }
-                }
+                // Agent 24: DISABLED - Don't show hints during active exercises to prevent blocking view
+                // Hints will be shown only during idle/completed phases
             }
             
             // Update previous phase for next comparison
@@ -354,7 +365,28 @@ struct WorkoutTimerView: View {
     
     // Agent 29: Portrait layout (original)
     private var portraitLayout: some View {
-        VStack(spacing: DesignSystem.Spacing.xl) {
+        VStack(spacing: DesignSystem.Spacing.md) {
+            // Exercise name prominently displayed at top during countdown (immediately visible)
+            if engine.phase == .preparing, let nextExercise = engine.nextExercise {
+                VStack(spacing: DesignSystem.Spacing.xs) {
+                    Text("Next Exercise")
+                        .font(Theme.caption.weight(.semibold))
+                        .foregroundStyle(Theme.textSecondary)
+                        .textCase(.uppercase)
+                        .tracking(DesignSystem.Typography.uppercaseTracking)
+                    
+                    Text(nextExercise.name)
+                        .font(Theme.title2.weight(.bold))
+                        .foregroundStyle(Theme.textPrimary)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.8)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.top, DesignSystem.Spacing.md)
+                .padding(.horizontal, DesignSystem.Spacing.lg)
+            }
+            
             // Timer section with circular progress (shows when idle or before workout starts)
             if engine.phase == .idle {
                 timerSectionWithCircularProgress
@@ -362,7 +394,7 @@ struct WorkoutTimerView: View {
             } else {
                 // Segmented progress ring (12 segments per spec)
                 segmentedProgressRing
-                    .padding(.top, DesignSystem.Spacing.xl)
+                    .padding(.top, engine.phase == .preparing ? DesignSystem.Spacing.md : DesignSystem.Spacing.xl)
             }
             
             // Exercise/prep view (simplified)
@@ -385,32 +417,55 @@ struct WorkoutTimerView: View {
     
     // Agent 29: Landscape layout (optimized for horizontal viewing)
     private var landscapeLayout: some View {
-        HStack(alignment: .top, spacing: LandscapeOptimizer.landscapeSpacing) {
-            // Left side: Timer and progress
-            VStack(spacing: DesignSystem.Spacing.md) {
-                if engine.phase == .idle {
-                    timerSectionWithCircularProgress
-                        .frame(width: LandscapeOptimizer.landscapeTimerSize, height: LandscapeOptimizer.landscapeTimerSize)
-                        .padding(.top, DesignSystem.Spacing.md)
-                } else {
-                    segmentedProgressRing
-                        .frame(width: LandscapeOptimizer.landscapeTimerSize, height: LandscapeOptimizer.landscapeTimerSize)
-                        .padding(.top, DesignSystem.Spacing.md)
+        VStack(spacing: DesignSystem.Spacing.sm) {
+            // Exercise name prominently displayed at top during countdown (immediately visible in landscape too)
+            if engine.phase == .preparing, let nextExercise = engine.nextExercise {
+                VStack(spacing: DesignSystem.Spacing.xs) {
+                    Text("Next Exercise")
+                        .font(Theme.caption.weight(.semibold))
+                        .foregroundStyle(Theme.textSecondary)
+                        .textCase(.uppercase)
+                        .tracking(DesignSystem.Typography.uppercaseTracking)
+                    
+                    Text(nextExercise.name)
+                        .font(Theme.title2.weight(.bold))
+                        .foregroundStyle(Theme.textPrimary)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.8)
                 }
-                
-                statsSectionIfNeeded
+                .frame(maxWidth: .infinity)
+                .padding(.top, DesignSystem.Spacing.xs)
+                .padding(.horizontal, LandscapeOptimizer.landscapePadding)
             }
-            .frame(width: LandscapeOptimizer.landscapeTimerSize + 40)
             
-            // Right side: Exercise info and controls
-            VStack(spacing: DesignSystem.Spacing.md) {
-                exerciseOrPrepView
-                
-                if engine.phase == .idle || engine.phase == .completed {
-                    controlsSection
+            HStack(alignment: .top, spacing: LandscapeOptimizer.landscapeSpacing) {
+                // Left side: Timer and progress
+                VStack(spacing: DesignSystem.Spacing.md) {
+                    if engine.phase == .idle {
+                        timerSectionWithCircularProgress
+                            .frame(width: LandscapeOptimizer.landscapeTimerSize, height: LandscapeOptimizer.landscapeTimerSize)
+                            .padding(.top, DesignSystem.Spacing.md)
+                    } else {
+                        segmentedProgressRing
+                            .frame(width: LandscapeOptimizer.landscapeTimerSize, height: LandscapeOptimizer.landscapeTimerSize)
+                            .padding(.top, engine.phase == .preparing ? DesignSystem.Spacing.xs : DesignSystem.Spacing.md)
+                    }
+                    
+                    statsSectionIfNeeded
                 }
+                .frame(width: LandscapeOptimizer.landscapeTimerSize + 40)
+                
+                // Right side: Exercise info and controls
+                VStack(spacing: DesignSystem.Spacing.md) {
+                    exerciseOrPrepView
+                    
+                    if engine.phase == .idle || engine.phase == .completed {
+                        controlsSection
+                    }
+                }
+                .frame(maxWidth: .infinity)
             }
-            .frame(maxWidth: .infinity)
         }
         .padding(.horizontal, LandscapeOptimizer.landscapePadding)
         .padding(.vertical, LandscapeOptimizer.landscapeSpacing)
@@ -1018,13 +1073,23 @@ struct WorkoutTimerView: View {
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: .infinity)
                     
-                    if let firstExercise = engine.nextExercise {
-                        Text("First exercise: \(firstExercise.name)")
-                            .font(Theme.subheadline)
-                            .foregroundStyle(Theme.textSecondary)
-                            .multilineTextAlignment(.center)
-                            .lineSpacing(DesignSystem.Typography.bodyLineHeight - 1.0)
-                            .frame(maxWidth: .infinity)
+                    // Exercise name is now shown at top of screen, so we don't need to repeat it here
+                    // But show a subtle reminder if it's not the first exercise
+                    if let nextExercise = engine.nextExercise {
+                        if engine.currentExerciseIndex > 0 {
+                            Text("Next: \(nextExercise.name)")
+                                .font(Theme.subheadline)
+                                .foregroundStyle(Theme.textSecondary)
+                                .multilineTextAlignment(.center)
+                                .lineSpacing(DesignSystem.Typography.bodyLineHeight - 1.0)
+                                .frame(maxWidth: .infinity)
+                        } else {
+                            Text("Get ready!")
+                                .font(Theme.subheadline)
+                                .foregroundStyle(Theme.textSecondary)
+                                .multilineTextAlignment(.center)
+                                .frame(maxWidth: .infinity)
+                        }
                     }
                 }
                 .padding(DesignSystem.Spacing.cardPadding)
@@ -1165,10 +1230,12 @@ struct WorkoutTimerView: View {
             .animation(AnimationConstants.smoothEase, value: engine.phase)
         }
         .onAppear {
-            // Agent 11: Start rep counting and voice cues
+            // Agent 11: Start rep counting (voice cue is triggered in onChange handler for timing)
             repCounter.startTracking(for: exercise)
-            voiceCues.speakExerciseTransition(to: exercise, phase: .exercise)
-            voiceCues.speakFormGuidance(for: exercise)
+            // Form guidance is spoken after a delay to not overlap with "Go!"
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                voiceCues.speakFormGuidance(for: exercise)
+            }
         }
         .onDisappear {
             repCounter.stopTracking()
@@ -1185,7 +1252,7 @@ struct WorkoutTimerView: View {
                     Haptics.buttonPress()
                     engine.start()
                 } label: {
-                    Label(MicrocopyManager.shared.ButtonLabel.startWorkout.text, systemImage: "play.fill")
+                    Label(ButtonLabel.startWorkout.text, systemImage: "play.fill")
                         .font(Theme.title3)
                         .fontWeight(DesignSystem.Typography.headlineWeight)
                         .frame(maxWidth: .infinity)
@@ -1216,7 +1283,7 @@ struct WorkoutTimerView: View {
                             engine.pause()
                         }
                     } label: {
-                        Label(engine.isPaused ? MicrocopyManager.shared.ButtonLabel.resume.text : MicrocopyManager.shared.ButtonLabel.pause.text, 
+                        Label(engine.isPaused ? ButtonLabel.resume.text : ButtonLabel.pause.text, 
                               systemImage: engine.isPaused ? "play.fill" : "pause.fill")
                             .font(Theme.headline)
                             .fontWeight(DesignSystem.Typography.headlineWeight)
@@ -1232,7 +1299,7 @@ struct WorkoutTimerView: View {
                             Haptics.buttonPress()
                             engine.skipRest()
                         } label: {
-                            Label(MicrocopyManager.shared.ButtonLabel.skipRest.text, systemImage: "forward.fill")
+                            Label(ButtonLabel.skipRest.text, systemImage: "forward.fill")
                                 .font(Theme.headline)
                                 .fontWeight(DesignSystem.Typography.headlineWeight)
                                 .frame(maxWidth: .infinity)
@@ -1247,7 +1314,7 @@ struct WorkoutTimerView: View {
                             Haptics.buttonPress()
                             engine.skipPrep()
                         } label: {
-                            Label(MicrocopyManager.shared.ButtonLabel.skipPrep.text, systemImage: "forward.fill")
+                            Label(ButtonLabel.skipPrep.text, systemImage: "forward.fill")
                                 .font(Theme.headline)
                                 .fontWeight(DesignSystem.Typography.headlineWeight)
                                 .frame(maxWidth: .infinity)
@@ -1785,6 +1852,21 @@ struct SymbolPulseModifier: ViewModifier {
                 .symbolEffect(.pulse, value: trigger)
         } else {
             content
+        }
+    }
+}
+
+// MARK: - Compatibility Extension for safeAreaPadding
+
+extension View {
+    /// Compatibility wrapper for safeAreaPadding that works on iOS 14+ and iOS 17+
+    @ViewBuilder
+    func safeAreaPaddingCompat(_ edge: Edge.Set = .all, _ length: CGFloat? = nil) -> some View {
+        if #available(iOS 17.0, *) {
+            self.safeAreaPadding(edge, length)
+        } else {
+            // Fallback: Use padding with safeAreaInsets
+            self.padding(edge, length ?? 0)
         }
     }
 }

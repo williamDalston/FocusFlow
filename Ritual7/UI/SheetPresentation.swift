@@ -6,7 +6,7 @@ struct SmoothSheetPresentation: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .presentationBackground(
+            .background(
                 ZStack {
                     Color(UIColor.systemBackground)
                     LinearGradient(
@@ -19,8 +19,9 @@ struct SmoothSheetPresentation: ViewModifier {
                         endPoint: .bottomTrailing
                     )
                 }
+                .ignoresSafeArea()
             )
-            .presentationCornerRadius(DesignSystem.CornerRadius.card)
+            .applySheetPresentationModifiers()
             .presentationDragIndicator(.visible)
             .presentationDetents([.large])
             .transition(.asymmetric(
@@ -44,6 +45,18 @@ extension View {
     /// Apply smooth sheet presentation with enhanced transitions
     func smoothSheetPresentation() -> some View {
         modifier(SmoothSheetPresentation())
+    }
+    
+    /// Conditionally apply iOS 16.4+ sheet presentation modifiers
+    @ViewBuilder
+    func applySheetPresentationModifiers() -> some View {
+        if #available(iOS 16.4, *) {
+            self
+                .presentationBackground(.ultraThinMaterial)
+                .presentationCornerRadius(DesignSystem.CornerRadius.card)
+        } else {
+            self
+        }
     }
 }
 

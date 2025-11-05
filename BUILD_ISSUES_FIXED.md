@@ -170,3 +170,4 @@ Comprehensive audit and fixes for common iOS build issues in the Ritual7 project
 
 All identified issues have been fixed. The project is now properly configured for iOS builds and should compile without issues.
 
+

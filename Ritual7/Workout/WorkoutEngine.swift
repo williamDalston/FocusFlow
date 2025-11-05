@@ -539,7 +539,27 @@ final class WorkoutEngine: ObservableObject {
         phase = .exercise
         timeRemaining = exerciseDuration
         
-        timer.start(duration: exerciseDuration)
+        // Wait for voice cue to finish before starting timer
+        // This ensures "Go!" completes before countdown begins
+        // Use a safe delay that accounts for longest exercise names
+        Task { @MainActor in
+            if let exercise = currentExercise {
+                // Calculate estimated speaking duration for "[Exercise Name]. Go!"
+                let voiceText = "\(exercise.name). Go!"
+                let estimatedDuration = VoiceCuesManager.shared.estimateSpeakingDuration(for: voiceText)
+                
+                // Wait for estimated voice duration plus buffer to ensure "Go!" finishes
+                // Use max of estimated duration or 1.5 seconds (safe minimum for short names)
+                let delay = max(estimatedDuration + 0.2, 1.5)
+                try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
+            } else {
+                // Fallback: use safe delay if no exercise
+                try? await Task.sleep(nanoseconds: 1_500_000_000) // 1.5 seconds
+            }
+            
+            // Start timer after voice finishes
+            timer.start(duration: exerciseDuration)
+        }
         
         // Enhanced haptic and sound feedback for exercise start
         Haptics.exerciseStart()

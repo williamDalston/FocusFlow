@@ -256,3 +256,4 @@ Thanks for using Ritual7! ⭐️ If you love it, please rate us 5 stars!
 
 *Remember: ASO is an ongoing process. Test, measure, optimize, repeat.*
 
+

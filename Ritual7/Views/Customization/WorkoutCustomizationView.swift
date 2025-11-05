@@ -773,7 +773,7 @@ struct CustomWorkoutEditorView: View {
                     Section("Workout Details") {
                         // Agent 25: Real-time validation for workout name
                         TextField("Workout Name", text: $workout.name)
-                            .onChange(of: workout.name) { _, newValue in
+                            .onChangeCompat(of: workout.name) { newValue in
                                 nameValidation.touch()
                                 nameValidation.validate(newValue) { InputValidator.validateWorkoutName($0) }
                             }
@@ -781,7 +781,7 @@ struct CustomWorkoutEditorView: View {
                         
                         TextField("Description (optional)", text: $workout.description, axis: .vertical)
                             .lineLimit(3...6)
-                            .onChange(of: workout.description) { _, newValue in
+                            .onChangeCompat(of: workout.description) { newValue in
                                 _ = InputValidator.validateWorkoutDescription(newValue)
                             }
                     }
@@ -801,7 +801,7 @@ struct CustomWorkoutEditorView: View {
                                     .font(Theme.caption)
                             }
                         }
-                        .onChange(of: selectedExerciseIds) { _, _ in
+                        .onChangeCompat(of: selectedExerciseIds) { _ in
                             exerciseValidation.touch()
                             let exerciseArray = Array(selectedExerciseIds)
                             exerciseValidation.validate(exerciseArray) { InputValidator.validateExerciseSelection($0) }
@@ -867,6 +867,22 @@ struct CustomWorkoutEditorView: View {
             .sheet(isPresented: $showExerciseSelector) {
                 ExerciseSelectorView(selectedExerciseIds: $selectedExerciseIds)
             }
+        }
+    }
+}
+
+// MARK: - Compatibility Extension for onChange
+
+extension View {
+    /// Compatibility wrapper for onChange that works on iOS 14+ and iOS 17+
+    @ViewBuilder
+    func onChangeCompat<T: Equatable>(of value: T, perform action: @escaping (T) -> Void) -> some View {
+        if #available(iOS 17.0, *) {
+            self.onChange(of: value) { _, newValue in
+                action(newValue)
+            }
+        } else {
+            self.onChange(of: value, perform: action)
         }
     }
 }

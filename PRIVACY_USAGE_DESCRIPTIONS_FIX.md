@@ -100,3 +100,4 @@ All required privacy usage descriptions are now present in `Info.plist`:
 
 The crash should be resolved. The app will now properly display permission prompts with the usage descriptions.
 
+

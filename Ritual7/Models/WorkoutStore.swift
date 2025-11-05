@@ -413,12 +413,29 @@ final class WorkoutStore: ObservableObject {
     /// Personal best exercises completed
     @Published private(set) var personalBestExercises: Int = 0
     
-    /// Checks if a workout session is a personal best
+    /// Read-only check if a workout session would be a personal best (doesn't modify properties)
     /// - Parameters:
     ///   - duration: Workout duration in seconds
     ///   - exercisesCompleted: Number of exercises completed
     /// - Returns: Tuple of (isDurationBest, isExercisesBest)
-    func checkPersonalBest(duration: TimeInterval, exercisesCompleted: Int) -> (isDurationBest: Bool, isExercisesBest: Bool) {
+    func wouldBePersonalBest(duration: TimeInterval, exercisesCompleted: Int) -> (isDurationBest: Bool, isExercisesBest: Bool) {
+        let isDurationBest = duration > personalBestDuration
+        let isExercisesBest = exercisesCompleted > personalBestExercises
+        return (isDurationBest, isExercisesBest)
+    }
+    
+    /// Checks if current workout is any kind of personal best (read-only, doesn't modify properties)
+    func isPersonalBest(duration: TimeInterval, exercisesCompleted: Int) -> Bool {
+        let result = wouldBePersonalBest(duration: duration, exercisesCompleted: exercisesCompleted)
+        return result.isDurationBest || result.isExercisesBest
+    }
+    
+    /// Updates personal best records (should be called asynchronously, not during view updates)
+    /// - Parameters:
+    ///   - duration: Workout duration in seconds
+    ///   - exercisesCompleted: Number of exercises completed
+    /// - Returns: Tuple of (isDurationBest, isExercisesBest) indicating what was updated
+    func updatePersonalBest(duration: TimeInterval, exercisesCompleted: Int) -> (isDurationBest: Bool, isExercisesBest: Bool) {
         var isDurationBest = false
         var isExercisesBest = false
         
@@ -438,12 +455,6 @@ final class WorkoutStore: ObservableObject {
         }
         
         return (isDurationBest, isExercisesBest)
-    }
-    
-    /// Checks if current workout is any kind of personal best
-    func isPersonalBest(duration: TimeInterval, exercisesCompleted: Int) -> Bool {
-        let result = checkPersonalBest(duration: duration, exercisesCompleted: exercisesCompleted)
-        return result.isDurationBest || result.isExercisesBest
     }
     
     private func loadPersonalBest() {

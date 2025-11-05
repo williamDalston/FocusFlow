@@ -82,3 +82,4 @@ rm -rf ~/Library/Developer/Xcode/DerivedData
 
 **Status:** ✅ All main assets are correct Ritual7 assets!
 
+

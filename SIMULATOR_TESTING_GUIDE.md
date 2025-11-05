@@ -115,3 +115,4 @@ The app includes swipe gestures for workout control:
 - All gestures work with both touch and mouse/trackpad
 - Button feedback is optimized for both touch and mouse interactions
 
+

@@ -71,3 +71,4 @@ private static let prodInterstitial = "ca-app-pub-2214618538122354/7280223242"
 
 Everything is configured correctly and ready for production. You can proceed with App Store submission!
 
+

@@ -118,3 +118,4 @@ All `symbolEffect` calls are properly wrapped with availability checks:
 
 The codebase is safe from compiler errors related to iOS 17+ API usage.
 
+
