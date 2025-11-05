@@ -188,6 +188,11 @@ struct CompletionCelebrationView: View {
     private var actionButtons: some View {
         VStack(spacing: 12) {
             Button {
+                // Show interstitial ad after workout completion
+                // Small delay to let user see the completion screen first
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    InterstitialAdManager.shared.present(from: nil)
+                }
                 onStartNew()
             } label: {
                 Label("Start New Workout", systemImage: "arrow.clockwise")
@@ -200,6 +205,11 @@ struct CompletionCelebrationView: View {
             .foregroundStyle(.black)
             
             Button {
+                // Show interstitial ad after workout completion
+                // Small delay to let user see the completion screen first
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    InterstitialAdManager.shared.present(from: nil)
+                }
                 onDismiss()
             } label: {
                 Text("Done")

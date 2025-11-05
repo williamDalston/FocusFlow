@@ -1,7 +1,7 @@
-# Privacy Policy for 7-Minute Workout
+# Privacy Policy for Ritual7
 
 **Last Updated:** November 5, 2024  
-**App Name:** 7-Minute Workout  
+**App Name:** Ritual7  
 **Developer:** William Alston  
 **Contact:** [Your Email Address]
 
@@ -9,7 +9,7 @@
 
 ## Introduction
 
-7-Minute Workout ("we," "our," or "the app") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application.
+Ritual7 ("we," "our," or "the app") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application.
 
 ---
 
@@ -124,7 +124,7 @@ We do not sell, trade, or rent your personal information to third parties. We ma
 
 ## Children's Privacy
 
-7-Minute Workout is not intended for children under the age of 13. We do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe your child has provided us with personal information, please contact us.
+Ritual7 is not intended for children under the age of 13. We do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe your child has provided us with personal information, please contact us.
 
 ---
 

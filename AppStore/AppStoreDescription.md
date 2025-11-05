@@ -1,7 +1,7 @@
-# App Store Description for 7-Minute Workout
+# App Store Description for Ritual7
 
 ## App Name
-**7-Minute Workout**
+**Ritual7**
 
 ## Subtitle (30 characters max)
 **"Full-body fitness in 7 minutes"**
@@ -15,9 +15,9 @@
 
 ### 💪 **Transform Your Fitness in Just 7 Minutes**
 
-7-Minute Workout brings you the scientifically-backed high-intensity interval training (HIIT) routine that delivers maximum results in minimal time. Perfect for busy schedules, no gym required, and no equipment needed—just you, your phone, and 7 minutes of commitment.
+Ritual7 brings you the scientifically-backed high-intensity interval training (HIIT) routine that delivers maximum results in minimal time. Perfect for busy schedules, no gym required, and no equipment needed—just you, your phone, and 7 minutes of commitment.
 
-### ✨ **What Makes 7-Minute Workout Special**
+### ✨ **What Makes Ritual7 Special**
 
 **🏋️ Science-Backed Routine**
 - 12 carefully designed exercises targeting your entire body

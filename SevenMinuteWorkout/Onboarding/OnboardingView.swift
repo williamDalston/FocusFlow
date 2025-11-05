@@ -15,7 +15,7 @@ struct OnboardingView: View {
             ThemeBackground()
             TabView(selection: $step) {
                 page(title: "Welcome 👋",
-                     body: "7-Minute Workout helps you build strength and fitness in just 7 minutes. No equipment needed, just 12 exercises and your commitment.",
+                     body: "Ritual7 helps you build strength and fitness in just 7 minutes. No equipment needed, just 12 exercises and your commitment.",
                      icon: "figure.run")
                     .tag(0)
 

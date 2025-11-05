@@ -1,10 +1,10 @@
-# 7-Minute Workout iOS App
+# Ritual7 iOS App
 
 A beautiful, native iOS workout app featuring the scientifically-backed 7-minute high-intensity interval training (HIIT) routine. Built with SwiftUI for iPhone, iPad, and Apple Watch.
 
 ## 🎯 Overview
 
-7-Minute Workout brings you the scientifically-backed high-intensity interval training routine that delivers maximum results in minimal time. Perfect for busy schedules, no gym required, and no equipment needed—just you, your phone, and 7 minutes of commitment.
+Ritual7 brings you the scientifically-backed high-intensity interval training routine that delivers maximum results in minimal time. Perfect for busy schedules, no gym required, and no equipment needed—just you, your phone, and 7 minutes of commitment.
 
 ## ✨ Features
 

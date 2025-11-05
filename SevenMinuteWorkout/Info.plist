@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-2214618538122354~6506191141</string>
+	<string>ca-app-pub-2214618538122354~5208701479</string>
 	<key>UIApplicationSceneManifest</key>
 	<false/>
 	<key>UILaunchScreen</key>
@@ -13,13 +13,17 @@
 		<key>UIImageName</key>
 		<string></string>
 	</dict>
+	<key>CFBundleDisplayName</key>
+	<string>Ritual7</string>
+	<key>CFBundleName</key>
+	<string>Ritual7</string>
 	<key>UIApplicationShortcutItems</key>
 	<array>
 		<dict>
 			<key>UIApplicationShortcutItemIconType</key>
 			<string>UIApplicationShortcutIconTypePlay</string>
 			<key>UIApplicationShortcutItemTitle</key>
-			<string>Start Workout</string>
+			<string>Start Ritual7</string>
 			<key>UIApplicationShortcutItemType</key>
 			<string>com.williamalston.SevenMinuteWorkout.startworkout</string>
 		</dict>

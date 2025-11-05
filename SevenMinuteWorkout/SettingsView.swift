@@ -431,7 +431,7 @@ struct SettingsView: View {
                         VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs * 0.5) {
                             Text("Daily Workout Reminder")
                                 .font(Theme.body)
-                            Text("Get reminded to complete your daily 7-minute workout.")
+                            Text("Get reminded to complete your daily Ritual7.")
                                 .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                         }
@@ -827,7 +827,7 @@ struct SettingsView: View {
             let enc = JSONEncoder()
             enc.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
             let data = try enc.encode(store.entries)
-            let url = FileManager.default.temporaryDirectory.appendingPathComponent("SevenMinuteWorkout.json")
+            let url = FileManager.default.temporaryDirectory.appendingPathComponent("Ritual7.json")
             try data.write(to: url, options: .atomic)
             shareItems = [url]
             Haptics.tap()
@@ -849,7 +849,7 @@ struct SettingsView: View {
             csv += "\"\(ts)\",\"\(escaped)\"\n"
         }
         let data = Data(csv.utf8)
-        let url = FileManager.default.temporaryDirectory.appendingPathComponent("SevenMinuteWorkout.csv")
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("Ritual7.csv")
         do {
             try data.write(to: url, options: .atomic)
             shareItems = [url]
@@ -895,7 +895,7 @@ struct SettingsView: View {
         comps.hour = hour; comps.minute = minute
 
         let content = UNMutableNotificationContent()
-        content.title = "Time for Your 7-Minute Workout"
+            content.title = "Time for Your Ritual7"
         content.body = "Quick and effective! Start your daily workout now."
         content.sound = .default
 

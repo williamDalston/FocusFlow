@@ -62,7 +62,7 @@ final class MotivationalMessageManager: ObservableObject {
     /// Get encouragement message for when user hasn't worked out today
     func getNoWorkoutTodayMessage() -> String {
         let messages = [
-            "You've got this! Time for your daily 7-minute workout.",
+            "You've got this! Time for your daily Ritual7.",
             "Don't let your streak break! Start your workout now.",
             "Remember why you started. Your future self will thank you.",
             "Just 7 minutes. That's all it takes to stay on track.",
@@ -93,7 +93,7 @@ final class MotivationalMessageManager: ObservableObject {
         switch hour {
         case 5..<12:
             messages = [
-                "Good morning! Start your day with a 7-minute workout.",
+                "Good morning! Start your day with Ritual7.",
                 "Morning energy boost! Time for your workout.",
                 "Rise and shine! Your body is ready for movement."
             ]
@@ -101,12 +101,12 @@ final class MotivationalMessageManager: ObservableObject {
             messages = [
                 "Afternoon energy dip? Boost it with a quick workout!",
                 "Perfect time for a midday movement break.",
-                "Revitalize your afternoon with a 7-minute workout."
+                "Revitalize your afternoon with Ritual7."
             ]
         case 17..<22:
             messages = [
                 "Evening workout time! Finish your day strong.",
-                "Unwind with movement. Your 7-minute workout awaits.",
+                "Unwind with movement. Your Ritual7 awaits.",
                 "End your day on a high note with a workout."
             ]
         default:

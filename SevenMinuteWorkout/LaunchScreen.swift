@@ -27,7 +27,7 @@ struct LaunchScreenView: View {
                     .scaleEffect(isAnimating ? 1.1 : 1.0)
                     .animation(.easeInOut(duration: 1.0).repeatForever(autoreverses: true), value: isAnimating)
                 
-                Text("7-Minute Workout")
+                Text("Ritual7")
                     .font(.title.weight(.bold))
                     .foregroundColor(.white)
                     .opacity(isAnimating ? 1.0 : 0.8)

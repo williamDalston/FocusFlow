@@ -11,7 +11,7 @@ struct WorkoutWidget: Widget {
             WorkoutWidgetEntryView(entry: entry)
                 .containerBackground(.fill.tertiary, for: .widget)
         }
-        .configurationDisplayName("7-Minute Workout")
+        .configurationDisplayName("Ritual7")
         .description("Track your workout streak and start a quick session.")
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }
@@ -187,7 +187,7 @@ struct LargeWidgetView: View {
         VStack(spacing: 16) {
             HStack {
                 VStack(alignment: .leading) {
-                    Text("7-Minute Workout")
+                    Text("Ritual7")
                         .font(.title2.weight(.bold))
                     
                     Text("Track your progress")

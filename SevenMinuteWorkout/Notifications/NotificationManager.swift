@@ -22,7 +22,7 @@ enum NotificationManager {
 
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
         let content = UNMutableNotificationContent()
-        content.title = "Time for Your 7-Minute Workout"
+        content.title = "Time for Your Ritual7"
         
         // Use motivational message manager for personalized messages
         let messageManager = MotivationalMessageManager.shared

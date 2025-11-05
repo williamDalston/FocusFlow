@@ -38,6 +38,9 @@ struct SevenMinuteWorkoutApp: App {
                     
                     // Register shortcuts for Siri integration
                     WorkoutShortcuts.registerWorkoutShortcut()
+                    
+                    // Preload interstitial ad (loads in background)
+                    InterstitialAdManager.shared.load()
                 }
         }
         .onChange(of: scenePhase) { phase in

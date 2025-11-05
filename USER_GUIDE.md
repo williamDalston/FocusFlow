@@ -1,12 +1,12 @@
-# 7-Minute Workout - User Guide
+# Ritual7 - User Guide
 
-Welcome to 7-Minute Workout! This guide will help you get the most out of your fitness journey.
+Welcome to Ritual7! This guide will help you get the most out of your fitness journey.
 
 ## 🚀 Getting Started
 
 ### First Launch
 
-1. **Open the App**: Launch 7-Minute Workout on your iPhone or iPad
+1. **Open the App**: Launch Ritual7 on your iPhone or iPad
 2. **Complete Onboarding**: Follow the quick onboarding flow to learn about the app
 3. **Set Preferences**: Choose your notification preferences and workout settings
 4. **Start Your First Workout**: Tap "Start Workout" to begin!
@@ -311,12 +311,12 @@ Check the "What's New" section in the App Store for the latest updates and featu
 
 1. Open the App Store
 2. Tap your profile picture
-3. Find "7-Minute Workout" in the update list
+3. Find "Ritual7" in the update list
 4. Tap "Update"
 
 ---
 
-**Thank you for using 7-Minute Workout! We hope this guide helps you on your fitness journey. 💪**
+**Thank you for using Ritual7! We hope this guide helps you on your fitness journey. 💪**
 
 *Last Updated: November 2024*
 

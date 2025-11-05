@@ -177,7 +177,7 @@ struct WorkoutContentView: View {
                         .tracking(DesignSystem.Typography.uppercaseTracking)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    Text("7-Minute Workout")
+                    Text("Ritual7")
                         .font(horizontalSizeClass == .regular ? Theme.largeTitle : Theme.title)
                         .foregroundStyle(Theme.textPrimary)
                         .minimumScaleFactor(0.5)

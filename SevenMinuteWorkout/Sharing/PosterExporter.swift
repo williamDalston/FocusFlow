@@ -245,7 +245,7 @@ private struct BrandMark: View {
             Image(systemName: "figure.run")
                 .symbolRenderingMode(.palette)
                 .foregroundStyle(.white, .orange)
-            Text("7-Minute Workout")
+            Text("Ritual7")
                 .font(.system(.title2, design: .rounded).weight(.bold))
                 .minimumScaleFactor(0.7)
         }
@@ -291,6 +291,6 @@ private extension Bundle {
     var displayName: String {
         if let name = object(forInfoDictionaryKey: "CFBundleDisplayName") as? String { return name }
         if let name = object(forInfoDictionaryKey: "CFBundleName") as? String { return name }
-        return "7-Minute Workout"
+        return "Ritual7"
     }
 }

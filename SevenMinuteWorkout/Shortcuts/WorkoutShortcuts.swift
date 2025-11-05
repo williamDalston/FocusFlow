@@ -11,7 +11,7 @@ enum WorkoutShortcuts {
     /// Creates a workout intent for Siri Shortcuts
     static func createWorkoutIntent() -> INIntent {
         let intent = INStartWorkoutIntent()
-        intent.workoutName = "7-Minute Workout"
+        intent.workoutName = "Ritual7"
         intent.goalValue = nil
         intent.workoutGoalUnitType = .minute
         return intent
@@ -26,7 +26,7 @@ enum WorkoutShortcuts {
         
         // Create a user activity for the shortcut
         let activity = NSUserActivity(activityType: "com.williamalston.SevenMinuteWorkout.startWorkout")
-        activity.title = "Start 7-Minute Workout"
+        activity.title = "Start Ritual7"
         activity.suggestedInvocationPhrase = "Start workout"
         activity.isEligibleForPrediction = true
         activity.isEligibleForSearch = true

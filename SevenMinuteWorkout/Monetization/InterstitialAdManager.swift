@@ -3,8 +3,11 @@ import SwiftUI
 import GoogleMobileAds
 import UIKit
 
+/// Shared interstitial ad manager for the entire app
 @MainActor
 final class InterstitialAdManager: NSObject, ObservableObject, FullScreenContentDelegate {
+    static let shared = InterstitialAdManager()
+    
     @Published private(set) var isReady = false
     @Published private(set) var shownThisSession = 0
 
@@ -17,9 +20,11 @@ final class InterstitialAdManager: NSObject, ObservableObject, FullScreenContent
 
     private var lastShown: Date?
 
-    init(unitID: String) {
-        self.unitID = unitID
+    private init() {
+        self.unitID = AdConfig.interstitialUnit
         super.init()
+        // Preload ad on initialization
+        load()
     }
 
     func load() {

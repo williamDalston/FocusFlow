@@ -186,7 +186,7 @@ struct RootView: View {
             // Fallback inline scheduler (no dependency)
             var dc = DateComponents(); dc.hour = 20; dc.minute = 0
             let content = UNMutableNotificationContent()
-            content.title = "Time for Your 7-Minute Workout"
+            content.title = "Time for Your Ritual7"
             content.body = "Quick and effective! Start your daily workout now."
             content.sound = .default
 
@@ -243,7 +243,7 @@ struct iPadSidebar: View {
                         .font(.title2)
                         .foregroundStyle(Theme.accentA)
                     
-                    Text("7-Minute Workout")
+                    Text("Ritual7")
                         .font(.title2.weight(.bold))
                         .foregroundStyle(Theme.textPrimary)
                     

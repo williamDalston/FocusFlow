@@ -132,8 +132,8 @@ class HealthKitManager {
         // Create workout metadata
         var metadata: [String: Any] = [
             "exercisesCompleted": exercisesCompleted,
-            "workoutType": "7-Minute Workout",
-            "appName": "7-Minute Workout"
+            "workoutType": "Ritual7",
+            "appName": "Ritual7"
         ]
         
         // Create the workout
