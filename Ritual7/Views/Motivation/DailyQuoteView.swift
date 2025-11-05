@@ -193,7 +193,7 @@ struct StreakCelebrationView: View {
                 }
                 
                 VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
-                    // Larger, bolder streak number with pulse animation
+                    // Larger, bolder streak number with pulse animation - Enhanced with stronger shadow
                     Text("\(streak)")
                         .font(.system(size: 48, weight: .bold, design: .rounded))
                         .foregroundStyle(
@@ -205,13 +205,17 @@ struct StreakCelebrationView: View {
                         )
                         .monospacedDigit()
                         .scaleEffect(pulseAnimation ? 1.05 : 1.0)
-                        .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.subtle * 1.25), radius: DesignSystem.Shadow.verySoft.radius * 0.25, x: 0, y: DesignSystem.Shadow.verySoft.y * 0.17)
+                        .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.subtle * 1.5), 
+                               radius: DesignSystem.Shadow.verySoft.radius * 0.5, 
+                               x: 0, y: DesignSystem.Shadow.verySoft.y * 0.25)
                         .contentTransition(.numericText())
                     
                     Text("day streak")
                         .font(Theme.headline.weight(.bold))
                         .foregroundStyle(.secondary)
-                        .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.subtle * 0.83), radius: DesignSystem.Shadow.verySoft.radius * 0.17, x: 0, y: DesignSystem.Shadow.verySoft.y * 0.17)
+                        .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.subtle * 1.0), 
+                               radius: DesignSystem.Shadow.verySoft.radius * 0.3, 
+                               x: 0, y: DesignSystem.Shadow.verySoft.y * 0.2)
                 }
                 
                 Spacer()
@@ -255,8 +259,8 @@ struct StreakCelebrationView: View {
                         )
                     )
                     .multilineTextAlignment(.center)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
+                    .padding(.horizontal, DesignSystem.Spacing.md)
+                    .padding(.vertical, DesignSystem.Spacing.xs + 2)
                     .background(
                         RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
                             .fill(Theme.accentA.opacity(DesignSystem.Opacity.subtle * 1.0))
@@ -291,44 +295,151 @@ struct StreakCelebrationView: View {
     }
 }
 
-/// Achievement celebration view
+/// Agent 21: Achievement celebration view - Enhanced and more prominent
 struct AchievementCelebrationView: View {
     let achievement: AchievementNotifier.Achievement
     @State private var showConfetti = false
     @State private var scale: CGFloat = 0.8
+    @State private var rotation: Double = 0
+    @State private var glowOpacity: Double = 0.0
+    @State private var pulseScale: CGFloat = 1.0
+    @Environment(\.dismiss) private var dismiss
+    
+    // Agent 21: Get achievement color from icon mapping
+    private var achievementColor: Color {
+        // Map common achievement icons to colors
+        if achievement.icon.contains("flame") { return .orange }
+        if achievement.icon.contains("trophy") { return .purple }
+        if achievement.icon.contains("crown") { return .yellow }
+        if achievement.icon.contains("star") { return .yellow }
+        if achievement.icon.contains("medal") { return .blue }
+        return Theme.accentA
+    }
     
     var body: some View {
-        VStack(spacing: 16) {
-            ZStack {
-                if showConfetti {
-                    ConfettiView(trigger: $showConfetti)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        ZStack {
+            // Agent 21: Enhanced background with gradient
+            LinearGradient(
+                colors: [
+                    Color.black.opacity(0.95),
+                    achievementColor.opacity(0.15),
+                    Color.black.opacity(0.9)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
+            
+            // Agent 21: Multiple confetti bursts
+            if showConfetti {
+                ConfettiView(trigger: $showConfetti)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            
+            VStack(spacing: DesignSystem.Spacing.xl) {
+                Spacer()
+                
+                // Agent 21: Large icon with glow and pulse animation
+                ZStack {
+                    // Glow effect
+                    Circle()
+                        .fill(
+                            RadialGradient(
+                                colors: [
+                                    achievementColor.opacity(glowOpacity * 0.6),
+                                    achievementColor.opacity(glowOpacity * 0.3),
+                                    Color.clear
+                                ],
+                                center: .center,
+                                startRadius: 40,
+                                endRadius: 100
+                            )
+                        )
+                        .frame(width: 200, height: 200)
+                        .blur(radius: 20)
+                    
+                    // Pulsing background circle
+                    Circle()
+                        .fill(achievementColor.opacity(0.2))
+                        .frame(width: 120 * pulseScale, height: 120 * pulseScale)
+                    
+                    // Icon with rotation
+                    Image(systemName: achievement.icon)
+                        .font(.system(size: DesignSystem.IconSize.huge * 1.5, weight: .bold))
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [achievementColor, achievementColor.opacity(0.8)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .scaleEffect(scale)
+                        .rotationEffect(.degrees(rotation))
+                        .shadow(color: achievementColor.opacity(0.8), radius: 20, x: 0, y: 0)
                 }
                 
-                VStack(spacing: 12) {
-                    Image(systemName: achievement.icon)
-                        .font(.system(size: DesignSystem.IconSize.huge, weight: .bold))
-                        .foregroundStyle(Theme.accentA)
-                        .scaleEffect(scale)
+                // Agent 21: Enhanced title and message
+                VStack(spacing: DesignSystem.Spacing.md) {
+                    Text("Achievement Unlocked!")
+                        .font(Theme.footnote.smallCaps())
+                        .foregroundStyle(.secondary)
+                        .tracking(DesignSystem.Typography.uppercaseTracking)
                     
                     Text(achievement.title)
-                        .font(Theme.title2)
+                        .font(.system(size: 36, weight: .bold, design: .rounded))
                         .foregroundStyle(Theme.textPrimary)
+                        .multilineTextAlignment(.center)
+                        .shadow(color: Theme.shadow.opacity(0.3), radius: 4, x: 0, y: 2)
                     
                     Text(achievement.message)
-                        .font(Theme.body)
-                        .foregroundStyle(.secondary)
+                        .font(Theme.title3)
+                        .foregroundStyle(achievementColor)
                         .multilineTextAlignment(.center)
+                        .padding(.horizontal, DesignSystem.Spacing.lg)
                 }
-                .padding(DesignSystem.Spacing.cardPadding)
+                
+                Spacer()
+                
+                // Agent 21: Dismiss button
+                Button {
+                    Haptics.success()
+                    dismiss()
+                } label: {
+                    HStack(spacing: DesignSystem.Spacing.sm) {
+                        Text("Awesome!")
+                            .fontWeight(.bold)
+                        Image(systemName: "checkmark.circle.fill")
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: DesignSystem.ButtonSize.large.height)
+                }
+                .buttonStyle(PrimaryProminentButtonStyle())
+                .padding(.horizontal, DesignSystem.Spacing.xl)
+                .padding(.bottom, DesignSystem.Spacing.xl)
+                .accessibilityLabel("Dismiss achievement celebration")
             }
         }
         .onAppear {
-            withAnimation(.spring(response: 0.5, dampingFraction: 0.6)) {
+            // Agent 21: Enhanced entrance animation
+            withAnimation(.spring(response: 0.6, dampingFraction: 0.7)) {
                 scale = 1.0
+                glowOpacity = 1.0
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            
+            // Confetti after short delay
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 showConfetti = true
+                Haptics.success()
+            }
+            
+            // Pulse animation
+            withAnimation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
+                pulseScale = 1.15
+            }
+            
+            // Rotation animation
+            withAnimation(.linear(duration: 20).repeatForever(autoreverses: false)) {
+                rotation = 360
             }
         }
     }

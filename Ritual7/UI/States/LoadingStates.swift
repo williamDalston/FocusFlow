@@ -87,39 +87,203 @@ struct SkeletonCard: View {
 }
 
 /// Agent 7: Skeleton loader for stat boxes
+/// Agent 16: Enhanced to match actual StatBox layout
 struct SkeletonStatBox: View {
     var body: some View {
-        VStack(spacing: DesignSystem.Spacing.md) {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
+            // Icon placeholder (matches StatBox icon layout)
+            ZStack {
+                Circle()
+                    .fill(Theme.accentA.opacity(DesignSystem.Opacity.highlight))
+                    .frame(width: DesignSystem.IconSize.statBox + 8, height: DesignSystem.IconSize.statBox + 8)
+                    .overlay(ShimmerView())
+                
+                Circle()
+                    .fill(.ultraThinMaterial)
+                    .frame(width: DesignSystem.IconSize.statBox, height: DesignSystem.IconSize.statBox)
+                    .overlay(ShimmerView())
+            }
+            
+            // Large number placeholder (matches AnimatedGradientCounter)
+            RoundedRectangle(cornerRadius: DesignSystem.Spacing.xs)
+                .fill(.ultraThinMaterial)
+                .frame(width: 80, height: 48)
+                .overlay(ShimmerView())
+            
+            // Title placeholder
+            RoundedRectangle(cornerRadius: DesignSystem.Spacing.xs)
+                .fill(.ultraThinMaterial)
+                .frame(width: 100, height: 12)
+                .overlay(ShimmerView())
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .regularCardPadding()
+        .background(
+            ZStack {
+                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                    .fill(.ultraThinMaterial)
+                
+                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Theme.accentA.opacity(DesignSystem.Opacity.highlight * 0.5),
+                                Color.clear
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .blendMode(.overlay)
+            }
+            .overlay(
+                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                    .stroke(
+                        LinearGradient(
+                            colors: [
+                                Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.5),
+                                Theme.accentA.opacity(DesignSystem.Opacity.light * 0.5),
+                                Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.5)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: DesignSystem.Border.standard
+                    )
+            )
+        )
+        .softShadow()
+    }
+}
+
+// MARK: - Agent 16: Additional Skeleton Components
+
+/// Agent 16: Skeleton loader for list items (workout history rows)
+struct SkeletonList: View {
+    let count: Int
+    
+    init(count: Int = 5) {
+        self.count = count
+    }
+    
+    var body: some View {
+        VStack(spacing: DesignSystem.Spacing.sm) {
+            ForEach(0..<count, id: \.self) { index in
+                SkeletonListItem()
+                    .staggeredEntrance(index: index, delay: 0.04)
+            }
+        }
+    }
+}
+
+/// Agent 16: Skeleton loader for individual list items
+struct SkeletonListItem: View {
+    var body: some View {
+        HStack(spacing: DesignSystem.Spacing.lg) {
             // Icon placeholder
             Circle()
                 .fill(.ultraThinMaterial)
-                .frame(width: DesignSystem.IconSize.statBox, height: DesignSystem.IconSize.statBox)
+                .frame(width: DesignSystem.IconSize.xlarge, height: DesignSystem.IconSize.xlarge)
                 .overlay(ShimmerView())
             
-            // Text placeholders
-            VStack(spacing: DesignSystem.Spacing.xs) {
-                RoundedRectangle(cornerRadius: 4)
+            // Content placeholders
+            VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
+                RoundedRectangle(cornerRadius: DesignSystem.Spacing.xs)
                     .fill(.ultraThinMaterial)
-                    .frame(width: 60, height: 16)
+                    .frame(width: 120, height: 16)
                     .overlay(ShimmerView())
                 
-                RoundedRectangle(cornerRadius: 4)
+                RoundedRectangle(cornerRadius: DesignSystem.Spacing.xs)
                     .fill(.ultraThinMaterial)
-                    .frame(width: 40, height: 12)
+                    .frame(width: 80, height: 12)
                     .overlay(ShimmerView())
             }
-        }
-        .padding(DesignSystem.Spacing.cardPadding)
-        .frame(maxWidth: .infinity)
-        .background(
-            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+            
+            Spacer()
+            
+            // Trailing placeholder
+            RoundedRectangle(cornerRadius: DesignSystem.Spacing.xs)
                 .fill(.ultraThinMaterial)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
-                .stroke(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle), lineWidth: DesignSystem.Border.subtle)
+                .frame(width: 60, height: 14)
+                .overlay(ShimmerView())
+        }
+        .padding(DesignSystem.Spacing.lg)
+        .background(
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.medium, style: .continuous)
+                .fill(.ultraThinMaterial)
+                .overlay(
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.medium, style: .continuous)
+                        .stroke(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle), lineWidth: DesignSystem.Border.subtle)
+                )
         )
         .softShadow()
+    }
+}
+
+/// Agent 16: Skeleton loader for chart views
+struct SkeletonChart: View {
+    let height: CGFloat
+    
+    init(height: CGFloat = 200) {
+        self.height = height
+    }
+    
+    private var barHeights: [CGFloat] {
+        [80, 120, 90, 140, 100, 130, 110]
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
+            // Title placeholder
+            RoundedRectangle(cornerRadius: DesignSystem.Spacing.xs)
+                .fill(.ultraThinMaterial)
+                .frame(width: 150, height: 20)
+                .overlay(ShimmerView())
+            
+            // Chart area placeholder
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.medium, style: .continuous)
+                .fill(.ultraThinMaterial)
+                .frame(height: height)
+                .overlay(
+                    // Chart bars/lines placeholder
+                    HStack(alignment: .bottom, spacing: DesignSystem.Spacing.sm) {
+                        ForEach(0..<7, id: \.self) { index in
+                            RoundedRectangle(cornerRadius: 4, style: .continuous)
+                                .fill(.ultraThinMaterial)
+                                .frame(width: 30, height: barHeights[index])
+                                .overlay(ShimmerView())
+                        }
+                    }
+                    .padding(.horizontal, DesignSystem.Spacing.md)
+                    .padding(.bottom, DesignSystem.Spacing.md)
+                )
+                .overlay(ShimmerView())
+        }
+        .cardPadding()
+        .background(
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
+                .fill(.ultraThinMaterial)
+                .overlay(
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
+                        .stroke(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle), lineWidth: DesignSystem.Border.subtle)
+                )
+        )
+        .cardShadow()
+    }
+}
+
+/// Agent 16: Skeleton loader for workout content grid
+struct SkeletonStatsGrid: View {
+    var body: some View {
+        LazyVGrid(columns: [
+            GridItem(.flexible()),
+            GridItem(.flexible())
+        ], spacing: DesignSystem.Spacing.gridSpacing) {
+            ForEach(0..<4, id: \.self) { index in
+                SkeletonStatBox()
+                    .staggeredEntrance(index: index, delay: 0.05)
+            }
+        }
     }
 }
 
@@ -199,6 +363,27 @@ extension View {
     /// Shows a loading indicator in a button
     func loading(_ isLoading: Bool) -> some View {
         modifier(LoadingButtonModifier(isLoading: isLoading))
+    }
+}
+
+// MARK: - Agent 16: Smooth Transition Helpers
+
+/// Agent 16: Smooth transition modifier for loading states
+struct LoadingTransitionModifier: ViewModifier {
+    let isLoading: Bool
+    
+    func body(content: Content) -> some View {
+        content
+            .opacity(isLoading ? 0 : 1)
+            .scaleEffect(isLoading ? 0.95 : 1.0)
+            .animation(AnimationConstants.smoothSpring, value: isLoading)
+    }
+}
+
+extension View {
+    /// Smoothly transitions between loading and loaded states
+    func loadingTransition(_ isLoading: Bool) -> some View {
+        modifier(LoadingTransitionModifier(isLoading: isLoading))
     }
 }
 

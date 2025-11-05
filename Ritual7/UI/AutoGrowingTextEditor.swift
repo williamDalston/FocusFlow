@@ -22,16 +22,16 @@ struct AutoGrowingTextEditor: View {
                 Text(placeholder)
                     .foregroundStyle(.secondary.opacity(0.9))
                     .font(Theme.body.weight(.medium))
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 16)
+                    .padding(.horizontal, DesignSystem.Spacing.lg)
+                    .padding(.vertical, DesignSystem.Spacing.lg)
             }
             TextEditor(text: $text)
                 .scrollContentBackground(.hidden)
                 .background(Color.clear)
                 .focused($isFocused)
                 .frame(minHeight: dynamicHeight, maxHeight: horizontalSizeClass == .regular ? 200 : 150)
-                .padding(.horizontal, 12) // Apply padding to TextEditor itself
-                .padding(.vertical, 12)
+                .padding(.horizontal, DesignSystem.Spacing.md) // Apply padding to TextEditor itself
+                .padding(.vertical, DesignSystem.Spacing.md)
                 .scrollDisabled(false) // Enable scrolling
                 .textSelection(.enabled) // Enable text selection
                 .overlay(

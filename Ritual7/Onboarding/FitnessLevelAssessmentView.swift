@@ -47,8 +47,8 @@ struct FitnessLevelAssessmentView: View {
                             .font(.system(size: horizontalSizeClass == .regular ? 80 : 64, weight: .bold))
                             .foregroundStyle(.white)
                             .padding(horizontalSizeClass == .regular ? 24 : 20)
-                            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
-                            .overlay(RoundedRectangle(cornerRadius: 22).stroke(.white.opacity(0.18), lineWidth: 1))
+                            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous))
+                            .overlay(RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large).stroke(.white.opacity(0.18), lineWidth: DesignSystem.Border.standard))
                         
                         Text("Assess Your Fitness Level")
                             .font(horizontalSizeClass == .regular ? .largeTitle.weight(.bold) : .title.weight(.bold))
@@ -59,9 +59,9 @@ struct FitnessLevelAssessmentView: View {
                             .font(horizontalSizeClass == .regular ? .title3 : .body)
                             .foregroundStyle(.white.opacity(0.85))
                             .multilineTextAlignment(.center)
-                            .padding(.horizontal, 24)
+                            .padding(.horizontal, DesignSystem.Spacing.xl)
                     }
-                    .padding(.top, 32)
+                    .padding(.top, DesignSystem.Spacing.xxl)
                     
                     // Fitness level options
                     VStack(spacing: 16) {
@@ -69,7 +69,7 @@ struct FitnessLevelAssessmentView: View {
                             fitnessLevelCard(level: level, index: index)
                         }
                     }
-                    .padding(.horizontal, 24)
+                    .padding(.horizontal, DesignSystem.Spacing.xl)
                     
                     // Skip option
                     Button {
@@ -80,8 +80,8 @@ struct FitnessLevelAssessmentView: View {
                             .font(Theme.body.weight(.medium))
                             .foregroundStyle(.white.opacity(0.7))
                     }
-                    .padding(.top, 16)
-                    .padding(.bottom, 32)
+                    .padding(.top, DesignSystem.Spacing.lg)
+                    .padding(.bottom, DesignSystem.Spacing.xxl)
                 }
             }
         }

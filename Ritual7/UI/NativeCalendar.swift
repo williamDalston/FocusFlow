@@ -52,7 +52,7 @@ struct NativeCalendar: View {
                 }
                 .buttonStyle(.plain)
             }
-            .padding(.horizontal, 16)
+            .padding(.horizontal, DesignSystem.Spacing.lg)
             
             // Weekday headers
             HStack(spacing: 0) {
@@ -63,7 +63,7 @@ struct NativeCalendar: View {
                         .frame(maxWidth: .infinity)
                 }
             }
-            .padding(.horizontal, 16)
+            .padding(.horizontal, DesignSystem.Spacing.lg)
             
             // Calendar grid
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 0), count: 7), spacing: horizontalSizeClass == .regular ? 12 : 8) {
@@ -92,7 +92,7 @@ struct NativeCalendar: View {
                     }
                 }
             }
-            .padding(.horizontal, 16)
+            .padding(.horizontal, DesignSystem.Spacing.lg)
         }
         .padding(.vertical, horizontalSizeClass == .regular ? DesignSystem.Spacing.formFieldSpacing : DesignSystem.Spacing.lg)
         .background(

@@ -32,28 +32,105 @@ struct WorkoutContentView: View {
             
             ScrollViewReader { proxy in
                 ScrollView(showsIndicators: false) {
-                    VStack(spacing: horizontalSizeClass == .regular ? DesignSystem.Spacing.sectionSpacingIPad : DesignSystem.Spacing.sectionSpacing) {
+                    VStack(spacing: 0) {
                         header
+                            .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Spacing.sectionSpacingIPad : DesignSystem.Spacing.sectionSpacing)
+                        
                         quickStartCard  // Moved to top 3 for better prominence
+                            .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Spacing.sectionSpacingIPad : DesignSystem.Spacing.sectionSpacing)
+                        
+                        // Subtle divider
+                        Divider()
+                            .background(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle))
+                            .padding(.vertical, DesignSystem.Spacing.lg)
+                        
                         dailyQuoteCard
+                            .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Spacing.sectionSpacingIPad : DesignSystem.Spacing.sectionSpacing)
+                        
+                        // Subtle divider
+                        Divider()
+                            .background(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle))
+                            .padding(.vertical, DesignSystem.Spacing.lg)
+                        
                         statsGrid
+                            .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Spacing.sectionSpacingIPad : DesignSystem.Spacing.sectionSpacing)
+                        
+                        // Agent 21: Next Achievement (Prominent)
+                        if let manager = achievementManager, let nextAchievement = manager.nextAchievement() {
+                            // Subtle divider
+                            Divider()
+                                .background(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle))
+                                .padding(.vertical, DesignSystem.Spacing.lg)
+                            
+                            NextAchievementCard(
+                                achievement: nextAchievement.achievement,
+                                remaining: nextAchievement.remaining,
+                                progressText: nextAchievement.progressText,
+                                achievementManager: manager
+                            ) {
+                                showAchievements = true
+                                Haptics.tap()
+                            }
+                            .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Spacing.sectionSpacingIPad : DesignSystem.Spacing.sectionSpacing)
+                        }
+                        
+                        // Agent 21: Achievement Progress Cards (showing closest achievements)
+                        if let manager = achievementManager, !manager.closestAchievements(limit: 3).isEmpty {
+                            // Subtle divider
+                            Divider()
+                                .background(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle))
+                                .padding(.vertical, DesignSystem.Spacing.lg)
+                            
+                            achievementProgressSection(manager: manager)
+                                .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Spacing.sectionSpacingIPad : DesignSystem.Spacing.sectionSpacing)
+                        }
                         
                         // Agent 2: Recent Achievements
                         if let manager = achievementManager, !manager.recentUnlocks.isEmpty {
+                            // Subtle divider
+                            Divider()
+                                .background(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle))
+                                .padding(.vertical, DesignSystem.Spacing.lg)
+                            
                             RecentAchievementsView(achievementManager: manager)
+                                .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Spacing.sectionSpacingIPad : DesignSystem.Spacing.sectionSpacing)
                         }
                         
                         // Agent 2: Quick Insights
                         if analytics != nil {
+                            // Subtle divider
+                            Divider()
+                                .background(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle))
+                                .padding(.vertical, DesignSystem.Spacing.lg)
+                            
                             quickInsightsSection
+                                .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Spacing.sectionSpacingIPad : DesignSystem.Spacing.sectionSpacing)
                         }
                         
                         // Agent 10: Goals Section
                         if let goalManager = goalManager {
+                            // Subtle divider
+                            Divider()
+                                .background(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle))
+                                .padding(.vertical, DesignSystem.Spacing.lg)
+                            
                             goalsSection(goalManager: goalManager)
+                                .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Spacing.sectionSpacingIPad : DesignSystem.Spacing.sectionSpacing)
                         }
                         
+                        // Subtle divider
+                        Divider()
+                            .background(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle))
+                            .padding(.vertical, DesignSystem.Spacing.lg)
+                        
                         exerciseListPreview
+                            .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Spacing.sectionSpacingIPad : DesignSystem.Spacing.sectionSpacing)
+                        
+                        // Subtle divider
+                        Divider()
+                            .background(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle))
+                            .padding(.vertical, DesignSystem.Spacing.lg)
+                        
                         recentWorkouts
                         Spacer(minLength: horizontalSizeClass == .regular ? 300 : 200)
                     }
@@ -157,6 +234,22 @@ struct WorkoutContentView: View {
                 totalWorkouts: store.totalWorkouts,
                 workoutsThisWeek: store.workoutsThisWeek
             )
+            
+            // Configure engine from preferences
+            configureEngineFromPreferences()
+        }
+        .onChange(of: preferencesStore.preferences.exerciseDuration) { _ in
+            // Update engine configuration when preferences change
+            configureEngineFromPreferences()
+        }
+        .onChange(of: preferencesStore.preferences.restDuration) { _ in
+            configureEngineFromPreferences()
+        }
+        .onChange(of: preferencesStore.preferences.prepDuration) { _ in
+            configureEngineFromPreferences()
+        }
+        .onChange(of: preferencesStore.preferences.skipPrepTime) { _ in
+            configureEngineFromPreferences()
         }
     }
     
@@ -279,7 +372,7 @@ struct WorkoutContentView: View {
                                             endPoint: .bottomTrailing
                                         )
                                     )
-                                    .frame(width: 32, height: 32)
+                                    .frame(width: DesignSystem.IconSize.xlarge, height: DesignSystem.IconSize.xlarge)
                                     .background(
                                         Circle()
                                             .fill(Theme.accentA.opacity(DesignSystem.Opacity.highlight))
@@ -401,49 +494,144 @@ struct WorkoutContentView: View {
     
     // MARK: - Stats Grid
     
+    /// Agent 16: Check if data is still loading
+    private var isDataLoading: Bool {
+        analytics == nil || achievementManager == nil || goalManager == nil
+    }
+    
     private var statsGrid: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
-            Text("Your Progress")
-                .font(Theme.headline)
-                .foregroundStyle(Theme.textPrimary)
-                .padding(.horizontal, DesignSystem.Spacing.xs)
-                .accessibilityAddTraits(.isHeader)
+            HStack {
+                Text("Your Progress")
+                    .font(Theme.headline)
+                    .foregroundStyle(Theme.textPrimary)
+                    .accessibilityAddTraits(.isHeader)
+                
+                Spacer()
+                
+                // Agent 21: Achievement preview in stats header
+                if let manager = achievementManager, let next = manager.nextAchievement() {
+                    Button {
+                        showAchievements = true
+                        Haptics.tap()
+                    } label: {
+                        HStack(spacing: DesignSystem.Spacing.xs) {
+                            Image(systemName: next.achievement.icon)
+                                .font(.caption2)
+                                .foregroundStyle(next.achievement.color)
+                            Text("\(next.remaining)")
+                                .font(Theme.caption2)
+                                .foregroundStyle(.secondary)
+                                .monospacedDigit()
+                        }
+                        .padding(.horizontal, DesignSystem.Spacing.sm)
+                        .padding(.vertical, DesignSystem.Spacing.xs)
+                        .background(
+                            Capsule()
+                                .fill(next.achievement.color.opacity(DesignSystem.Opacity.highlight * 0.3))
+                        )
+                    }
+                    .accessibilityLabel("\(next.progressText). Tap to view all achievements.")
+                    .accessibilityAddTraits(.isButton)
+                }
+            }
+            .padding(.horizontal, DesignSystem.Spacing.xs)
             
-            LazyVGrid(columns: [
-                GridItem(.flexible()),
-                GridItem(.flexible())
-            ], spacing: DesignSystem.Spacing.gridSpacing) {
-                StatBox(
-                    title: "Total Workouts",
-                    value: store.totalWorkouts,
-                    icon: "figure.run",
-                    color: Theme.accentA,
-                    nextMilestone: nextMilestone(for: store.totalWorkouts)
-                )
+            // Agent 16: Show skeleton loaders while data is loading
+            if isDataLoading {
+                SkeletonStatsGrid()
+                    .loadingTransition(isDataLoading)
+            } else {
+                LazyVGrid(columns: [
+                    GridItem(.flexible()),
+                    GridItem(.flexible())
+                ], spacing: DesignSystem.Spacing.gridSpacing) {
+                    StatBox(
+                        title: "Total Workouts",
+                        value: store.totalWorkouts,
+                        icon: "figure.run",
+                        color: Theme.accentA,
+                        nextMilestone: nextMilestone(for: store.totalWorkouts),
+                        achievementManager: achievementManager
+                    )
+                    
+                    StatBox(
+                        title: "This Week",
+                        value: store.workoutsThisWeek,
+                        icon: "calendar",
+                        color: Theme.accentB,
+                        nextMilestone: 7,  // Weekly goal
+                        achievementManager: achievementManager
+                    )
+                    
+                    StatBox(
+                        title: "This Month",
+                        value: store.workoutsThisMonth,
+                        icon: "chart.bar.fill",
+                        color: Theme.accentC,
+                        nextMilestone: nextMilestone(for: store.workoutsThisMonth),
+                        achievementManager: achievementManager
+                    )
+                    
+                    StatBox(
+                        title: "Total Minutes",
+                        value: Int(store.totalMinutes),
+                        icon: "clock.fill",
+                        color: Theme.accentA,
+                        nextMilestone: nextMinutesMilestone(for: Int(store.totalMinutes)),
+                        achievementManager: achievementManager
+                    )
+                }
+                .loadingTransition(isDataLoading)
+            }
+        }
+    }
+    
+    // MARK: - Agent 21: Achievement Progress Section
+    
+    @ViewBuilder
+    private func achievementProgressSection(manager: AchievementManager) -> some View {
+        let closest = manager.closestAchievements(limit: 3)
+        
+        if !closest.isEmpty {
+            VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
+                HStack {
+                    Text("Next Achievements")
+                        .font(Theme.headline)
+                        .foregroundStyle(Theme.textPrimary)
+                        .accessibilityAddTraits(.isHeader)
+                    
+                    Spacer()
+                    
+                    Button {
+                        showAchievements = true
+                        Haptics.tap()
+                    } label: {
+                        Text("View All")
+                            .font(Theme.subheadline)
+                            .foregroundStyle(Theme.accentA)
+                    }
+                    .accessibilityLabel("View All Achievements")
+                    .accessibilityHint("Double tap to see all available achievements.")
+                    .accessibilityAddTraits(.isButton)
+                    .accessibilityTouchTarget()
+                }
+                .padding(.horizontal, DesignSystem.Spacing.xs)
                 
-                StatBox(
-                    title: "This Week",
-                    value: store.workoutsThisWeek,
-                    icon: "calendar",
-                    color: Theme.accentB,
-                    nextMilestone: 7  // Weekly goal
-                )
-                
-                StatBox(
-                    title: "This Month",
-                    value: store.workoutsThisMonth,
-                    icon: "chart.bar.fill",
-                    color: Theme.accentC,
-                    nextMilestone: nextMilestone(for: store.workoutsThisMonth)
-                )
-                
-                StatBox(
-                    title: "Total Minutes",
-                    value: Int(store.totalMinutes),
-                    icon: "clock.fill",
-                    color: Theme.accentA,
-                    nextMilestone: nextMinutesMilestone(for: Int(store.totalMinutes))
-                )
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: DesignSystem.Spacing.md) {
+                        ForEach(closest, id: \.achievement.id) { item in
+                            AchievementProgressCard(
+                                achievement: item.achievement,
+                                remaining: item.remaining,
+                                progress: item.progress,
+                                progressText: item.progressText,
+                                achievementManager: manager
+                            )
+                        }
+                    }
+                    .padding(.horizontal, DesignSystem.Spacing.xs)
+                }
             }
         }
     }
@@ -515,7 +703,11 @@ struct WorkoutContentView: View {
             }
             .padding(.horizontal, DesignSystem.Spacing.xs)
             
-            if store.sessions.isEmpty {
+            // Agent 16: Show skeleton loader while data is loading
+            if isDataLoading {
+                SkeletonList(count: 3)
+                    .loadingTransition(isDataLoading)
+            } else if store.sessions.isEmpty {
                 VStack(spacing: DesignSystem.Spacing.lg) {
                     // Enhanced icon with animation
                     ZStack {
@@ -796,15 +988,31 @@ struct WorkoutContentView: View {
     
     // MARK: - Agent 3: Engine Configuration
     
+    /// Configures the workout engine with user preferences
+    /// Applies exercise duration, rest duration, and prep duration from preferences
     private func configureEngineFromPreferences() {
-        // Note: WorkoutEngine currently uses default durations
-        // Configuration from preferences would require engine modifications
-        // For now, engine uses standard 30s exercise / 10s rest / 10s prep durations
+        let prefs = preferencesStore.preferences
         
-        // TODO: Implement engine configuration if needed
-        // The engine currently doesn't support runtime configuration
-        // It would need to be recreated with new parameters or have configurable properties
-        // When implemented, use: let prefs = preferencesStore.preferences
+        // Apply preferences to engine (only if workout is not in progress)
+        // This ensures users can change preferences without affecting an active workout
+        guard engine.phase == .idle || engine.phase == .completed else {
+            // If workout is in progress, preferences will apply on next workout
+            return
+        }
+        
+        // Update engine durations from preferences
+        engine.exerciseDuration = prefs.exerciseDuration
+        engine.restDuration = prefs.restDuration
+        engine.prepDuration = prefs.skipPrepTime ? 0 : prefs.prepDuration
+        
+        // If a custom workout is selected, apply its exercises
+        if let customWorkoutId = prefs.selectedCustomWorkoutId,
+           let customWorkout = preferencesStore.getCustomWorkout(id: customWorkoutId) {
+            // Note: WorkoutEngine exercises are set during initialization
+            // For custom workouts, we would need to recreate the engine
+            // This is a design limitation - custom workouts require restarting the workout
+            // For now, custom workout selection is handled in WorkoutCustomizationView
+        }
     }
     
     // MARK: - Progress Indicators Helpers
@@ -828,10 +1036,37 @@ private struct StatBox: View {
     let icon: String
     let color: Color
     let nextMilestone: Int?  // Next milestone to show progress toward
+    let achievementManager: AchievementManager?  // Agent 21: For achievement previews
     
     var progress: Double {
         guard let milestone = nextMilestone, milestone > 0 else { return 0 }
         return min(Double(value) / Double(milestone), 1.0)
+    }
+    
+    // Agent 21: Helper to find achievement related to stat
+    private func findRelatedAchievement(for statTitle: String, manager: AchievementManager) -> (achievement: Achievement, progressText: String)? {
+        let closest = manager.closestAchievements(limit: 5)
+        
+        // Match stat title to achievement type
+        for item in closest {
+            switch statTitle {
+            case "Total Workouts":
+                if [.firstWorkout, .fiftyWorkouts, .hundredWorkouts, .twoHundredWorkouts, .fiveHundredWorkouts, .thousandWorkouts].contains(item.achievement) {
+                    return (item.achievement, item.progressText)
+                }
+            case "This Week":
+                if item.achievement == .perfectWeek {
+                    return (item.achievement, item.progressText)
+                }
+            case "This Month":
+                if item.achievement == .monthlyConsistency {
+                    return (item.achievement, item.progressText)
+                }
+            default:
+                break
+            }
+        }
+        return nil
     }
     
     var body: some View {
@@ -849,17 +1084,22 @@ private struct StatBox: View {
             }
             .accessibilityHidden(true)
             
-            // Animated counter instead of static text
+            // Animated counter instead of static text - Enhanced typography for hero metrics
             AnimatedGradientCounter(
                 value: value,
                 duration: 0.8,
-                font: Theme.title2,
+                font: title == "Total Workouts" 
+                    ? .system(size: 48, weight: .bold, design: .rounded)  // 48pt for total workouts
+                    : .system(size: 36, weight: .bold, design: .rounded), // 36pt for other hero metrics
                 gradient: LinearGradient(
                     colors: [Theme.textPrimary, Theme.textPrimary.opacity(0.9)],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
             )
+            .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.subtle * 0.5), 
+                   radius: DesignSystem.Shadow.verySoft.radius * 0.5, 
+                   x: 0, y: DesignSystem.Shadow.verySoft.y * 0.25)
             .accessibilityLabel("\(title): \(value)")
             .accessibilityAddTraits(.updatesFrequently)
             
@@ -885,14 +1125,23 @@ private struct StatBox: View {
                     }
                     .frame(height: 3)
                     
-                    Text("\(milestone - value) until \(milestone)")
-                        .font(Theme.caption2)
-                        .foregroundStyle(.secondary)
+                    // Agent 21: Show achievement preview if available
+                    if let manager = achievementManager,
+                       let relatedAchievement = findRelatedAchievement(for: title, manager: manager) {
+                        Text(relatedAchievement.progressText)
+                            .font(Theme.caption2)
+                            .foregroundStyle(relatedAchievement.achievement.color)
+                            .lineLimit(1)
+                    } else {
+                        Text("\(milestone - value) until \(milestone)")
+                            .font(Theme.caption2)
+                            .foregroundStyle(.secondary)
+                    }
                 }
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(DesignSystem.Spacing.lg)
+        .regularCardPadding()
         .background(
             ZStack {
                 // Base material
@@ -1197,6 +1446,253 @@ private struct GoalProgressCard: View {
             )
         )
         .softShadow()
+    }
+}
+
+// MARK: - Agent 21: Next Achievement Card
+
+struct NextAchievementCard: View {
+    let achievement: Achievement
+    let remaining: Int
+    let progressText: String
+    let achievementManager: AchievementManager
+    let onTap: () -> Void
+    
+    @EnvironmentObject private var theme: ThemeStore
+    
+    var progress: Double {
+        achievementManager.progressForAchievement(achievement)
+    }
+    
+    var body: some View {
+        Button(action: onTap) {
+            VStack(spacing: DesignSystem.Spacing.lg) {
+                HStack(alignment: .top, spacing: DesignSystem.Spacing.md) {
+                    // Icon with progress ring
+                    ZStack {
+                        // Progress ring
+                        Circle()
+                            .stroke(Color.gray.opacity(DesignSystem.Opacity.subtle), lineWidth: 6)
+                            .frame(width: 80, height: 80)
+                        
+                        Circle()
+                            .trim(from: 0, to: progress)
+                            .stroke(
+                                LinearGradient(
+                                    colors: [achievement.color, achievement.color.opacity(0.7)],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ),
+                                style: StrokeStyle(lineWidth: 6, lineCap: .round)
+                            )
+                            .frame(width: 80, height: 80)
+                            .rotationEffect(.degrees(-90))
+                            .animation(AnimationConstants.smoothSpring, value: progress)
+                        
+                        // Icon
+                        Image(systemName: achievement.icon)
+                            .font(.system(size: DesignSystem.IconSize.xxlarge, weight: .bold))
+                            .foregroundStyle(achievement.color)
+                    }
+                    
+                    VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
+                        Text("Next Achievement")
+                            .font(Theme.footnote.smallCaps())
+                            .foregroundStyle(.secondary)
+                            .tracking(DesignSystem.Typography.uppercaseTracking)
+                        
+                        Text(achievement.title)
+                            .font(Theme.title2.weight(.bold))
+                            .foregroundStyle(Theme.textPrimary)
+                        
+                        Text(progressText)
+                            .font(Theme.subheadline)
+                            .foregroundStyle(achievement.color)
+                            .lineLimit(2)
+                        
+                        // Progress indicator
+                        HStack(spacing: DesignSystem.Spacing.xs) {
+                            GeometryReader { geometry in
+                                ZStack(alignment: .leading) {
+                                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small * 0.5, style: .continuous)
+                                        .fill(Color.gray.opacity(DesignSystem.Opacity.subtle))
+                                    
+                                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small * 0.5, style: .continuous)
+                                        .fill(achievement.color.gradient)
+                                        .frame(width: geometry.size.width * progress)
+                                        .animation(AnimationConstants.smoothSpring, value: progress)
+                                }
+                            }
+                            .frame(height: 4)
+                            
+                            Text("\(Int(progress * 100))%")
+                                .font(Theme.caption2)
+                                .foregroundStyle(.secondary)
+                                .monospacedDigit()
+                                .frame(width: 40, alignment: .trailing)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .padding(DesignSystem.Spacing.cardPadding)
+            .background(
+                ZStack {
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
+                        .fill(.ultraThinMaterial)
+                    
+                    // Gradient overlay
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
+                        .fill(
+                            LinearGradient(
+                                colors: [
+                                    achievement.color.opacity(DesignSystem.Opacity.highlight * 0.4),
+                                    achievement.color.opacity(DesignSystem.Opacity.highlight * 0.2),
+                                    Color.clear
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .blendMode(.overlay)
+                }
+                .overlay(
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
+                        .stroke(
+                            LinearGradient(
+                                colors: [
+                                    achievement.color.opacity(DesignSystem.Opacity.light * 1.5),
+                                    achievement.color.opacity(DesignSystem.Opacity.subtle),
+                                    achievement.color.opacity(DesignSystem.Opacity.light * 1.5)
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: DesignSystem.Border.standard
+                        )
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
+                        .stroke(achievement.color.opacity(DesignSystem.Opacity.glow * 0.8), lineWidth: DesignSystem.Border.hairline)
+                        .blur(radius: 1)
+                )
+            )
+            .softShadow()
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Next achievement: \(achievement.title). \(progressText)")
+        .accessibilityHint("Double tap to view all achievements.")
+        .accessibilityAddTraits(.isButton)
+    }
+}
+
+// MARK: - Agent 21: Achievement Progress Card
+
+struct AchievementProgressCard: View {
+    let achievement: Achievement
+    let remaining: Int
+    let progress: Double
+    let progressText: String
+    let achievementManager: AchievementManager
+    
+    @EnvironmentObject private var theme: ThemeStore
+    
+    var body: some View {
+        VStack(spacing: DesignSystem.Spacing.md) {
+            // Icon with progress ring
+            ZStack {
+                // Background ring
+                Circle()
+                    .stroke(Color.gray.opacity(DesignSystem.Opacity.subtle), lineWidth: 4)
+                    .frame(width: 60, height: 60)
+                
+                // Progress ring
+                Circle()
+                    .trim(from: 0, to: progress)
+                    .stroke(
+                        LinearGradient(
+                            colors: [achievement.color, achievement.color.opacity(0.7)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        style: StrokeStyle(lineWidth: 4, lineCap: .round)
+                    )
+                    .frame(width: 60, height: 60)
+                    .rotationEffect(.degrees(-90))
+                    .animation(AnimationConstants.smoothSpring, value: progress)
+                
+                // Icon
+                Image(systemName: achievement.icon)
+                    .font(.system(size: DesignSystem.IconSize.large, weight: .semibold))
+                    .foregroundStyle(achievement.color)
+            }
+            
+            VStack(spacing: DesignSystem.Spacing.xs) {
+                Text(achievement.title)
+                    .font(Theme.subheadline.weight(.semibold))
+                    .foregroundStyle(Theme.textPrimary)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.center)
+                
+                Text(progressText)
+                    .font(Theme.caption)
+                    .foregroundStyle(achievement.color)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.center)
+                
+                // Progress percentage
+                Text("\(Int(progress * 100))%")
+                    .font(Theme.caption2.weight(.medium))
+                    .foregroundStyle(.secondary)
+                    .monospacedDigit()
+            }
+        }
+        .padding(DesignSystem.Spacing.md)
+        .frame(width: 140)
+        .background(
+            ZStack {
+                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                    .fill(.ultraThinMaterial)
+                
+                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                achievement.color.opacity(DesignSystem.Opacity.highlight * 0.3),
+                                Color.clear
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .blendMode(.overlay)
+            }
+            .overlay(
+                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                    .stroke(
+                        LinearGradient(
+                            colors: [
+                                achievement.color.opacity(DesignSystem.Opacity.light * 1.2),
+                                achievement.color.opacity(DesignSystem.Opacity.subtle)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: DesignSystem.Border.standard
+                    )
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                    .stroke(achievement.color.opacity(DesignSystem.Opacity.glow * 0.6), lineWidth: DesignSystem.Border.hairline)
+                    .blur(radius: 1)
+            )
+        )
+        .softShadow()
+        .accessibilityLabel("Achievement: \(achievement.title). \(progressText). \(Int(progress * 100)) percent complete.")
     }
 }
 

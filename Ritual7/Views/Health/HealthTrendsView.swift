@@ -80,7 +80,7 @@ struct HealthTrendsView: View {
                         }
                         .buttonStyle(.borderedProminent)
                         .tint(Theme.accentA)
-                        .padding(.top, 8)
+                        .padding(.top, DesignSystem.Spacing.sm)
                     }
                     .padding(DesignSystem.Spacing.cardPadding)
                 }

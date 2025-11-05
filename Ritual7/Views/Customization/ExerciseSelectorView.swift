@@ -58,7 +58,7 @@ struct ExerciseSelectorView: View {
                             .foregroundStyle(Theme.textPrimary)
                     }
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
+                    .padding(.vertical, DesignSystem.Spacing.md)
                     .background(.ultraThinMaterial)
                     .overlay(
                         Rectangle()
@@ -87,7 +87,7 @@ private struct ExerciseSelectionRow: View {
                 Image(systemName: exercise.icon)
                     .font(Theme.title2)
                     .foregroundStyle(isSelected ? Theme.accentA : Theme.textSecondary)
-                    .frame(width: 40)
+                    .frame(width: DesignSystem.IconSize.xlarge)
                 
                 // Content
                 VStack(alignment: .leading, spacing: 4) {
@@ -113,7 +113,7 @@ private struct ExerciseSelectionRow: View {
                         .font(Theme.title3)
                 }
             }
-            .padding(.vertical, 4)
+            .padding(.vertical, DesignSystem.Spacing.xs)
         }
         .buttonStyle(.plain)
     }

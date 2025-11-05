@@ -105,7 +105,7 @@ private struct ExerciseCustomizationRow: View {
                 Image(systemName: exercise.icon)
                     .font(Theme.title3)
                     .foregroundStyle(Theme.accentA)
-                    .frame(width: 32)
+                    .frame(width: DesignSystem.IconSize.xlarge)
                 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(exercise.name)

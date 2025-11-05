@@ -101,11 +101,46 @@ final class WorkoutAnalytics: ObservableObject {
         return DayOfWeek(rawValue: maxDay)
     }
     
-    /// Longest streak ever achieved
+    /// Longest streak ever achieved (calculated from historical workout sessions)
     var longestStreak: Int {
-        // This would need to be calculated from historical data
-        // For now, return current streak as a placeholder
-        return store.streak
+        guard !store.sessions.isEmpty else { return 0 }
+        
+        let calendar = Calendar.current
+        let sortedSessions = store.sessions.sorted { $0.date < $1.date }
+        
+        var longestStreak = 0
+        var currentStreak = 0
+        var lastDate: Date?
+        
+        for session in sortedSessions {
+            let sessionDate = calendar.startOfDay(for: session.date)
+            
+            if let last = lastDate {
+                let daysSinceLastWorkout = calendar.dateComponents([.day], from: last, to: sessionDate).day ?? 0
+                
+                if daysSinceLastWorkout == 1 {
+                    // Consecutive day - continue streak
+                    currentStreak += 1
+                } else if daysSinceLastWorkout == 0 {
+                    // Same day - multiple workouts don't count as separate streak days
+                    continue
+                } else {
+                    // Gap detected - streak broken, check if this was the longest
+                    longestStreak = max(longestStreak, currentStreak)
+                    currentStreak = 1 // Start new streak
+                }
+            } else {
+                // First workout
+                currentStreak = 1
+            }
+            
+            lastDate = sessionDate
+        }
+        
+        // Check if current streak is the longest
+        longestStreak = max(longestStreak, currentStreak)
+        
+        return longestStreak
     }
     
     /// Estimated total calories burned (rough estimate: ~100 calories per 7-minute workout)

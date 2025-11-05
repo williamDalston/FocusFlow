@@ -288,16 +288,16 @@ struct WorkoutTimerView: View {
                     .frame(width: 208, height: 208)
                     .accessibilityHidden(true)
                 
-                // Progress circle with premium gradient animation
+                // Agent 19: Progress circle with color transitions and enhanced glow
                 Circle()
                     .trim(from: 0, to: segmentProgress)
                     .stroke(
                         LinearGradient(
                             colors: [
-                                engine.phase == .rest ? Theme.accentB : Theme.accentA,
-                                engine.phase == .rest ? Theme.accentB.opacity(DesignSystem.Opacity.veryStrong * 1.18) : Theme.accentA.opacity(DesignSystem.Opacity.veryStrong * 1.18),
-                                engine.phase == .rest ? Theme.accentC : Theme.accentB,
-                                engine.phase == .rest ? Theme.accentB.opacity(DesignSystem.Opacity.strong * 1.17) : Theme.accentA.opacity(DesignSystem.Opacity.strong * 1.17)
+                                engine.phase == .rest ? Theme.accentB : timerColor,
+                                engine.phase == .rest ? Theme.accentB.opacity(DesignSystem.Opacity.veryStrong * 1.18) : timerColor.opacity(DesignSystem.Opacity.veryStrong * 1.18),
+                                engine.phase == .rest ? Theme.accentC : timerColor.opacity(DesignSystem.Opacity.strong),
+                                engine.phase == .rest ? Theme.accentB.opacity(DesignSystem.Opacity.strong * 1.17) : timerColor.opacity(DesignSystem.Opacity.strong * 1.17)
                             ],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
@@ -307,20 +307,31 @@ struct WorkoutTimerView: View {
                     .frame(width: 220, height: 220)
                     .rotationEffect(.degrees(-90))
                     .animation(AccessibilityHelpers.animation(.linear(duration: 0.1)), value: segmentProgress)
-                    .shadow(color: (engine.phase == .rest ? Theme.accentB : Theme.accentA).opacity(DesignSystem.Opacity.medium), radius: 12, x: 0, y: 6)
-                    .shadow(color: Theme.glowColor.opacity(DesignSystem.Opacity.glow * 0.8), radius: 8, x: 0, y: 3)
+                    // Agent 19: Smooth color transitions for progress ring
+                    .animation(AccessibilityHelpers.animation(AnimationConstants.smoothEase) ?? .none, value: timerColor)
+                    // Agent 19: Enhanced glow effect when time is running low
+                    .shadow(
+                        color: timerColor.opacity(DesignSystem.Opacity.medium + (timerGlowIntensity * 0.3)),
+                        radius: 12 + (timerGlowIntensity * 6),
+                        x: 0,
+                        y: 6
+                    )
+                    .shadow(
+                        color: timerColor.opacity(DesignSystem.Opacity.glow * 0.8 + (timerGlowIntensity * 0.4)),
+                        radius: 8 + (timerGlowIntensity * 4),
+                        x: 0,
+                        y: 3
+                    )
                 
-                // Timer text with premium styling
+                // Agent 19: Timer text with enhanced styling, color transitions, pulse, and glow
                 VStack(spacing: DesignSystem.Spacing.sm) {
                     Text(timeString)
-                        .font(.system(size: DesignSystem.IconSize.huge * 1.0625, weight: .bold, design: .rounded)) // 68pt timer display
+                        .font(.system(size: DesignSystem.IconSize.huge * 1.125, weight: .bold, design: .rounded)) // 72pt timer display (increased from 68pt for prominence)
                         .foregroundStyle(
                             LinearGradient(
                                 colors: [
-                                    engine.phase == .rest ? Theme.accentB : 
-                                    (engine.timeRemaining <= 3 && engine.phase != .idle && engine.phase != .preparing && !engine.isPaused ? .red : Theme.accentA),
-                                    engine.phase == .rest ? Theme.accentB.opacity(DesignSystem.Opacity.almostOpaque) : 
-                                    (engine.timeRemaining <= 3 && engine.phase != .idle && engine.phase != .preparing && !engine.isPaused ? .red.opacity(DesignSystem.Opacity.almostOpaque) : Theme.accentA.opacity(DesignSystem.Opacity.almostOpaque))
+                                    engine.phase == .rest ? Theme.accentB : timerColor,
+                                    engine.phase == .rest ? Theme.accentB.opacity(DesignSystem.Opacity.almostOpaque) : timerColor.opacity(DesignSystem.Opacity.almostOpaque)
                                 ],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
@@ -329,9 +340,25 @@ struct WorkoutTimerView: View {
                         .monospacedDigit()
                         .contentTransition(.numericText())
                         .scaleEffect(engine.phase == .rest ? 0.95 : 1.0)
-                        .shadow(color: (engine.phase == .rest ? Theme.accentB : Theme.accentA).opacity(DesignSystem.Opacity.glow * 0.8), radius: 8, x: 0, y: 2)
+                        // Agent 19: Smooth color transitions
+                        .animation(AccessibilityHelpers.animation(AnimationConstants.smoothEase) ?? .none, value: timerColor)
                         .animation(AccessibilityHelpers.animation(AnimationConstants.quickSpring) ?? .none, value: engine.phase)
                         .animation(AccessibilityHelpers.animation(AnimationConstants.quickSpring) ?? .none, value: engine.timeRemaining)
+                        // Agent 19: Tick pulse animation on each second
+                        .timerTickPulse(trigger: Int(engine.timeRemaining))
+                        // Agent 19: Glow effect when time is running low
+                        .shadow(
+                            color: timerColor.opacity(DesignSystem.Opacity.glow * timerGlowIntensity * 0.8),
+                            radius: 12 + (timerGlowIntensity * 8),
+                            x: 0,
+                            y: 2
+                        )
+                        .shadow(
+                            color: timerColor.opacity(DesignSystem.Opacity.glow * timerGlowIntensity * 0.6),
+                            radius: 20 + (timerGlowIntensity * 12),
+                            x: 0,
+                            y: 4
+                        )
                         .bounce(trigger: engine.timeRemaining <= 1 && engine.timeRemaining > 0)
                         .accessibilityLabel("\(Int(engine.timeRemaining)) seconds remaining")
                         .accessibilityValue("\(engine.phase == .rest ? "Rest" : "Exercise")")
@@ -387,6 +414,81 @@ struct WorkoutTimerView: View {
         
         guard segmentDuration > 0 else { return 0 }
         return 1.0 - (engine.timeRemaining / segmentDuration)
+    }
+    
+    // MARK: - Agent 19: Timer Color Transitions
+    
+    /// Agent 19: Computed property for timer color based on time remaining
+    /// Returns a color that transitions from green → yellow → red as time runs out
+    private var timerColor: Color {
+        guard engine.phase != .idle && engine.phase != .preparing && engine.phase != .completed && !engine.isPaused else {
+            return Theme.accentA
+        }
+        
+        let segmentDuration: TimeInterval
+        switch engine.phase {
+        case .exercise:
+            segmentDuration = engine.exerciseDuration
+        case .rest:
+            segmentDuration = engine.restDuration
+        default:
+            return Theme.accentA
+        }
+        
+        guard segmentDuration > 0 else { return Theme.accentA }
+        
+        let timeRatio = engine.timeRemaining / segmentDuration
+        
+        // Green → Yellow → Red transition using HSB color space
+        // Green: hue ~0.33 (120°), Yellow: hue ~0.17 (60°), Red: hue ~0.0 (0°)
+        if timeRatio > 0.5 {
+            // Pure green (accentA) when > 50% time remaining
+            return Theme.accentA
+        } else if timeRatio > 0.25 {
+            // Yellow transition (50% to 25% of time remaining)
+            // Interpolate from green (hue ~0.33) to yellow (hue ~0.17)
+            let yellowProgress = (0.5 - timeRatio) / 0.25 // 0.0 to 1.0
+            let hue = 0.33 - (0.33 - 0.17) * yellowProgress // Green to yellow
+            return Color(hue: hue, saturation: 0.75, brightness: 0.85)
+        } else {
+            // Red transition (25% to 0% of time remaining)
+            // Interpolate from yellow (hue ~0.17) to red (hue ~0.0)
+            let redProgress = (0.25 - timeRatio) / 0.25 // 0.0 to 1.0
+            let hue = 0.17 - (0.17 - 0.0) * redProgress // Yellow to red
+            let saturation = 0.75 + 0.20 * redProgress // Increase saturation as it gets redder
+            let brightness = 0.85 - 0.15 * redProgress // Slightly darker for red
+            return Color(hue: hue, saturation: saturation, brightness: brightness)
+        }
+    }
+    
+    /// Agent 19: Computed property for timer glow intensity based on time remaining
+    private var timerGlowIntensity: Double {
+        guard engine.phase != .idle && engine.phase != .preparing && engine.phase != .completed && !engine.isPaused else {
+            return 0.0
+        }
+        
+        let segmentDuration: TimeInterval
+        switch engine.phase {
+        case .exercise:
+            segmentDuration = engine.exerciseDuration
+        case .rest:
+            segmentDuration = engine.restDuration
+        default:
+            return 0.0
+        }
+        
+        guard segmentDuration > 0 else { return 0.0 }
+        
+        let timeRatio = engine.timeRemaining / segmentDuration
+        
+        // Glow increases as time runs out, especially in the last 25%
+        if timeRatio <= 0.25 {
+            return 1.0 - (timeRatio / 0.25) // 0.0 to 1.0 as time approaches 0
+        } else if timeRatio <= 0.5 {
+            return (0.5 - timeRatio) / 0.25 * 0.3 // Subtle glow from 50% to 25%
+        } else {
+            return 0.0
+        }
     }
     
     private var stageNumber: Int {
@@ -1095,10 +1197,13 @@ private struct StatCard: View {
             }
             
             Text(value)
-                .font(Theme.title2)
+                .font(.system(size: 36, weight: .bold, design: .rounded))  // Enhanced hero metric typography
                 .foregroundStyle(Theme.textPrimary)
                 .monospacedDigit()
                 .contentTransition(.numericText())
+                .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.subtle * 0.5), 
+                       radius: DesignSystem.Shadow.verySoft.radius * 0.5, 
+                       x: 0, y: DesignSystem.Shadow.verySoft.y * 0.25)
             
             Text(title)
                 .font(Theme.caption)

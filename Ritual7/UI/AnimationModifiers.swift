@@ -232,6 +232,30 @@ struct LoadingSpinner: ViewModifier {
     }
 }
 
+/// Agent 19: Timer tick pulse animation - Subtle pulse effect on each second
+struct TimerTickPulse: ViewModifier {
+    let trigger: Int // Triggered by time remaining (seconds)
+    @State private var pulseScale: CGFloat = 1.0
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    
+    func body(content: Content) -> some View {
+        content
+            .scaleEffect(reduceMotion ? 1.0 : pulseScale)
+            .onChange(of: trigger) { _ in
+                guard !reduceMotion else { return }
+                // Quick pulse on each second
+                withAnimation(AnimationConstants.quickSpring) {
+                    pulseScale = 1.02
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                    withAnimation(AnimationConstants.quickSpring) {
+                        pulseScale = 1.0
+                    }
+                }
+            }
+    }
+}
+
 // MARK: - View Extensions
 
 extension View {
@@ -273,6 +297,11 @@ extension View {
     /// Agent 4: Loading spinner
     func loadingSpinner() -> some View {
         modifier(LoadingSpinner())
+    }
+    
+    /// Agent 19: Timer tick pulse animation
+    func timerTickPulse(trigger: Int) -> some View {
+        modifier(TimerTickPulse(trigger: trigger))
     }
 }
 

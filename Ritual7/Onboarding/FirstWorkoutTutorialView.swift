@@ -64,8 +64,8 @@ struct FirstWorkoutTutorialView: View {
                             .animation(.spring(response: 0.3), value: currentStep)
                     }
                 }
-                .padding(.top, 20)
-                .padding(.bottom, 32)
+                .padding(.top, DesignSystem.Spacing.formFieldSpacing)
+                .padding(.bottom, DesignSystem.Spacing.xxl)
                 
                 TabView(selection: $currentStep) {
                     ForEach(0..<steps.count, id: \.self) { index in
@@ -147,14 +147,14 @@ struct FirstWorkoutTutorialView: View {
                     .font(horizontalSizeClass == .regular ? .largeTitle.weight(.bold) : .title.weight(.bold))
                     .foregroundStyle(.white)
                     .multilineTextAlignment(.center)
-                    .padding(.horizontal, 24)
+                    .padding(.horizontal, DesignSystem.Spacing.xl)
                 
                 // Description
                 Text(step.description)
                     .font(horizontalSizeClass == .regular ? .title3 : .body)
                     .foregroundStyle(.white.opacity(0.85))
                     .multilineTextAlignment(.center)
-                    .padding(.horizontal, 24)
+                    .padding(.horizontal, DesignSystem.Spacing.xl)
                 
                 // Tips
                 VStack(alignment: .leading, spacing: 16) {
@@ -178,7 +178,7 @@ struct FirstWorkoutTutorialView: View {
                 
                 Spacer()
             }
-            .padding(.top, 32)
+            .padding(.top, DesignSystem.Spacing.xxl)
         }
     }
 }

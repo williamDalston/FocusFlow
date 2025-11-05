@@ -157,10 +157,10 @@ private struct PosterCard: View {
 
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 44, style: .continuous)
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.xxlarge + 12, style: .continuous)
                 .fill(.regularMaterial)
-                .overlay(InnerShine(cornerRadius: 44))
-                .overlay(Hairline(cornerRadius: 44))
+                .overlay(InnerShine(cornerRadius: DesignSystem.CornerRadius.xxlarge + 12))
+                .overlay(Hairline(cornerRadius: DesignSystem.CornerRadius.xxlarge + 12))
                 .shadow(color: .black.opacity(0.35), radius: 38, y: 28)
 
             VStack(alignment: .leading, spacing: 28) {

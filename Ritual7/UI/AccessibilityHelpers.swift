@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 /// Agent 8: Accessibility enhancements
 /// Provides VoiceOver support, Dynamic Type, and accessibility improvements
@@ -67,12 +68,38 @@ enum AccessibilityHelpers {
     // MARK: - Color Contrast
     
     /// Checks if color contrast meets WCAG AA standards (4.5:1 minimum for normal text)
-    /// This is a simplified check - for production, use proper contrast ratio calculation
-    static func hasGoodContrast(foreground: Color, background: Color) -> Bool {
-        // Note: SwiftUI Color doesn't expose RGB values directly
-        // This is a placeholder - in production, convert to UIColor and calculate proper contrast ratio
-        // For now, we assume semantic colors (Color.primary, Color.secondary) meet standards
-        return true
+    /// Returns true if contrast ratio meets WCAG 2.1 AA standards (4.5:1 for normal text, 3:1 for large text)
+    static func hasGoodContrast(foreground: Color, background: Color, isLargeText: Bool = false) -> Bool {
+        // Convert SwiftUI Color to UIColor for RGB access
+        let foregroundUIColor = UIColor(foreground)
+        let backgroundUIColor = UIColor(background)
+        
+        // Get RGB components
+        var fgRed: CGFloat = 0
+        var fgGreen: CGFloat = 0
+        var fgBlue: CGFloat = 0
+        var fgAlpha: CGFloat = 0
+        foregroundUIColor.getRed(&fgRed, green: &fgGreen, blue: &fgBlue, alpha: &fgAlpha)
+        
+        var bgRed: CGFloat = 0
+        var bgGreen: CGFloat = 0
+        var bgBlue: CGFloat = 0
+        var bgAlpha: CGFloat = 0
+        backgroundUIColor.getRed(&bgRed, green: &bgGreen, blue: &bgBlue, alpha: &bgAlpha)
+        
+        // Calculate relative luminance
+        let fgLuminance = relativeLuminance(red: fgRed, green: fgGreen, blue: fgBlue)
+        let bgLuminance = relativeLuminance(red: bgRed, green: bgGreen, blue: bgBlue)
+        
+        // Calculate contrast ratio
+        let ratio = contrastRatio(luminance1: fgLuminance, luminance2: bgLuminance)
+        
+        // WCAG 2.1 AA requires:
+        // - 4.5:1 for normal text (18pt or smaller, or 14pt bold or smaller)
+        // - 3:1 for large text (18pt+ regular, or 14pt+ bold)
+        let minimumRatio: CGFloat = isLargeText ? 3.0 : 4.5
+        
+        return ratio >= minimumRatio
     }
     
     /// Calculates relative luminance for contrast checking

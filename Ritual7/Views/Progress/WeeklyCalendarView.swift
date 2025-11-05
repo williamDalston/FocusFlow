@@ -35,7 +35,7 @@ struct WeeklyCalendarView: View {
                             .font(Theme.caption2.weight(.medium))
                             .foregroundStyle(.secondary)
                             .frame(width: 60, alignment: .trailing)
-                            .padding(.trailing, 8)
+                            .padding(.trailing, DesignSystem.Spacing.sm)
                         
                         // Days
                         ForEach(DayOfWeek.allCases, id: \.rawValue) { day in

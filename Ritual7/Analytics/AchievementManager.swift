@@ -199,6 +199,142 @@ final class AchievementManager: ObservableObject {
             return min(1.0, Double(store.totalWorkouts) / 1000.0)
         }
     }
+    
+    // MARK: - Agent 21: Next Achievement Helpers
+    
+    /// Get the next closest unlocked achievement
+    func nextAchievement() -> (achievement: Achievement, remaining: Int, progressText: String)? {
+        let lockedAchievements = Achievement.allCases.filter { !unlockedAchievements.contains($0) }
+        
+        // Find the closest achievement based on progress
+        var closest: (achievement: Achievement, remaining: Int, progress: Double)?
+        
+        for achievement in lockedAchievements {
+            let progress = progressForAchievement(achievement)
+            let remaining = calculateRemaining(for: achievement)
+            
+            if progress > 0 && (closest == nil || progress > closest!.progress) {
+                closest = (achievement, remaining, progress)
+            }
+        }
+        
+        guard let closestAchievement = closest else { return nil }
+        
+        let progressText = generateProgressText(for: closestAchievement.achievement, remaining: closestAchievement.remaining)
+        
+        return (closestAchievement.achievement, closestAchievement.remaining, progressText)
+    }
+    
+    /// Get up to 3 closest achievements for preview
+    func closestAchievements(limit: Int = 3) -> [(achievement: Achievement, remaining: Int, progress: Double, progressText: String)] {
+        let lockedAchievements = Achievement.allCases.filter { !unlockedAchievements.contains($0) }
+        
+        var candidates: [(achievement: Achievement, remaining: Int, progress: Double, progressText: String)] = []
+        
+        for achievement in lockedAchievements {
+            let progress = progressForAchievement(achievement)
+            if progress > 0 {
+                let remaining = calculateRemaining(for: achievement)
+                let progressText = generateProgressText(for: achievement, remaining: remaining)
+                candidates.append((achievement, remaining, progress, progressText))
+            }
+        }
+        
+        // Sort by progress (descending) and take top N
+        return candidates.sorted { $0.progress > $1.progress }.prefix(limit).map { $0 }
+    }
+    
+    /// Calculate remaining workouts/actions needed for an achievement
+    private func calculateRemaining(for achievement: Achievement) -> Int {
+        switch achievement {
+        case .firstWorkout:
+            return max(0, 1 - store.totalWorkouts)
+        case .sevenDayStreak:
+            return max(0, 7 - store.streak)
+        case .thirtyDayStreak:
+            return max(0, 30 - store.streak)
+        case .hundredWorkouts:
+            return max(0, 100 - store.totalWorkouts)
+        case .perfectWeek:
+            return max(0, 7 - store.workoutsThisWeek)
+        case .monthlyConsistency:
+            return max(0, 20 - store.workoutsThisMonth)
+        case .earlyBird:
+            let count = countMorningWorkouts()
+            return max(0, 10 - count)
+        case .nightOwl:
+            let count = countEveningWorkouts()
+            return max(0, 10 - count)
+        case .fiftyWorkouts:
+            return max(0, 50 - store.totalWorkouts)
+        case .twoHundredWorkouts:
+            return max(0, 200 - store.totalWorkouts)
+        case .fiveHundredWorkouts:
+            return max(0, 500 - store.totalWorkouts)
+        case .thousandWorkouts:
+            return max(0, 1000 - store.totalWorkouts)
+        }
+    }
+    
+    /// Generate progress text for an achievement
+    private func generateProgressText(for achievement: Achievement, remaining: Int) -> String {
+        switch achievement {
+        case .firstWorkout:
+            return remaining == 1 ? "Complete your first workout!" : "\(remaining) workouts until \(achievement.title)"
+        case .sevenDayStreak:
+            return remaining == 1 ? "1 day until \(achievement.title)!" : "\(remaining) days until \(achievement.title)"
+        case .thirtyDayStreak:
+            return remaining == 1 ? "1 day until \(achievement.title)!" : "\(remaining) days until \(achievement.title)"
+        case .perfectWeek:
+            return remaining == 1 ? "1 workout until \(achievement.title)!" : "\(remaining) workouts until \(achievement.title)"
+        case .monthlyConsistency:
+            return remaining == 1 ? "1 workout until \(achievement.title)!" : "\(remaining) workouts until \(achievement.title)"
+        case .earlyBird:
+            return remaining == 1 ? "1 morning workout until \(achievement.title)!" : "\(remaining) morning workouts until \(achievement.title)"
+        case .nightOwl:
+            return remaining == 1 ? "1 evening workout until \(achievement.title)!" : "\(remaining) evening workouts until \(achievement.title)"
+        default:
+            return remaining == 1 ? "1 workout until \(achievement.title)!" : "\(remaining) workouts until \(achievement.title)"
+        }
+    }
+    
+    /// Get current value for an achievement (for display)
+    func currentValue(for achievement: Achievement) -> Int {
+        switch achievement {
+        case .firstWorkout:
+            return store.totalWorkouts
+        case .sevenDayStreak, .thirtyDayStreak:
+            return store.streak
+        case .hundredWorkouts, .fiftyWorkouts, .twoHundredWorkouts, .fiveHundredWorkouts, .thousandWorkouts:
+            return store.totalWorkouts
+        case .perfectWeek:
+            return store.workoutsThisWeek
+        case .monthlyConsistency:
+            return store.workoutsThisMonth
+        case .earlyBird:
+            return countMorningWorkouts()
+        case .nightOwl:
+            return countEveningWorkouts()
+        }
+    }
+    
+    /// Get target value for an achievement
+    func targetValue(for achievement: Achievement) -> Int {
+        switch achievement {
+        case .firstWorkout: return 1
+        case .sevenDayStreak: return 7
+        case .thirtyDayStreak: return 30
+        case .hundredWorkouts: return 100
+        case .perfectWeek: return 7
+        case .monthlyConsistency: return 20
+        case .earlyBird: return 10
+        case .nightOwl: return 10
+        case .fiftyWorkouts: return 50
+        case .twoHundredWorkouts: return 200
+        case .fiveHundredWorkouts: return 500
+        case .thousandWorkouts: return 1000
+        }
+    }
 }
 
 // MARK: - Achievement Model

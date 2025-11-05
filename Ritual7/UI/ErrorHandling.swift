@@ -122,9 +122,18 @@ enum ErrorHandling {
             // Cannot automatically recover - requires user action
             return false
         case .engineNotReady:
-            // Wait a moment and try again
-            // This is a placeholder - actual retry would be implementation-specific
-            // The caller should implement retry logic
+            // Retry after a short delay with exponential backoff
+            // Post notification for UI to handle retry
+            NotificationCenter.default.post(
+                name: NSNotification.Name(AppConstants.NotificationNames.errorOccurred),
+                object: nil,
+                userInfo: [
+                    "error": error,
+                    "action": "retry",
+                    "retryDelay": 1.0, // 1 second initial delay
+                    "maxRetries": 3
+                ]
+            )
             return true
         case .sessionExpired:
             // Reset session - this would be handled by WorkoutEngine
@@ -281,6 +290,43 @@ enum ErrorHandling {
         }
         
         return .success(())
+    }
+    
+    // MARK: - Retry Helper
+    
+    /// Retry helper with exponential backoff for async operations
+    /// - Parameters:
+    ///   - maxAttempts: Maximum number of retry attempts (default: 3)
+    ///   - initialDelay: Initial delay in seconds before first retry (default: 1.0)
+    ///   - backoffMultiplier: Multiplier for exponential backoff (default: 2.0)
+    ///   - operation: The async operation to retry
+    /// - Returns: Result of the operation or failure after all retries
+    static func retryWithBackoff<T>(
+        maxAttempts: Int = 3,
+        initialDelay: TimeInterval = 1.0,
+        backoffMultiplier: Double = 2.0,
+        operation: @escaping () async throws -> T
+    ) async -> Result<T, Error> {
+        var lastError: Error?
+        var delay = initialDelay
+        
+        for attempt in 1...maxAttempts {
+            do {
+                let result = try await operation()
+                return .success(result)
+            } catch {
+                lastError = error
+                os_log("Retry attempt %d failed: %{public}@", log: .default, type: .error, attempt, error.localizedDescription)
+                
+                // Don't wait after the last attempt
+                if attempt < maxAttempts {
+                    try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
+                    delay *= backoffMultiplier
+                }
+            }
+        }
+        
+        return .failure(lastError ?? NSError(domain: "ErrorHandling", code: -1, userInfo: [NSLocalizedDescriptionKey: "Retry failed after \(maxAttempts) attempts"]))
     }
 }
 

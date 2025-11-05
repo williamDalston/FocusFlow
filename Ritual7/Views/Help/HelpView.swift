@@ -21,9 +21,9 @@ struct HelpView: View {
                         // Additional resources
                         resourcesSection
                     }
-                    .padding(.horizontal, 24)
-                    .padding(.top, 20)
-                    .padding(.bottom, 32)
+                    .padding(.horizontal, DesignSystem.Spacing.xl)
+                    .padding(.top, DesignSystem.Spacing.formFieldSpacing)
+                    .padding(.bottom, DesignSystem.Spacing.xxl)
                 }
             }
             .navigationTitle("Help & Support")
@@ -157,7 +157,7 @@ struct HelpCard: View {
                 Image(systemName: icon)
                     .font(Theme.title2)
                     .foregroundStyle(color)
-                    .frame(width: 40)
+                    .frame(width: DesignSystem.IconSize.xlarge)
                 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(title)

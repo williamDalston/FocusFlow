@@ -9,6 +9,7 @@ struct ProgressChartView: View {
     @State private var selectedTimeframe: Timeframe = .week
     @State private var selectedDataPoint: DailyWorkoutCount?
     @State private var showingExportSheet = false
+    @State private var isLoading = true  // Agent 16: Loading state for skeleton loaders
     
     enum Timeframe: String, CaseIterable {
         case week = "Week"
@@ -49,18 +50,25 @@ struct ProgressChartView: View {
             .pickerStyle(.segmented)
             .tint(Theme.accentA)
             
-            // Chart based on selected timeframe
-            switch selectedTimeframe {
-            case .week:
-                weeklyChart
-            case .month:
-                monthlyChart
-            case .year:
-                yearlyChart
+            // Agent 16: Show skeleton loader while loading
+            if isLoading {
+                SkeletonChart(height: 200)
+                    .loadingTransition(isLoading)
+            } else {
+                // Chart based on selected timeframe
+                switch selectedTimeframe {
+                case .week:
+                    weeklyChart
+                case .month:
+                    monthlyChart
+                case .year:
+                    yearlyChart
+                }
+                .loadingTransition(isLoading)
             }
             
             // Agent 10: Selected Data Point Info
-            if let selected = selectedDataPoint {
+            if let selected = selectedDataPoint, !isLoading {
                 selectedDataPointInfo(dataPoint: selected)
             }
         }
@@ -76,6 +84,21 @@ struct ProgressChartView: View {
         .cardShadow()
         .sheet(isPresented: $showingExportSheet) {
             ProgressChartExportSheet(analytics: analytics, timeframe: selectedTimeframe)
+        }
+        .onAppear {
+            // Agent 16: Simulate loading delay for smooth transition
+            Task {
+                try? await Task.sleep(nanoseconds: 200_000_000) // 0.2 second delay
+                isLoading = false
+            }
+        }
+        .onChange(of: selectedTimeframe) { _ in
+            // Agent 16: Show loading state when switching timeframes
+            isLoading = true
+            Task {
+                try? await Task.sleep(nanoseconds: 150_000_000) // 0.15 second delay
+                isLoading = false
+            }
         }
     }
     

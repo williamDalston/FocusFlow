@@ -22,7 +22,7 @@ struct WorkoutHistoryFilterView: View {
                                 HStack {
                                     Image(systemName: range.icon)
                                         .foregroundStyle(Theme.accentA)
-                                        .frame(width: 24)
+                                        .frame(width: DesignSystem.IconSize.large)
                                     
                                     Text(range.displayName)
                                         .font(Theme.body)

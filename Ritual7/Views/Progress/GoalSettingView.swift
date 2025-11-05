@@ -212,7 +212,7 @@ struct GoalSettingView: View {
                         }
                         .padding()
                         .background(
-                            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
                                 .fill(Theme.accentB.opacity(0.1))
                         )
                     }
@@ -470,8 +470,8 @@ private struct SuggestionRow: View {
                     Text("Apply")
                         .font(Theme.caption.weight(.semibold))
                         .foregroundStyle(.white)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 6)
+                        .padding(.horizontal, DesignSystem.Spacing.md)
+                        .padding(.vertical, DesignSystem.Spacing.xs + 2)
                         .background(
                             RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
                                 .fill(Theme.accentA)

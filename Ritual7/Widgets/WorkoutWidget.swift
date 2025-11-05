@@ -270,7 +270,7 @@ struct StatView: View {
         .frame(maxWidth: .infinity)
         .padding()
         .background(
-            RoundedRectangle(cornerRadius: 12)
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small)
                 .fill(.quaternary)
         )
     }

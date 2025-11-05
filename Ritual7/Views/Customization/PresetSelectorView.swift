@@ -24,8 +24,8 @@ struct PresetSelectorView: View {
                             }
                         }
                     }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 16)
+                    .padding(.horizontal, DesignSystem.Spacing.lg)
+                    .padding(.vertical, DesignSystem.Spacing.lg)
                 }
             }
             .navigationTitle("Workout Presets")
@@ -57,7 +57,7 @@ private struct PresetCard: View {
                     Image(systemName: preset.icon)
                         .font(.system(size: DesignSystem.IconSize.xlarge, weight: .bold))
                         .foregroundStyle(isSelected ? Theme.accentA : Theme.textSecondary)
-                        .frame(width: 48, height: 48)
+                        .frame(width: DesignSystem.IconSize.xxlarge, height: DesignSystem.IconSize.xxlarge)
                         .background(
                             Circle()
                                 .fill(isSelected ? Theme.accentA.opacity(0.2) : Color.clear)
@@ -81,8 +81,8 @@ private struct PresetCard: View {
                             Text("~\(preset.estimatedMinutes) min")
                                 .font(Theme.caption.weight(.semibold))
                                 .foregroundStyle(.secondary)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
+                                .padding(.horizontal, DesignSystem.Spacing.sm)
+                                .padding(.vertical, DesignSystem.Spacing.xs)
                                 .background(
                                     Capsule()
                                         .fill(Color(.systemGray6))

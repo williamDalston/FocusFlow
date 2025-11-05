@@ -17,12 +17,13 @@ enum DesignSystem {
         static let huge: CGFloat = 64
         
         // Semantic spacing (refined for more breathing room)
-        static let cardPadding: CGFloat = 24  // Increased from 20 for more elegant spacing
-        static let sectionSpacing: CGFloat = 32  // Increased from 24 for better hierarchy
-        static let sectionSpacingIPad: CGFloat = 40  // Increased from 32 for iPad elegance
-        static let gridSpacing: CGFloat = 16  // Increased from 12 for better visual separation
-        static let listItemSpacing: CGFloat = 12  // Increased from 8 for better readability
-        static let formFieldSpacing: CGFloat = 20  // Increased from 16 for clearer form hierarchy
+        static let cardPadding: CGFloat = 24  // Hero cards (main workout card, prominent cards)
+        static let regularCardPadding: CGFloat = 20  // Regular cards (stat boxes, list items, etc.)
+        static let sectionSpacing: CGFloat = 32  // Spacing between major sections (iPhone)
+        static let sectionSpacingIPad: CGFloat = 40  // Spacing between major sections (iPad)
+        static let gridSpacing: CGFloat = 20  // Increased from 16 for better visual separation in stat grids
+        static let listItemSpacing: CGFloat = 12  // Spacing between list items
+        static let formFieldSpacing: CGFloat = 20  // Spacing between form fields
     }
     
     // MARK: - Corner Radius
@@ -194,9 +195,14 @@ extension View {
         self.padding(.vertical, DesignSystem.Spacing.sectionSpacing)
     }
     
-    /// Apply standard card padding
+    /// Apply standard card padding (hero cards - 24pt)
     func cardPadding() -> some View {
         self.padding(DesignSystem.Spacing.cardPadding)
+    }
+    
+    /// Apply regular card padding (regular cards - 20pt)
+    func regularCardPadding() -> some View {
+        self.padding(DesignSystem.Spacing.regularCardPadding)
     }
     
     /// Apply standard content padding

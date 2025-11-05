@@ -10,14 +10,53 @@ struct CountdownAnimation: View {
     @State private var scale: CGFloat = 0.5
     @State private var opacity: Double = 0.0
     
+    // Agent 19: Color for countdown numbers based on count value
+    private var countdownColor: Color {
+        switch count {
+        case 3:
+            return Color(hue: 0.33, saturation: 0.85, brightness: 0.90) // Green
+        case 2:
+            return Color(hue: 0.17, saturation: 0.85, brightness: 0.90) // Yellow
+        case 1:
+            return Color(hue: 0.0, saturation: 0.85, brightness: 0.90) // Red
+        default:
+            return .white
+        }
+    }
+    
     var body: some View {
         ZStack {
             if count > 0 {
                 Text("\(count)")
-                    .font(.system(size: DesignSystem.IconSize.huge * 1.875, weight: .bold, design: .rounded)) // 120pt for countdown display
-                    .foregroundStyle(.white)
+                    // Agent 19: Enhanced size for more prominence (increased from 120pt to 132pt)
+                    .font(.system(size: DesignSystem.IconSize.huge * 2.0625, weight: .bold, design: .rounded)) // 132pt for countdown display
+                    .foregroundStyle(
+                        // Agent 19: Enhanced gradient with countdown color
+                        LinearGradient(
+                            colors: [
+                                countdownColor,
+                                countdownColor.opacity(DesignSystem.Opacity.almostOpaque)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .monospacedDigit()
                     .scaleEffect(scale)
                     .opacity(opacity)
+                    // Agent 19: Enhanced glow effect for countdown numbers
+                    .shadow(
+                        color: countdownColor.opacity(DesignSystem.Opacity.glow * 0.9),
+                        radius: 20,
+                        x: 0,
+                        y: 4
+                    )
+                    .shadow(
+                        color: countdownColor.opacity(DesignSystem.Opacity.glow * 0.6),
+                        radius: 30,
+                        x: 0,
+                        y: 6
+                    )
                     .onAppear {
                         // Agent 4: Optimized animation sequence using AnimationConstants
                         withAnimation(AnimationConstants.bouncySpring) {
@@ -38,7 +77,8 @@ struct CountdownAnimation: View {
                     }
             } else if count == 0 {
                 Text("GO!")
-                    .font(.system(size: DesignSystem.IconSize.huge * 1.5625, weight: .bold, design: .rounded)) // 100pt for "GO!" display
+                    // Agent 19: Enhanced size for more prominence (increased from 100pt to 120pt)
+                    .font(.system(size: DesignSystem.IconSize.huge * 1.875, weight: .bold, design: .rounded)) // 120pt for "GO!" display
                     .foregroundStyle(
                         LinearGradient(
                             colors: [Theme.accentA, Theme.accentB],
@@ -48,6 +88,19 @@ struct CountdownAnimation: View {
                     )
                     .scaleEffect(scale)
                     .opacity(opacity)
+                    // Agent 19: Enhanced glow effect for "GO!"
+                    .shadow(
+                        color: Theme.accentA.opacity(DesignSystem.Opacity.glow * 0.9),
+                        radius: 24,
+                        x: 0,
+                        y: 4
+                    )
+                    .shadow(
+                        color: Theme.accentB.opacity(DesignSystem.Opacity.glow * 0.7),
+                        radius: 36,
+                        x: 0,
+                        y: 6
+                    )
                     .onAppear {
                         // Agent 4: Optimized animation sequence using AnimationConstants
                         withAnimation(AnimationConstants.bouncySpring) {
@@ -141,8 +194,8 @@ struct FormGuidanceIndicator: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
+                .padding(.horizontal, DesignSystem.Spacing.md)
+                .padding(.vertical, DesignSystem.Spacing.sm)
                 .background(
                     RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
                         .fill(.ultraThinMaterial)

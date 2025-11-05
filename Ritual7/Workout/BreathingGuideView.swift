@@ -91,7 +91,7 @@ struct BreathingGuideView: View {
                     .font(Theme.subheadline)
                     .foregroundStyle(.white.opacity(0.8))
                     .multilineTextAlignment(.center)
-                    .padding(.horizontal, 24)
+                    .padding(.horizontal, DesignSystem.Spacing.xl)
             }
             
             // Next exercise preview

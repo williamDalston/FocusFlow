@@ -201,7 +201,7 @@ struct CompletionCelebrationView: View {
                     
                     Spacer()
                 }
-                .padding(12)
+                .padding(DesignSystem.Spacing.md)
                 .background(
                     ZStack {
                         RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
@@ -439,9 +439,9 @@ private struct StatCard: View {
                 .foregroundStyle(.white.opacity(0.8))
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 20)
+        .padding(.vertical, DesignSystem.Spacing.formFieldSpacing)
         .background(
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
                 .fill(.white.opacity(0.1))
         )
     }

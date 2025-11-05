@@ -68,9 +68,9 @@ struct FAQView: View {
                             )
                         }
                     }
-                    .padding(.horizontal, 24)
-                    .padding(.top, 20)
-                    .padding(.bottom, 32)
+                    .padding(.horizontal, DesignSystem.Spacing.xl)
+                    .padding(.top, DesignSystem.Spacing.formFieldSpacing)
+                    .padding(.bottom, DesignSystem.Spacing.xxl)
                 }
             }
             .navigationTitle("Frequently Asked Questions")
@@ -112,7 +112,7 @@ struct FAQCard: View {
                     Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
                         .font(Theme.caption.weight(.semibold))
                         .foregroundStyle(Theme.accentA)
-                        .padding(.top, 4)
+                        .padding(.top, DesignSystem.Spacing.xs)
                 }
                 .padding(DesignSystem.Spacing.formFieldSpacing)
                 

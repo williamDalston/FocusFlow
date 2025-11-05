@@ -1,6 +1,8 @@
 import SwiftUI
+import Charts
 
 /// Agent 1: Missing Views - Comprehensive workout history view with filtering, search, export, and share
+/// Agent 20: Enhanced with timeline view, workout patterns, grouped sections, and best week highlight
 struct WorkoutHistoryView: View {
     @EnvironmentObject private var store: WorkoutStore
     @Environment(\.dismiss) private var dismiss
@@ -13,6 +15,22 @@ struct WorkoutHistoryView: View {
     @State private var customEndDate: Date = Date()
     @State private var showingExportSheet = false
     @State private var selectedSession: WorkoutSession?
+    @State private var isLoading = false  // Agent 16: Loading state for skeleton loaders
+    @State private var viewMode: ViewMode = .list  // Agent 20: Timeline view toggle
+    @State private var showingPatterns = false  // Agent 20: Workout patterns visualization
+    
+    // Agent 20: View mode enum
+    enum ViewMode {
+        case list
+        case timeline
+        
+        var icon: String {
+            switch self {
+            case .list: return "list.bullet"
+            case .timeline: return "timeline.selection"
+            }
+        }
+    }
     
     private var filteredSessions: [WorkoutSession] {
         var sessions = store.sessions
@@ -52,7 +70,76 @@ struct WorkoutHistoryView: View {
             }
         }
         
-        return sessions
+        return sessions.sorted { $0.date > $1.date }
+    }
+    
+    // Agent 20: Grouped sessions by date sections
+    private var groupedSessions: [WorkoutDateSection] {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: today) ?? today
+        let weekAgo = calendar.date(byAdding: .day, value: -7, to: today) ?? today
+        let monthAgo = calendar.date(byAdding: .month, value: -1, to: today) ?? today
+        
+        var sections: [WorkoutDateSection] = []
+        var todaySessions: [WorkoutSession] = []
+        var yesterdaySessions: [WorkoutSession] = []
+        var thisWeekSessions: [WorkoutSession] = []
+        var thisMonthSessions: [WorkoutSession] = []
+        var olderSessions: [WorkoutSession] = []
+        
+        for session in filteredSessions {
+            let sessionDate = calendar.startOfDay(for: session.date)
+            
+            if calendar.isDate(sessionDate, inSameDayAs: today) {
+                todaySessions.append(session)
+            } else if calendar.isDate(sessionDate, inSameDayAs: yesterday) {
+                yesterdaySessions.append(session)
+            } else if session.date >= weekAgo {
+                thisWeekSessions.append(session)
+            } else if session.date >= monthAgo {
+                thisMonthSessions.append(session)
+            } else {
+                olderSessions.append(session)
+            }
+        }
+        
+        if !todaySessions.isEmpty {
+            sections.append(WorkoutDateSection(title: "Today", sessions: todaySessions))
+        }
+        if !yesterdaySessions.isEmpty {
+            sections.append(WorkoutDateSection(title: "Yesterday", sessions: yesterdaySessions))
+        }
+        if !thisWeekSessions.isEmpty {
+            sections.append(WorkoutDateSection(title: "This Week", sessions: thisWeekSessions))
+        }
+        if !thisMonthSessions.isEmpty {
+            sections.append(WorkoutDateSection(title: "This Month", sessions: thisMonthSessions))
+        }
+        if !olderSessions.isEmpty {
+            sections.append(WorkoutDateSection(title: "Older", sessions: olderSessions))
+        }
+        
+        return sections
+    }
+    
+    // Agent 20: Best week calculation
+    private var bestWeek: BestWeek? {
+        let calendar = Calendar.current
+        var weekCounts: [Date: Int] = [:]
+        
+        for session in store.sessions {
+            let weekStart = calendar.dateInterval(of: .weekOfYear, for: session.date)?.start ?? session.date
+            weekCounts[weekStart, default: 0] += 1
+        }
+        
+        guard let bestWeekStart = weekCounts.max(by: { $0.value < $1.value })?.key,
+              let bestWeekCount = weekCounts[bestWeekStart] else {
+            return nil
+        }
+        
+        let weekEnd = calendar.date(byAdding: .day, value: 6, to: bestWeekStart) ?? bestWeekStart
+        return BestWeek(startDate: bestWeekStart, endDate: weekEnd, workoutCount: bestWeekCount)
     }
     
     var body: some View {
@@ -61,7 +148,22 @@ struct WorkoutHistoryView: View {
             searchAndFilterBar
             
             // Content
-            if filteredSessions.isEmpty {
+            // Agent 16: Show skeleton loaders while loading
+            if isLoading {
+                ScrollView {
+                    VStack(spacing: DesignSystem.Spacing.lg) {
+                        // Summary skeleton
+                        SkeletonCard(height: 100)
+                            .padding(.horizontal, DesignSystem.Spacing.lg)
+                            .padding(.top, DesignSystem.Spacing.lg)
+                        
+                        // List skeleton
+                        SkeletonList(count: 5)
+                            .padding(.horizontal, DesignSystem.Spacing.lg)
+                    }
+                }
+                .loadingTransition(isLoading)
+            } else if filteredSessions.isEmpty {
                 emptyStateView
             } else {
                 workoutList
@@ -83,41 +185,64 @@ struct WorkoutHistoryView: View {
             }
             
             ToolbarItem(placement: .navigationBarTrailing) {
-                Menu {
+                HStack(spacing: DesignSystem.Spacing.md) {
+                    // Agent 20: View mode toggle
                     Button {
-                        showingFilter = true
+                        viewMode = viewMode == .list ? .timeline : .list
                         Haptics.tap()
                     } label: {
-                        Label("Filter", systemImage: "line.3.horizontal.decrease.circle")
+                        Image(systemName: viewMode.icon)
+                            .font(Theme.headline)
+                            .foregroundStyle(Theme.accentA)
                     }
+                    .accessibilityLabel(viewMode == .list ? "Switch to Timeline View" : "Switch to List View")
                     
-                    Button {
-                        showingExportSheet = true
-                        Haptics.tap()
-                    } label: {
-                        Label("Export", systemImage: "square.and.arrow.up")
-                    }
-                    
-                    Button {
-                        shareAllWorkouts()
-                        Haptics.tap()
-                    } label: {
-                        Label("Share Summary", systemImage: "square.and.arrow.up.on.square")
-                    }
-                    
-                    if !filteredSessions.isEmpty {
-                        Divider()
-                        
-                        Button(role: .destructive) {
-                            deleteAllFiltered()
+                    Menu {
+                        // Agent 20: Workout patterns option
+                        Button {
+                            showingPatterns = true
                             Haptics.tap()
                         } label: {
-                            Label("Delete All", systemImage: "trash")
+                            Label("Workout Patterns", systemImage: "chart.bar.fill")
                         }
+                        
+                        Divider()
+                        
+                        Button {
+                            showingFilter = true
+                            Haptics.tap()
+                        } label: {
+                            Label("Filter", systemImage: "line.3.horizontal.decrease.circle")
+                        }
+                        
+                        Button {
+                            showingExportSheet = true
+                            Haptics.tap()
+                        } label: {
+                            Label("Export", systemImage: "square.and.arrow.up")
+                        }
+                        
+                        Button {
+                            shareAllWorkouts()
+                            Haptics.tap()
+                        } label: {
+                            Label("Share Summary", systemImage: "square.and.arrow.up.on.square")
+                        }
+                        
+                        if !filteredSessions.isEmpty {
+                            Divider()
+                            
+                            Button(role: .destructive) {
+                                deleteAllFiltered()
+                                Haptics.tap()
+                            } label: {
+                                Label("Delete All", systemImage: "trash")
+                            }
+                        }
+                    } label: {
+                        Image(systemName: "ellipsis.circle")
+                            .font(Theme.headline)
                     }
-                } label: {
-                    Image(systemName: "ellipsis.circle")
-                        .font(Theme.headline)
                 }
             }
         }
@@ -130,6 +255,9 @@ struct WorkoutHistoryView: View {
         }
         .sheet(isPresented: $showingExportSheet) {
             ExportOptionsView(sessions: filteredSessions)
+        }
+        .sheet(isPresented: $showingPatterns) {
+            WorkoutPatternsView(sessions: store.sessions)
         }
         .sheet(item: $selectedSession) { session in
             WorkoutSessionDetailView(session: session)
@@ -244,7 +372,24 @@ struct WorkoutHistoryView: View {
     // MARK: - Workout List
     
     private var workoutList: some View {
+        Group {
+            if viewMode == .list {
+                listView
+            } else {
+                timelineView
+            }
+        }
+    }
+    
+    private var listView: some View {
         List {
+            // Agent 20: Best week highlight
+            if let bestWeek = bestWeek {
+                Section {
+                    BestWeekCard(bestWeek: bestWeek)
+                }
+            }
+            
             // Summary section
             if !filteredSessions.isEmpty {
                 Section {
@@ -252,49 +397,102 @@ struct WorkoutHistoryView: View {
                 }
             }
             
-            // Sessions list
-            Section {
-                ForEach(Array(filteredSessions.enumerated()), id: \.element.id) { index, session in
-                    WorkoutHistoryRow(session: session)
-                        .contentShape(Rectangle())
-                        .staggeredEntrance(index: index, delay: 0.04)
-                        .cardLift()
-                        .onTapGesture {
-                            selectedSession = session
+            // Agent 20: Grouped sessions by date
+            if !groupedSessions.isEmpty {
+                ForEach(groupedSessions) { section in
+                    Section {
+                        ForEach(Array(section.sessions.enumerated()), id: \.element.id) { index, session in
+                            WorkoutHistoryRow(session: session)
+                                .contentShape(Rectangle())
+                                .staggeredEntrance(index: index, delay: 0.04)
+                                .cardLift()
+                                .onTapGesture {
+                                    selectedSession = session
+                                    Haptics.buttonPress()
+                                }
+                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                    Button(role: .destructive) {
+                                        deleteSession(session)
+                                        Haptics.buttonPress()
+                                    } label: {
+                                        Label("Delete", systemImage: "trash")
+                                    }
+                                    
+                                    Button {
+                                        shareSession(session)
+                                        Haptics.buttonPress()
+                                    } label: {
+                                        Label("Share", systemImage: "square.and.arrow.up")
+                                    }
+                                    .tint(Theme.accentA)
+                                }
+                        }
+                        .onDelete { indexSet in
+                            let sessionsToDelete = indexSet.map { section.sessions[$0] }
+                            for session in sessionsToDelete {
+                                deleteSession(session)
+                            }
                             Haptics.buttonPress()
                         }
-                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                            Button(role: .destructive) {
-                                deleteSession(session)
-                                Haptics.buttonPress()
-                            } label: {
-                                Label("Delete", systemImage: "trash")
-                            }
-                            
-                            Button {
-                                shareSession(session)
-                                Haptics.buttonPress()
-                            } label: {
-                                Label("Share", systemImage: "square.and.arrow.up")
-                            }
-                            .tint(Theme.accentA)
-                        }
+                    } header: {
+                        Text(section.title)
+                            .font(Theme.headline)
+                            .foregroundStyle(Theme.textPrimary)
+                    }
                 }
-                .onDelete { indexSet in
-                    store.deleteSession(at: indexSet)
-                    Haptics.buttonPress()
-                }
-            } header: {
-                Text("Workouts (\(filteredSessions.count))")
-                    .font(Theme.headline)
-                    .foregroundStyle(Theme.textPrimary)
             }
         }
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
         .refreshable {
+            // Agent 16: Show loading state during refresh
+            isLoading = true
             // Pull-to-refresh: reload workout data
             await refreshWorkoutData()
+            isLoading = false
+        }
+    }
+    
+    // Agent 20: Timeline view
+    private var timelineView: some View {
+        ScrollView {
+            VStack(spacing: DesignSystem.Spacing.lg) {
+                // Agent 20: Best week highlight
+                if let bestWeek = bestWeek {
+                    BestWeekCard(bestWeek: bestWeek)
+                        .padding(.horizontal, DesignSystem.Spacing.lg)
+                        .padding(.top, DesignSystem.Spacing.lg)
+                }
+                
+                // Summary section
+                if !filteredSessions.isEmpty {
+                    WorkoutHistorySummaryView(sessions: filteredSessions)
+                        .padding(.horizontal, DesignSystem.Spacing.lg)
+                }
+                
+                // Timeline view
+                VStack(spacing: DesignSystem.Spacing.xl) {
+                    ForEach(groupedSessions) { section in
+                        TimelineSectionView(section: section, onSessionTap: { session in
+                            selectedSession = session
+                            Haptics.buttonPress()
+                        }, onDelete: { session in
+                            deleteSession(session)
+                            Haptics.buttonPress()
+                        }, onShare: { session in
+                            shareSession(session)
+                            Haptics.buttonPress()
+                        })
+                    }
+                }
+                .padding(.horizontal, DesignSystem.Spacing.lg)
+                .padding(.bottom, DesignSystem.Spacing.xl)
+            }
+        }
+        .refreshable {
+            isLoading = true
+            await refreshWorkoutData()
+            isLoading = false
         }
     }
     
@@ -303,10 +501,11 @@ struct WorkoutHistoryView: View {
         // Trigger haptic feedback
         Haptics.buttonPress()
         
+        // Agent 16: Simulate data loading for smooth transition
         // Reload workout store data
         // The WorkoutStore will automatically refresh when accessed
-        // This is a placeholder for any async refresh logic if needed
-        try? await Task.sleep(nanoseconds: 100_000_000) // Small delay for visual feedback
+        // Small delay for visual feedback and smooth skeleton transition
+        try? await Task.sleep(nanoseconds: 300_000_000) // 0.3 second delay for smooth transition
     }
     
     // MARK: - Helpers
@@ -829,6 +1028,514 @@ struct ExportButton: View {
         }
         
         return csv.data(using: .utf8)
+    }
+}
+
+// MARK: - Agent 20: Supporting Types
+
+/// Date section for grouping workouts
+struct WorkoutDateSection: Identifiable {
+    let id = UUID()
+    let title: String
+    let sessions: [WorkoutSession]
+}
+
+/// Best week information
+struct BestWeek {
+    let startDate: Date
+    let endDate: Date
+    let workoutCount: Int
+}
+
+// MARK: - Agent 20: Best Week Card
+
+struct BestWeekCard: View {
+    let bestWeek: BestWeek
+    
+    var body: some View {
+        HStack(spacing: DesignSystem.Spacing.lg) {
+            // Icon
+            ZStack {
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Theme.accentA.opacity(0.3),
+                                Theme.accentB.opacity(0.2)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(width: 60, height: 60)
+                
+                Image(systemName: "star.fill")
+                    .font(.system(size: 28, weight: .bold))
+                    .foregroundStyle(Theme.accentA)
+            }
+            
+            // Content
+            VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
+                Text("Your Best Week")
+                    .font(Theme.headline)
+                    .foregroundStyle(Theme.textPrimary)
+                
+                Text("\(bestWeek.workoutCount) workout\(bestWeek.workoutCount == 1 ? "" : "s")")
+                    .font(Theme.title3)
+                    .foregroundStyle(Theme.accentA)
+                    .monospacedDigit()
+                
+                Text(formatDateRange(bestWeek.startDate, bestWeek.endDate))
+                    .font(Theme.caption)
+                    .foregroundStyle(.secondary)
+            }
+            
+            Spacer()
+        }
+        .padding(DesignSystem.Spacing.lg)
+        .background(
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
+                .fill(
+                    LinearGradient(
+                        colors: [
+                            Theme.accentA.opacity(DesignSystem.Opacity.subtle * 0.5),
+                            Theme.accentB.opacity(DesignSystem.Opacity.subtle * 0.3)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
+                        .stroke(
+                            LinearGradient(
+                                colors: [
+                                    Theme.accentA.opacity(DesignSystem.Opacity.light),
+                                    Theme.accentB.opacity(DesignSystem.Opacity.light * 0.5)
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: DesignSystem.Border.standard
+                        )
+                )
+        )
+        .cardShadow()
+    }
+    
+    private func formatDateRange(_ start: Date, _ end: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        
+        let startString = formatter.string(from: start)
+        let endString = formatter.string(from: end)
+        
+        return "\(startString) - \(endString)"
+    }
+}
+
+// MARK: - Agent 20: Timeline Section View
+
+struct TimelineSectionView: View {
+    let section: WorkoutDateSection
+    let onSessionTap: (WorkoutSession) -> Void
+    let onDelete: (WorkoutSession) -> Void
+    let onShare: (WorkoutSession) -> Void
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
+            // Section header
+            HStack {
+                Text(section.title)
+                    .font(Theme.headline)
+                    .foregroundStyle(Theme.textPrimary)
+                
+                Spacer()
+                
+                Text("\(section.sessions.count)")
+                    .font(Theme.subheadline)
+                    .foregroundStyle(.secondary)
+                    .monospacedDigit()
+            }
+            
+            // Timeline items
+            VStack(spacing: DesignSystem.Spacing.md) {
+                ForEach(Array(section.sessions.enumerated()), id: \.element.id) { index, session in
+                    TimelineItemView(
+                        session: session,
+                        isFirst: index == 0,
+                        isLast: index == section.sessions.count - 1,
+                        onTap: { onSessionTap(session) },
+                        onDelete: { onDelete(session) },
+                        onShare: { onShare(session) }
+                    )
+                }
+            }
+        }
+        .padding(DesignSystem.Spacing.lg)
+        .background(
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
+                .fill(.ultraThinMaterial)
+                .overlay(
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
+                        .stroke(Theme.strokeOuter, lineWidth: DesignSystem.Border.subtle)
+                )
+        )
+        .cardShadow()
+    }
+}
+
+// MARK: - Agent 20: Timeline Item View
+
+struct TimelineItemView: View {
+    let session: WorkoutSession
+    let isFirst: Bool
+    let isLast: Bool
+    let onTap: () -> Void
+    let onDelete: () -> Void
+    let onShare: () -> Void
+    
+    var body: some View {
+        HStack(alignment: .top, spacing: DesignSystem.Spacing.md) {
+            // Timeline indicator
+            VStack(spacing: 0) {
+                Circle()
+                    .fill(Theme.accentA)
+                    .frame(width: 12, height: 12)
+                    .overlay(
+                        Circle()
+                            .stroke(Theme.accentA.opacity(0.3), lineWidth: 4)
+                            .frame(width: 20, height: 20)
+                    )
+                
+                if !isLast {
+                    Rectangle()
+                        .fill(Theme.accentA.opacity(0.3))
+                        .frame(width: 2)
+                        .frame(maxHeight: .infinity)
+                } else {
+                    Spacer()
+                }
+            }
+            .frame(width: 20)
+            
+            // Content
+            VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
+                HStack {
+                    Text(formatTime(session.date))
+                        .font(Theme.caption)
+                        .foregroundStyle(.secondary)
+                    
+                    Spacer()
+                    
+                    Text(formatDuration(session.duration))
+                        .font(Theme.subheadline)
+                        .foregroundStyle(Theme.accentA)
+                        .monospacedDigit()
+                }
+                
+                Text("\(session.exercisesCompleted) exercises completed")
+                    .font(Theme.body)
+                    .foregroundStyle(Theme.textPrimary)
+                
+                if let notes = session.notes, !notes.isEmpty {
+                    Text(notes)
+                        .font(Theme.caption)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(2)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            onTap()
+            Haptics.buttonPress()
+        }
+        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+            Button(role: .destructive) {
+                onDelete()
+                Haptics.buttonPress()
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
+            
+            Button {
+                onShare()
+                Haptics.buttonPress()
+            } label: {
+                Label("Share", systemImage: "square.and.arrow.up")
+            }
+            .tint(Theme.accentA)
+        }
+    }
+    
+    private func formatTime(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        return formatter.string(from: date)
+    }
+    
+    private func formatDuration(_ duration: TimeInterval) -> String {
+        let minutes = Int(duration) / 60
+        let seconds = Int(duration) % 60
+        return String(format: "%d:%02d", minutes, seconds)
+    }
+}
+
+// MARK: - Agent 20: Workout Patterns View
+
+struct WorkoutPatternsView: View {
+    let sessions: [WorkoutSession]
+    @Environment(\.dismiss) private var dismiss
+    @State private var selectedType: PatternType = .timeOfDay
+    
+    enum PatternType {
+        case timeOfDay
+        case dayOfWeek
+        
+        var title: String {
+            switch self {
+            case .timeOfDay: return "Time of Day"
+            case .dayOfWeek: return "Day of Week"
+            }
+        }
+    }
+    
+    
+    var body: some View {
+        NavigationStack {
+            ZStack {
+                ThemeBackground()
+                
+                ScrollView {
+                    VStack(spacing: DesignSystem.Spacing.xl) {
+                        // Picker
+                        Picker("Pattern Type", selection: $selectedType) {
+                            Text("Time of Day").tag(PatternType.timeOfDay)
+                            Text("Day of Week").tag(PatternType.dayOfWeek)
+                        }
+                        .pickerStyle(.segmented)
+                        .padding(.horizontal, DesignSystem.Spacing.lg)
+                        .padding(.top, DesignSystem.Spacing.lg)
+                        
+                        // Chart
+                        if selectedType == .timeOfDay {
+                            timeOfDayChart
+                        } else {
+                            dayOfWeekChart
+                        }
+                        
+                        // Insights
+                        insightsCard
+                    }
+                    .padding(.bottom, DesignSystem.Spacing.xl)
+                }
+            }
+            .navigationTitle("Workout Patterns")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                        Haptics.tap()
+                    }
+                    .font(Theme.headline)
+                }
+            }
+        }
+    }
+    
+    private var timeOfDayChart: some View {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
+            Text("Workout Time Distribution")
+                .font(Theme.headline)
+                .foregroundStyle(Theme.textPrimary)
+                .padding(.horizontal, DesignSystem.Spacing.lg)
+            
+            let frequency = calculateTimeOfDayFrequency()
+            Chart(TimeOfDay.allCases.filter { $0 != .unknown }) { time in
+                BarMark(
+                    x: .value("Time", time.displayName),
+                    y: .value("Workouts", frequency[time] ?? 0)
+                )
+                .foregroundStyle(Theme.accentA.gradient)
+                .cornerRadius(8)
+            }
+            .frame(height: 250)
+            .chartYAxis {
+                AxisMarks { _ in
+                    AxisGridLine()
+                    AxisValueLabel()
+                }
+            }
+            .padding(.horizontal, DesignSystem.Spacing.lg)
+        }
+        .cardPadding()
+        .background(
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
+                .fill(.ultraThinMaterial)
+                .overlay(
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
+                        .stroke(Theme.strokeOuter, lineWidth: DesignSystem.Border.subtle)
+                )
+        )
+        .cardShadow()
+        .padding(.horizontal, DesignSystem.Spacing.lg)
+    }
+    
+    private var dayOfWeekChart: some View {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
+            Text("Workout Day Distribution")
+                .font(Theme.headline)
+                .foregroundStyle(Theme.textPrimary)
+                .padding(.horizontal, DesignSystem.Spacing.lg)
+            
+            let frequency = calculateDayOfWeekFrequency()
+            Chart(DayOfWeek.allCases) { day in
+                BarMark(
+                    x: .value("Day", day.shortName),
+                    y: .value("Workouts", frequency[day] ?? 0)
+                )
+                .foregroundStyle(Theme.accentB.gradient)
+                .cornerRadius(8)
+            }
+            .frame(height: 250)
+            .chartYAxis {
+                AxisMarks { _ in
+                    AxisGridLine()
+                    AxisValueLabel()
+                }
+            }
+            .padding(.horizontal, DesignSystem.Spacing.lg)
+        }
+        .cardPadding()
+        .background(
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
+                .fill(.ultraThinMaterial)
+                .overlay(
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
+                        .stroke(Theme.strokeOuter, lineWidth: DesignSystem.Border.subtle)
+                )
+        )
+        .cardShadow()
+        .padding(.horizontal, DesignSystem.Spacing.lg)
+    }
+    
+    private var insightsCard: some View {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
+            Text("Insights")
+                .font(Theme.headline)
+                .foregroundStyle(Theme.textPrimary)
+            
+            let bestTime = calculateBestTime()
+            let bestDay = calculateBestDay()
+            
+            if let bestTime = bestTime {
+                InsightRow(
+                    icon: "sun.max.fill",
+                    title: "Most Active Time",
+                    value: bestTime.displayName,
+                    color: Theme.accentA
+                )
+            }
+            
+            if let bestDay = bestDay {
+                InsightRow(
+                    icon: "calendar",
+                    title: "Most Consistent Day",
+                    value: bestDay.displayName,
+                    color: Theme.accentB
+                )
+            }
+        }
+        .cardPadding()
+        .background(
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
+                .fill(.ultraThinMaterial)
+                .overlay(
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
+                        .stroke(Theme.strokeOuter, lineWidth: DesignSystem.Border.subtle)
+                )
+        )
+        .cardShadow()
+        .padding(.horizontal, DesignSystem.Spacing.lg)
+    }
+    
+    private func calculateTimeOfDayFrequency() -> [TimeOfDay: Int] {
+        let calendar = Calendar.current
+        var frequency: [TimeOfDay: Int] = [:]
+        
+        for session in sessions {
+            let hour = calendar.component(.hour, from: session.date)
+            let timeOfDay: TimeOfDay
+            
+            switch hour {
+            case 5..<12: timeOfDay = .morning
+            case 12..<17: timeOfDay = .afternoon
+            case 17..<22: timeOfDay = .evening
+            default: timeOfDay = .night
+            }
+            
+            frequency[timeOfDay, default: 0] += 1
+        }
+        
+        return frequency
+    }
+    
+    private func calculateDayOfWeekFrequency() -> [DayOfWeek: Int] {
+        let calendar = Calendar.current
+        var frequency: [DayOfWeek: Int] = [:]
+        
+        for session in sessions {
+            let weekday = calendar.component(.weekday, from: session.date)
+            if let day = DayOfWeek(rawValue: weekday) {
+                frequency[day, default: 0] += 1
+            }
+        }
+        
+        return frequency
+    }
+    
+    private func calculateBestTime() -> TimeOfDay? {
+        let frequency = calculateTimeOfDayFrequency()
+        return frequency.max(by: { $0.value < $1.value })?.key
+    }
+    
+    private func calculateBestDay() -> DayOfWeek? {
+        let frequency = calculateDayOfWeekFrequency()
+        return frequency.max(by: { $0.value < $1.value })?.key
+    }
+}
+
+// MARK: - Agent 20: Insight Row
+
+struct InsightRow: View {
+    let icon: String
+    let title: String
+    let value: String
+    let color: Color
+    
+    var body: some View {
+        HStack(spacing: DesignSystem.Spacing.md) {
+            Image(systemName: icon)
+                .font(Theme.title3)
+                .foregroundStyle(color)
+                .frame(width: DesignSystem.IconSize.medium, height: DesignSystem.IconSize.medium)
+            
+            VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
+                Text(title)
+                    .font(Theme.caption)
+                    .foregroundStyle(.secondary)
+                
+                Text(value)
+                    .font(Theme.body)
+                    .foregroundStyle(Theme.textPrimary)
+            }
+            
+            Spacer()
+        }
     }
 }
 

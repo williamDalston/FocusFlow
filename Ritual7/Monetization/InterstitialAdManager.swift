@@ -79,7 +79,7 @@ final class InterstitialAdManager: NSObject, ObservableObject, FullScreenContent
         // Small delay to avoid immediate load after showing ad
         Task { [weak self] in
             try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 second delay
-            await self?.load()
+            self?.load()
         }
     }
 
@@ -161,7 +161,7 @@ final class InterstitialAdManager: NSObject, ObservableObject, FullScreenContent
         // Ad was successfully shown - track if needed
     }
     
-    func ad(_ ad: FullScreenPresentingAd, didRecordClick click: GADAdClick) {
+    func adDidRecordClick(_ ad: FullScreenPresentingAd) {
         // User clicked ad - track if needed
     }
 }

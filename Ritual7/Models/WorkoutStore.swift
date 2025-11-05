@@ -43,7 +43,7 @@ final class WorkoutStore: ObservableObject {
         
         if wasLoading {
             // Log warning but proceed - this should be rare
-            os_log("addSession called while load is in progress - this may cause data inconsistency", log: .default, type: .warning)
+            os_log("addSession called while load is in progress - this may cause data inconsistency", log: .default, type: .info)
         }
         
         // Validate session data
