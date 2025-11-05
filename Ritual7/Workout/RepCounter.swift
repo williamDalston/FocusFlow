@@ -119,20 +119,20 @@ struct RepCounterView: View {
             HStack(spacing: 12) {
                 Image(systemName: "figure.run")
                     .foregroundStyle(Theme.accentA)
-                    .font(.headline)
+                    .font(Theme.headline)
                 
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Reps")
-                        .font(.caption)
+                        .font(Theme.caption)
                         .foregroundStyle(.secondary)
                     
                     Text("\(repCounter.currentReps)")
-                        .font(.title2.weight(.bold))
+                        .font(Theme.title2)
                         .foregroundStyle(Theme.textPrimary)
                 }
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 12)
+            .padding(.horizontal, DesignSystem.Spacing.lg)
+            .padding(.vertical, DesignSystem.Spacing.md)
             .background(
                 ZStack {
                     RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)

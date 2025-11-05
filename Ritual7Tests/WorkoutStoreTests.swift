@@ -74,7 +74,10 @@ final class WorkoutStoreTests: XCTestCase {
         XCTAssertEqual(store.totalWorkouts, 1)
         XCTAssertEqual(store.totalMinutes, duration / 60.0, accuracy: 0.01)
         
-        let session = store.sessions.first!
+        guard let session = store.sessions.first else {
+            XCTFail("Expected session to exist")
+            return
+        }
         XCTAssertEqual(session.duration, duration)
         XCTAssertEqual(session.exercisesCompleted, exercisesCompleted)
     }
@@ -84,7 +87,10 @@ final class WorkoutStoreTests: XCTestCase {
         
         store.addSession(duration: 420, exercisesCompleted: 12, notes: notes)
         
-        let session = store.sessions.first!
+        guard let session = store.sessions.first else {
+            XCTFail("Expected session to exist")
+            return
+        }
         XCTAssertEqual(session.notes, notes)
     }
     
@@ -93,7 +99,10 @@ final class WorkoutStoreTests: XCTestCase {
         
         store.addSession(duration: 420, exercisesCompleted: 12, startDate: customDate)
         
-        let session = store.sessions.first!
+        guard let session = store.sessions.first else {
+            XCTFail("Expected session to exist")
+            return
+        }
         let calendar = Calendar.current
         XCTAssertTrue(calendar.isDate(session.date, inSameDayAs: customDate))
     }
@@ -187,7 +196,10 @@ final class WorkoutStoreTests: XCTestCase {
         store.addSession(duration: 420, exercisesCompleted: 12, startDate: Date())
         
         // Tomorrow
-        let tomorrow = calendar.date(byAdding: .day, value: 1, to: Date())!
+        guard let tomorrow = calendar.date(byAdding: .day, value: 1, to: Date()) else {
+            XCTFail("Failed to create tomorrow date")
+            return
+        }
         store.addSession(duration: 420, exercisesCompleted: 12, startDate: tomorrow)
         
         // Note: Since we're testing with dates, streak calculation depends on the actual date logic
@@ -200,7 +212,10 @@ final class WorkoutStoreTests: XCTestCase {
         store.addSession(duration: 420, exercisesCompleted: 12)
         
         // Add workout 3 days later (breaks streak)
-        let threeDaysLater = Calendar.current.date(byAdding: .day, value: 3, to: Date())!
+        guard let threeDaysLater = Calendar.current.date(byAdding: .day, value: 3, to: Date()) else {
+            XCTFail("Failed to create threeDaysLater date")
+            return
+        }
         store.addSession(duration: 420, exercisesCompleted: 12, startDate: threeDaysLater)
         
         // Streak should reset to 1
@@ -216,11 +231,17 @@ final class WorkoutStoreTests: XCTestCase {
         store.addSession(duration: 420, exercisesCompleted: 12)
         
         // Add workout 3 days ago
-        let threeDaysAgo = calendar.date(byAdding: .day, value: -3, to: Date())!
+        guard let threeDaysAgo = calendar.date(byAdding: .day, value: -3, to: Date()) else {
+            XCTFail("Failed to create threeDaysAgo date")
+            return
+        }
         store.addSession(duration: 420, exercisesCompleted: 12, startDate: threeDaysAgo)
         
         // Add workout 10 days ago (outside this week)
-        let tenDaysAgo = calendar.date(byAdding: .day, value: -10, to: Date())!
+        guard let tenDaysAgo = calendar.date(byAdding: .day, value: -10, to: Date()) else {
+            XCTFail("Failed to create tenDaysAgo date")
+            return
+        }
         store.addSession(duration: 420, exercisesCompleted: 12, startDate: tenDaysAgo)
         
         XCTAssertGreaterThanOrEqual(store.workoutsThisWeek, 2)
@@ -233,7 +254,10 @@ final class WorkoutStoreTests: XCTestCase {
         store.addSession(duration: 420, exercisesCompleted: 12)
         
         // Add workout 15 days ago (same month)
-        let fifteenDaysAgo = calendar.date(byAdding: .day, value: -15, to: Date())!
+        guard let fifteenDaysAgo = calendar.date(byAdding: .day, value: -15, to: Date()) else {
+            XCTFail("Failed to create fifteenDaysAgo date")
+            return
+        }
         store.addSession(duration: 420, exercisesCompleted: 12, startDate: fifteenDaysAgo)
         
         XCTAssertGreaterThanOrEqual(store.workoutsThisMonth, 2)
@@ -263,14 +287,20 @@ final class WorkoutStoreTests: XCTestCase {
     
     func testSessionsInRange() {
         let calendar = Calendar.current
-        let startDate = calendar.date(byAdding: .day, value: -7, to: Date())!
+        guard let startDate = calendar.date(byAdding: .day, value: -7, to: Date()) else {
+            XCTFail("Failed to create startDate")
+            return
+        }
         let endDate = Date()
         
         // Add workout in range
         store.addSession(duration: 420, exercisesCompleted: 12, startDate: Date())
         
         // Add workout outside range
-        let tenDaysAgo = calendar.date(byAdding: .day, value: -10, to: Date())!
+        guard let tenDaysAgo = calendar.date(byAdding: .day, value: -10, to: Date()) else {
+            XCTFail("Failed to create tenDaysAgo date")
+            return
+        }
         store.addSession(duration: 420, exercisesCompleted: 12, startDate: tenDaysAgo)
         
         let sessionsInRange = store.sessions(in: startDate...endDate)
@@ -284,7 +314,10 @@ final class WorkoutStoreTests: XCTestCase {
         store.addSession(duration: 420, exercisesCompleted: 12, startDate: targetDate)
         
         // Add workout on different date
-        let yesterday = calendar.date(byAdding: .day, value: -1, to: targetDate)!
+        guard let yesterday = calendar.date(byAdding: .day, value: -1, to: targetDate) else {
+            XCTFail("Failed to create yesterday date")
+            return
+        }
         store.addSession(duration: 420, exercisesCompleted: 12, startDate: yesterday)
         
         let sessionsOnDate = store.sessions(on: targetDate)
@@ -299,7 +332,10 @@ final class WorkoutStoreTests: XCTestCase {
         store.addSession(duration: 420, exercisesCompleted: 12, startDate: Date())
         
         // Add workout last month
-        let lastMonth = calendar.date(byAdding: .month, value: -1, to: Date())!
+        guard let lastMonth = calendar.date(byAdding: .month, value: -1, to: Date()) else {
+            XCTFail("Failed to create lastMonth date")
+            return
+        }
         store.addSession(duration: 420, exercisesCompleted: 12, startDate: lastMonth)
         
         let sessionsInMonth = store.sessions(in: targetMonth)
@@ -310,7 +346,11 @@ final class WorkoutStoreTests: XCTestCase {
     
     func testPersistence() {
         store.addSession(duration: 420, exercisesCompleted: 12)
-        let sessionId = store.sessions.first!.id
+        guard let firstSession = store.sessions.first else {
+            XCTFail("Expected session to exist")
+            return
+        }
+        let sessionId = firstSession.id
         let totalWorkouts = store.totalWorkouts
         
         // Create new store instance (simulating app restart)
@@ -337,7 +377,10 @@ final class WorkoutStoreTests: XCTestCase {
     func testCorruptedDataRecovery() {
         // Simulate corrupted data
         let defaults = UserDefaults.standard
-        let corruptedData = "invalid json".data(using: .utf8)!
+        guard let corruptedData = "invalid json".data(using: .utf8) else {
+            XCTFail("Failed to create corrupted data")
+            return
+        }
         defaults.set(corruptedData, forKey: "workout.sessions.v1")
         
         // Create store - should handle corrupted data gracefully
@@ -392,7 +435,10 @@ final class WorkoutStoreTests: XCTestCase {
     func testAddSessionWithZeroExercises() {
         store.addSession(duration: 420, exercisesCompleted: 0)
         
-        let session = store.sessions.first!
+        guard let session = store.sessions.first else {
+            XCTFail("Expected session to exist")
+            return
+        }
         XCTAssertEqual(session.exercisesCompleted, 0)
     }
     

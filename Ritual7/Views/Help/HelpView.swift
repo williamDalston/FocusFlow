@@ -42,7 +42,7 @@ struct HelpView: View {
     private var quickHelpSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Quick Help")
-                .font(.title2.weight(.bold))
+                .font(Theme.title2)
                 .foregroundStyle(Theme.textPrimary)
             
             VStack(spacing: 12) {
@@ -79,7 +79,7 @@ struct HelpView: View {
     private var supportSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Support")
-                .font(.title2.weight(.bold))
+                .font(Theme.title2)
                 .foregroundStyle(Theme.textPrimary)
             
             VStack(spacing: 12) {
@@ -111,7 +111,7 @@ struct HelpView: View {
     private var resourcesSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Resources")
-                .font(.title2.weight(.bold))
+                .font(Theme.title2)
                 .foregroundStyle(Theme.textPrimary)
             
             VStack(spacing: 12) {
@@ -155,24 +155,24 @@ struct HelpCard: View {
         Button(action: action) {
             HStack(spacing: 16) {
                 Image(systemName: icon)
-                    .font(.title2)
+                    .font(Theme.title2)
                     .foregroundStyle(color)
                     .frame(width: 40)
                 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(title)
-                        .font(.headline)
+                        .font(Theme.headline)
                         .foregroundStyle(Theme.textPrimary)
                     
                     Text(description)
-                        .font(.subheadline)
+                        .font(Theme.subheadline)
                         .foregroundStyle(Theme.textSecondary)
                 }
                 
                 Spacer()
                 
                 Image(systemName: "chevron.right")
-                    .font(.caption)
+                    .font(Theme.caption)
                     .foregroundStyle(.secondary)
             }
             .padding(DesignSystem.Spacing.formFieldSpacing)

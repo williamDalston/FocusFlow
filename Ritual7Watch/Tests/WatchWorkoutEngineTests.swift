@@ -133,8 +133,11 @@ final class WatchWorkoutEngineTests: XCTestCase {
         XCTAssertNil(engine.currentSessionDuration) // Not started
         
         engine.start()
-        XCTAssertNotNil(engine.currentSessionDuration)
-        XCTAssertGreaterThanOrEqual(engine.currentSessionDuration!, 0)
+        guard let sessionDuration = engine.currentSessionDuration else {
+            XCTFail("Expected currentSessionDuration to exist after starting")
+            return
+        }
+        XCTAssertGreaterThanOrEqual(sessionDuration, 0)
     }
     
     func testProgress() {

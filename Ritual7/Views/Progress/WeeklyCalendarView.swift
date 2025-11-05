@@ -21,7 +21,7 @@ struct WeeklyCalendarView: View {
                     
                     ForEach(DayOfWeek.allCases, id: \.rawValue) { day in
                         Text(day.shortName)
-                            .font(.caption2.weight(.semibold))
+                            .font(Theme.caption2.weight(.semibold))
                             .foregroundStyle(.secondary)
                             .frame(maxWidth: .infinity)
                     }
@@ -32,7 +32,7 @@ struct WeeklyCalendarView: View {
                     HStack(spacing: 0) {
                         // Week label
                         Text(weekLabel(for: weekOffset))
-                            .font(.caption2.weight(.medium))
+                            .font(Theme.caption2.weight(.medium))
                             .foregroundStyle(.secondary)
                             .frame(width: 60, alignment: .trailing)
                             .padding(.trailing, 8)

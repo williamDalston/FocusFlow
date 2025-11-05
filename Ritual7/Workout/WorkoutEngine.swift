@@ -106,13 +106,13 @@ final class WorkoutEngine: ObservableObject {
     // MARK: - Configuration
     
     /// Duration of the preparation phase before workout starts (seconds)
-    var prepDuration: TimeInterval = 10.0
+    var prepDuration: TimeInterval = AppConstants.TimingConstants.defaultPrepDuration
     
     /// Duration of each exercise phase (seconds)
-    var exerciseDuration: TimeInterval = 30.0
+    var exerciseDuration: TimeInterval = AppConstants.TimingConstants.defaultExerciseDuration
     
     /// Duration of rest periods between exercises (seconds)
-    var restDuration: TimeInterval = 10.0
+    var restDuration: TimeInterval = AppConstants.TimingConstants.defaultRestDuration
     
     /// List of exercises in the workout
     private(set) var exercises: [Exercise]
@@ -158,7 +158,7 @@ final class WorkoutEngine: ObservableObject {
     ) {
         // Ensure exercises array is not empty
         if exercises.isEmpty {
-            os_log("Empty exercises array provided, using default workout", log: .default, type: .error)
+            ErrorHandling.handleError(ErrorHandling.WorkoutError.invalidData(description: "Empty exercises array provided, using default workout"), context: "WorkoutEngine.init")
             self.exercises = Exercise.sevenMinuteWorkout
         } else {
             self.exercises = exercises
@@ -199,8 +199,8 @@ final class WorkoutEngine: ObservableObject {
     /// - Note: If workout is already in progress, this method does nothing
     func start() {
         guard phase == .idle || phase == .completed else {
-            // Workout already in progress, log but don't throw
-            os_log("Workout already in progress, ignoring start() call", log: .default, type: .info)
+            // Workout already in progress
+            ErrorHandling.handleError(ErrorHandling.WorkoutError.workoutInProgress, context: "WorkoutEngine.start()")
             return
         }
         
@@ -222,7 +222,7 @@ final class WorkoutEngine: ObservableObject {
     /// - Note: If workout cannot be paused, this method does nothing
     func pause() {
         guard !isPaused && canPause else {
-            os_log("Cannot pause workout in current phase: %{public}@", log: .default, type: .info, String(describing: phase))
+            ErrorHandling.handleError(ErrorHandling.WorkoutError.invalidState, context: "WorkoutEngine.pause() - phase: \(String(describing: phase))")
             return
         }
         
@@ -235,7 +235,7 @@ final class WorkoutEngine: ObservableObject {
     /// - Note: If workout is not paused, this method does nothing
     func resume() {
         guard isPaused else {
-            os_log("Workout is not paused, cannot resume", log: .default, type: .info)
+            ErrorHandling.handleError(ErrorHandling.WorkoutError.invalidState, context: "WorkoutEngine.resume() - workout not paused")
             return
         }
         
@@ -266,7 +266,7 @@ final class WorkoutEngine: ObservableObject {
     /// - Note: If not in rest phase, this method does nothing
     func skipRest() {
         guard phase == .rest else {
-            os_log("Cannot skip rest, not in rest phase", log: .default, type: .info)
+            ErrorHandling.handleError(ErrorHandling.WorkoutError.invalidState, context: "WorkoutEngine.skipRest() - not in rest phase")
             return
         }
         
@@ -278,7 +278,7 @@ final class WorkoutEngine: ObservableObject {
     /// - Note: If not in prep phase, this method does nothing
     func skipPrep() {
         guard phase == .preparing else {
-            os_log("Cannot skip prep, not in prep phase", log: .default, type: .info)
+            ErrorHandling.handleError(ErrorHandling.WorkoutError.invalidState, context: "WorkoutEngine.skipPrep() - not in prep phase")
             return
         }
         
@@ -537,8 +537,7 @@ final class WorkoutEngine: ObservableObject {
             pause()
         }
         
-        // Log the interruption
-        os_log("Workout interrupted", log: .default, type: .info)
+        // Handle the interruption
         ErrorHandling.handleError(ErrorHandling.WorkoutError.workoutInterrupted, context: "WorkoutEngine.handleInterruption")
     }
     
@@ -562,7 +561,7 @@ final class WorkoutEngine: ObservableObject {
         // Restore workout state if needed
         if isPaused {
             // User can resume if they want
-            os_log("Workout ready to resume", log: .default, type: .info)
+            // State is already saved, no need to log
         }
     }
     
@@ -577,21 +576,21 @@ final class WorkoutEngine: ObservableObject {
             "timestamp": Date().timeIntervalSince1970
         ]
         
-        UserDefaults.standard.set(state, forKey: "workout.state.recovery")
+        UserDefaults.standard.set(state, forKey: AppConstants.UserDefaultsKeys.workoutStateRecovery)
     }
     
     /// Attempts to restore workout state after interruption
     func restoreWorkoutState() -> Bool {
-        guard let state = UserDefaults.standard.dictionary(forKey: "workout.state.recovery") else {
+        guard let state = UserDefaults.standard.dictionary(forKey: AppConstants.UserDefaultsKeys.workoutStateRecovery) else {
             return false
         }
         
         // Check if state is recent (within 1 hour)
         if let timestamp = state["timestamp"] as? TimeInterval {
             let stateDate = Date(timeIntervalSince1970: timestamp)
-            if Date().timeIntervalSince(stateDate) > 3600 {
+            if Date().timeIntervalSince(stateDate) > AppConstants.TimingConstants.defaultWorkoutDuration * 6 {
                 // State is too old, don't restore
-                UserDefaults.standard.removeObject(forKey: "workout.state.recovery")
+                UserDefaults.standard.removeObject(forKey: AppConstants.UserDefaultsKeys.workoutStateRecovery)
                 return false
             }
         }
@@ -610,7 +609,7 @@ final class WorkoutEngine: ObservableObject {
                 currentExercise = exercises[index]
             }
             
-            os_log("Workout state restored", log: .default, type: .info)
+            // State restored successfully
             return true
         }
         

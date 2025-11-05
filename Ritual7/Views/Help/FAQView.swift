@@ -103,14 +103,14 @@ struct FAQCard: View {
                 // Question
                 HStack(alignment: .top, spacing: 16) {
                     Text(faq.question)
-                        .font(.headline)
+                        .font(Theme.headline)
                         .foregroundStyle(Theme.textPrimary)
                         .multilineTextAlignment(.leading)
                     
                     Spacer()
                     
                     Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
-                        .font(.caption.weight(.semibold))
+                        .font(Theme.caption.weight(.semibold))
                         .foregroundStyle(Theme.accentA)
                         .padding(.top, 4)
                 }
@@ -122,7 +122,7 @@ struct FAQCard: View {
                         .padding(.horizontal, DesignSystem.Spacing.formFieldSpacing)
                     
                     Text(faq.answer)
-                        .font(.body)
+                        .font(Theme.body)
                         .foregroundStyle(Theme.textSecondary)
                         .fixedSize(horizontal: false, vertical: true)
                         .padding(DesignSystem.Spacing.formFieldSpacing)

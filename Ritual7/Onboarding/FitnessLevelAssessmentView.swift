@@ -77,7 +77,7 @@ struct FitnessLevelAssessmentView: View {
                         dismiss()
                     } label: {
                         Text("Skip for now")
-                            .font(.body.weight(.medium))
+                            .font(Theme.body.weight(.medium))
                             .foregroundStyle(.white.opacity(0.7))
                     }
                     .padding(.top, 16)
@@ -109,17 +109,17 @@ struct FitnessLevelAssessmentView: View {
         } label: {
             HStack(spacing: 20) {
                 Image(systemName: level.icon)
-                    .font(.title)
+                    .font(Theme.title)
                     .foregroundStyle(selectedIndex == index ? Theme.accentA : .white.opacity(0.7))
                     .frame(width: 50)
                 
                 VStack(alignment: .leading, spacing: 8) {
                     Text(level.rawValue)
-                        .font(.title2.weight(.bold))
+                        .font(Theme.title2)
                         .foregroundStyle(.white)
                     
                     Text(level.description)
-                        .font(.body)
+                        .font(Theme.body)
                         .foregroundStyle(.white.opacity(0.85))
                         .multilineTextAlignment(.leading)
                 }
@@ -128,7 +128,7 @@ struct FitnessLevelAssessmentView: View {
                 
                 if selectedIndex == index {
                     Image(systemName: "checkmark.circle.fill")
-                        .font(.title2)
+                        .font(Theme.title2)
                         .foregroundStyle(Theme.accentA)
                 }
             }

@@ -13,7 +13,7 @@ struct WorkoutHistoryRow: View {
                 .frame(width: DesignSystem.IconSize.xlarge, height: DesignSystem.IconSize.xlarge)
                 .overlay(
                     Image(systemName: "checkmark.circle.fill")
-                        .font(.title3)
+                        .font(Theme.title3)
                         .foregroundStyle(Theme.accentA)
                 )
             
@@ -39,7 +39,7 @@ struct WorkoutHistoryRow: View {
                             .foregroundStyle(.secondary)
                     } icon: {
                         Image(systemName: "calendar")
-                            .font(.caption2)
+                            .font(Theme.caption2)
                             .foregroundStyle(.secondary)
                     }
                     
@@ -50,7 +50,7 @@ struct WorkoutHistoryRow: View {
                                 .foregroundStyle(.secondary)
                         } icon: {
                             Image(systemName: "note.text")
-                                .font(.caption2)
+                                .font(Theme.caption2)
                                 .foregroundStyle(.secondary)
                         }
                     }
@@ -59,7 +59,7 @@ struct WorkoutHistoryRow: View {
             
             // Chevron
             Image(systemName: "chevron.right")
-                .font(.caption)
+                .font(Theme.caption)
                 .foregroundStyle(.secondary)
         }
         .padding(.horizontal, DesignSystem.Spacing.md)

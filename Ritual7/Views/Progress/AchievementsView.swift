@@ -143,7 +143,7 @@ struct AchievementCard: View {
                     )
                 
                 Image(systemName: achievement.icon)
-                    .font(.title2)
+                    .font(Theme.title2)
                     .foregroundStyle(
                         isUnlocked
                         ? achievement.color

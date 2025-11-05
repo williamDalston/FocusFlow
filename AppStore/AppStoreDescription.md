@@ -4,7 +4,16 @@
 **Ritual7**
 
 ## Subtitle (30 characters max)
-**"Full-body fitness in 7 minutes"**
+**Current:** "Full-body fitness in 7 minutes" (31 chars - TOO LONG! ❌)
+
+**Optimized:** "7 min HIIT, no equipment" (26 chars ✅)
+
+**Alternative Options:**
+- "7 minute HIIT workout" (22 chars)
+- "Quick HIIT, no equipment" (24 chars)
+- "7 min full-body workout" (23 chars)
+
+**Recommended:** "7 min HIIT, no equipment" - Includes primary keywords: "7 min", "HIIT", "no equipment"
 
 ## Promotional Text (170 characters max)
 **"Transform your fitness with science-backed HIIT workouts. 12 exercises, 7 minutes, no equipment needed. Build strength, burn calories, and create lasting habits."**

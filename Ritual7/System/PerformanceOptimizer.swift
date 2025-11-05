@@ -9,6 +9,10 @@ enum PerformanceOptimizer {
     
     // MARK: - Image Loading Optimization
     
+    // Cache for loaded symbols to avoid redundant loading
+    private static var symbolCache: [String: UIImage] = [:]
+    private static let symbolCacheLock = NSLock()
+    
     /// Preloads critical images for better performance
     static func preloadCriticalAssets() {
         // Preload system symbols that are commonly used
@@ -19,9 +23,41 @@ enum PerformanceOptimizer {
             ]
             
             for symbol in criticalSymbols {
-                _ = UIImage(systemName: symbol)
+                _ = loadSymbol(symbol)
             }
         }
+    }
+    
+    /// Loads a system symbol with caching
+    /// - Parameter name: The system symbol name
+    /// - Returns: The loaded UIImage or nil if not found
+    static func loadSymbol(_ name: String) -> UIImage? {
+        // Check cache first
+        symbolCacheLock.lock()
+        if let cached = symbolCache[name] {
+            symbolCacheLock.unlock()
+            return cached
+        }
+        symbolCacheLock.unlock()
+        
+        // Load symbol
+        guard let image = UIImage(systemName: name) else {
+            return nil
+        }
+        
+        // Cache it
+        symbolCacheLock.lock()
+        symbolCache[name] = image
+        symbolCacheLock.unlock()
+        
+        return image
+    }
+    
+    /// Clears the symbol cache
+    static func clearSymbolCache() {
+        symbolCacheLock.lock()
+        symbolCache.removeAll()
+        symbolCacheLock.unlock()
     }
     
     // MARK: - Memory Management
@@ -37,7 +73,7 @@ enum PerformanceOptimizer {
         let memoryInfo = getMemoryInfo()
         
         // Clear image cache if memory pressure is high
-        if ProcessInfo.processInfo.isLowPowerModeEnabled || memoryInfo.usageRatio > 0.8 {
+        if ProcessInfo.processInfo.isLowPowerModeEnabled || memoryInfo.usageRatio > AppConstants.PerformanceConstants.memoryUsageWarningThreshold {
             clearNonEssentialCaches()
             Task { @MainActor in
                 CrashReporter.logMessage("Memory optimization triggered", level: .info, context: [
@@ -49,7 +85,7 @@ enum PerformanceOptimizer {
         }
         
         // Agent 6: Check for low memory condition
-        if memoryInfo.usageRatio > 0.9 {
+        if memoryInfo.usageRatio > AppConstants.PerformanceConstants.memoryUsageCriticalThreshold {
             ErrorHandling.handleError(ErrorHandling.WorkoutError.lowMemory, context: "PerformanceOptimizer.optimizeMemoryUsage")
         }
     }
@@ -58,12 +94,12 @@ enum PerformanceOptimizer {
     static func checkLowMemoryCondition() -> Bool {
         let memoryInfo = getMemoryInfo()
         
-        if memoryInfo.usageRatio > 0.85 {
+        if memoryInfo.usageRatio > AppConstants.PerformanceConstants.memoryUsageWarningThreshold {
             // Clear aggressive caches
             clearNonEssentialCaches()
             
             // Post notification for UI to handle
-            NotificationCenter.default.post(name: NSNotification.Name("lowMemoryWarning"), object: nil)
+            NotificationCenter.default.post(name: NSNotification.Name(AppConstants.NotificationNames.lowMemoryWarning), object: nil)
             
             ErrorHandling.handleError(ErrorHandling.WorkoutError.lowMemory, context: "PerformanceOptimizer.checkLowMemoryCondition")
             return true
@@ -76,7 +112,7 @@ enum PerformanceOptimizer {
     static func checkBatterySaverMode() -> Bool {
         if ProcessInfo.processInfo.isLowPowerModeEnabled {
             // Post notification for UI to handle
-            NotificationCenter.default.post(name: NSNotification.Name("batterySaverModeEnabled"), object: nil)
+            NotificationCenter.default.post(name: NSNotification.Name(AppConstants.NotificationNames.batterySaverModeEnabled), object: nil)
             
             ErrorHandling.handleError(ErrorHandling.WorkoutError.batterySaverMode, context: "PerformanceOptimizer.checkBatterySaverMode")
             return true
@@ -117,7 +153,7 @@ enum PerformanceOptimizer {
     
     /// Defers heavy operations to improve launch time
     static func deferHeavyOperations(_ operation: @escaping () -> Void) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + TimeInterval(AppConstants.TimingConstants.heavyOperationDelay) / 1_000_000_000) {
             operation()
         }
     }
@@ -132,14 +168,14 @@ enum PerformanceOptimizer {
             // Any heavy operations can go here
             let launchTime = CFAbsoluteTimeGetCurrent() - launchStartTime
             #if DEBUG
-            if launchTime > 1.5 {
+            if launchTime > AppConstants.TimingConstants.targetLaunchTime {
                 print("⚠️ Launch time exceeded target: \(String(format: "%.2f", launchTime))s")
             } else {
                 print("✅ Launch time: \(String(format: "%.2f", launchTime))s")
             }
             #endif
             Task { @MainActor in
-                CrashReporter.logMessage("App launch completed", level: launchTime > 1.5 ? .warning : .info, context: ["launch_time": launchTime])
+                CrashReporter.logMessage("App launch completed", level: launchTime > AppConstants.TimingConstants.targetLaunchTime ? .warning : .info, context: ["launch_time": launchTime])
             }
         }
     }
@@ -173,7 +209,7 @@ enum PerformanceOptimizer {
         let batteryLevel = UIDevice.current.batteryLevel
         let batteryState = UIDevice.current.batteryState
         
-        if batteryState == .unplugged && batteryLevel < 0.2 {
+        if batteryState == .unplugged && batteryLevel < AppConstants.PerformanceConstants.lowBatteryThreshold {
             // Battery is low - optimize aggressively
             clearNonEssentialCaches()
             Task { @MainActor in
@@ -197,7 +233,7 @@ enum PerformanceOptimizer {
         let batteryState = UIDevice.current.batteryState
         
         return ProcessInfo.processInfo.isLowPowerModeEnabled || 
-               (batteryState == .unplugged && batteryLevel < 0.2)
+               (batteryState == .unplugged && batteryLevel < AppConstants.PerformanceConstants.lowBatteryThreshold)
     }
 }
 
@@ -253,9 +289,16 @@ struct PerformanceMonitor {
     }
     
     /// Logs slow operations with automatic threshold detection
-    static func logSlowOperation(name: String, threshold: TimeInterval = 0.1) {
+    /// - Parameters:
+    ///   - name: Name of the operation being measured
+    ///   - threshold: Time threshold in seconds (default: AppConstants.PerformanceConstants.slowOperationThreshold)
+    ///   - operation: The operation to measure
+    /// - Returns: The result of the operation
+    @discardableResult
+    static func logSlowOperation<T>(name: String, threshold: TimeInterval = AppConstants.PerformanceConstants.slowOperationThreshold, operation: () -> T) -> T {
         #if DEBUG
         let start = CFAbsoluteTimeGetCurrent()
+        let result = operation()
         let time = CFAbsoluteTimeGetCurrent() - start
         if time > threshold {
             let message = "⚠️ Slow operation detected: \(name) took \(String(format: "%.3f", time))s"
@@ -268,6 +311,38 @@ struct PerformanceMonitor {
                 ])
             }
         }
+        return result
+        #else
+        return operation()
+        #endif
+    }
+    
+    /// Logs slow async operations with automatic threshold detection
+    /// - Parameters:
+    ///   - name: Name of the operation being measured
+    ///   - threshold: Time threshold in seconds (default: AppConstants.PerformanceConstants.slowOperationThreshold)
+    ///   - operation: The async operation to measure
+    /// - Returns: The result of the operation
+    @discardableResult
+    static func logSlowOperationAsync<T>(name: String, threshold: TimeInterval = AppConstants.PerformanceConstants.slowOperationThreshold, operation: () async -> T) async -> T {
+        #if DEBUG
+        let start = CFAbsoluteTimeGetCurrent()
+        let result = await operation()
+        let time = CFAbsoluteTimeGetCurrent() - start
+        if time > threshold {
+            let message = "⚠️ Slow operation detected: \(name) took \(String(format: "%.3f", time))s"
+            print(message)
+            Task { @MainActor in
+                CrashReporter.logMessage(message, level: .warning, context: [
+                    "operation": name,
+                    "duration": time,
+                    "threshold": threshold
+                ])
+            }
+        }
+        return result
+        #else
+        return await operation()
         #endif
     }
     
@@ -280,7 +355,7 @@ struct PerformanceMonitor {
         let after = getMemoryUsage()
         let delta = after - before
         
-        if delta > 10_000_000 { // 10MB threshold
+        if delta > AppConstants.PerformanceConstants.highMemoryUsageThreshold {
             Task { @MainActor in
                 CrashReporter.logMessage("High memory usage detected", level: .warning, context: [
                     "operation": name,
@@ -322,9 +397,9 @@ struct PerformanceMonitor {
         let launchStartTime = CFAbsoluteTimeGetCurrent()
         
         // Track launch completion
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + AppConstants.TimingConstants.launchTimeCheckDelay) {
             let launchTime = CFAbsoluteTimeGetCurrent() - launchStartTime
-            let targetTime: TimeInterval = 1.5
+            let targetTime: TimeInterval = AppConstants.TimingConstants.targetLaunchTime
             
             Task { @MainActor in
                 if launchTime > targetTime {

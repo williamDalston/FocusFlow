@@ -136,16 +136,17 @@ struct RootView: View {
             // Handle home screen quick action
             handleShortcutStart()
         }
-        .onContinueUserActivity("com.williamalston.Ritual7.startWorkout") { userActivity in
+        .onContinueUserActivity(AppConstants.ActivityTypes.startWorkout) { userActivity in
             // Agent 8: Handle shortcut invocation
             handleShortcutActivity(userActivity)
         }
         .onOpenURL { url in
             // Agent 8: Handle URL-based shortcuts
-            if url.scheme == "sevenminuteworkout" && url.host == "start" {
+            if url.scheme == AppConstants.URLSchemes.workoutScheme && url.host == AppConstants.URLSchemes.startHost {
                 handleShortcutStart()
             }
         }
+        .globalErrorHandler()
     }
     
     // MARK: - Shortcut Handling
@@ -153,11 +154,11 @@ struct RootView: View {
     private func handleShortcutActivity(_ userActivity: NSUserActivity) {
         _ = WorkoutShortcuts.handleShortcut(userActivity)
         // Trigger workout start (this would need to be connected to WorkoutContentView)
-        NotificationCenter.default.post(name: NSNotification.Name("StartWorkoutFromShortcut"), object: nil)
+        NotificationCenter.default.post(name: NSNotification.Name(AppConstants.NotificationNames.startWorkoutFromShortcut), object: nil)
     }
     
     private func handleShortcutStart() {
-        NotificationCenter.default.post(name: NSNotification.Name("StartWorkoutFromShortcut"), object: nil)
+        NotificationCenter.default.post(name: NSNotification.Name(AppConstants.NotificationNames.startWorkoutFromShortcut), object: nil)
     }
 
     // MARK: - ATT (App Tracking Transparency)
@@ -536,7 +537,7 @@ struct iPadInsightsView: View {
         ScrollView {
             VStack(spacing: DesignSystem.Spacing.xl) {
                 Text("Insights")
-                    .font(.largeTitle.weight(.bold))
+                    .font(Theme.largeTitle)
                     .foregroundStyle(Theme.textPrimary)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
@@ -601,10 +602,10 @@ struct iPadInsightsView: View {
                         .overlay(
                             VStack {
                                 Image(systemName: "chart.bar.fill")
-                                    .font(.largeTitle)
+                                    .font(Theme.largeTitle)
                                     .foregroundStyle(Theme.accentA.opacity(0.6))
                                 Text("Chart Coming Soon")
-                                    .font(.caption)
+                                    .font(Theme.caption)
                                     .foregroundStyle(.secondary)
                             }
                         )

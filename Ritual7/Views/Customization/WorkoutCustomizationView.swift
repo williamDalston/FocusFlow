@@ -91,7 +91,7 @@ struct WorkoutCustomizationView: View {
     private var presetSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Workout Presets")
-                .font(.headline.weight(.semibold))
+                .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
                 .padding(.horizontal, 4)
             
@@ -104,37 +104,37 @@ struct WorkoutCustomizationView: View {
                             VStack(alignment: .leading, spacing: 8) {
                                 HStack {
                                     Image(systemName: preset.icon)
-                                        .font(.title2)
+                                        .font(Theme.title2)
                                         .foregroundStyle(Theme.accentA)
                                     
                                     Text(preset.displayName)
-                                        .font(.headline.weight(.semibold))
+                                        .font(Theme.headline)
                                         .foregroundStyle(Theme.textPrimary)
                                 }
                                 
                                 Text(preset.description)
-                                    .font(.subheadline)
+                                    .font(Theme.subheadline)
                                     .foregroundStyle(.secondary)
                                     .fixedSize(horizontal: false, vertical: true)
                                 
                                 HStack(spacing: 12) {
                                     Label("\(preset.exerciseIndices.count) exercises", systemImage: "figure.run")
-                                        .font(.caption)
+                                        .font(Theme.caption)
                                         .foregroundStyle(.secondary)
                                     
                                     Label("~\(preset.estimatedMinutes) min", systemImage: "timer")
-                                        .font(.caption)
+                                        .font(Theme.caption)
                                         .foregroundStyle(.secondary)
                                 }
                             }
                         } else {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text("Select a Preset")
-                                    .font(.headline)
+                                    .font(Theme.headline)
                                     .foregroundStyle(Theme.textPrimary)
                                 
                                 Text("Choose from predefined workout configurations")
-                                    .font(.subheadline)
+                                    .font(Theme.subheadline)
                                     .foregroundStyle(.secondary)
                             }
                         }
@@ -157,7 +157,7 @@ struct WorkoutCustomizationView: View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
                 Text("Custom Workouts")
-                    .font(.headline.weight(.semibold))
+                    .font(Theme.headline)
                     .foregroundStyle(Theme.textPrimary)
                 
                 Spacer()
@@ -175,7 +175,7 @@ struct WorkoutCustomizationView: View {
                     editingCustomWorkout = newWorkout
                 } label: {
                     Image(systemName: "plus.circle.fill")
-                        .font(.title3)
+                        .font(Theme.title3)
                         .foregroundStyle(Theme.accentA)
                 }
             }
@@ -184,25 +184,25 @@ struct WorkoutCustomizationView: View {
             if preferencesStore.customWorkouts.isEmpty {
                 VStack(spacing: 8) {
                     Image(systemName: "list.bullet.rectangle")
-                        .font(.title2)
+                        .font(Theme.title2)
                         .foregroundStyle(.secondary)
                     
                     Text("No custom workouts yet")
-                        .font(.subheadline)
+                        .font(Theme.subheadline)
                         .foregroundStyle(.secondary)
                     
                     Text("Create your own workout routine")
-                        .font(.caption)
+                        .font(Theme.caption)
                         .foregroundStyle(.secondary)
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 24)
                 .background(
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
                         .fill(Color(.systemGray6))
                         .overlay(
-                            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                .stroke(Color(.systemGray4), lineWidth: 0.5)
+                            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small, style: .continuous)
+                                .stroke(Color(.systemGray4), lineWidth: DesignSystem.Border.subtle)
                         )
                 )
             } else {
@@ -222,7 +222,7 @@ struct WorkoutCustomizationView: View {
     private var durationSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Duration Settings")
-                .font(.headline.weight(.semibold))
+                .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
                 .padding(.horizontal, 4)
             
@@ -232,13 +232,13 @@ struct WorkoutCustomizationView: View {
                     VStack(alignment: .leading, spacing: 8) {
                         HStack {
                             Text("Exercise Duration")
-                                .font(.subheadline.weight(.semibold))
+                                .font(Theme.subheadline.weight(.semibold))
                                 .foregroundStyle(Theme.textPrimary)
                             
                             Spacer()
                             
                             Text("\(Int(preferencesStore.preferences.exerciseDuration))s")
-                                .font(.subheadline.weight(.semibold))
+                                .font(Theme.subheadline.weight(.semibold))
                                 .foregroundStyle(Theme.accentA)
                         }
                         
@@ -254,11 +254,11 @@ struct WorkoutCustomizationView: View {
                         
                         HStack {
                             Text("15s")
-                                .font(.caption)
+                                .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                             Spacer()
                             Text("60s")
-                                .font(.caption)
+                                .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                         }
                     }
@@ -269,13 +269,13 @@ struct WorkoutCustomizationView: View {
                     VStack(alignment: .leading, spacing: 8) {
                         HStack {
                             Text("Rest Duration")
-                                .font(.subheadline.weight(.semibold))
+                                .font(Theme.subheadline.weight(.semibold))
                                 .foregroundStyle(Theme.textPrimary)
                             
                             Spacer()
                             
                             Text("\(Int(preferencesStore.preferences.restDuration))s")
-                                .font(.subheadline.weight(.semibold))
+                                .font(Theme.subheadline.weight(.semibold))
                                 .foregroundStyle(Theme.accentA)
                         }
                         
@@ -291,11 +291,11 @@ struct WorkoutCustomizationView: View {
                         
                         HStack {
                             Text("5s")
-                                .font(.caption)
+                                .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                             Spacer()
                             Text("30s")
-                                .font(.caption)
+                                .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                         }
                     }
@@ -306,13 +306,13 @@ struct WorkoutCustomizationView: View {
                     VStack(alignment: .leading, spacing: 8) {
                         HStack {
                             Text("Prep Duration")
-                                .font(.subheadline.weight(.semibold))
+                                .font(Theme.subheadline.weight(.semibold))
                                 .foregroundStyle(Theme.textPrimary)
                             
                             Spacer()
                             
                             Text("\(Int(preferencesStore.preferences.prepDuration))s")
-                                .font(.subheadline.weight(.semibold))
+                                .font(Theme.subheadline.weight(.semibold))
                                 .foregroundStyle(Theme.accentA)
                         }
                         
@@ -328,11 +328,11 @@ struct WorkoutCustomizationView: View {
                         
                         HStack {
                             Text("5s")
-                                .font(.caption)
+                                .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                             Spacer()
                             Text("15s")
-                                .font(.caption)
+                                .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                         }
                     }
@@ -356,7 +356,7 @@ struct WorkoutCustomizationView: View {
     private var fitnessLevelSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Fitness Level")
-                .font(.headline.weight(.semibold))
+                .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
                 .padding(.horizontal, 4)
             
@@ -377,7 +377,7 @@ struct WorkoutCustomizationView: View {
                     .foregroundStyle(.secondary)
                     .padding(.top, 8)
             }
-            .padding(16)
+            .padding(DesignSystem.Spacing.lg)
         }
     }
     
@@ -386,7 +386,7 @@ struct WorkoutCustomizationView: View {
     private var advancedCustomizationSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Advanced Options")
-                .font(.headline.weight(.semibold))
+                .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
                 .padding(.horizontal, 4)
             
@@ -402,20 +402,20 @@ struct WorkoutCustomizationView: View {
                                     .foregroundStyle(Theme.accentA)
                                 
                                 Text("Advanced Customization")
-                                    .font(.headline)
+                                    .font(Theme.headline)
                                     .foregroundStyle(Theme.textPrimary)
                                 
                                 Spacer()
                                 
                                 Image(systemName: "chevron.right")
                                     .foregroundStyle(.secondary)
-                                    .font(.caption)
+                                    .font(Theme.caption)
                             }
                         }
                         .buttonStyle(.plain)
                         
                         Text("Customize exercise order, per-exercise rest periods, and sets")
-                            .font(.caption)
+                            .font(Theme.caption)
                             .foregroundStyle(.secondary)
                     }
                     .padding(DesignSystem.Spacing.lg)
@@ -429,7 +429,7 @@ struct WorkoutCustomizationView: View {
     private var personalizationSettingsSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Personalization")
-                .font(.headline.weight(.semibold))
+                .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
                 .padding(.horizontal, 4)
             
@@ -463,7 +463,7 @@ struct WorkoutCustomizationView: View {
                         .tint(Theme.accentA)
                         
                         Text("Personalization learns your workout patterns and adapts recommendations to help you build stronger habits.")
-                            .font(.caption)
+                            .font(Theme.caption)
                             .foregroundStyle(.secondary)
                             .padding(.top, 4)
                     }
@@ -478,7 +478,7 @@ struct WorkoutCustomizationView: View {
     private func personalizationRecommendationSection(recommendation: WorkoutRecommendation) -> some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Recommended for You")
-                .font(.headline.weight(.semibold))
+                .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
                 .padding(.horizontal, 4)
             
@@ -487,31 +487,31 @@ struct WorkoutCustomizationView: View {
                     HStack {
                         Image(systemName: "sparkles")
                             .foregroundStyle(Theme.accentA)
-                            .font(.title3)
+                            .font(Theme.title3)
                         
                         Text(recommendation.recommendedWorkoutType.displayName)
-                            .font(.headline.weight(.semibold))
+                            .font(Theme.headline)
                             .foregroundStyle(Theme.textPrimary)
                         
                         Spacer()
                         
                         if let optimalTime = recommendation.optimalTime {
                             Text(optimalTime, style: .time)
-                                .font(.caption)
+                                .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                         }
                     }
                     
                     HStack {
                         Label("\(recommendation.confidencePercentage)% confidence", systemImage: "chart.line.uptrend.xyaxis")
-                            .font(.caption)
+                            .font(Theme.caption)
                             .foregroundStyle(.secondary)
                         
                         Spacer()
                         
                         if let optimalTime = recommendation.optimalTime {
                             Label("Optimal time: \(optimalTime, style: .time)", systemImage: "clock")
-                                .font(.caption)
+                                .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                         }
                     }
@@ -526,7 +526,7 @@ struct WorkoutCustomizationView: View {
     private func habitInsightsSection(habitLearner: HabitLearner) -> some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Your Workout Habits")
-                .font(.headline.weight(.semibold))
+                .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
                 .padding(.horizontal, 4)
             
@@ -537,7 +537,7 @@ struct WorkoutCustomizationView: View {
                     HStack(alignment: .top, spacing: 12) {
                         Image(systemName: insight.type.icon)
                             .foregroundStyle(insight.type.color)
-                            .font(.title3)
+                            .font(Theme.title3)
                             .frame(width: 24)
                         
                         VStack(alignment: .leading, spacing: 4) {
@@ -569,7 +569,7 @@ private struct CustomWorkoutRow: View {
             HStack {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(workout.name)
-                        .font(.headline.weight(.semibold))
+                        .font(Theme.headline)
                         .foregroundStyle(Theme.textPrimary)
                     
                     if !workout.description.isEmpty {
@@ -580,11 +580,11 @@ private struct CustomWorkoutRow: View {
                     
                     HStack(spacing: 12) {
                         Label("\(workout.exerciseIds.count) exercises", systemImage: "figure.run")
-                            .font(.caption)
+                            .font(Theme.caption)
                             .foregroundStyle(.secondary)
                         
                         Label("~\(workout.estimatedMinutes) min", systemImage: "timer")
-                            .font(.caption)
+                            .font(Theme.caption)
                             .foregroundStyle(.secondary)
                     }
                 }
@@ -598,7 +598,7 @@ private struct CustomWorkoutRow: View {
                     } label: {
                         Image(systemName: "pencil")
                             .foregroundStyle(Theme.accentA)
-                            .font(.title3)
+                            .font(Theme.title3)
                     }
                     
                     Button(role: .destructive) {
@@ -607,11 +607,11 @@ private struct CustomWorkoutRow: View {
                     } label: {
                         Image(systemName: "trash")
                             .foregroundStyle(.red)
-                            .font(.title3)
+                            .font(Theme.title3)
                     }
                 }
             }
-            .padding(16)
+            .padding(DesignSystem.Spacing.lg)
         }
     }
 }
@@ -654,7 +654,7 @@ struct CustomWorkoutEditorView: View {
                                     .foregroundStyle(.secondary)
                                 Image(systemName: "chevron.right")
                                     .foregroundStyle(.secondary)
-                                    .font(.caption)
+                                    .font(Theme.caption)
                             }
                         }
                     }

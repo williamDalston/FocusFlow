@@ -66,7 +66,7 @@ struct InsightsView: View {
     private var emptyInsights: some View {
         VStack(spacing: DesignSystem.Spacing.md) {
             Image(systemName: "chart.bar.xaxis")
-                .font(.title)
+                .font(Theme.title)
                 .foregroundStyle(.secondary)
             
             Text("Complete more workouts to see insights")
@@ -223,7 +223,7 @@ struct InsightCard: View {
         HStack(spacing: DesignSystem.Spacing.lg) {
             // Icon
             Image(systemName: insight.icon)
-                .font(.title2)
+                .font(Theme.title2)
                 .foregroundStyle(insight.color)
                 .frame(width: DesignSystem.IconSize.xxlarge, height: DesignSystem.IconSize.xxlarge)
                 .background(
@@ -268,7 +268,7 @@ struct RecommendationCard: View {
     var body: some View {
         HStack(spacing: DesignSystem.Spacing.md) {
             Image(systemName: "lightbulb.fill")
-                .font(.title3)
+                .font(Theme.title3)
                 .foregroundStyle(.yellow)
                 .frame(width: DesignSystem.IconSize.statBox, height: DesignSystem.IconSize.statBox)
             

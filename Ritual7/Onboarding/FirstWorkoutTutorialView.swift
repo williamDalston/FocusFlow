@@ -161,12 +161,12 @@ struct FirstWorkoutTutorialView: View {
                     ForEach(step.tips, id: \.self) { tip in
                         HStack(alignment: .top, spacing: 12) {
                             Image(systemName: "checkmark.circle.fill")
-                                .font(.title3)
+                                .font(Theme.title3)
                                 .foregroundStyle(Theme.accentA)
                                 .padding(.top, 2)
                             
                             Text(tip)
-                                .font(.body)
+                                .font(Theme.body)
                                 .foregroundStyle(.white.opacity(0.9))
                         }
                     }

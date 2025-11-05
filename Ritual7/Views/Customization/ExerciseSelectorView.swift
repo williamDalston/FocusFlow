@@ -54,7 +54,7 @@ struct ExerciseSelectorView: View {
                 if !selectedExerciseIds.isEmpty {
                     VStack(spacing: 8) {
                         Text("\(selectedExerciseIds.count) exercise\(selectedExerciseIds.count == 1 ? "" : "s") selected")
-                            .font(.subheadline.weight(.semibold))
+                            .font(Theme.subheadline.weight(.semibold))
                             .foregroundStyle(Theme.textPrimary)
                     }
                     .frame(maxWidth: .infinity)
@@ -85,18 +85,18 @@ private struct ExerciseSelectionRow: View {
             HStack(spacing: 16) {
                 // Icon
                 Image(systemName: exercise.icon)
-                    .font(.title2)
+                    .font(Theme.title2)
                     .foregroundStyle(isSelected ? Theme.accentA : Theme.textSecondary)
                     .frame(width: 40)
                 
                 // Content
                 VStack(alignment: .leading, spacing: 4) {
                     Text(exercise.name)
-                        .font(.headline)
+                        .font(Theme.headline)
                         .foregroundStyle(Theme.textPrimary)
                     
                     Text(exercise.description)
-                        .font(.caption)
+                        .font(Theme.caption)
                         .foregroundStyle(.secondary)
                 }
                 
@@ -106,11 +106,11 @@ private struct ExerciseSelectionRow: View {
                 if isSelected {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundStyle(Theme.accentA)
-                        .font(.title3)
+                        .font(Theme.title3)
                 } else {
                     Image(systemName: "circle")
                         .foregroundStyle(.secondary)
-                        .font(.title3)
+                        .font(Theme.title3)
                 }
             }
             .padding(.vertical, 4)

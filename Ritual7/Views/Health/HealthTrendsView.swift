@@ -66,7 +66,7 @@ struct HealthTrendsView: View {
                             .foregroundStyle(Theme.textPrimary)
                         
                         Text("Connect with Apple Health to get personalized health insights and track your fitness progress.")
-                            .font(.subheadline)
+                            .font(Theme.subheadline)
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
                         
@@ -74,7 +74,7 @@ struct HealthTrendsView: View {
                             HealthKitPermissionsView()
                         } label: {
                             Text("Enable HealthKit")
-                                .font(.headline)
+                                .font(Theme.headline)
                                 .frame(maxWidth: .infinity)
                                 .frame(height: 44)
                         }
@@ -132,7 +132,7 @@ struct HealthTrendsView: View {
                     GlassCard(material: .ultraThinMaterial) {
                         VStack(alignment: .leading, spacing: 12) {
                             Text("Consistency Score")
-                                .font(.headline)
+                                .font(Theme.headline)
                                 .foregroundStyle(Theme.textPrimary)
                             
                             HStack {
@@ -140,12 +140,12 @@ struct HealthTrendsView: View {
                                     .tint(Theme.accentA)
                                 
                                 Text("\(Int(insight.consistencyScore * 100))%")
-                                    .font(.headline)
+                                    .font(Theme.headline)
                                     .foregroundStyle(Theme.textPrimary)
                             }
                             
                             Text(consistencyDescription(score: insight.consistencyScore))
-                                .font(.caption)
+                                .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                         }
                         .padding(DesignSystem.Spacing.formFieldSpacing)
@@ -157,7 +157,7 @@ struct HealthTrendsView: View {
                     GlassCard(material: .ultraThinMaterial) {
                         VStack(alignment: .leading, spacing: 12) {
                             Text("Average Heart Rate")
-                                .font(.headline)
+                                .font(Theme.headline)
                                 .foregroundStyle(Theme.textPrimary)
                             
                             HStack(alignment: .lastTextBaseline, spacing: 8) {
@@ -166,13 +166,13 @@ struct HealthTrendsView: View {
                                     .foregroundStyle(Theme.accentA)
                                 
                                 Text("BPM")
-                                    .font(.title3)
+                                    .font(Theme.title3)
                                     .foregroundStyle(.secondary)
                             }
                             
                             if let restingHR = insight.restingHeartRate {
                                 Text("Resting: \(Int(restingHR)) BPM")
-                                    .font(.caption)
+                                    .font(Theme.caption)
                                     .foregroundStyle(.secondary)
                             }
                         }
@@ -184,16 +184,16 @@ struct HealthTrendsView: View {
                 GlassCard(material: .ultraThinMaterial) {
                     VStack(alignment: .leading, spacing: 12) {
                         Text("Improvement Trend")
-                            .font(.headline)
+                            .font(Theme.headline)
                             .foregroundStyle(Theme.textPrimary)
                         
                         HStack {
                             Image(systemName: trendIcon(for: insight.improvementTrend))
-                                .font(.title2)
+                                .font(Theme.title2)
                                 .foregroundStyle(trendColor(for: insight.improvementTrend))
                             
                             Text(insight.improvementTrend.rawValue)
-                                .font(.title3.weight(.semibold))
+                                    .font(Theme.title3)
                                 .foregroundStyle(Theme.textPrimary)
                         }
                         
@@ -208,7 +208,7 @@ struct HealthTrendsView: View {
                 if !insight.recommendations.isEmpty {
                     VStack(alignment: .leading, spacing: 16) {
                         Text("Recommendations")
-                            .font(.title3.weight(.bold))
+                            .font(Theme.title3)
                             .foregroundStyle(Theme.textPrimary)
                         
                         ForEach(insight.recommendations) { recommendation in
@@ -218,7 +218,7 @@ struct HealthTrendsView: View {
                 }
             } else if !isLoading {
                 Text("No insights available")
-                    .font(.headline)
+                    .font(Theme.headline)
                     .foregroundStyle(.secondary)
                     .padding()
             }
@@ -234,7 +234,7 @@ struct HealthTrendsView: View {
                 GlassCard(material: .ultraThinMaterial) {
                     VStack(alignment: .leading, spacing: 12) {
                         Text("Training Load")
-                            .font(.headline)
+                            .font(Theme.headline)
                             .foregroundStyle(Theme.textPrimary)
                         
                         HStack {
@@ -242,7 +242,7 @@ struct HealthTrendsView: View {
                                 .tint(loadColor(for: analysis.trainingLoad.level))
                             
                             Text("\(Int(analysis.trainingLoad.score))%")
-                                .font(.headline)
+                                .font(Theme.headline)
                                 .foregroundStyle(Theme.textPrimary)
                         }
                         
@@ -257,7 +257,7 @@ struct HealthTrendsView: View {
                 GlassCard(material: .ultraThinMaterial) {
                     VStack(alignment: .leading, spacing: 12) {
                         Text("Readiness Score")
-                            .font(.headline)
+                            .font(Theme.headline)
                             .foregroundStyle(Theme.textPrimary)
                         
                         HStack(alignment: .lastTextBaseline, spacing: 8) {
@@ -281,7 +281,7 @@ struct HealthTrendsView: View {
                 GlassCard(material: .ultraThinMaterial) {
                     VStack(alignment: .leading, spacing: 12) {
                         Text("Recommended Recovery")
-                            .font(.headline)
+                            .font(Theme.headline)
                             .foregroundStyle(Theme.textPrimary)
                         
                         let hours = analysis.recommendedRecoveryTime / 3600
@@ -306,7 +306,7 @@ struct HealthTrendsView: View {
                 if !analysis.recommendations.isEmpty {
                     VStack(alignment: .leading, spacing: 16) {
                         Text("Recovery Recommendations")
-                            .font(.title3.weight(.bold))
+                            .font(Theme.title3)
                             .foregroundStyle(Theme.textPrimary)
                         
                         ForEach(analysis.recommendations) { recommendation in
@@ -316,7 +316,7 @@ struct HealthTrendsView: View {
                 }
             } else if !isLoading {
                 Text("No recovery data available")
-                    .font(.headline)
+                    .font(Theme.headline)
                     .foregroundStyle(.secondary)
                     .padding()
             }
@@ -332,7 +332,7 @@ struct HealthTrendsView: View {
                 GlassCard(material: .ultraThinMaterial) {
                     VStack(alignment: .leading, spacing: 16) {
                         Text("Weekly Workouts")
-                            .font(.headline)
+                            .font(Theme.headline)
                             .foregroundStyle(Theme.textPrimary)
                         
                         Chart(insightsManager.healthTrends) { trend in
@@ -351,7 +351,7 @@ struct HealthTrendsView: View {
                 GlassCard(material: .ultraThinMaterial) {
                     VStack(alignment: .leading, spacing: 16) {
                         Text("Weekly Calories Burned")
-                            .font(.headline)
+                            .font(Theme.headline)
                             .foregroundStyle(Theme.textPrimary)
                         
                         Chart(insightsManager.healthTrends) { trend in
@@ -374,7 +374,7 @@ struct HealthTrendsView: View {
                 }
             } else if !isLoading {
                 Text("No trend data available")
-                    .font(.headline)
+                    .font(Theme.headline)
                     .foregroundStyle(.secondary)
                     .padding()
             }
@@ -503,15 +503,15 @@ private struct HealthTrendsInsightCard: View {
         GlassCard(material: .ultraThinMaterial) {
             VStack(spacing: 12) {
                 Image(systemName: icon)
-                    .font(.title2)
+                    .font(Theme.title2)
                     .foregroundStyle(color)
                 
                 Text(value)
-                    .font(.title2.weight(.bold))
+                    .font(Theme.title2)
                     .foregroundStyle(Theme.textPrimary)
                 
                 Text(title)
-                    .font(.caption)
+                    .font(Theme.caption)
                     .foregroundStyle(.secondary)
             }
             .frame(maxWidth: .infinity)
@@ -549,21 +549,21 @@ private struct HealthTrendsRecommendationCard: View {
             VStack(alignment: .leading, spacing: 12) {
                 HStack {
                     Image(systemName: "info.circle.fill")
-                        .font(.headline)
+                        .font(Theme.headline)
                         .foregroundStyle(colorForPriority(priority))
                     
                     Text(title)
-                        .font(.headline)
+                        .font(Theme.headline)
                         .foregroundStyle(Theme.textPrimary)
                 }
                 
                 Text(message)
-                    .font(.subheadline)
+                    .font(Theme.subheadline)
                     .foregroundStyle(.secondary)
                 
                 if let action = action {
                     Text(action)
-                        .font(.caption)
+                        .font(Theme.caption)
                         .foregroundStyle(Theme.accentA)
                         .padding(.top, 4)
                 }

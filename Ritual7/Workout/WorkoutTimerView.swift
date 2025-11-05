@@ -12,6 +12,8 @@ struct WorkoutTimerView: View {
     @StateObject private var repCounter = RepCounter()
     @StateObject private var voiceCues = VoiceCuesManager.shared
     @State private var showCompletionCelebration = false
+    @AppStorage("hasSeenGestureHint") private var hasSeenGestureHint = false
+    @State private var showGestureHint = false
     
     var body: some View {
         ZStack {
@@ -22,6 +24,11 @@ struct WorkoutTimerView: View {
             }
             completionOverlayIfNeeded
             ConfettiView(trigger: $showCompletionConfetti)
+            
+            // Gesture hints overlay
+            if showGestureHint {
+                gestureHintsOverlay
+            }
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -47,7 +54,7 @@ struct WorkoutTimerView: View {
         .dynamicTypeSize(...DynamicTypeSize.accessibility5)
         .onChange(of: engine.phase) { newPhase in
             if newPhase == .completed {
-                let duration = engine.currentSessionDuration ?? 420 // 7 minutes default
+                let duration = engine.currentSessionDuration ?? AppConstants.TimingConstants.defaultWorkoutDuration
                 // Get start date from engine
                 let startDate = engine.sessionStartDate ?? Date().addingTimeInterval(-duration)
                 store.addSession(duration: duration, exercisesCompleted: 12, startDate: startDate)
@@ -70,11 +77,11 @@ struct WorkoutTimerView: View {
                 }
             }
         }
-        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("appDidEnterBackground"))) { _ in
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name(AppConstants.NotificationNames.appDidEnterBackground))) { _ in
             // Agent 6: Handle background transition
             engine.handleBackgroundTransition()
         }
-        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("appDidBecomeActive"))) { _ in
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name(AppConstants.NotificationNames.appDidBecomeActive))) { _ in
             // Agent 6: Handle foreground transition
             engine.handleForegroundTransition()
         }
@@ -84,6 +91,14 @@ struct WorkoutTimerView: View {
         }
         .sheet(isPresented: $showCompletionCelebration) {
             completionCelebrationSheet
+        }
+        .onAppear {
+            // Show gesture hints on first use
+            if !hasSeenGestureHint && engine.phase == .exercise {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                    showGestureHint = true
+                }
+            }
         }
         .onDisappear {
             // Reset engine when view disappears if not completed
@@ -133,12 +148,22 @@ struct WorkoutTimerView: View {
                                     engine.pause()
                                 }
                                 Haptics.buttonPress()
+                                // Dismiss gesture hint if showing
+                                if showGestureHint {
+                                    showGestureHint = false
+                                    hasSeenGestureHint = true
+                                }
                             }
                         } else if horizontalAmount < -50 {
                             // Swipe left: Skip rest (only during rest phase)
                             if engine.phase == .rest {
                                 engine.skipRest()
                                 Haptics.buttonPress()
+                                // Dismiss gesture hint if showing
+                                if showGestureHint {
+                                    showGestureHint = false
+                                    hasSeenGestureHint = true
+                                }
                             }
                         }
                     }
@@ -179,7 +204,7 @@ struct WorkoutTimerView: View {
         let hasWorkoutToday = store.sessions.contains { calendar.isDate($0.date, inSameDayAs: today) }
         
         // Agent 2: Check personal best and achievements
-        let duration = engine.currentSessionDuration ?? 420
+        let duration = engine.currentSessionDuration ?? AppConstants.TimingConstants.defaultWorkoutDuration
         let exercisesCompleted = engine.exercises.count
         let isPersonalBest = store.isPersonalBest(duration: duration, exercisesCompleted: exercisesCompleted)
         
@@ -270,9 +295,9 @@ struct WorkoutTimerView: View {
                         LinearGradient(
                             colors: [
                                 engine.phase == .rest ? Theme.accentB : Theme.accentA,
-                                engine.phase == .rest ? Theme.accentB.opacity(0.85) : Theme.accentA.opacity(0.85),
+                                engine.phase == .rest ? Theme.accentB.opacity(DesignSystem.Opacity.veryStrong * 1.18) : Theme.accentA.opacity(DesignSystem.Opacity.veryStrong * 1.18),
                                 engine.phase == .rest ? Theme.accentC : Theme.accentB,
-                                engine.phase == .rest ? Theme.accentB.opacity(0.7) : Theme.accentA.opacity(0.7)
+                                engine.phase == .rest ? Theme.accentB.opacity(DesignSystem.Opacity.strong * 1.17) : Theme.accentA.opacity(DesignSystem.Opacity.strong * 1.17)
                             ],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
@@ -281,7 +306,7 @@ struct WorkoutTimerView: View {
                     )
                     .frame(width: 220, height: 220)
                     .rotationEffect(.degrees(-90))
-                    .animation(.linear(duration: 0.1), value: segmentProgress)
+                    .animation(AccessibilityHelpers.animation(.linear(duration: 0.1)), value: segmentProgress)
                     .shadow(color: (engine.phase == .rest ? Theme.accentB : Theme.accentA).opacity(DesignSystem.Opacity.medium), radius: 12, x: 0, y: 6)
                     .shadow(color: Theme.glowColor.opacity(DesignSystem.Opacity.glow * 0.8), radius: 8, x: 0, y: 3)
                 
@@ -294,8 +319,8 @@ struct WorkoutTimerView: View {
                                 colors: [
                                     engine.phase == .rest ? Theme.accentB : 
                                     (engine.timeRemaining <= 3 && engine.phase != .idle && engine.phase != .preparing && !engine.isPaused ? .red : Theme.accentA),
-                                    engine.phase == .rest ? Theme.accentB.opacity(0.9) : 
-                                    (engine.timeRemaining <= 3 && engine.phase != .idle && engine.phase != .preparing && !engine.isPaused ? .red.opacity(0.9) : Theme.accentA.opacity(0.9))
+                                    engine.phase == .rest ? Theme.accentB.opacity(DesignSystem.Opacity.almostOpaque) : 
+                                    (engine.timeRemaining <= 3 && engine.phase != .idle && engine.phase != .preparing && !engine.isPaused ? .red.opacity(DesignSystem.Opacity.almostOpaque) : Theme.accentA.opacity(DesignSystem.Opacity.almostOpaque))
                                 ],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
@@ -305,8 +330,8 @@ struct WorkoutTimerView: View {
                         .contentTransition(.numericText())
                         .scaleEffect(engine.phase == .rest ? 0.95 : 1.0)
                         .shadow(color: (engine.phase == .rest ? Theme.accentB : Theme.accentA).opacity(DesignSystem.Opacity.glow * 0.8), radius: 8, x: 0, y: 2)
-                        .animation(AnimationConstants.quickSpring, value: engine.phase)
-                        .animation(AnimationConstants.quickSpring, value: engine.timeRemaining)
+                        .animation(AccessibilityHelpers.animation(AnimationConstants.quickSpring) ?? .none, value: engine.phase)
+                        .animation(AccessibilityHelpers.animation(AnimationConstants.quickSpring) ?? .none, value: engine.timeRemaining)
                         .bounce(trigger: engine.timeRemaining <= 1 && engine.timeRemaining > 0)
                         .accessibilityLabel("\(Int(engine.timeRemaining)) seconds remaining")
                         .accessibilityValue("\(engine.phase == .rest ? "Rest" : "Exercise")")
@@ -314,7 +339,7 @@ struct WorkoutTimerView: View {
                         .dynamicTypeSize(...DynamicTypeSize.accessibility5)
                 }
             }
-            .padding(.vertical, 16)
+            .padding(.vertical, DesignSystem.Spacing.lg)
             
             // Exercise counter or next exercise preview
             if engine.phase == .preparing {
@@ -382,7 +407,7 @@ struct WorkoutTimerView: View {
     private var prepView: some View {
         ZStack {
             GlassCard(material: .ultraThinMaterial) {
-                VStack(spacing: 20) {
+                VStack(spacing: DesignSystem.Spacing.lg) {
                     // Agent 11: Countdown animation
                     if engine.timeRemaining <= 3 && engine.timeRemaining > 0 {
                         PrepCountdownView(timeRemaining: engine.timeRemaining)
@@ -406,7 +431,7 @@ struct WorkoutTimerView: View {
                             .multilineTextAlignment(.center)
                     }
                 }
-                .padding(24)
+                .padding(DesignSystem.Spacing.cardPadding)
             }
         }
         .onAppear {
@@ -420,7 +445,7 @@ struct WorkoutTimerView: View {
     // MARK: - Rest View
     
     private var restView: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: DesignSystem.Spacing.xl) {
             // Agent 11: Breathing guide during rest
             BreathingGuideView(
                 exercise: engine.nextExercise,
@@ -430,7 +455,7 @@ struct WorkoutTimerView: View {
             // Next exercise preview
             if let nextExercise = engine.nextExercise {
                 GlassCard(material: .ultraThinMaterial) {
-                    VStack(spacing: 16) {
+                    VStack(spacing: DesignSystem.Spacing.lg) {
                         Text("Next Exercise")
                             .font(Theme.headline)
                             .foregroundStyle(Theme.textPrimary)
@@ -477,7 +502,7 @@ struct WorkoutTimerView: View {
                             LinearGradient(
                                 colors: [
                                     engine.phase == .exercise ? Theme.accentA : Theme.accentB,
-                                    engine.phase == .exercise ? Theme.accentA.opacity(0.8) : Theme.accentB.opacity(0.8)
+                                    engine.phase == .exercise ? Theme.accentA.opacity(DesignSystem.Opacity.veryStrong * 1.11) : Theme.accentB.opacity(DesignSystem.Opacity.veryStrong * 1.11)
                                 ],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
@@ -487,7 +512,7 @@ struct WorkoutTimerView: View {
                         .modifier(SymbolPulseModifier(trigger: engine.phase == .exercise))
                         .scaleEffect(engine.phase == .exercise ? 1.0 : 0.9)
                         .animation(AnimationConstants.smoothSpring, value: engine.phase)
-                        .shadow(color: (engine.phase == .exercise ? Theme.accentA : Theme.accentB).opacity(0.4), radius: 12, x: 0, y: 6)
+                        .shadow(color: (engine.phase == .exercise ? Theme.accentA : Theme.accentB).opacity(DesignSystem.Opacity.medium), radius: DesignSystem.Shadow.verySoft.radius * 1.5, x: 0, y: DesignSystem.Shadow.verySoft.y * 1.5)
                     
                     // Exercise name
                     Text(exercise.name)
@@ -674,7 +699,7 @@ struct WorkoutTimerView: View {
     
     private var completionOverlay: some View {
         ZStack {
-            Color.black.opacity(0.7)
+            Color.black.opacity(DesignSystem.Opacity.strong * 1.17)
                 .ignoresSafeArea()
             
             ScrollView {
@@ -761,7 +786,7 @@ struct WorkoutTimerView: View {
                 .buttonStyle(.bordered)
                 .tint(.white)
                 .foregroundStyle(.white)
-                .padding(.top, 8)
+                .padding(.top, DesignSystem.Spacing.sm)
                 
                 Button {
                     Haptics.buttonPress()
@@ -775,7 +800,7 @@ struct WorkoutTimerView: View {
                 .buttonStyle(.borderedProminent)
                 .tint(.white)
                 .foregroundStyle(.black)
-                .padding(.top, 8)
+                .padding(.top, DesignSystem.Spacing.sm)
                 }
                 .padding(DesignSystem.Spacing.xxl)
                 .background(
@@ -834,6 +859,137 @@ struct WorkoutTimerView: View {
     private var timeString: String {
         let seconds = Int(engine.timeRemaining.rounded(.up))
         return String(format: "%d", seconds)
+    }
+    
+    // MARK: - Gesture Hints Overlay
+    
+    private var gestureHintsOverlay: some View {
+        VStack(spacing: DesignSystem.Spacing.lg) {
+            Spacer()
+            
+            VStack(spacing: DesignSystem.Spacing.md) {
+                // Swipe right hint (pause/resume)
+                if !engine.isPaused {
+                    HStack(spacing: DesignSystem.Spacing.md) {
+                        Image(systemName: "arrow.left")
+                            .font(.title2)
+                            .foregroundStyle(Theme.accentA)
+                            .symbolEffect(.bounce, value: showGestureHint)
+                        
+                        Text("Swipe right to pause")
+                            .font(Theme.subheadline)
+                            .foregroundStyle(.white)
+                        
+                        Image(systemName: "arrow.right")
+                            .font(.title2)
+                            .foregroundStyle(Theme.accentA)
+                            .symbolEffect(.bounce, value: showGestureHint)
+                    }
+                    .padding(DesignSystem.Spacing.md)
+                    .background(
+                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.medium, style: .continuous)
+                            .fill(.ultraThinMaterial)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.medium, style: .continuous)
+                                    .stroke(Theme.accentA.opacity(DesignSystem.Opacity.medium), lineWidth: DesignSystem.Border.standard)
+                            )
+                    )
+                    .shadow(color: Theme.accentA.opacity(DesignSystem.Opacity.subtle), 
+                           radius: DesignSystem.Shadow.medium.radius, 
+                           y: DesignSystem.Shadow.medium.y)
+                }
+                
+                // Swipe left hint (skip rest)
+                if engine.phase == .rest {
+                    HStack(spacing: DesignSystem.Spacing.md) {
+                        Image(systemName: "arrow.left")
+                            .font(.title2)
+                            .foregroundStyle(Theme.accentB)
+                            .symbolEffect(.bounce, value: showGestureHint)
+                        
+                        Text("Swipe left to skip rest")
+                            .font(Theme.subheadline)
+                            .foregroundStyle(.white)
+                        
+                        Image(systemName: "arrow.right")
+                            .font(.title2)
+                            .foregroundStyle(Theme.accentB)
+                            .symbolEffect(.bounce, value: showGestureHint)
+                    }
+                    .padding(DesignSystem.Spacing.md)
+                    .background(
+                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.medium, style: .continuous)
+                            .fill(.ultraThinMaterial)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.medium, style: .continuous)
+                                    .stroke(Theme.accentB.opacity(DesignSystem.Opacity.medium), lineWidth: DesignSystem.Border.standard)
+                            )
+                    )
+                    .shadow(color: Theme.accentB.opacity(DesignSystem.Opacity.subtle), 
+                           radius: DesignSystem.Shadow.medium.radius, 
+                           y: DesignSystem.Shadow.medium.y)
+                }
+                
+                // Dismiss button
+                Button {
+                    withAnimation {
+                        showGestureHint = false
+                        hasSeenGestureHint = true
+                    }
+                } label: {
+                    Text("Got it")
+                        .font(Theme.subheadline.weight(.semibold))
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, DesignSystem.Spacing.lg)
+                        .padding(.vertical, DesignSystem.Spacing.sm)
+                }
+                .buttonStyle(.bordered)
+                .tint(.white)
+            }
+            .padding(DesignSystem.Spacing.xl)
+            .background(
+                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
+                    .fill(.ultraThinMaterial)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
+                            .stroke(
+                                LinearGradient(
+                                    colors: [
+                                        Theme.accentA.opacity(DesignSystem.Opacity.light),
+                                        Theme.accentB.opacity(DesignSystem.Opacity.light)
+                                    ],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ),
+                                lineWidth: DesignSystem.Border.standard
+                            )
+                    )
+            )
+            .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.medium), 
+                   radius: DesignSystem.Shadow.large.radius, 
+                   y: DesignSystem.Shadow.large.y)
+            .padding(DesignSystem.Spacing.lg)
+            .transition(.scale.combined(with: .opacity))
+            .onTapGesture {
+                // Dismiss on tap outside
+                withAnimation {
+                    showGestureHint = false
+                    hasSeenGestureHint = true
+                }
+            }
+            
+            Spacer()
+        }
+        .background(
+            Color.black.opacity(DesignSystem.Opacity.medium)
+                .ignoresSafeArea()
+                .onTapGesture {
+                    withAnimation {
+                        showGestureHint = false
+                        hasSeenGestureHint = true
+                    }
+                }
+        )
     }
     
     // MARK: - Accessibility

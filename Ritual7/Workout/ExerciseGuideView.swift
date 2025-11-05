@@ -65,6 +65,10 @@ struct ExerciseGuideView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("Done") {
+                    // Show interstitial ad after viewing exercise guide (natural break point)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        InterstitialAdManager.shared.present(from: nil)
+                    }
                     dismiss()
                     Haptics.tap()
                 }
@@ -82,7 +86,7 @@ struct ExerciseGuideView: View {
             VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
                 HStack {
                     Image(systemName: "list.bullet.rectangle")
-                        .font(.title2)
+                        .font(Theme.title2)
                         .foregroundStyle(Theme.accentA)
                     
                     Text("How to Perform")
@@ -118,7 +122,7 @@ struct ExerciseGuideView: View {
             VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
                 HStack {
                     Image(systemName: "wind")
-                        .font(.title2)
+                        .font(Theme.title2)
                         .foregroundStyle(Theme.accentC)
                     
                     Text("Breathing")
@@ -143,7 +147,7 @@ struct ExerciseGuideView: View {
             VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
                 HStack {
                     Image(systemName: "figure.strengthtraining.traditional")
-                        .font(.title2)
+                        .font(Theme.title2)
                         .foregroundStyle(Theme.accentA)
                     
                     Text("Targets")
@@ -165,7 +169,7 @@ struct ExerciseGuideView: View {
             VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
                 HStack {
                     Image(systemName: "exclamationmark.triangle.fill")
-                        .font(.title2)
+                        .font(Theme.title2)
                         .foregroundStyle(.orange)
                     
                     Text("Common Mistakes")
@@ -199,7 +203,7 @@ struct ExerciseGuideView: View {
             VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
                 HStack {
                     Image(systemName: "slider.horizontal.3")
-                        .font(.title2)
+                        .font(Theme.title2)
                         .foregroundStyle(Theme.accentB)
                     
                     Text("Modifications")
@@ -238,7 +242,7 @@ struct ExerciseGuideView: View {
             VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
                 HStack {
                     Image(systemName: "shield.fill")
-                        .font(.title2)
+                        .font(Theme.title2)
                         .foregroundStyle(.red)
                     
                     Text("Safety")
@@ -272,7 +276,7 @@ struct ExerciseGuideView: View {
             VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
                 HStack {
                     Image(systemName: "lightbulb.fill")
-                        .font(.title2)
+                        .font(Theme.title2)
                         .foregroundStyle(.yellow)
                     
                     Text("Tips")

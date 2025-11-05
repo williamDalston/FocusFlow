@@ -15,7 +15,7 @@ struct PrimaryProminentButtonStyle: ButtonStyle {
             configuration.label
                 .opacity(isLoading ? 0.7 : 1.0)
         }
-            .font(.headline.weight(DesignSystem.Typography.headlineWeight))
+            .font(Theme.headline)
             .padding(.vertical, DesignSystem.ButtonSize.standard.padding)
             .frame(maxWidth: .infinity)
             .frame(height: DesignSystem.ButtonSize.standard.height)
@@ -131,7 +131,7 @@ struct SecondaryGlassButtonStyle: ButtonStyle {
             configuration.label
                 .opacity(isLoading ? 0.7 : 1.0)
         }
-            .font(.subheadline.weight(DesignSystem.Typography.headlineWeight))
+            .font(Theme.subheadline.weight(.semibold))
             .padding(.vertical, DesignSystem.ButtonSize.small.padding)
             .frame(maxWidth: .infinity)
             .frame(height: DesignSystem.ButtonSize.small.height)

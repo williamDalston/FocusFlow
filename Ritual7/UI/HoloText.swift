@@ -6,7 +6,7 @@ struct HoloText: View {
 
     var body: some View {
         Text(text)
-            .font(.largeTitle.bold())
+            .font(Theme.largeTitle)
             .overlay {
                 LinearGradient(
                     colors: [
@@ -20,7 +20,7 @@ struct HoloText: View {
                     endPoint:   UnitPoint(x: 1 - phase, y: 0.8)
                 )
                 .blendMode(.overlay)
-                .mask(Text(text).font(.largeTitle.bold()))
+                .mask(Text(text).font(Theme.largeTitle))
             }
             .animation(.linear(duration: 6).repeatForever(autoreverses: false), value: phase)
             .onAppear { if !UIAccessibility.isReduceMotionEnabled { phase = 1 } }

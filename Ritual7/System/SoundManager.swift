@@ -17,8 +17,8 @@ class SoundManager: ObservableObject {
     private let voiceCuesManager = VoiceCuesManager.shared
     
     private var audioPlayer: AVAudioPlayer?
-    private let soundEnabledKey = "workout.soundEnabled"
-    private let vibrationEnabledKey = "workout.vibrationEnabled"
+    private let soundEnabledKey = AppConstants.UserDefaultsKeys.soundEnabled
+    private let vibrationEnabledKey = AppConstants.UserDefaultsKeys.vibrationEnabled
     
     private init() {
         loadSettings()
@@ -66,13 +66,25 @@ class SoundManager: ObservableObject {
         let sampleRate = 44100.0
         let frameCount = AVAudioFrameCount(sampleRate * duration)
         
-        guard let format = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: 1) else { return }
+        guard let format = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: 1) else {
+            // Clean up on failure
+            engine.stop()
+            return
+        }
         
         engine.attach(playerNode)
         engine.connect(playerNode, to: engine.mainMixerNode, format: format)
         
         do {
             try engine.start()
+            
+            defer {
+                // Ensure cleanup happens in all code paths
+                playerNode.stop()
+                engine.stop()
+                engine.reset()
+                engine.detach(playerNode)
+            }
             
             guard let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: frameCount) else {
                 throw SoundError.failedToCreateBuffer
@@ -99,10 +111,9 @@ class SoundManager: ObservableObject {
                 playerNode.play()
             }
             
-            // Buffer has finished playing, clean up
-            playerNode.stop()
-            engine.stop()
+            // Buffer has finished playing, cleanup handled by defer
         } catch {
+            // Cleanup already handled by defer
             os_log("Sound playback error: %{public}@", log: .default, type: .error, error.localizedDescription)
             CrashReporter.logError(error, context: ["action": "sound_playback", "frequency": frequency, "duration": duration])
         }

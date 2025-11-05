@@ -43,7 +43,7 @@ struct HealthKitPermissionsView: View {
                     // Description
                     VStack(spacing: DesignSystem.Spacing.lg) {
                         Text("Connect your workouts with Apple Health to:")
-                            .font(.headline.weight(DesignSystem.Typography.headlineWeight))
+                            .font(Theme.headline)
                             .foregroundStyle(Theme.textPrimary)
                             .multilineTextAlignment(.center)
                         
@@ -74,11 +74,11 @@ struct HealthKitPermissionsView: View {
                     // Privacy note
                     VStack(spacing: DesignSystem.Spacing.sm) {
                         Image(systemName: "lock.shield.fill")
-                            .font(.title3)
+                            .font(Theme.title3)
                             .foregroundStyle(.secondary)
                         
                         Text("Your health data is private and secure. We only write workout data to HealthKit.")
-                            .font(.caption)
+                            .font(Theme.caption)
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
                             .lineSpacing(DesignSystem.Spacing.xs)
@@ -99,9 +99,9 @@ struct HealthKitPermissionsView: View {
                     if let errorMessage = errorMessage {
                         HStack(spacing: DesignSystem.Spacing.sm) {
                             Image(systemName: "exclamationmark.triangle.fill")
-                                .font(.caption)
+                                .font(Theme.caption)
                             Text(errorMessage)
-                                .font(.caption)
+                                .font(Theme.caption)
                         }
                         .foregroundStyle(.red)
                         .padding(.horizontal, DesignSystem.Spacing.lg)
@@ -210,7 +210,7 @@ private struct FeatureRow: View {
                 .frame(width: DesignSystem.IconSize.large, height: DesignSystem.IconSize.large)
             
             Text(text)
-                .font(.body.weight(DesignSystem.Typography.bodyWeight))
+                .font(Theme.body)
                 .foregroundStyle(Theme.textPrimary)
                 .lineSpacing(DesignSystem.Spacing.xs)
             

@@ -55,7 +55,7 @@ struct ComparisonView: View {
         
         return VStack(alignment: .leading, spacing: 16) {
             Text("Weekly Comparison")
-                .font(.headline.weight(.semibold))
+                .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
             
             Chart {
@@ -86,10 +86,10 @@ struct ComparisonView: View {
                 Image(systemName: comparison.isImproving ? "arrow.up.right" : "arrow.down.right")
                     .foregroundStyle(comparison.isImproving ? .green : .red)
                 Text("\(comparison.isImproving ? "+" : "")\(comparison.changePercentage)%")
-                    .font(.subheadline.weight(.semibold))
+                    .font(Theme.subheadline.weight(.semibold))
                     .foregroundStyle(comparison.isImproving ? .green : .red)
                 Text("vs last week")
-                    .font(.caption)
+                    .font(Theme.caption)
                     .foregroundStyle(.secondary)
             }
         }
@@ -102,7 +102,7 @@ struct ComparisonView: View {
         
         return VStack(alignment: .leading, spacing: 16) {
             Text("Monthly Comparison")
-                .font(.headline.weight(.semibold))
+                .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
             
             Chart {
@@ -133,10 +133,10 @@ struct ComparisonView: View {
                 Image(systemName: comparison.isImproving ? "arrow.up.right" : "arrow.down.right")
                     .foregroundStyle(comparison.isImproving ? .green : .red)
                 Text("\(comparison.isImproving ? "+" : "")\(comparison.changePercentage)%")
-                    .font(.subheadline.weight(.semibold))
+                    .font(Theme.subheadline.weight(.semibold))
                     .foregroundStyle(comparison.isImproving ? .green : .red)
                 Text("vs last month")
-                    .font(.caption)
+                    .font(Theme.caption)
                     .foregroundStyle(.secondary)
             }
         }
@@ -149,7 +149,7 @@ struct ComparisonView: View {
         
         return VStack(alignment: .leading, spacing: 16) {
             Text("30-Day Period Comparison")
-                .font(.headline.weight(.semibold))
+                .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
             
             Chart {
@@ -180,10 +180,10 @@ struct ComparisonView: View {
                 Image(systemName: trend.direction.icon)
                     .foregroundStyle(trend.direction.color)
                 Text(trend.direction.description)
-                    .font(.subheadline.weight(.semibold))
+                    .font(Theme.subheadline.weight(.semibold))
                     .foregroundStyle(trend.direction.color)
                 Text("\(trend.changePercentage > 0 ? "+" : "")\(trend.changePercentage)%")
-                    .font(.caption)
+                    .font(Theme.caption)
                     .foregroundStyle(.secondary)
             }
         }
@@ -194,7 +194,7 @@ struct ComparisonView: View {
     private var comparisonSummary: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Summary")
-                .font(.headline.weight(.semibold))
+                .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
             
             let weekComparison = trendAnalyzer.compareThisWeekVsLastWeek()
@@ -249,26 +249,26 @@ private struct ComparisonSummaryRow: View {
     var body: some View {
         HStack {
             Text(title)
-                .font(.subheadline.weight(.medium))
+                .font(Theme.subheadline.weight(.medium))
                 .foregroundStyle(Theme.textPrimary)
             
             Spacer()
             
             HStack(spacing: 8) {
                 Text("\(value1)")
-                    .font(.caption)
+                    .font(Theme.caption)
                     .foregroundStyle(.secondary)
                 
                 Image(systemName: "arrow.right")
-                    .font(.caption2)
+                    .font(Theme.caption2)
                     .foregroundStyle(.secondary)
                 
                 Text("\(value2)")
-                    .font(.subheadline.weight(.semibold))
+                    .font(Theme.subheadline.weight(.semibold))
                     .foregroundStyle(Theme.textPrimary)
                 
                 Text("(\(isImproving ? "+" : "")\(Int(abs(change)))%)")
-                    .font(.caption.weight(.semibold))
+                    .font(Theme.caption.weight(.semibold))
                     .foregroundStyle(isImproving ? .green : .red)
             }
         }

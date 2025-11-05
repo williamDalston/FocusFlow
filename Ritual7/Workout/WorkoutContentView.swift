@@ -34,8 +34,8 @@ struct WorkoutContentView: View {
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: horizontalSizeClass == .regular ? DesignSystem.Spacing.sectionSpacingIPad : DesignSystem.Spacing.sectionSpacing) {
                         header
+                        quickStartCard  // Moved to top 3 for better prominence
                         dailyQuoteCard
-                        quickStartCard
                         statsGrid
                         
                         // Agent 2: Recent Achievements
@@ -260,22 +260,76 @@ struct WorkoutContentView: View {
     
     // MARK: - Quick Start Card
     
+    @State private var breathingAnimation: Bool = false
+    
     private var quickStartCard: some View {
         GlassCard(material: .ultraThinMaterial) {
-            VStack(spacing: 20) {
-                VStack(spacing: 12) {
+            VStack(spacing: DesignSystem.Spacing.xl) {
+                VStack(spacing: DesignSystem.Spacing.md) {
+                    // Exercise preview icons in a row
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: DesignSystem.Spacing.sm) {
+                            ForEach(Array(Exercise.sevenMinuteWorkout.prefix(8)), id: \.id) { exercise in
+                                Image(systemName: exercise.icon)
+                                    .font(.system(size: DesignSystem.IconSize.medium, weight: .medium))
+                                    .foregroundStyle(
+                                        LinearGradient(
+                                            colors: [Theme.accentA, Theme.accentB],
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        )
+                                    )
+                                    .frame(width: 32, height: 32)
+                                    .background(
+                                        Circle()
+                                            .fill(Theme.accentA.opacity(DesignSystem.Opacity.highlight))
+                                    )
+                            }
+                        }
+                        .padding(.horizontal, DesignSystem.Spacing.xs)
+                    }
+                    .frame(height: 40)
+                    
+                    // Main icon with breathing animation
                     Image(systemName: "figure.run")
-                        .font(.system(size: DesignSystem.IconSize.xxlarge, weight: .bold))
-                        .foregroundStyle(Theme.accentA)
+                        .font(.system(size: DesignSystem.IconSize.huge, weight: .bold))
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [Theme.accentA, Theme.accentB],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .scaleEffect(breathingAnimation ? 1.05 : 1.0)
+                        .animation(
+                            Animation.easeInOut(duration: 2.0)
+                                .repeatForever(autoreverses: true),
+                            value: breathingAnimation
+                        )
+                        .onAppear {
+                            breathingAnimation = true
+                        }
                     
                     Text("Ready to Work Out?")
-                        .font(Theme.title2)
+                        .font(Theme.title.weight(.bold))
                         .foregroundStyle(Theme.textPrimary)
+                        .multilineTextAlignment(.center)
                     
                     Text("12 exercises • 7 minutes • No equipment needed")
                         .font(Theme.subheadline)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
+                    
+                    // Estimated calories and time
+                    HStack(spacing: DesignSystem.Spacing.lg) {
+                        Label("~84 calories", systemImage: "flame.fill")
+                            .font(Theme.caption)
+                            .foregroundStyle(Theme.accentB)
+                        Label("~7 min", systemImage: "clock.fill")
+                            .font(Theme.caption)
+                            .foregroundStyle(Theme.accentC)
+                    }
+                    .padding(.top, DesignSystem.Spacing.xs)
                 }
                 
                 Button {
@@ -286,10 +340,15 @@ struct WorkoutContentView: View {
                     showTimerView = true
                     Haptics.tap()
                 } label: {
-                    Label("Start Workout", systemImage: "play.fill")
-                        .fontWeight(.semibold)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 56)
+                    HStack(spacing: DesignSystem.Spacing.sm) {
+                        Image(systemName: "play.fill")
+                            .font(.system(size: DesignSystem.IconSize.medium, weight: .bold))
+                        Text("Start Workout")
+                            .fontWeight(.bold)
+                            .font(.system(size: 18))
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: DesignSystem.ButtonSize.large.height + 8) // Larger button
                 }
                 .buttonStyle(PrimaryProminentButtonStyle())
                 .keyboardShortcut(.return, modifiers: [])  // Enter key to start workout for simulator testing
@@ -356,30 +415,34 @@ struct WorkoutContentView: View {
             ], spacing: DesignSystem.Spacing.gridSpacing) {
                 StatBox(
                     title: "Total Workouts",
-                    value: "\(store.totalWorkouts)",
+                    value: store.totalWorkouts,
                     icon: "figure.run",
-                    color: Theme.accentA
+                    color: Theme.accentA,
+                    nextMilestone: nextMilestone(for: store.totalWorkouts)
                 )
                 
                 StatBox(
                     title: "This Week",
-                    value: "\(store.workoutsThisWeek)",
+                    value: store.workoutsThisWeek,
                     icon: "calendar",
-                    color: Theme.accentB
+                    color: Theme.accentB,
+                    nextMilestone: 7  // Weekly goal
                 )
                 
                 StatBox(
                     title: "This Month",
-                    value: "\(store.workoutsThisMonth)",
+                    value: store.workoutsThisMonth,
                     icon: "chart.bar.fill",
-                    color: Theme.accentC
+                    color: Theme.accentC,
+                    nextMilestone: nextMilestone(for: store.workoutsThisMonth)
                 )
                 
                 StatBox(
                     title: "Total Minutes",
-                    value: "\(Int(store.totalMinutes))",
+                    value: Int(store.totalMinutes),
                     icon: "clock.fill",
-                    color: Theme.accentA
+                    color: Theme.accentA,
+                    nextMilestone: nextMinutesMilestone(for: Int(store.totalMinutes))
                 )
             }
         }
@@ -453,17 +516,65 @@ struct WorkoutContentView: View {
             .padding(.horizontal, DesignSystem.Spacing.xs)
             
             if store.sessions.isEmpty {
-                VStack(spacing: DesignSystem.Spacing.sm) {
-                    Image(systemName: "figure.run")
-                        .font(Theme.title2)
-                        .foregroundStyle(.secondary)
-                    Text("Complete your first workout to see history here.")
-                        .font(Theme.subheadline)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
+                VStack(spacing: DesignSystem.Spacing.lg) {
+                    // Enhanced icon with animation
+                    ZStack {
+                        Circle()
+                            .fill(
+                                LinearGradient(
+                                    colors: [
+                                        Theme.accentA.opacity(DesignSystem.Opacity.highlight),
+                                        Theme.accentB.opacity(DesignSystem.Opacity.highlight * 0.8)
+                                    ],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                            .frame(width: 80, height: 80)
+                            .shadow(color: Theme.accentA.opacity(DesignSystem.Opacity.subtle), 
+                                   radius: DesignSystem.Shadow.medium.radius, 
+                                   y: DesignSystem.Shadow.medium.y)
+                        
+                        Image(systemName: "figure.run")
+                            .font(.system(size: DesignSystem.IconSize.xxlarge, weight: .bold))
+                            .foregroundStyle(
+                                LinearGradient(
+                                    colors: [Theme.accentA, Theme.accentB],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                    }
+                    
+                    VStack(spacing: DesignSystem.Spacing.sm) {
+                        Text("Start Your Journey")
+                            .font(Theme.title3.weight(.bold))
+                            .foregroundStyle(Theme.textPrimary)
+                        
+                        Text("Complete your first workout to see your progress and build your streak!")
+                            .font(Theme.subheadline)
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.center)
+                            .lineSpacing(DesignSystem.Typography.bodyLineHeight - 1.0)
+                        
+                        // Call to action button
+                        Button {
+                            configureEngineFromPreferences()
+                            engine.stop()
+                            showTimerView = true
+                            Haptics.tap()
+                        } label: {
+                            Label("Start First Workout", systemImage: "play.fill")
+                                .font(Theme.subheadline.weight(.semibold))
+                                .frame(maxWidth: .infinity)
+                                .frame(height: DesignSystem.ButtonSize.standard.height)
+                        }
+                        .buttonStyle(SecondaryGlassButtonStyle())
+                        .padding(.top, DesignSystem.Spacing.md)
+                    }
                 }
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, DesignSystem.Spacing.xl)
+                .padding(DesignSystem.Spacing.xl)
                 .background(
                     ZStack {
                         RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
@@ -473,7 +584,8 @@ struct WorkoutContentView: View {
                             .fill(
                                 LinearGradient(
                                     colors: [
-                                        Theme.accentA.opacity(DesignSystem.Opacity.highlight * 0.2),
+                                        Theme.accentA.opacity(DesignSystem.Opacity.highlight * 0.3),
+                                        Theme.accentB.opacity(DesignSystem.Opacity.highlight * 0.2),
                                         Color.clear
                                     ],
                                     startPoint: .topLeading,
@@ -484,7 +596,17 @@ struct WorkoutContentView: View {
                     }
                     .overlay(
                         RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
-                            .stroke(Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle), lineWidth: DesignSystem.Border.subtle)
+                            .stroke(
+                                LinearGradient(
+                                    colors: [
+                                        Theme.accentA.opacity(DesignSystem.Opacity.light),
+                                        Theme.accentB.opacity(DesignSystem.Opacity.subtle)
+                                    ],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ),
+                                lineWidth: DesignSystem.Border.standard
+                            )
                     )
                 )
                 .softShadow()
@@ -684,15 +806,33 @@ struct WorkoutContentView: View {
         // It would need to be recreated with new parameters or have configurable properties
         // When implemented, use: let prefs = preferencesStore.preferences
     }
+    
+    // MARK: - Progress Indicators Helpers
+    
+    private func nextMilestone(for value: Int) -> Int? {
+        let milestones = [10, 25, 50, 100, 250, 500, 1000]
+        return milestones.first { $0 > value }
+    }
+    
+    private func nextMinutesMilestone(for value: Int) -> Int? {
+        let milestones = [100, 250, 500, 1000, 2500, 5000, 10000]
+        return milestones.first { $0 > value }
+    }
 }
 
 // MARK: - Stat Box (Master Designer Polish)
 
 private struct StatBox: View {
     let title: String
-    let value: String
+    let value: Int  // Changed to Int for animated counter
     let icon: String
     let color: Color
+    let nextMilestone: Int?  // Next milestone to show progress toward
+    
+    var progress: Double {
+        guard let milestone = nextMilestone, milestone > 0 else { return 0 }
+        return min(Double(value) / Double(milestone), 1.0)
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
@@ -709,19 +849,47 @@ private struct StatBox: View {
             }
             .accessibilityHidden(true)
             
-            Text(value)
-                .font(Theme.title2)
-                .foregroundStyle(Theme.textPrimary)
-                .monospacedDigit()
-                .contentTransition(.numericText())
-                .accessibilityLabel("\(title): \(value)")
-                .accessibilityAddTraits(.updatesFrequently)
+            // Animated counter instead of static text
+            AnimatedGradientCounter(
+                value: value,
+                duration: 0.8,
+                font: Theme.title2,
+                gradient: LinearGradient(
+                    colors: [Theme.textPrimary, Theme.textPrimary.opacity(0.9)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .accessibilityLabel("\(title): \(value)")
+            .accessibilityAddTraits(.updatesFrequently)
             
             Text(title)
                 .font(Theme.caption)
                 .foregroundStyle(.secondary)
                 .lineLimit(2)
                 .accessibilityHidden(true) // Value already announced above
+            
+            // Mini progress bar showing progress toward next milestone
+            if let milestone = nextMilestone, milestone > value {
+                VStack(spacing: DesignSystem.Spacing.xs) {
+                    GeometryReader { geometry in
+                        ZStack(alignment: .leading) {
+                            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small * 0.5, style: .continuous)
+                                .fill(Color.gray.opacity(DesignSystem.Opacity.subtle))
+                            
+                            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.small * 0.5, style: .continuous)
+                                .fill(color.gradient)
+                                .frame(width: geometry.size.width * progress)
+                                .animation(AnimationConstants.smoothSpring, value: progress)
+                        }
+                    }
+                    .frame(height: 3)
+                    
+                    Text("\(milestone - value) until \(milestone)")
+                        .font(Theme.caption2)
+                        .foregroundStyle(.secondary)
+                }
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(DesignSystem.Spacing.lg)

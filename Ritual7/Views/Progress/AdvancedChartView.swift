@@ -20,7 +20,7 @@ struct AdvancedChartView: View {
             // Header with export button
             HStack {
                 Text("Advanced Analytics")
-                    .font(.headline.weight(.semibold))
+                    .font(Theme.headline)
                     .foregroundStyle(Theme.textPrimary)
                 
                 Spacer()
@@ -29,7 +29,7 @@ struct AdvancedChartView: View {
                     showingExportSheet = true
                 } label: {
                     Image(systemName: "square.and.arrow.up")
-                        .font(.body)
+                        .font(Theme.body)
                         .foregroundStyle(Theme.accentA)
                 }
             }
@@ -76,7 +76,7 @@ struct AdvancedChartView: View {
     private var interactiveWeeklyChart: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Workouts This Week")
-                .font(.headline.weight(.semibold))
+                .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
             
             Chart(analytics.weeklyTrend) { day in
@@ -98,7 +98,7 @@ struct AdvancedChartView: View {
                     if selectedDataPoint?.id == day.id {
                         VStack(spacing: 4) {
                             Text("\(day.count)")
-                                .font(.caption.weight(.bold))
+                                .font(Theme.caption)
                                 .foregroundStyle(.white)
                                 .padding(DesignSystem.Spacing.xs)
                                 .background(
@@ -146,7 +146,7 @@ struct AdvancedChartView: View {
     private var interactiveMonthlyChart: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Workouts Last 30 Days")
-                .font(.headline.weight(.semibold))
+                .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
             
             Chart(analytics.monthlyTrend) { day in
@@ -212,7 +212,7 @@ struct AdvancedChartView: View {
     private var interactiveYearlyChart: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Workouts Last 12 Months")
-                .font(.headline.weight(.semibold))
+                .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
             
             Chart(analytics.yearlyTrend) { month in
@@ -234,7 +234,7 @@ struct AdvancedChartView: View {
                     if selectedDataPoint?.id == month.id {
                         VStack(spacing: 4) {
                             Text("\(month.count)")
-                                .font(.caption.weight(.bold))
+                                .font(Theme.caption)
                                 .foregroundStyle(.white)
                                 .padding(DesignSystem.Spacing.xs)
                                 .background(
@@ -269,17 +269,17 @@ struct AdvancedChartView: View {
                 Image(systemName: "info.circle.fill")
                     .foregroundStyle(Theme.accentA)
                 Text("Selected Date")
-                    .font(.subheadline.weight(.semibold))
+                    .font(Theme.subheadline.weight(.semibold))
                     .foregroundStyle(Theme.textPrimary)
             }
             
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(dataPoint.date.formatted(date: .abbreviated, time: .omitted))
-                        .font(.caption)
+                        .font(Theme.caption)
                         .foregroundStyle(.secondary)
                     Text("\(dataPoint.count) workout\(dataPoint.count == 1 ? "" : "s")")
-                        .font(.title3.weight(.bold))
+                        .font(Theme.title3)
                         .foregroundStyle(Theme.textPrimary)
                 }
                 
@@ -330,7 +330,7 @@ struct ChartExportSheet: View {
         NavigationStack {
             VStack(spacing: 24) {
                 Text("Export Chart")
-                    .font(.headline.weight(.semibold))
+                    .font(Theme.headline)
                     .foregroundStyle(Theme.textPrimary)
                 
                 Picker("Format", selection: $exportFormat) {
@@ -344,7 +344,7 @@ struct ChartExportSheet: View {
                     exportChart()
                 } label: {
                     Label("Export", systemImage: "square.and.arrow.up")
-                        .font(.body.weight(.semibold))
+                        .font(Theme.body.weight(.semibold))
                         .frame(maxWidth: .infinity)
                         .frame(height: 50)
                 }

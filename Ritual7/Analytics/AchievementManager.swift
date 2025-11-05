@@ -101,6 +101,20 @@ final class AchievementManager: ObservableObject {
         }
         
         save()
+        
+        // ASO: Consider review prompt after achievement unlock
+        Task { @MainActor in
+            let achievementCount = unlockedAchievements.count
+            ReviewGate.considerPromptAfterAchievement(achievementCount: achievementCount)
+            
+            // ASO: Track engagement
+            ASOAnalytics.shared.trackEngagement(event: "achievement_unlocked", value: achievementCount)
+            
+            // ASO: Track conversion funnel for first achievement
+            if achievementCount == 1 {
+                ASOAnalytics.shared.trackConversionFunnel(stage: "achievement_unlock")
+            }
+        }
     }
     
     // MARK: - Helpers

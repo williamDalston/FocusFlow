@@ -603,6 +603,10 @@ struct WorkoutSessionDetailView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") {
+                        // Show interstitial ad after viewing workout details (natural break point)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            InterstitialAdManager.shared.present(from: nil)
+                        }
                         dismiss()
                         Haptics.tap()
                     }

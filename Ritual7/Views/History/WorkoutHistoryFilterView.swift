@@ -33,7 +33,7 @@ struct WorkoutHistoryFilterView: View {
                                     if selectedDateRange == range {
                                         Image(systemName: "checkmark")
                                             .foregroundStyle(Theme.accentA)
-                                            .font(.headline)
+                                            .font(Theme.headline)
                                     }
                                 }
                             }

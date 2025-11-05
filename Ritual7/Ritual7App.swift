@@ -26,7 +26,10 @@ struct Ritual7App: App {
                     PerformanceMonitor.monitorAppLaunch()
                     
                     // Defer all heavy operations to improve initial render
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    Task { @MainActor in
+                        // Wait a bit for WorkoutStore to finish initial async loading
+                        try? await Task.sleep(nanoseconds: AppConstants.TimingConstants.deferredOperationDelay)
+                        
                         // Agent 16: Configure preferences store with workout store
                         preferencesStore.configure(with: workoutStore)
                         
@@ -61,14 +64,14 @@ struct Ritual7App: App {
                 PerformanceOptimizer.optimizeMemoryUsage()
                 
                 // Agent 6: Handle foreground transition
-                NotificationCenter.default.post(name: NSNotification.Name("appDidBecomeActive"), object: nil)
+                NotificationCenter.default.post(name: NSNotification.Name(AppConstants.NotificationNames.appDidBecomeActive), object: nil)
             case .inactive: break
             case .background:
                 // Agent 8: Optimize background processing
                 PerformanceOptimizer.optimizeBackgroundProcessing()
                 
                 // Agent 6: Handle background transition
-                NotificationCenter.default.post(name: NSNotification.Name("appDidEnterBackground"), object: nil)
+                NotificationCenter.default.post(name: NSNotification.Name(AppConstants.NotificationNames.appDidEnterBackground), object: nil)
             @unknown default: break
             }
         }

@@ -11,28 +11,54 @@ struct CompletionCelebrationView: View {
     @State private var showStats = false
     @State private var showAchievements = false
     @State private var animationPhase: Int = 0
+    @State private var confettiTrigger1 = false
+    @State private var confettiTrigger2 = false
+    @State private var confettiTrigger3 = false
+    @State private var victoryLapScale: CGFloat = 0.8
+    @State private var victoryLapRotation: Double = 0
     
     var body: some View {
         ZStack {
-            // Background
-            Color.black.opacity(0.85)
-                .ignoresSafeArea()
+            // Background with gradient
+            LinearGradient(
+                colors: [
+                    Color.black.opacity(0.9),
+                    Color.black.opacity(0.85),
+                    Theme.accentA.opacity(0.1)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .ignoresSafeArea()
+            
+            // Multiple confetti bursts
+            ConfettiView(trigger: $confettiTrigger1)
+            ConfettiView(trigger: $confettiTrigger2)
+            ConfettiView(trigger: $confettiTrigger3)
             
             ScrollView {
-                VStack(spacing: 32) {
-                    // Celebration header
+                VStack(spacing: DesignSystem.Spacing.xxl) {
+                    // Celebration header with victory lap
                     celebrationHeader
+                        .scaleEffect(victoryLapScale)
+                        .rotationEffect(.degrees(victoryLapRotation))
                     
-                    // Stats grid
+                    // Stats grid with staggered animation
                     if showStats {
                         statsGrid
-                            .transition(.scale.combined(with: .opacity))
+                            .transition(.asymmetric(
+                                insertion: .scale(scale: 0.8).combined(with: .opacity),
+                                removal: .opacity
+                            ))
                     }
                     
-                    // Achievement unlocks
+                    // Achievement unlocks with enhanced animation
                     if showAchievements && !workoutStats.unlockedAchievements.isEmpty {
                         achievementsSection
-                            .transition(.scale.combined(with: .opacity))
+                            .transition(.asymmetric(
+                                insertion: .move(edge: .bottom).combined(with: .opacity),
+                                removal: .opacity
+                            ))
                     }
                     
                     // Next workout suggestion
@@ -52,39 +78,72 @@ struct CompletionCelebrationView: View {
     // MARK: - Celebration Header
     
     private var celebrationHeader: some View {
-        VStack(spacing: 24) {
-            // Animated checkmark
+        VStack(spacing: DesignSystem.Spacing.xl) {
+            // Enhanced animated checkmark with glow effect
             ZStack {
+                // Outer glow rings
+                ForEach(0..<3) { index in
+                    Circle()
+                        .stroke(
+                            LinearGradient(
+                                colors: [
+                                    Theme.accentA.opacity(0.4 - Double(index) * 0.1),
+                                    Theme.accentB.opacity(0.3 - Double(index) * 0.1)
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: 2
+                        )
+                        .frame(width: 120 + CGFloat(index * 20), height: 120 + CGFloat(index * 20))
+                        .opacity(animationPhase >= 1 ? 1.0 : 0.0)
+                        .blur(radius: CGFloat(index * 2))
+                }
+                
+                // Main circle
                 Circle()
                     .fill(
                         LinearGradient(
-                            colors: [Theme.accentA, Theme.accentB],
+                            colors: [Theme.accentA, Theme.accentB, Theme.accentC],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         )
                     )
-                    .frame(width: 120, height: 120)
-                    .scaleEffect(animationPhase >= 1 ? 1.0 : 0.5)
+                    .frame(width: 140, height: 140)
+                    .scaleEffect(animationPhase >= 1 ? 1.0 : 0.3)
                     .opacity(animationPhase >= 1 ? 1.0 : 0.0)
+                    .shadow(color: Theme.accentA.opacity(DesignSystem.Opacity.medium), 
+                           radius: DesignSystem.Shadow.large.radius, 
+                           y: DesignSystem.Shadow.large.y)
                 
+                // Checkmark with pulse
                 Image(systemName: "checkmark")
-                    .font(.system(size: DesignSystem.IconSize.huge, weight: .bold))
+                    .font(.system(size: DesignSystem.IconSize.huge * 1.2, weight: .bold))
                     .foregroundStyle(.white)
-                    .scaleEffect(animationPhase >= 2 ? 1.0 : 0.5)
+                    .scaleEffect(animationPhase >= 2 ? 1.0 : 0.3)
                     .opacity(animationPhase >= 2 ? 1.0 : 0.0)
+                    .shadow(color: .white.opacity(0.5), radius: 8, x: 0, y: 4)
             }
             
-            VStack(spacing: 12) {
+            VStack(spacing: DesignSystem.Spacing.md) {
                 Text("Workout Complete!")
-                    .font(.largeTitle.weight(.bold))
-                    .foregroundStyle(.white)
+                    .font(.system(size: 36, weight: .bold, design: .rounded))
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [.white, .white.opacity(0.9)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
                     .opacity(animationPhase >= 3 ? 1.0 : 0.0)
+                    .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 2)
                 
                 Text(completionMessage)
-                    .font(.title3)
-                    .foregroundStyle(.white.opacity(0.9))
+                    .font(Theme.title2)
+                    .foregroundStyle(.white.opacity(DesignSystem.Opacity.almostOpaque))
                     .multilineTextAlignment(.center)
                     .opacity(animationPhase >= 3 ? 1.0 : 0.0)
+                    .shadow(color: .black.opacity(0.2), radius: 2, x: 0, y: 1)
             }
         }
     }
@@ -95,37 +154,31 @@ struct CompletionCelebrationView: View {
         LazyVGrid(columns: [
             GridItem(.flexible()),
             GridItem(.flexible())
-        ], spacing: 16) {
-            StatCard(
-                title: "Duration",
-                value: formatDuration(workoutStats.duration),
-                icon: "clock.fill",
-                color: Theme.accentA
-            )
-            
-            StatCard(
-                title: "Exercises",
-                value: "\(workoutStats.exercisesCompleted)",
-                icon: "figure.run",
-                color: Theme.accentB
-            )
-            
-            StatCard(
-                title: "Calories",
-                value: "~\(workoutStats.estimatedCalories)",
-                icon: "flame.fill",
-                color: Theme.accentC
-            )
-            
-            if workoutStats.repsCompleted > 0 {
+        ], spacing: DesignSystem.Spacing.md) {
+            ForEach(Array(statsArray.enumerated()), id: \.element.id) { index, stat in
                 StatCard(
-                    title: "Reps",
-                    value: "\(workoutStats.repsCompleted)",
-                    icon: "repeat",
-                    color: Theme.accentA
+                    title: stat.title,
+                    value: stat.value,
+                    icon: stat.icon,
+                    color: stat.color
                 )
+                .staggeredEntrance(index: index, delay: 0.1)
             }
         }
+    }
+    
+    private var statsArray: [(id: String, title: String, value: String, icon: String, color: Color)] {
+        var stats: [(id: String, title: String, value: String, icon: String, color: Color)] = [
+            ("duration", "Duration", formatDuration(workoutStats.duration), "clock.fill", Theme.accentA),
+            ("exercises", "Exercises", "\(workoutStats.exercisesCompleted)", "figure.run", Theme.accentB),
+            ("calories", "Calories", "~\(workoutStats.estimatedCalories)", "flame.fill", Theme.accentC)
+        ]
+        
+        if workoutStats.repsCompleted > 0 {
+            stats.append(("reps", "Reps", "\(workoutStats.repsCompleted)", "repeat", Theme.accentA))
+        }
+        
+        return stats
     }
     
     // MARK: - Achievements Section
@@ -133,17 +186,17 @@ struct CompletionCelebrationView: View {
     private var achievementsSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Achievements Unlocked!")
-                .font(.headline.weight(.semibold))
+                .font(Theme.headline)
                 .foregroundStyle(.white)
             
             ForEach(workoutStats.unlockedAchievements, id: \.self) { achievement in
                 HStack(spacing: 12) {
                     Image(systemName: "star.fill")
                         .foregroundStyle(.yellow)
-                        .font(.title3)
+                        .font(Theme.title3)
                     
                     Text(achievement)
-                        .font(.subheadline)
+                        .font(Theme.subheadline)
                         .foregroundStyle(.white.opacity(0.9))
                     
                     Spacer()
@@ -205,7 +258,7 @@ struct CompletionCelebrationView: View {
     private var nextWorkoutSuggestion: some View {
         VStack(spacing: 12) {
             Text("Keep Going!")
-                .font(.headline.weight(.semibold))
+                .font(Theme.headline)
                 .foregroundStyle(.white)
             
             Text(suggestionMessage)
@@ -234,7 +287,7 @@ struct CompletionCelebrationView: View {
                 onStartNew()
             } label: {
                 Label("Start New Workout", systemImage: "arrow.clockwise")
-                    .font(.headline)
+                    .font(Theme.headline)
                     .frame(maxWidth: .infinity)
                     .frame(height: 56)
             }
@@ -251,7 +304,7 @@ struct CompletionCelebrationView: View {
                 onDismiss()
             } label: {
                 Text("Done")
-                    .font(.headline)
+                    .font(Theme.headline)
                     .frame(maxWidth: .infinity)
                     .frame(height: 50)
             }
@@ -289,12 +342,26 @@ struct CompletionCelebrationView: View {
     }
     
     private func startCelebrationAnimation() {
-        // Agent 4: Use AnimationConstants for celebration animations
-        // Phase 1: Circle appears
+        // Initial confetti burst
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            confettiTrigger1 = true
+        }
+        
+        // Phase 1: Circle appears with victory lap
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             withAnimation(AnimationConstants.smoothSpring) {
                 animationPhase = 1
             }
+            // Victory lap animation
+            withAnimation(.spring(response: 0.6, dampingFraction: 0.7)) {
+                victoryLapScale = 1.0
+                victoryLapRotation = 360
+            }
+        }
+        
+        // Second confetti burst
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            confettiTrigger2 = true
         }
         
         // Phase 2: Checkmark appears
@@ -311,18 +378,27 @@ struct CompletionCelebrationView: View {
             }
         }
         
-        // Phase 4: Stats appear
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+        // Phase 4: Stats appear with staggered entrance
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) {
             withAnimation(AnimationConstants.elegantSpring) {
                 showStats = true
+            }
+            // Third confetti burst when stats appear
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                confettiTrigger3 = true
             }
         }
         
         // Phase 5: Achievements appear
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.3) {
             withAnimation(AnimationConstants.elegantSpring) {
                 showAchievements = true
             }
+        }
+        
+        // Continuous subtle pulse for victory lap
+        withAnimation(.easeInOut(duration: 2.0).repeatForever(autoreverses: true)) {
+            victoryLapScale = 1.05
         }
     }
 }
@@ -351,15 +427,15 @@ private struct StatCard: View {
     var body: some View {
         VStack(spacing: 12) {
             Image(systemName: icon)
-                .font(.title2)
+                .font(Theme.title2)
                 .foregroundStyle(color)
             
             Text(value)
-                .font(.title2.weight(.bold))
+                .font(Theme.title2)
                 .foregroundStyle(.white)
             
             Text(title)
-                .font(.caption)
+                .font(Theme.caption)
                 .foregroundStyle(.white.opacity(0.8))
         }
         .frame(maxWidth: .infinity)

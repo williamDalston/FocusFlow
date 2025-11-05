@@ -71,8 +71,15 @@ final class WorkoutPreferencesStore: ObservableObject {
         personalizationEngine = PersonalizationEngine(workoutStore: workoutStore)
         habitLearner = HabitLearner(workoutStore: workoutStore)
         
-        // Analyze patterns
-        habitLearner?.analyzePatterns()
+        // Defer pattern analysis to ensure WorkoutStore has finished loading
+        // Give WorkoutStore time to complete its async initialization
+        Task { @MainActor in
+            // Wait a bit for WorkoutStore to finish loading its data asynchronously
+            try? await Task.sleep(nanoseconds: 200_000_000) // 0.2 seconds
+            
+            // Analyze patterns after WorkoutStore is ready
+            habitLearner?.analyzePatterns()
+        }
         
         // Agent 16: Listen for workout completions to learn patterns
         NotificationCenter.default.addObserver(

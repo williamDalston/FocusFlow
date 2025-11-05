@@ -1,39 +1,166 @@
-# App Store Keywords for 7-Minute Workout
+# App Store Keywords for Ritual7
 # Maximum 100 characters including commas and spaces
-
-fitness,workout,HIIT,exercise,7 minute,home workout,no equipment,Apple Watch,HealthKit,strength training,cardio,interval training,bodyweight,quick workout,home fitness,fitness app,workout timer,exercise app,health,wellness
-
-# Character count: 199 (too long - needs to be under 100)
-
-# Optimized Version (under 100 characters):
-fitness,workout,HIIT,exercise,7 minute,home workout,no equipment,Apple Watch,HealthKit,strength,cardio,interval,bodyweight,quick workout,fitness app,workout timer,exercise app,health,wellness
-
-# Character count: 174 (still too long)
-
-# Final Optimized Version (under 100 characters):
-fitness,workout,HIIT,exercise,7 minute,home workout,no equipment,Apple Watch,HealthKit,strength,cardio,interval,bodyweight,quick workout,fitness app
-
-# Character count: 127 (still too long)
-
-# Most Optimized Version (under 100 characters):
-fitness,workout,HIIT,exercise,7 minute,home workout,no equipment,Apple Watch,HealthKit,strength,cardio,interval,bodyweight,quick workout
-
-# Character count: 115 (still too long)
-
-# Final Optimized (under 100 characters):
-fitness,workout,HIIT,exercise,7 minute,home workout,no equipment,Apple Watch,HealthKit,strength,cardio,interval,bodyweight
-
-# Character count: 99 ✅
 
 ---
 
-## Recommended Keywords (99 characters)
+## CURRENT KEYWORDS (99 characters) ✅
 fitness,workout,HIIT,exercise,7 minute,home workout,no equipment,Apple Watch,HealthKit,strength,cardio,interval,bodyweight
 
-## Alternative Keywords (if needed)
+**Status:** Currently active - good baseline, but can be optimized further
+
+---
+
+## OPTIMIZED OPTIONS (Test These)
+
+### Version 1 - High Volume Keywords (98 characters)
+**Focus:** Target high-search-volume keywords
+```
+7 minute workout,HIIT,home workout,no equipment,quick workout,bodyweight,exercise,interval training,cardio,strength training,fitness app,workout timer
+```
+
+**Why:** Includes popular search terms like "7 minute workout" (exact phrase), "interval training", "strength training", "fitness app", "workout timer"
+
+**Test Period:** 2 weeks, then measure rankings
+
+---
+
+### Version 2 - Long-Tail Focus (97 characters)
+**Focus:** Target specific, less competitive long-tail keywords
+```
+7 minute workout,HIIT training,home fitness,no equipment workout,bodyweight exercise,interval training,quick fitness,cardio workout,strength training,Apple Watch,HealthKit
+```
+
+**Why:** Includes long-tail variations like "HIIT training", "no equipment workout", "bodyweight exercise" - less competition, better conversion
+
+**Test Period:** 2 weeks after Version 1
+
+---
+
+### Version 3 - Branded + Category Mix (99 characters)
+**Focus:** Balance branded keywords with high-volume category terms
+```
+7 minute workout,HIIT,home workout,no equipment,quick workout,bodyweight,exercise,interval training,cardio,strength,fitness,workout timer,Apple Watch,HealthKit
+```
+
+**Why:** Includes both platform differentiators (Apple Watch, HealthKit) and category keywords
+
+**Test Period:** 2 weeks after Version 2
+
+---
+
+## TESTING STRATEGY
+
+**Month 1:** Use Version 1 (High Volume)
+- Track rankings for: "7 minute workout", "HIIT", "home workout"
+- Measure conversion rate
+- Monitor organic downloads
+
+**Month 2:** Switch to Version 2 (Long-Tail)
+- Compare rankings to Month 1
+- Measure conversion rate (should be higher with long-tail)
+- Monitor organic downloads
+
+**Month 3:** Switch to Version 3 (Balanced)
+- Compare rankings to Months 1 & 2
+- Measure conversion rate
+- Monitor organic downloads
+
+**Month 4:** Use winner from Months 1-3
+- Keep the best-performing version
+- Continue optimizing based on data
+
+---
+
+## KEYWORD PRIORITY LIST
+
+### Primary Keywords (Must Include):
+1. **7 minute workout** - Exact brand/search term (highest volume)
+2. **HIIT** - Category keyword (high volume)
+3. **home workout** - Benefit keyword (high volume)
+4. **no equipment** - Unique selling point (differentiator)
+
+### Secondary Keywords (Should Include):
+5. **quick workout** - Benefit keyword (medium volume)
+6. **bodyweight** - Type keyword (medium volume)
+7. **exercise** - Category keyword (high volume, but generic)
+8. **interval training** - Type keyword (medium volume)
+
+### Tertiary Keywords (Nice to Have):
+9. **cardio** - Type keyword (medium volume)
+10. **strength** - Type keyword (medium volume)
+11. **fitness app** - Category keyword (low volume, but specific)
+12. **workout timer** - Feature keyword (low volume)
+
+### Platform Keywords (Differentiators):
+13. **Apple Watch** - Platform keyword (differentiator, but lower search volume)
+14. **HealthKit** - Platform keyword (differentiator, but lower search volume)
+
+**Recommendation:** Prioritize primary + secondary keywords. Include platform keywords only if space allows.
+
+---
+
+## CHARACTER SAVING OPTIONS
+
+If you need more space for keywords:
+
 - Replace "7 minute" with "7min" (saves 2 characters)
 - Replace "home workout" with "home" (saves 8 characters)
+- Replace "interval training" with "interval" (saves 8 characters)
+- Replace "strength training" with "strength" (saves 8 characters)
 - Remove "no equipment" if space is needed (saves 13 characters)
+- Remove "Apple Watch" if space is needed (saves 11 characters)
+- Remove "HealthKit" if space is needed (saves 9 characters)
+
+---
+
+## KEYWORD RESEARCH NOTES
+
+### Best Practices:
+- ✅ Use exact match phrases users search for
+- ✅ Include common misspellings if space allows
+- ✅ Prioritize high-volume, relevant keywords
+- ✅ Test different keyword combinations monthly
+- ✅ Monitor rankings daily
+- ✅ Track conversion rates
+
+### Avoid:
+- ❌ Generic terms that won't help ranking ("fitness" alone)
+- ❌ Keyword stuffing (use naturally)
+- ❌ Duplicate keywords
+- ❌ Irrelevant keywords
+- ❌ Setting and forgetting (test monthly)
+
+---
+
+## COMPETITOR ANALYSIS
+
+**Research Competitors:**
+- Check their keywords (if visible)
+- Analyze their rankings
+- Identify keyword gaps
+- Find opportunities
+
+**Tools:**
+- App Store Connect (free)
+- AppTweak (paid, but comprehensive)
+- Sensor Tower (paid, competitor analysis)
+- MobileAction (paid, keyword tracking)
+
+---
+
+## QUICK REFERENCE
+
+**Current Active:** Version (99 chars) ✅
+**Recommended Test Order:** Version 1 → Version 2 → Version 3
+**Test Duration:** 2 weeks per version
+**Success Metric:** Rankings improve + conversion rate increases
+
+**Remember:** Keywords are only one part of ASO. Also optimize:
+- App name/subtitle
+- Screenshots
+- App preview video
+- Description
+- Ratings & reviews
 
 ## Keyword Research Notes
 - Include brand terms: "7 minute", "HIIT"

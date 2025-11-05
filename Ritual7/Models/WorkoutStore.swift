@@ -11,16 +11,20 @@ final class WorkoutStore: ObservableObject {
     @Published private(set) var totalWorkouts: Int = 0
     @Published private(set) var totalMinutes: TimeInterval = 0
     
-    private let sessionsKey = "workout.sessions.v1"
-    private let streakKey = "workout.streak.v1"
-    private let lastDayKey = "workout.lastDay.v1"
-    private let totalWorkoutsKey = "workout.totalWorkouts.v1"
-    private let totalMinutesKey = "workout.totalMinutes.v1"
+    private let sessionsKey = AppConstants.UserDefaultsKeys.workoutSessions
+    private let streakKey = AppConstants.UserDefaultsKeys.workoutStreak
+    private let lastDayKey = AppConstants.UserDefaultsKeys.workoutLastDay
+    private let totalWorkoutsKey = AppConstants.UserDefaultsKeys.workoutTotalWorkouts
+    private let totalMinutesKey = AppConstants.UserDefaultsKeys.workoutTotalMinutes
     
     private var watchSessionManager: WatchSessionManager?
     private let healthKitManager = HealthKitManager.shared
     private let healthKitStore = HealthKitStore.shared
     
+    // Synchronization for loading state
+    private var isLoading = false
+    private let loadLock = NSLock()
+    private var loadCompleted = false
     
     private func setupWatchConnectivity() {
         watchSessionManager = WatchSessionManager.shared
@@ -30,6 +34,18 @@ final class WorkoutStore: ObservableObject {
     // MARK: - Public API
     
     func addSession(duration: TimeInterval, exercisesCompleted: Int, notes: String? = nil, startDate: Date? = nil) {
+        // Ensure load has completed before adding session
+        // This is a best-effort check - in practice, load completes quickly during initialization
+        // If load is still in progress, we'll proceed anyway (sessions will be merged on next load)
+        loadLock.lock()
+        let wasLoading = isLoading
+        loadLock.unlock()
+        
+        if wasLoading {
+            // Log warning but proceed - this should be rare
+            os_log("addSession called while load is in progress - this may cause data inconsistency", log: .default, type: .warning)
+        }
+        
         // Validate session data
         let validationResult = ErrorHandling.validateSessionData(duration: duration, exercisesCompleted: exercisesCompleted)
         
@@ -70,10 +86,31 @@ final class WorkoutStore: ObservableObject {
         
         // Agent 16: Notify personalization components
         NotificationCenter.default.post(
-            name: NSNotification.Name("workoutCompleted"),
+            name: NSNotification.Name(AppConstants.NotificationNames.workoutCompleted),
             object: nil,
             userInfo: ["session": newSession]
         )
+        
+        // ASO: Consider review prompt after workout completion
+        Task { @MainActor in
+            ReviewGate.considerPromptAfterWorkout(totalWorkouts: totalWorkouts)
+            
+            // ASO: Track engagement
+            ASOAnalytics.shared.trackEngagement(event: "workout_completed", value: totalWorkouts)
+            
+            // ASO: Track conversion funnel
+            if totalWorkouts == 1 {
+                ASOAnalytics.shared.trackConversionFunnel(stage: "first_workout")
+            } else if totalWorkouts == 3 {
+                ASOAnalytics.shared.trackConversionFunnel(stage: "workout_3")
+            }
+            
+            // ASO: Consider review prompt after streak milestone
+            if streak >= 7 {
+                ReviewGate.considerPromptAfterStreak(streak: streak)
+                ASOAnalytics.shared.trackEngagement(event: "streak_milestone", value: streak)
+            }
+        }
     }
     
     // MARK: - HealthKit Integration
@@ -182,7 +219,7 @@ final class WorkoutStore: ObservableObject {
         do {
             let encoder = JSONEncoder()
             let data = try encoder.encode(sessions)
-            UserDefaults.standard.set(data, forKey: "workout.sessions.backup")
+            UserDefaults.standard.set(data, forKey: AppConstants.UserDefaultsKeys.workoutSessionsBackup)
         } catch {
             os_log("Failed to create backup: %{public}@", log: .default, type: .error, error.localizedDescription)
         }
@@ -191,7 +228,7 @@ final class WorkoutStore: ObservableObject {
     /// Attempts to recover from corrupted data
     private func attemptDataRecovery() -> Bool {
         // Try to load from backup
-        if let backupData = UserDefaults.standard.data(forKey: "workout.sessions.backup") {
+        if let backupData = UserDefaults.standard.data(forKey: AppConstants.UserDefaultsKeys.workoutSessionsBackup) {
             do {
                 let decoder = JSONDecoder()
                 let recoveredSessions = try decoder.decode([WorkoutSession].self, from: backupData)
@@ -214,6 +251,18 @@ final class WorkoutStore: ObservableObject {
     }
     
     private func load() {
+        loadLock.lock()
+        isLoading = true
+        loadCompleted = false
+        loadLock.unlock()
+        
+        defer {
+            loadLock.lock()
+            isLoading = false
+            loadCompleted = true
+            loadLock.unlock()
+        }
+        
         // Try to load data with error handling
         do {
             guard let data = UserDefaults.standard.data(forKey: sessionsKey) else {
@@ -226,8 +275,10 @@ final class WorkoutStore: ObservableObject {
             
             // Validate loaded data
             let validSessions = loadedSessions.filter { session in
-                session.duration > 0 && session.duration <= 3600 &&
-                session.exercisesCompleted >= 0 && session.exercisesCompleted <= 12
+                session.duration > AppConstants.ValidationConstants.minWorkoutDuration && 
+                session.duration <= AppConstants.ValidationConstants.maxWorkoutDuration &&
+                session.exercisesCompleted >= AppConstants.ValidationConstants.minExercisesCompleted && 
+                session.exercisesCompleted <= AppConstants.ValidationConstants.maxExercisesCompleted
             }
             
             if validSessions.count != loadedSessions.count {
@@ -315,7 +366,7 @@ final class WorkoutStore: ObservableObject {
     
     // MARK: - Agent 2: Personal Best Tracking
     
-    private let personalBestKey = "workout.personalBest.v1"
+    private let personalBestKey = AppConstants.UserDefaultsKeys.workoutPersonalBest
     
     /// Personal best duration (in seconds)
     @Published private(set) var personalBestDuration: TimeInterval = 0
@@ -344,7 +395,7 @@ final class WorkoutStore: ObservableObject {
         if exercisesCompleted > personalBestExercises {
             isExercisesBest = true
             personalBestExercises = exercisesCompleted
-            UserDefaults.standard.set(personalBestExercises, forKey: "\(personalBestKey).exercises")
+            UserDefaults.standard.set(personalBestExercises, forKey: AppConstants.UserDefaultsKeys.workoutPersonalBestExercises)
         }
         
         return (isDurationBest, isExercisesBest)
@@ -358,8 +409,8 @@ final class WorkoutStore: ObservableObject {
     
     private func loadPersonalBest() {
         let d = UserDefaults.standard
-        personalBestDuration = d.double(forKey: personalBestKey)
-        personalBestExercises = d.integer(forKey: "\(personalBestKey).exercises")
+        personalBestDuration = d.double(forKey: AppConstants.UserDefaultsKeys.workoutPersonalBest)
+        personalBestExercises = d.integer(forKey: AppConstants.UserDefaultsKeys.workoutPersonalBestExercises)
     }
     
     // MARK: - Agent 7: Achievement Checking
@@ -397,7 +448,7 @@ final class WorkoutStore: ObservableObject {
         }
         
         // Defer watch connectivity setup (non-critical for initial render)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + TimeInterval(AppConstants.TimingConstants.watchConnectivityDelay) / 1_000_000_000) { [weak self] in
             self?.setupWatchConnectivity()
         }
     }

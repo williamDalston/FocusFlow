@@ -123,13 +123,20 @@ struct DailyQuoteView: View {
 struct StreakCelebrationView: View {
     let streak: Int
     @State private var showFire = false
+    @State private var pulseAnimation = false
+    @State private var previousStreak = 0
+    
+    // Check if this is a milestone (7, 14, 30, 50, 100 days)
+    private var isMilestone: Bool {
+        [7, 14, 30, 50, 100].contains(streak)
+    }
     
     var body: some View {
-        VStack(spacing: 10) {
-            HStack(spacing: 10) {
-                // Flame icon with rounded background and depth
+        VStack(spacing: DesignSystem.Spacing.md) {
+            HStack(spacing: DesignSystem.Spacing.md) {
+                // Flame icon with rounded background and depth - larger and more prominent
                 ZStack {
-                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.medium, style: .continuous)
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
                         .fill(
                             LinearGradient(
                                 colors: [
@@ -141,7 +148,8 @@ struct StreakCelebrationView: View {
                                 endPoint: .bottomTrailing
                             )
                         )
-                        .frame(width: DesignSystem.IconSize.xxlarge, height: DesignSystem.IconSize.xxlarge)
+                        .frame(width: DesignSystem.IconSize.huge, height: DesignSystem.IconSize.huge)
+                        .scaleEffect(pulseAnimation ? 1.1 : 1.0)
                         .shadow(color: Color.orange.opacity(DesignSystem.Opacity.medium * 1.3), 
                                radius: DesignSystem.Shadow.medium.radius, 
                                y: DesignSystem.Shadow.medium.y)
@@ -152,7 +160,7 @@ struct StreakCelebrationView: View {
                                radius: DesignSystem.Shadow.verySoft.radius, 
                                y: DesignSystem.Shadow.verySoft.y)
                         .overlay(
-                            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.medium, style: .continuous)
+                            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
                                 .stroke(
                                     LinearGradient(
                                         colors: [
@@ -166,13 +174,13 @@ struct StreakCelebrationView: View {
                                 )
                         )
                         .overlay(
-                            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.medium, style: .continuous)
+                            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.large, style: .continuous)
                                 .stroke(Color.white.opacity(DesignSystem.Opacity.light), lineWidth: DesignSystem.Border.hairline)
                                 .blur(radius: 1)
                         )
                     
                     Image(systemName: "flame.fill")
-                        .font(Theme.title2)
+                        .font(.system(size: DesignSystem.IconSize.xxlarge, weight: .bold))
                         .foregroundStyle(
                             LinearGradient(
                                 colors: [Color.orange, Color.orange.opacity(0.8)],
@@ -184,21 +192,24 @@ struct StreakCelebrationView: View {
                         .shadow(color: Color.orange.opacity(DesignSystem.Opacity.strong), radius: DesignSystem.Shadow.verySoft.radius * 0.33, x: 0, y: DesignSystem.Shadow.verySoft.y * 0.33)
                 }
                 
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
+                    // Larger, bolder streak number with pulse animation
                     Text("\(streak)")
-                        .font(Theme.title)
+                        .font(.system(size: 48, weight: .bold, design: .rounded))
                         .foregroundStyle(
                             LinearGradient(
-                                colors: [Theme.textPrimary, Theme.textPrimary.opacity(0.9)],
+                                colors: isMilestone ? [Color.orange, Color.orange.opacity(0.9)] : [Theme.textPrimary, Theme.textPrimary.opacity(0.9)],
                                 startPoint: .top,
                                 endPoint: .bottom
                             )
                         )
                         .monospacedDigit()
+                        .scaleEffect(pulseAnimation ? 1.05 : 1.0)
                         .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.subtle * 1.25), radius: DesignSystem.Shadow.verySoft.radius * 0.25, x: 0, y: DesignSystem.Shadow.verySoft.y * 0.17)
+                        .contentTransition(.numericText())
                     
                     Text("day streak")
-                        .font(Theme.subheadline.weight(.semibold))
+                        .font(Theme.headline.weight(.bold))
                         .foregroundStyle(.secondary)
                         .shadow(color: Theme.shadow.opacity(DesignSystem.Opacity.subtle * 0.83), radius: DesignSystem.Shadow.verySoft.radius * 0.17, x: 0, y: DesignSystem.Shadow.verySoft.y * 0.17)
                 }
@@ -206,8 +217,34 @@ struct StreakCelebrationView: View {
                 Spacer()
             }
             .animation(.spring(response: 0.6, dampingFraction: 0.7).repeatForever(autoreverses: true), value: showFire)
+            .animation(.spring(response: 0.4, dampingFraction: 0.6), value: pulseAnimation)
             
-            if streak >= 7 {
+            // Enhanced milestone celebration
+            if isMilestone {
+                HStack(spacing: DesignSystem.Spacing.xs) {
+                    Image(systemName: "trophy.fill")
+                        .font(.system(size: DesignSystem.IconSize.small, weight: .bold))
+                        .foregroundStyle(Color.orange)
+                    Text("Milestone Achieved!")
+                        .font(Theme.subheadline.weight(.bold))
+                        .foregroundStyle(Color.orange)
+                }
+                .padding(.horizontal, DesignSystem.Spacing.md)
+                .padding(.vertical, DesignSystem.Spacing.sm)
+                .background(
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.medium, style: .continuous)
+                        .fill(Color.orange.opacity(DesignSystem.Opacity.highlight))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.medium, style: .continuous)
+                                .stroke(Color.orange.opacity(DesignSystem.Opacity.medium), lineWidth: DesignSystem.Border.standard)
+                        )
+                        .shadow(color: Color.orange.opacity(DesignSystem.Opacity.subtle), 
+                               radius: DesignSystem.Shadow.verySoft.radius, 
+                               y: DesignSystem.Shadow.verySoft.y)
+                )
+                .scaleEffect(pulseAnimation ? 1.05 : 1.0)
+                .transition(.scale.combined(with: .opacity))
+            } else if streak >= 7 {
                 Text(Quotes.forStreak(streak))
                     .font(Theme.caption.weight(.medium))
                     .foregroundStyle(
@@ -235,6 +272,21 @@ struct StreakCelebrationView: View {
         }
         .onAppear {
             showFire = true
+            previousStreak = streak
+        }
+        .onChange(of: streak) { newStreak in
+            // Pulse animation when streak updates
+            if newStreak > previousStreak {
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                    pulseAnimation = true
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                    withAnimation {
+                        pulseAnimation = false
+                    }
+                }
+                previousStreak = newStreak
+            }
         }
     }
 }

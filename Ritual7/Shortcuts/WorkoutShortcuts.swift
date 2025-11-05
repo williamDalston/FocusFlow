@@ -24,7 +24,7 @@ enum WorkoutShortcuts {
         _ = INShortcut(intent: intent)
         
         // Create a user activity for the shortcut
-        let activity = NSUserActivity(activityType: "com.williamalston.Ritual7.startWorkout")
+        let activity = NSUserActivity(activityType: AppConstants.ActivityTypes.startWorkout)
         activity.title = "Start Ritual7"
         activity.suggestedInvocationPhrase = "Start workout"
         activity.isEligibleForPrediction = true
@@ -47,7 +47,7 @@ enum WorkoutShortcuts {
     
     /// Handles shortcut invocation
     static func handleShortcut(_ userActivity: NSUserActivity) -> Bool {
-        guard userActivity.activityType == "com.williamalston.Ritual7.startWorkout" else {
+        guard userActivity.activityType == AppConstants.ActivityTypes.startWorkout else {
             return false
         }
         

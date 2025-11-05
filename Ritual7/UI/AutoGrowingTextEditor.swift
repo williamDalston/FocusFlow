@@ -21,7 +21,7 @@ struct AutoGrowingTextEditor: View {
             if text.isEmpty {
                 Text(placeholder)
                     .foregroundStyle(.secondary.opacity(0.9))
-                    .font(.body.weight(.medium))
+                    .font(Theme.body.weight(.medium))
                     .padding(.horizontal, 16)
                     .padding(.vertical, 16)
             }

@@ -103,32 +103,32 @@ private struct ExerciseCustomizationRow: View {
         Button(action: onTap) {
             HStack {
                 Image(systemName: exercise.icon)
-                    .font(.title3)
+                    .font(Theme.title3)
                     .foregroundStyle(Theme.accentA)
                     .frame(width: 32)
                 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(exercise.name)
-                        .font(.headline)
+                        .font(Theme.headline)
                         .foregroundStyle(Theme.textPrimary)
                     
                     HStack(spacing: 12) {
                         if workout.useCustomDurations {
                             Label("\(Int(workout.getExerciseDuration(for: exercise.id)))s", systemImage: "timer")
-                                .font(.caption)
+                                .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                         }
                         
                         if workout.useCustomRest {
                             Label("\(Int(workout.getRestDuration(for: exercise.id)))s rest", systemImage: "pause.circle")
-                                .font(.caption)
+                                .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                         }
                         
                         let sets = workout.getSets(for: exercise.id)
                         if sets > 1 {
                             Label("\(sets) sets", systemImage: "repeat")
-                                .font(.caption)
+                                .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                         }
                     }
@@ -138,7 +138,7 @@ private struct ExerciseCustomizationRow: View {
                 
                 Image(systemName: "chevron.right")
                     .foregroundStyle(.secondary)
-                    .font(.caption)
+                    .font(Theme.caption)
             }
         }
         .buttonStyle(.plain)
@@ -178,11 +178,11 @@ private struct ExerciseCustomizationDetailView: View {
                     Section {
                         HStack {
                             Image(systemName: exercise.icon)
-                                .font(.title)
+                                .font(Theme.title)
                                 .foregroundStyle(Theme.accentA)
                             
                             Text(exercise.name)
-                                .font(.title2.weight(.semibold))
+                                .font(Theme.title2)
                                 .foregroundStyle(Theme.textPrimary)
                         }
                     }
@@ -192,12 +192,12 @@ private struct ExerciseCustomizationDetailView: View {
                             VStack(alignment: .leading, spacing: 8) {
                                 HStack {
                                     Text("Duration")
-                                        .font(.subheadline.weight(.semibold))
+                                        .font(Theme.subheadline.weight(.semibold))
                                     
                                     Spacer()
                                     
                                     Text("\(Int(exerciseDuration))s")
-                                        .font(.subheadline.weight(.semibold))
+                                        .font(Theme.subheadline.weight(.semibold))
                                         .foregroundStyle(Theme.accentA)
                                 }
                                 
@@ -210,11 +210,11 @@ private struct ExerciseCustomizationDetailView: View {
                                 
                                 HStack {
                                     Text("15s")
-                                        .font(.caption)
+                                        .font(Theme.caption)
                                         .foregroundStyle(.secondary)
                                     Spacer()
                                     Text("60s")
-                                        .font(.caption)
+                                        .font(Theme.caption)
                                         .foregroundStyle(.secondary)
                                 }
                             }
@@ -226,12 +226,12 @@ private struct ExerciseCustomizationDetailView: View {
                             VStack(alignment: .leading, spacing: 8) {
                                 HStack {
                                     Text("Rest After Exercise")
-                                        .font(.subheadline.weight(.semibold))
+                                        .font(Theme.subheadline.weight(.semibold))
                                     
                                     Spacer()
                                     
                                     Text("\(Int(restDuration))s")
-                                        .font(.subheadline.weight(.semibold))
+                                        .font(Theme.subheadline.weight(.semibold))
                                         .foregroundStyle(Theme.accentA)
                                 }
                                 
@@ -244,11 +244,11 @@ private struct ExerciseCustomizationDetailView: View {
                                 
                                 HStack {
                                     Text("5s")
-                                        .font(.caption)
+                                        .font(Theme.caption)
                                         .foregroundStyle(.secondary)
                                     Spacer()
                                     Text("30s")
-                                        .font(.caption)
+                                        .font(Theme.caption)
                                         .foregroundStyle(.secondary)
                                 }
                             }
@@ -260,7 +260,7 @@ private struct ExerciseCustomizationDetailView: View {
                             .tint(Theme.accentA)
                         
                         Text("Repeat this exercise \(sets) time\(sets == 1 ? "" : "s")")
-                            .font(.caption)
+                            .font(Theme.caption)
                             .foregroundStyle(.secondary)
                     }
                 }

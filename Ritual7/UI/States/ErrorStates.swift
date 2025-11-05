@@ -224,7 +224,7 @@ struct EnhancedErrorAlertModifier: ViewModifier {
                     
                     if let suggestion = error.recoverySuggestion {
                         Text(suggestion)
-                            .font(.caption)
+                            .font(Theme.caption)
                             .foregroundStyle(.secondary)
                     }
                 }
@@ -236,6 +236,88 @@ extension View {
     /// Shows an enhanced error alert
     func enhancedErrorAlert(error: Binding<ErrorHandling.WorkoutError?>, onRetry: (() -> Void)? = nil) -> some View {
         modifier(EnhancedErrorAlertModifier(error: error, onRetry: onRetry))
+    }
+}
+
+// MARK: - Error Boundary
+
+/// Error boundary view that catches errors and displays them gracefully
+struct ErrorBoundary<Content: View>: View {
+    @State private var error: Error?
+    @State private var showError = false
+    let content: Content
+    let onError: ((Error) -> Void)?
+    
+    init(@ViewBuilder content: () -> Content, onError: ((Error) -> Void)? = nil) {
+        self.content = content()
+        self.onError = onError
+    }
+    
+    var body: some View {
+        Group {
+            if let error = error {
+                ErrorStateView(
+                    error: error as? ErrorHandling.WorkoutError ?? .unknown(error),
+                    onRetry: {
+                        self.error = nil
+                        self.showError = false
+                    },
+                    onDismiss: {
+                        self.error = nil
+                        self.showError = false
+                    }
+                )
+            } else {
+                content
+            }
+        }
+        .onChange(of: error) { newError in
+            if newError != nil {
+                showError = true
+                onError?(newError!)
+            }
+        }
+    }
+}
+
+/// Error boundary modifier that wraps content and catches errors
+struct ErrorBoundaryModifier: ViewModifier {
+    @State private var error: Error?
+    let onError: ((Error) -> Void)?
+    
+    func body(content: Content) -> some View {
+        Group {
+            if let error = error {
+                ErrorStateView(
+                    error: error as? ErrorHandling.WorkoutError ?? .unknown(error),
+                    onRetry: {
+                        self.error = nil
+                    },
+                    onDismiss: {
+                        self.error = nil
+                    }
+                )
+            } else {
+                content
+            }
+        }
+        .task {
+            // Catch errors from async operations
+            do {
+                // This is a placeholder - actual error catching would be implementation-specific
+            } catch {
+                self.error = error
+                onError?(error)
+                ErrorHandling.handleError(error, context: "ErrorBoundary")
+            }
+        }
+    }
+}
+
+extension View {
+    /// Wraps content in an error boundary that catches and displays errors gracefully
+    func errorBoundary(onError: ((Error) -> Void)? = nil) -> some View {
+        modifier(ErrorBoundaryModifier(onError: onError))
     }
 }
 

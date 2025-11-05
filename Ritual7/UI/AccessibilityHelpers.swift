@@ -118,6 +118,37 @@ enum AccessibilityHelpers {
     static var valueTraits: AccessibilityTraits {
         return [.updatesFrequently]
     }
+    
+    // MARK: - Reduce Motion Support
+    
+    /// Checks if Reduce Motion is enabled
+    static var isReduceMotionEnabled: Bool {
+        return UIAccessibility.isReduceMotionEnabled
+    }
+    
+    /// Returns animation that respects Reduce Motion preference
+    /// - Parameters:
+    ///   - animation: The animation to use if Reduce Motion is disabled
+    ///   - respectReduceMotion: Whether to respect Reduce Motion (default: true)
+    /// - Returns: Animation or nil if Reduce Motion is enabled
+    static func animation(_ animation: Animation, respectReduceMotion: Bool = true) -> Animation? {
+        if respectReduceMotion && isReduceMotionEnabled {
+            return nil
+        }
+        return animation
+    }
+    
+    /// Returns duration that respects Reduce Motion (0 if enabled)
+    /// - Parameters:
+    ///   - duration: The duration to use if Reduce Motion is disabled
+    ///   - respectReduceMotion: Whether to respect Reduce Motion (default: true)
+    /// - Returns: Duration or 0 if Reduce Motion is enabled
+    static func duration(_ duration: TimeInterval, respectReduceMotion: Bool = true) -> TimeInterval {
+        if respectReduceMotion && isReduceMotionEnabled {
+            return 0
+        }
+        return duration
+    }
 }
 
 // MARK: - View Modifiers for Accessibility

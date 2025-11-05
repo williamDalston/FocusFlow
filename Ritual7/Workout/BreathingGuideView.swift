@@ -83,12 +83,12 @@ struct BreathingGuideView: View {
             // Breathing instruction
             VStack(spacing: 8) {
                 Text(coordinator.breathingPhase == .inhale ? "Breathe In" : "Breathe Out")
-                    .font(.title2.weight(.bold))
+                    .font(Theme.title2)
                     .foregroundStyle(.white)
                     .transition(.opacity)
                 
                 Text(breathingInstruction)
-                    .font(.subheadline)
+                    .font(Theme.subheadline)
                     .foregroundStyle(.white.opacity(0.8))
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 24)
@@ -98,11 +98,11 @@ struct BreathingGuideView: View {
             if let nextExercise = exercise {
                 VStack(spacing: 8) {
                     Text("Next: \(nextExercise.name)")
-                        .font(.headline)
+                        .font(Theme.headline)
                         .foregroundStyle(.white.opacity(0.9))
                     
                     Image(systemName: nextExercise.icon)
-                        .font(.title2)
+                        .font(Theme.title2)
                         .foregroundStyle(Theme.accentA)
                 }
                 .padding(DesignSystem.Spacing.lg)

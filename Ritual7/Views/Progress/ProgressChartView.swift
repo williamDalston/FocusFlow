@@ -443,7 +443,7 @@ private struct ProgressChartExportSheet: View {
         NavigationStack {
             VStack(spacing: 24) {
                 Text("Export Chart")
-                    .font(.headline.weight(.semibold))
+                    .font(Theme.headline)
                     .foregroundStyle(Theme.textPrimary)
                 
                 Picker("Format", selection: $exportFormat) {
@@ -457,7 +457,7 @@ private struct ProgressChartExportSheet: View {
                     exportChart()
                 } label: {
                     Label("Export", systemImage: "square.and.arrow.up")
-                        .font(.body.weight(.semibold))
+                        .font(Theme.body.weight(.semibold))
                         .frame(maxWidth: .infinity)
                         .frame(height: 50)
                 }

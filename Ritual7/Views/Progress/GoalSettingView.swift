@@ -406,7 +406,7 @@ private struct GoalPredictionCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
-                .font(.subheadline.weight(.semibold))
+                .font(Theme.subheadline.weight(.semibold))
                 .foregroundStyle(Theme.textPrimary)
             
             HStack {

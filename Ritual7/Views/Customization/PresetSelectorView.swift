@@ -67,19 +67,19 @@ private struct PresetCard: View {
                     VStack(alignment: .leading, spacing: 8) {
                         HStack {
                             Text(preset.displayName)
-                                .font(.headline.weight(.semibold))
+                                .font(Theme.headline)
                                 .foregroundStyle(Theme.textPrimary)
                             
                             if isSelected {
                                 Image(systemName: "checkmark.circle.fill")
                                     .foregroundStyle(Theme.accentA)
-                                    .font(.headline)
+                                    .font(Theme.headline)
                             }
                             
                             Spacer()
                             
                             Text("~\(preset.estimatedMinutes) min")
-                                .font(.caption.weight(.semibold))
+                                .font(Theme.caption.weight(.semibold))
                                 .foregroundStyle(.secondary)
                                 .padding(.horizontal, 8)
                                 .padding(.vertical, 4)
@@ -90,22 +90,22 @@ private struct PresetCard: View {
                         }
                         
                         Text(preset.description)
-                            .font(.subheadline)
+                            .font(Theme.subheadline)
                             .foregroundStyle(.secondary)
                             .fixedSize(horizontal: false, vertical: true)
                         
                         // Details
                         HStack(spacing: 12) {
                             Label("\(preset.exerciseIndices.count) exercises", systemImage: "figure.run")
-                                .font(.caption)
+                                .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                             
                             Label("\(Int(preset.exerciseDuration))s", systemImage: "timer")
-                                .font(.caption)
+                                .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                             
                             Label("\(Int(preset.restDuration))s rest", systemImage: "pause.circle")
-                                .font(.caption)
+                                .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                         }
                     }

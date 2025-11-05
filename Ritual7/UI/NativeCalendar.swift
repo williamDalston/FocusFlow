@@ -30,7 +30,7 @@ struct NativeCalendar: View {
             HStack {
                 Button(action: previousMonth) {
                     Image(systemName: "chevron.left")
-                        .font(.title2.weight(.medium))
+                        .font(Theme.title2)
                         .foregroundStyle(.primary)
                         .frame(width: DesignSystem.TouchTarget.minimum, height: DesignSystem.TouchTarget.minimum) // Proper touch target
                 }
@@ -46,7 +46,7 @@ struct NativeCalendar: View {
                 
                 Button(action: nextMonth) {
                     Image(systemName: "chevron.right")
-                        .font(.title2.weight(.medium))
+                        .font(Theme.title2)
                         .foregroundStyle(.primary)
                         .frame(width: DesignSystem.TouchTarget.minimum, height: DesignSystem.TouchTarget.minimum) // Proper touch target
                 }

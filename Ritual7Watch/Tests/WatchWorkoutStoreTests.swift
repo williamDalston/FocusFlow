@@ -57,7 +57,10 @@ final class WatchWorkoutStoreTests: XCTestCase {
         XCTAssertEqual(store.totalWorkouts, 1)
         XCTAssertEqual(store.totalMinutes, duration / 60.0, accuracy: 0.01)
         
-        let session = store.sessions.first!
+        guard let session = store.sessions.first else {
+            XCTFail("Expected session to exist")
+            return
+        }
         XCTAssertEqual(session.duration, duration)
         XCTAssertEqual(session.exercisesCompleted, exercisesCompleted)
     }
@@ -67,7 +70,10 @@ final class WatchWorkoutStoreTests: XCTestCase {
         
         store.addSession(duration: 420, exercisesCompleted: 12, notes: notes)
         
-        let session = store.sessions.first!
+        guard let session = store.sessions.first else {
+            XCTFail("Expected session to exist")
+            return
+        }
         XCTAssertEqual(session.notes, notes)
     }
     
@@ -95,7 +101,10 @@ final class WatchWorkoutStoreTests: XCTestCase {
         store.addSession(duration: 420, exercisesCompleted: 12)
         
         // Tomorrow
-        let tomorrow = calendar.date(byAdding: .day, value: 1, to: Date())!
+        guard let tomorrow = calendar.date(byAdding: .day, value: 1, to: Date()) else {
+            XCTFail("Failed to create tomorrow date")
+            return
+        }
         store.addSession(duration: 420, exercisesCompleted: 12)
         
         XCTAssertGreaterThanOrEqual(store.streak, 1)
@@ -105,7 +114,11 @@ final class WatchWorkoutStoreTests: XCTestCase {
     
     func testPersistence() {
         store.addSession(duration: 420, exercisesCompleted: 12)
-        let sessionId = store.sessions.first!.id
+        guard let firstSession = store.sessions.first else {
+            XCTFail("Expected session to exist")
+            return
+        }
+        let sessionId = firstSession.id
         let totalWorkouts = store.totalWorkouts
         
         // Create new store instance (simulating app restart)

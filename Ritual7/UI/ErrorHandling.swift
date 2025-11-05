@@ -87,6 +87,7 @@ enum ErrorHandling {
     // MARK: - Error Handling
     
     /// Handles errors with user-friendly messages
+    /// Posts notification for UI to handle and logs for debugging
     static func handleError(_ error: Error, context: String = "") {
         let workoutError: WorkoutError
         if let we = error as? WorkoutError {
@@ -99,10 +100,17 @@ enum ErrorHandling {
         os_log("Error in %{public}@: %{public}@", log: .default, type: .error, context.isEmpty ? "unknown" : context, workoutError.localizedDescription)
         Task { @MainActor in
             CrashReporter.logError(workoutError, context: ["context": context])
+            
+            // Post notification for UI to handle
+            NotificationCenter.default.post(
+                name: NSNotification.Name(AppConstants.NotificationNames.errorOccurred),
+                object: nil,
+                userInfo: [
+                    "error": workoutError,
+                    "context": context
+                ]
+            )
         }
-        
-        // Show user-friendly error message
-        // This would typically be integrated with a UI alert system
     }
     
     // MARK: - Recovery Actions
@@ -115,16 +123,30 @@ enum ErrorHandling {
             return false
         case .engineNotReady:
             // Wait a moment and try again
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                // Retry logic here
-            }
+            // This is a placeholder - actual retry would be implementation-specific
+            // The caller should implement retry logic
             return true
         case .sessionExpired:
-            // Reset session
+            // Reset session - this would be handled by WorkoutEngine
+            // Post notification to reset session
+            NotificationCenter.default.post(
+                name: NSNotification.Name(AppConstants.NotificationNames.errorOccurred),
+                object: nil,
+                userInfo: ["error": error, "action": "resetSession"]
+            )
             return true
         case .dataCorrupted:
-            // Attempt data recovery
-            return attemptDataRecovery()
+            // Attempt data recovery with actual implementation
+            let recoveryResult = attemptDataRecovery()
+            if recoveryResult {
+                // Notify that data was recovered
+                NotificationCenter.default.post(
+                    name: NSNotification.Name(AppConstants.NotificationNames.errorOccurred),
+                    object: nil,
+                    userInfo: ["error": error, "action": "dataRecovered", "recovered": true]
+                )
+            }
+            return recoveryResult
         case .networkUnavailable:
             // Cannot recover automatically
             return false
@@ -132,10 +154,12 @@ enum ErrorHandling {
             // Reset state
             return attemptBasicRecovery()
         case .workoutInterrupted:
-            // Save current state for resume
+            // Save current state for resume - this is handled by WorkoutEngine
+            // Recovery is successful if state can be saved
             return true
         case .backgroundTransitionFailed:
-            // Save state and allow resume
+            // Save state and allow resume - this is handled by WorkoutEngine
+            // Recovery is successful if state can be saved
             return true
         case .lowMemory:
             // Try to free memory
@@ -160,13 +184,13 @@ enum ErrorHandling {
         os_log("Attempting data recovery", log: .default, type: .info)
         
         // Try to load backup data if available
-        if let backupData = UserDefaults.standard.data(forKey: "workout.sessions.backup") {
+        if let backupData = UserDefaults.standard.data(forKey: AppConstants.UserDefaultsKeys.workoutSessionsBackup) {
             do {
                 let decoder = JSONDecoder()
                 let _ = try decoder.decode([WorkoutSession].self, from: backupData)
                 // Validate backup data before restoring
                 // Restore from backup
-                UserDefaults.standard.set(backupData, forKey: "workout.sessions.v1")
+                UserDefaults.standard.set(backupData, forKey: AppConstants.UserDefaultsKeys.workoutSessions)
                 os_log("Data recovery successful from backup", log: .default, type: .info)
                 return true
             } catch {
@@ -185,7 +209,19 @@ enum ErrorHandling {
         os_log("Attempting basic recovery", log: .default, type: .info)
         
         // Clear any cached state that might be causing issues
-        // This is a last resort recovery
+        // Clear URL cache
+        URLCache.shared.removeAllCachedResponses()
+        
+        // Clear image cache if available
+        // Note: In a real app, you might have a custom image cache to clear
+        
+        // Attempt to recover workout state
+        if UserDefaults.standard.dictionary(forKey: AppConstants.UserDefaultsKeys.workoutStateRecovery) != nil {
+            // State exists, try to restore it
+            // This would be handled by WorkoutEngine.restoreWorkoutState()
+            os_log("Workout state found, recovery may be possible", log: .default, type: .info)
+        }
+        
         return true
     }
     
@@ -194,8 +230,23 @@ enum ErrorHandling {
         os_log("Attempting memory recovery", log: .default, type: .info)
         
         // Clear caches, reduce memory usage
-        // This is a best-effort recovery
-        return true
+        URLCache.shared.removeAllCachedResponses()
+        
+        // Trigger performance optimizer to clear non-essential caches
+        PerformanceOptimizer.clearNonEssentialCaches()
+        
+        // Attempt to optimize memory usage
+        PerformanceOptimizer.optimizeMemoryUsage()
+        
+        // Check if memory recovery was successful
+        let memoryInfo = PerformanceOptimizer.getMemoryInfo()
+        if memoryInfo.usageRatio < AppConstants.PerformanceConstants.memoryUsageWarningThreshold {
+            os_log("Memory recovery successful", log: .default, type: .info)
+            return true
+        } else {
+            os_log("Memory recovery partially successful - usage ratio: %{public}@", log: .default, type: .warning, String(memoryInfo.usageRatio))
+            return false
+        }
     }
     
     // MARK: - Data Validation
@@ -206,11 +257,12 @@ enum ErrorHandling {
             return .failure(.invalidData(description: "Workout duration must be greater than 0"))
         }
         
-        guard duration <= 3600 else { // 1 hour max
+        guard duration <= AppConstants.ValidationConstants.maxWorkoutDuration else {
             return .failure(.invalidData(description: "Workout duration exceeds maximum allowed"))
         }
         
-        guard exercisesCompleted >= 0 && exercisesCompleted <= 12 else {
+        guard exercisesCompleted >= AppConstants.ValidationConstants.minExercisesCompleted && 
+              exercisesCompleted <= AppConstants.ValidationConstants.maxExercisesCompleted else {
             return .failure(.invalidData(description: "Exercises completed must be between 0 and 12"))
         }
         
@@ -223,7 +275,8 @@ enum ErrorHandling {
             return .failure(.invalidData(description: "Exercise name cannot be empty"))
         }
         
-        guard exercise.order >= 0 && exercise.order < 12 else {
+        guard exercise.order >= AppConstants.ValidationConstants.minExerciseOrder && 
+              exercise.order <= AppConstants.ValidationConstants.maxExerciseOrder else {
             return .failure(.invalidData(description: "Exercise order must be between 0 and 11"))
         }
         
@@ -246,7 +299,7 @@ struct ErrorView: View {
     }
     
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: DesignSystem.Spacing.lg) {
             Image(systemName: "exclamationmark.triangle.fill")
                 .font(.system(size: DesignSystem.IconSize.xxlarge, weight: .bold))
                 .foregroundStyle(.orange)
@@ -268,7 +321,7 @@ struct ErrorView: View {
                     .padding(.horizontal)
             }
             
-            HStack(spacing: 12) {
+            HStack(spacing: DesignSystem.Spacing.md) {
                 if let onRetry = onRetry {
                     Button("Try Again") {
                         onRetry()
@@ -283,7 +336,7 @@ struct ErrorView: View {
                     .buttonStyle(.bordered)
                 }
             }
-            .padding(.top, 8)
+            .padding(.top, DesignSystem.Spacing.sm)
         }
         .padding(DesignSystem.Spacing.cardPadding)
         .background(
@@ -321,6 +374,93 @@ extension View {
     /// Shows an error alert
     func errorAlert(error: Binding<ErrorHandling.WorkoutError?>, onRetry: (() -> Void)? = nil) -> some View {
         modifier(ErrorAlertModifier(error: error, onRetry: onRetry))
+    }
+}
+
+// MARK: - Global Error Handler
+
+/// Global error handler that listens for errors and displays them
+@MainActor
+class GlobalErrorHandler: ObservableObject {
+    static let shared = GlobalErrorHandler()
+    
+    @Published var currentError: ErrorHandling.WorkoutError?
+    @Published var showError: Bool = false
+    
+    private var observers: [NSObjectProtocol] = []
+    
+    private init() {
+        setupErrorObserver()
+    }
+    
+    private func setupErrorObserver() {
+        let observer = NotificationCenter.default.addObserver(
+            forName: NSNotification.Name(AppConstants.NotificationNames.errorOccurred),
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            guard let self = self,
+                  let userInfo = notification.userInfo,
+                  let error = userInfo["error"] as? ErrorHandling.WorkoutError else {
+                return
+            }
+            
+            self.currentError = error
+            self.showError = true
+            
+            // Haptic feedback for error
+            Haptics.error()
+        }
+        
+        observers.append(observer)
+    }
+    
+    deinit {
+        observers.forEach { NotificationCenter.default.removeObserver($0) }
+    }
+    
+    func dismissError() {
+        showError = false
+        currentError = nil
+    }
+}
+
+/// View modifier that automatically handles errors globally
+struct GlobalErrorHandlerModifier: ViewModifier {
+    @StateObject private var errorHandler = GlobalErrorHandler.shared
+    
+    func body(content: Content) -> some View {
+        content
+            .alert("Error", isPresented: $errorHandler.showError, presenting: errorHandler.currentError) { error in
+                Button("OK") {
+                    errorHandler.dismissError()
+                }
+                
+                // Add retry button if recovery is possible
+                if ErrorHandling.attemptRecovery(from: error) {
+                    Button("Try Again") {
+                        errorHandler.dismissError()
+                        // Retry logic can be added here
+                    }
+                }
+            } message: { error in
+                VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
+                    Text(error.localizedDescription)
+                    
+                    if let suggestion = error.recoverySuggestion {
+                        Text(suggestion)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+    }
+}
+
+extension View {
+    /// Adds global error handling to the view hierarchy
+    func globalErrorHandler() -> some View {
+        modifier(GlobalErrorHandlerModifier())
     }
 }
 
