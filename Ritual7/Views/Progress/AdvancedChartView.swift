@@ -2,11 +2,12 @@ import SwiftUI
 import Charts
 
 /// Agent 10: Advanced Chart View - Interactive charts with tap-to-detail and export functionality
+/// Agent 15: Updated to use FocusAnalytics
 struct AdvancedChartView: View {
-    @ObservedObject var analytics: WorkoutAnalytics
+    @ObservedObject var analytics: FocusAnalytics
     @EnvironmentObject private var theme: ThemeStore
     @State private var selectedTimeframe: Timeframe = .week
-    @State private var selectedDataPoint: DailyWorkoutCount?
+    @State private var selectedDataPoint: DailyFocusCount?
     @State private var showingExportSheet = false
     
     enum Timeframe: String, CaseIterable {
@@ -76,14 +77,14 @@ struct AdvancedChartView: View {
     
     private var interactiveWeeklyChart: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Workouts This Week")
+            Text("Focus Sessions This Week")
                 .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
             
             Chart(analytics.weeklyTrend) { day in
                 BarMark(
                     x: .value("Day", day.date, unit: .day),
-                    y: .value("Workouts", day.count)
+                    y: .value("Focus Sessions", day.count)
                 )
                 .foregroundStyle(Theme.accentA.gradient)
                 .cornerRadius(DesignSystem.CornerRadius.small)
@@ -146,14 +147,14 @@ struct AdvancedChartView: View {
     
     private var interactiveMonthlyChart: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Workouts Last 30 Days")
+            Text("Focus Sessions Last 30 Days")
                 .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
             
             Chart(analytics.monthlyTrend) { day in
                 LineMark(
                     x: .value("Date", day.date, unit: .day),
-                    y: .value("Workouts", day.count)
+                    y: .value("Focus Sessions", day.count)
                 )
                 .foregroundStyle(Theme.accentB)
                 .interpolationMethod(.catmullRom)
@@ -166,7 +167,7 @@ struct AdvancedChartView: View {
                 
                 AreaMark(
                     x: .value("Date", day.date, unit: .day),
-                    y: .value("Workouts", day.count)
+                    y: .value("Focus Sessions", day.count)
                 )
                 .foregroundStyle(
                     LinearGradient(
@@ -212,14 +213,14 @@ struct AdvancedChartView: View {
     
     private var interactiveYearlyChart: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Workouts Last 12 Months")
+            Text("Focus Sessions Last 12 Months")
                 .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
             
             Chart(analytics.yearlyTrend) { month in
                 BarMark(
                     x: .value("Month", month.month, unit: .month),
-                    y: .value("Workouts", month.count)
+                    y: .value("Focus Sessions", month.count)
                 )
                 .foregroundStyle(Theme.accentC.gradient)
                 .cornerRadius(DesignSystem.CornerRadius.small)
@@ -264,7 +265,7 @@ struct AdvancedChartView: View {
     
     // MARK: - Selected Data Point Card
     
-    private func selectedDataPointCard(dataPoint: DailyWorkoutCount) -> some View {
+    private func selectedDataPointCard(dataPoint: DailyFocusCount) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Image(systemName: "info.circle.fill")
@@ -279,7 +280,7 @@ struct AdvancedChartView: View {
                     Text(dataPoint.date.formatted(date: .abbreviated, time: .omitted))
                         .font(Theme.caption)
                         .foregroundStyle(.secondary)
-                    Text("\(dataPoint.count) workout\(dataPoint.count == 1 ? "" : "s")")
+                    Text("\(dataPoint.count) focus session\(dataPoint.count == 1 ? "" : "s")")
                         .font(Theme.title3)
                         .foregroundStyle(Theme.textPrimary)
                 }
@@ -307,7 +308,7 @@ struct AdvancedChartView: View {
     
     // MARK: - Helper Methods
     
-    private func findDataPoint(at location: CGPoint, in size: CGSize, chartProxy: ChartProxy) -> DailyWorkoutCount? {
+    private func findDataPoint(at location: CGPoint, in size: CGSize, chartProxy: ChartProxy) -> DailyFocusCount? {
         // Simplified - in a real implementation, you'd use chartProxy to convert screen coordinates
         // For now, return nil as this requires more complex chart interaction handling
         return nil
@@ -317,7 +318,7 @@ struct AdvancedChartView: View {
 // MARK: - Chart Export Sheet
 
 struct ChartExportSheet: View {
-    @ObservedObject var analytics: WorkoutAnalytics
+    @ObservedObject var analytics: FocusAnalytics
     let timeframe: AdvancedChartView.Timeframe
     @Environment(\.dismiss) private var dismiss
     @State private var exportFormat: ExportFormat = .png
@@ -376,7 +377,7 @@ struct ChartExportSheet: View {
 // MARK: - Chart Angle Selection Modifier (iOS 17+ compatibility)
 
 struct ChartAngleSelectionModifier: ViewModifier {
-    @Binding var selectedDataPoint: DailyWorkoutCount?
+    @Binding var selectedDataPoint: DailyFocusCount?
     
     func body(content: Content) -> some View {
         if #available(iOS 17.0, *) {

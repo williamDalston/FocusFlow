@@ -17,7 +17,8 @@ final class InterstitialAdManager: NSObject, ObservableObject, FullScreenContent
     private let unitID: String
 
     // Tuning - Optimized for revenue without being annoying
-    var sessionCap = 3                 // max per app launch (good balance)
+    // For Pomodoro app: Users may have 4-8 focus sessions per day, so 3-4 ads per session is reasonable
+    var sessionCap = 4                 // max per app launch (Pomodoro: more sessions per day than workouts)
     var minimumSecondsBetween = 90.0   // cooldown (prevents ad fatigue)
 
     private var lastShown: Date?

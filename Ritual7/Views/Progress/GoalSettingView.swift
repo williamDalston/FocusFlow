@@ -324,7 +324,7 @@ private struct WeeklyGoalPickerView: View {
                             onSave(goal)
                         } label: {
                             HStack {
-                                Text(goal == 0 ? "No Goal" : "\(goal) workouts per week")
+                                Text(goal == 0 ? "No Goal" : "\(goal) focus sessions per week")
                                     .foregroundStyle(.primary)
                                 Spacer()
                                 if goal == currentGoal {
@@ -342,7 +342,7 @@ private struct WeeklyGoalPickerView: View {
                 } header: {
                     Text("Weekly Goals")
                 } footer: {
-                    Text("Based on your workout history, we suggest \(suggestion) workouts per week.")
+                    Text("Based on your focus history, we suggest \(suggestion) focus sessions per week.")
                 }
             }
             .navigationTitle("Set Weekly Goal")

@@ -1,11 +1,12 @@
 import Foundation
 import SwiftUI
 
-/// Agent 2: Achievement Manager - Tracks and manages workout achievements
+/// Agent 2 & 4: Achievement Manager - Tracks and manages focus achievements
 /// Agent 28: Enhanced with VoiceOver announcements for achievement unlocks
+/// Agent 4: Refactored for Pomodoro focus sessions
 @MainActor
 final class AchievementManager: ObservableObject {
-    private let store: WorkoutStore
+    private let store: FocusStore
     
     @Published private(set) var unlockedAchievements: Set<Achievement> = []
     @Published private(set) var recentUnlocks: [Achievement] = []
@@ -13,7 +14,7 @@ final class AchievementManager: ObservableObject {
     private let unlockedKey = "achievements.unlocked"
     private let recentUnlocksKey = "achievements.recent"
     
-    init(store: WorkoutStore) {
+    init(store: FocusStore) {
         self.store = store
         load()
         checkAchievements()
@@ -24,9 +25,10 @@ final class AchievementManager: ObservableObject {
     func checkAchievements() {
         var newlyUnlocked: [Achievement] = []
         
-        // First workout
-        if store.totalWorkouts >= 1 && !unlockedAchievements.contains(.firstWorkout) {
-            newlyUnlocked.append(.firstWorkout)
+        // First focus session
+        let focusSessions = store.sessions.filter { $0.phaseType == .focus && $0.completed }
+        if focusSessions.count >= 1 && !unlockedAchievements.contains(.firstFocusSession) {
+            newlyUnlocked.append(.firstFocusSession)
         }
         
         // 7-day streak
@@ -39,51 +41,32 @@ final class AchievementManager: ObservableObject {
             newlyUnlocked.append(.thirtyDayStreak)
         }
         
-        // 100 workouts
-        if store.totalWorkouts >= 100 && !unlockedAchievements.contains(.hundredWorkouts) {
-            newlyUnlocked.append(.hundredWorkouts)
+        // 100 focus sessions
+        if focusSessions.count >= 100 && !unlockedAchievements.contains(.hundredSessions) {
+            newlyUnlocked.append(.hundredSessions)
         }
         
-        // Perfect week (7 workouts in 7 days)
-        if store.workoutsThisWeek >= 7 && !unlockedAchievements.contains(.perfectWeek) {
+        // Perfect week (daily focus sessions)
+        if store.sessionsThisWeek >= 7 && !unlockedAchievements.contains(.perfectWeek) {
             newlyUnlocked.append(.perfectWeek)
         }
         
-        // Monthly consistency (20+ workouts in a month)
-        if store.workoutsThisMonth >= 20 && !unlockedAchievements.contains(.monthlyConsistency) {
-            newlyUnlocked.append(.monthlyConsistency)
-        }
-        
-        // Early bird (morning workouts)
-        let morningWorkouts = countMorningWorkouts()
-        if morningWorkouts >= 10 && !unlockedAchievements.contains(.earlyBird) {
+        // Early bird (morning focus sessions)
+        let morningFocus = countMorningFocusSessions()
+        if morningFocus >= 10 && !unlockedAchievements.contains(.earlyBird) {
             newlyUnlocked.append(.earlyBird)
         }
         
-        // Night owl (evening workouts)
-        let eveningWorkouts = countEveningWorkouts()
-        if eveningWorkouts >= 10 && !unlockedAchievements.contains(.nightOwl) {
+        // Night owl (evening focus sessions)
+        let eveningFocus = countEveningFocusSessions()
+        if eveningFocus >= 10 && !unlockedAchievements.contains(.nightOwl) {
             newlyUnlocked.append(.nightOwl)
         }
         
-        // 50 workouts
-        if store.totalWorkouts >= 50 && !unlockedAchievements.contains(.fiftyWorkouts) {
-            newlyUnlocked.append(.fiftyWorkouts)
-        }
-        
-        // 200 workouts
-        if store.totalWorkouts >= 200 && !unlockedAchievements.contains(.twoHundredWorkouts) {
-            newlyUnlocked.append(.twoHundredWorkouts)
-        }
-        
-        // 500 workouts
-        if store.totalWorkouts >= 500 && !unlockedAchievements.contains(.fiveHundredWorkouts) {
-            newlyUnlocked.append(.fiveHundredWorkouts)
-        }
-        
-        // 1000 workouts
-        if store.totalWorkouts >= 1000 && !unlockedAchievements.contains(.thousandWorkouts) {
-            newlyUnlocked.append(.thousandWorkouts)
+        // Deep Focus (completed 4-session cycle = 1 full Pomodoro cycle)
+        let cyclesCompleted = focusSessions.count / 4
+        if cyclesCompleted >= 1 && !unlockedAchievements.contains(.deepFocus) {
+            newlyUnlocked.append(.deepFocus)
         }
         
         // Unlock new achievements
@@ -125,19 +108,21 @@ final class AchievementManager: ObservableObject {
     
     // MARK: - Helpers
     
-    private func countMorningWorkouts() -> Int {
+    private func countMorningFocusSessions() -> Int {
         let calendar = Calendar.current
         return store.sessions.filter { session in
-            let hour = calendar.component(.hour, from: session.date)
-            return hour >= 5 && hour < 12
+            session.phaseType == .focus && session.completed &&
+            calendar.component(.hour, from: session.date) >= 5 &&
+            calendar.component(.hour, from: session.date) < 12
         }.count
     }
     
-    private func countEveningWorkouts() -> Int {
+    private func countEveningFocusSessions() -> Int {
         let calendar = Calendar.current
         return store.sessions.filter { session in
-            let hour = calendar.component(.hour, from: session.date)
-            return hour >= 17 && hour < 22
+            session.phaseType == .focus && session.completed &&
+            calendar.component(.hour, from: session.date) >= 17 &&
+            calendar.component(.hour, from: session.date) < 22
         }.count
     }
     
@@ -176,33 +161,27 @@ final class AchievementManager: ObservableObject {
     // MARK: - Progress Tracking
     
     func progressForAchievement(_ achievement: Achievement) -> Double {
+        let focusSessions = store.sessions.filter { $0.phaseType == .focus && $0.completed }
         switch achievement {
-        case .firstWorkout:
-            return min(1.0, Double(store.totalWorkouts) / 1.0)
+        case .firstFocusSession:
+            return min(1.0, Double(focusSessions.count) / 1.0)
         case .sevenDayStreak:
             return min(1.0, Double(store.streak) / 7.0)
         case .thirtyDayStreak:
             return min(1.0, Double(store.streak) / 30.0)
-        case .hundredWorkouts:
-            return min(1.0, Double(store.totalWorkouts) / 100.0)
+        case .hundredSessions:
+            return min(1.0, Double(focusSessions.count) / 100.0)
         case .perfectWeek:
-            return min(1.0, Double(store.workoutsThisWeek) / 7.0)
-        case .monthlyConsistency:
-            return min(1.0, Double(store.workoutsThisMonth) / 20.0)
+            return min(1.0, Double(store.sessionsThisWeek) / 7.0)
         case .earlyBird:
-            let count = countMorningWorkouts()
+            let count = countMorningFocusSessions()
             return min(1.0, Double(count) / 10.0)
         case .nightOwl:
-            let count = countEveningWorkouts()
+            let count = countEveningFocusSessions()
             return min(1.0, Double(count) / 10.0)
-        case .fiftyWorkouts:
-            return min(1.0, Double(store.totalWorkouts) / 50.0)
-        case .twoHundredWorkouts:
-            return min(1.0, Double(store.totalWorkouts) / 200.0)
-        case .fiveHundredWorkouts:
-            return min(1.0, Double(store.totalWorkouts) / 500.0)
-        case .thousandWorkouts:
-            return min(1.0, Double(store.totalWorkouts) / 1000.0)
+        case .deepFocus:
+            let cycles = focusSessions.count / 4
+            return min(1.0, Double(cycles) / 1.0)
         }
     }
     
@@ -256,95 +235,86 @@ final class AchievementManager: ObservableObject {
         return candidates.sorted { $0.progress > $1.progress }.prefix(limit).map { $0 }
     }
     
-    /// Calculate remaining workouts/actions needed for an achievement
+    /// Calculate remaining focus sessions/actions needed for an achievement
     private func calculateRemaining(for achievement: Achievement) -> Int {
+        let focusSessions = store.sessions.filter { $0.phaseType == .focus && $0.completed }
         switch achievement {
-        case .firstWorkout:
-            return max(0, 1 - store.totalWorkouts)
+        case .firstFocusSession:
+            return max(0, 1 - focusSessions.count)
         case .sevenDayStreak:
             return max(0, 7 - store.streak)
         case .thirtyDayStreak:
             return max(0, 30 - store.streak)
-        case .hundredWorkouts:
-            return max(0, 100 - store.totalWorkouts)
+        case .hundredSessions:
+            return max(0, 100 - focusSessions.count)
         case .perfectWeek:
-            return max(0, 7 - store.workoutsThisWeek)
-        case .monthlyConsistency:
-            return max(0, 20 - store.workoutsThisMonth)
+            return max(0, 7 - store.sessionsThisWeek)
         case .earlyBird:
-            let count = countMorningWorkouts()
+            let count = countMorningFocusSessions()
             return max(0, 10 - count)
         case .nightOwl:
-            let count = countEveningWorkouts()
+            let count = countEveningFocusSessions()
             return max(0, 10 - count)
-        case .fiftyWorkouts:
-            return max(0, 50 - store.totalWorkouts)
-        case .twoHundredWorkouts:
-            return max(0, 200 - store.totalWorkouts)
-        case .fiveHundredWorkouts:
-            return max(0, 500 - store.totalWorkouts)
-        case .thousandWorkouts:
-            return max(0, 1000 - store.totalWorkouts)
+        case .deepFocus:
+            let cycles = focusSessions.count / 4
+            return max(0, 1 - cycles)
         }
     }
     
     /// Generate progress text for an achievement
     private func generateProgressText(for achievement: Achievement, remaining: Int) -> String {
         switch achievement {
-        case .firstWorkout:
-            return remaining == 1 ? "Complete your first workout!" : "\(remaining) workouts until \(achievement.title)"
+        case .firstFocusSession:
+            return remaining == 1 ? "Complete your first focus session!" : "\(remaining) sessions until \(achievement.title)"
         case .sevenDayStreak:
             return remaining == 1 ? "1 day until \(achievement.title)!" : "\(remaining) days until \(achievement.title)"
         case .thirtyDayStreak:
             return remaining == 1 ? "1 day until \(achievement.title)!" : "\(remaining) days until \(achievement.title)"
         case .perfectWeek:
-            return remaining == 1 ? "1 workout until \(achievement.title)!" : "\(remaining) workouts until \(achievement.title)"
-        case .monthlyConsistency:
-            return remaining == 1 ? "1 workout until \(achievement.title)!" : "\(remaining) workouts until \(achievement.title)"
+            return remaining == 1 ? "1 session until \(achievement.title)!" : "\(remaining) sessions until \(achievement.title)"
         case .earlyBird:
-            return remaining == 1 ? "1 morning workout until \(achievement.title)!" : "\(remaining) morning workouts until \(achievement.title)"
+            return remaining == 1 ? "1 morning focus session until \(achievement.title)!" : "\(remaining) morning focus sessions until \(achievement.title)"
         case .nightOwl:
-            return remaining == 1 ? "1 evening workout until \(achievement.title)!" : "\(remaining) evening workouts until \(achievement.title)"
-        default:
-            return remaining == 1 ? "1 workout until \(achievement.title)!" : "\(remaining) workouts until \(achievement.title)"
+            return remaining == 1 ? "1 evening focus session until \(achievement.title)!" : "\(remaining) evening focus sessions until \(achievement.title)"
+        case .hundredSessions:
+            return remaining == 1 ? "1 session until \(achievement.title)!" : "\(remaining) sessions until \(achievement.title)"
+        case .deepFocus:
+            return remaining == 1 ? "Complete 1 more Pomodoro cycle!" : "Complete \(remaining) more Pomodoro cycle\(remaining == 1 ? "" : "s")!"
         }
     }
     
     /// Get current value for an achievement (for display)
     func currentValue(for achievement: Achievement) -> Int {
+        let focusSessions = store.sessions.filter { $0.phaseType == .focus && $0.completed }
         switch achievement {
-        case .firstWorkout:
-            return store.totalWorkouts
+        case .firstFocusSession:
+            return focusSessions.count
         case .sevenDayStreak, .thirtyDayStreak:
             return store.streak
-        case .hundredWorkouts, .fiftyWorkouts, .twoHundredWorkouts, .fiveHundredWorkouts, .thousandWorkouts:
-            return store.totalWorkouts
+        case .hundredSessions:
+            return focusSessions.count
         case .perfectWeek:
-            return store.workoutsThisWeek
-        case .monthlyConsistency:
-            return store.workoutsThisMonth
+            return store.sessionsThisWeek
         case .earlyBird:
-            return countMorningWorkouts()
+            return countMorningFocusSessions()
         case .nightOwl:
-            return countEveningWorkouts()
+            return countEveningFocusSessions()
+        case .deepFocus:
+            return focusSessions.count / 4
         }
     }
     
     /// Get target value for an achievement
     func targetValue(for achievement: Achievement) -> Int {
         switch achievement {
-        case .firstWorkout: return 1
+        case .firstFocusSession: return 1
         case .sevenDayStreak: return 7
         case .thirtyDayStreak: return 30
-        case .hundredWorkouts: return 100
+        case .hundredSessions: return 100
         case .perfectWeek: return 7
-        case .monthlyConsistency: return 20
         case .earlyBird: return 10
         case .nightOwl: return 10
-        case .fiftyWorkouts: return 50
-        case .twoHundredWorkouts: return 200
-        case .fiveHundredWorkouts: return 500
-        case .thousandWorkouts: return 1000
+        case .deepFocus: return 1
         }
     }
 }
@@ -352,103 +322,79 @@ final class AchievementManager: ObservableObject {
 // MARK: - Achievement Model
 
 enum Achievement: String, CaseIterable, Codable, Identifiable {
-    case firstWorkout = "first_workout"
+    case firstFocusSession = "first_focus_session"
     case sevenDayStreak = "seven_day_streak"
     case thirtyDayStreak = "thirty_day_streak"
-    case hundredWorkouts = "hundred_workouts"
+    case hundredSessions = "hundred_sessions"
     case perfectWeek = "perfect_week"
-    case monthlyConsistency = "monthly_consistency"
     case earlyBird = "early_bird"
     case nightOwl = "night_owl"
-    case fiftyWorkouts = "fifty_workouts"
-    case twoHundredWorkouts = "two_hundred_workouts"
-    case fiveHundredWorkouts = "five_hundred_workouts"
-    case thousandWorkouts = "thousand_workouts"
+    case deepFocus = "deep_focus"
     
     var id: String { rawValue }
     
     var title: String {
         switch self {
-        case .firstWorkout: return "First Step"
+        case .firstFocusSession: return "First Focus"
         case .sevenDayStreak: return "Week Warrior"
         case .thirtyDayStreak: return "Monthly Master"
-        case .hundredWorkouts: return "Century Club"
+        case .hundredSessions: return "Century Club"
         case .perfectWeek: return "Perfect Week"
-        case .monthlyConsistency: return "Monthly Champion"
         case .earlyBird: return "Early Bird"
         case .nightOwl: return "Night Owl"
-        case .fiftyWorkouts: return "Half Century"
-        case .twoHundredWorkouts: return "Double Century"
-        case .fiveHundredWorkouts: return "Five Hundred"
-        case .thousandWorkouts: return "Thousand Club"
+        case .deepFocus: return "Deep Focus"
         }
     }
     
     var description: String {
         switch self {
-        case .firstWorkout: return "Complete your first workout"
-        case .sevenDayStreak: return "Maintain a 7-day workout streak"
-        case .thirtyDayStreak: return "Maintain a 30-day workout streak"
-        case .hundredWorkouts: return "Complete 100 workouts"
-        case .perfectWeek: return "Complete 7 workouts in 7 days"
-        case .monthlyConsistency: return "Complete 20 workouts in a month"
-        case .earlyBird: return "Complete 10 morning workouts"
-        case .nightOwl: return "Complete 10 evening workouts"
-        case .fiftyWorkouts: return "Complete 50 workouts"
-        case .twoHundredWorkouts: return "Complete 200 workouts"
-        case .fiveHundredWorkouts: return "Complete 500 workouts"
-        case .thousandWorkouts: return "Complete 1000 workouts"
+        case .firstFocusSession: return "Complete your first focus session"
+        case .sevenDayStreak: return "Maintain a 7-day focus streak"
+        case .thirtyDayStreak: return "Maintain a 30-day focus streak"
+        case .hundredSessions: return "Complete 100 focus sessions"
+        case .perfectWeek: return "Complete 7 focus sessions in 7 days"
+        case .earlyBird: return "Complete 10 morning focus sessions"
+        case .nightOwl: return "Complete 10 evening focus sessions"
+        case .deepFocus: return "Complete a full Pomodoro cycle (4 sessions)"
         }
     }
     
     var icon: String {
         switch self {
-        case .firstWorkout: return "star.fill"
+        case .firstFocusSession: return "star.fill"
         case .sevenDayStreak: return "flame.fill"
         case .thirtyDayStreak: return "flame.fill"
-        case .hundredWorkouts: return "trophy.fill"
+        case .hundredSessions: return "trophy.fill"
         case .perfectWeek: return "checkmark.circle.fill"
-        case .monthlyConsistency: return "calendar"
         case .earlyBird: return "sunrise.fill"
         case .nightOwl: return "moon.stars.fill"
-        case .fiftyWorkouts: return "medal.fill"
-        case .twoHundredWorkouts: return "trophy.fill"
-        case .fiveHundredWorkouts: return "trophy.fill"
-        case .thousandWorkouts: return "crown.fill"
+        case .deepFocus: return "infinity"
         }
     }
     
     var color: Color {
         switch self {
-        case .firstWorkout: return .yellow
+        case .firstFocusSession: return .yellow
         case .sevenDayStreak: return .orange
         case .thirtyDayStreak: return .red
-        case .hundredWorkouts: return .purple
+        case .hundredSessions: return .purple
         case .perfectWeek: return .green
-        case .monthlyConsistency: return .blue
         case .earlyBird: return .yellow
         case .nightOwl: return .indigo
-        case .fiftyWorkouts: return .blue
-        case .twoHundredWorkouts: return .purple
-        case .fiveHundredWorkouts: return .orange
-        case .thousandWorkouts: return .yellow
+        case .deepFocus: return .blue
         }
     }
     
     var rarity: Rarity {
         switch self {
-        case .firstWorkout: return .common
+        case .firstFocusSession: return .common
         case .sevenDayStreak: return .uncommon
         case .thirtyDayStreak: return .rare
-        case .hundredWorkouts: return .epic
+        case .hundredSessions: return .epic
         case .perfectWeek: return .uncommon
-        case .monthlyConsistency: return .rare
         case .earlyBird: return .common
         case .nightOwl: return .common
-        case .fiftyWorkouts: return .uncommon
-        case .twoHundredWorkouts: return .epic
-        case .fiveHundredWorkouts: return .legendary
-        case .thousandWorkouts: return .legendary
+        case .deepFocus: return .uncommon
         }
     }
     

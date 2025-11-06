@@ -1,7 +1,7 @@
 import SwiftUI
 import Foundation
 
-/// Agent 24: Onboarding Manager - Manages onboarding state and contextual hints
+/// Agent 7: Onboarding Manager for Pomodoro Timer - Manages onboarding state and contextual hints
 /// Provides progressive disclosure of features and contextual help for first-time users
 class OnboardingManager: ObservableObject {
     static let shared = OnboardingManager()
@@ -9,15 +9,15 @@ class OnboardingManager: ObservableObject {
     // MARK: - Onboarding State
     
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
-    @AppStorage("hasSeenFirstWorkoutTutorial") private var hasSeenFirstWorkoutTutorial = false
-    @AppStorage("hasSeenWorkoutTimerHints") private var hasSeenWorkoutTimerHints = false
+    @AppStorage("hasSeenFirstFocusTutorial") private var hasSeenFirstFocusTutorial = false
+    @AppStorage("hasSeenFocusTimerHints") private var hasSeenFocusTimerHints = false
     @AppStorage("hasSeenHistoryHints") private var hasSeenHistoryHints = false
     @AppStorage("hasSeenCustomizationHints") private var hasSeenCustomizationHints = false
     
     // Feature-specific hints
     @AppStorage("hasSeenPauseHint") private var hasSeenPauseHint = false
     @AppStorage("hasSeenProgressHint") private var hasSeenProgressHint = false
-    @AppStorage("hasSeenExerciseGuideHint") private var hasSeenExerciseGuideHint = false
+    @AppStorage("hasSeenPomodoroGuideHint") private var hasSeenPomodoroGuideHint = false
     
     // MARK: - Public Properties
     
@@ -25,8 +25,8 @@ class OnboardingManager: ObservableObject {
         !hasSeenOnboarding
     }
     
-    var shouldShowFirstWorkoutTutorial: Bool {
-        !hasSeenFirstWorkoutTutorial
+    var shouldShowFirstFocusTutorial: Bool {
+        !hasSeenFirstFocusTutorial
     }
     
     // MARK: - Onboarding Completion
@@ -35,16 +35,16 @@ class OnboardingManager: ObservableObject {
         hasSeenOnboarding = true
     }
     
-    func completeFirstWorkoutTutorial() {
-        hasSeenFirstWorkoutTutorial = true
+    func completeFirstFocusTutorial() {
+        hasSeenFirstFocusTutorial = true
     }
     
     // MARK: - Contextual Hints
     
     func shouldShowHint(for feature: OnboardingFeature) -> Bool {
         switch feature {
-        case .workoutTimer:
-            return !hasSeenWorkoutTimerHints
+        case .focusTimer:
+            return !hasSeenFocusTimerHints
         case .history:
             return !hasSeenHistoryHints
         case .customization:
@@ -53,15 +53,15 @@ class OnboardingManager: ObservableObject {
             return !hasSeenPauseHint
         case .progress:
             return !hasSeenProgressHint
-        case .exerciseGuide:
-            return !hasSeenExerciseGuideHint
+        case .pomodoroGuide:
+            return !hasSeenPomodoroGuideHint
         }
     }
     
     func markHintAsSeen(for feature: OnboardingFeature) {
         switch feature {
-        case .workoutTimer:
-            hasSeenWorkoutTimerHints = true
+        case .focusTimer:
+            hasSeenFocusTimerHints = true
         case .history:
             hasSeenHistoryHints = true
         case .customization:
@@ -70,8 +70,8 @@ class OnboardingManager: ObservableObject {
             hasSeenPauseHint = true
         case .progress:
             hasSeenProgressHint = true
-        case .exerciseGuide:
-            hasSeenExerciseGuideHint = true
+        case .pomodoroGuide:
+            hasSeenPomodoroGuideHint = true
         }
     }
     
@@ -79,63 +79,63 @@ class OnboardingManager: ObservableObject {
     
     func resetOnboarding() {
         hasSeenOnboarding = false
-        hasSeenFirstWorkoutTutorial = false
-        hasSeenWorkoutTimerHints = false
+        hasSeenFirstFocusTutorial = false
+        hasSeenFocusTimerHints = false
         hasSeenHistoryHints = false
         hasSeenCustomizationHints = false
         hasSeenPauseHint = false
         hasSeenProgressHint = false
-        hasSeenExerciseGuideHint = false
+        hasSeenPomodoroGuideHint = false
     }
 }
 
 // MARK: - Onboarding Features
 
 enum OnboardingFeature: String, CaseIterable {
-    case workoutTimer
+    case focusTimer
     case history
     case customization
     case pause
     case progress
-    case exerciseGuide
+    case pomodoroGuide
     
     var title: String {
         switch self {
-        case .workoutTimer:
-            return "Workout Timer"
+        case .focusTimer:
+            return "Focus Timer"
         case .history:
-            return "Workout History"
+            return "Session History"
         case .customization:
-            return "Customize Workout"
+            return "Customize Timer"
         case .pause:
-            return "Pause Workout"
+            return "Pause Session"
         case .progress:
             return "Track Progress"
-        case .exerciseGuide:
-            return "Exercise Guide"
+        case .pomodoroGuide:
+            return "Pomodoro Guide"
         }
     }
     
     var message: String {
         switch self {
-        case .workoutTimer:
-            return "Watch the timer count down. Each exercise lasts 30 seconds with 10-second rest periods."
+        case .focusTimer:
+            return "Watch the timer count down. Focus for 25 minutes, then take a 5-minute break. After 4 sessions, enjoy a 15-minute long break."
         case .history:
-            return "View your workout history and track your progress over time."
+            return "View your focus session history and track your progress over time."
         case .customization:
-            return "Customize your workout by selecting exercises and adjusting settings."
+            return "Customize your timer by selecting presets and adjusting focus/break durations."
         case .pause:
             return "Tap pause to take a break. You can resume anytime."
         case .progress:
-            return "Track your streak and total workouts completed."
-        case .exerciseGuide:
-            return "Tap an exercise to see form tips and instructions."
+            return "Track your streak and total focus sessions completed."
+        case .pomodoroGuide:
+            return "Learn about the Pomodoro Technique and productivity tips."
         }
     }
     
     var icon: String {
         switch self {
-        case .workoutTimer:
+        case .focusTimer:
             return "timer"
         case .history:
             return "clock.fill"
@@ -145,7 +145,7 @@ enum OnboardingFeature: String, CaseIterable {
             return "pause.circle.fill"
         case .progress:
             return "chart.line.uptrend.xyaxis"
-        case .exerciseGuide:
+        case .pomodoroGuide:
             return "questionmark.circle.fill"
         }
     }

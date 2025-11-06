@@ -41,6 +41,10 @@ struct SettingsView: View {
     
     // Daily Motivation toggle
     @AppStorage("dailyMotivationEnabled") private var dailyMotivationEnabled = true
+    
+    // Agent 6: Pomodoro Timer Settings
+    @StateObject private var focusPreferencesStore = FocusPreferencesStore()
+    @State private var showFocusCustomization = false
 
     var body: some View {
         NavigationStack {
@@ -50,6 +54,7 @@ struct SettingsView: View {
                     List {
                         appearanceSection
                         soundSection
+                        pomodoroTimerSection
                         watchSection
                         reminderSection
                         healthKitSection
@@ -68,6 +73,7 @@ struct SettingsView: View {
                     List {
                         appearanceSection
                         soundSection
+                        pomodoroTimerSection
                         reminderSection
                         healthKitSection
                         dataSection
@@ -256,6 +262,102 @@ struct SettingsView: View {
             }
         } header: {
             Text("Sound & Haptics").textCase(.none)
+        }
+    }
+    
+    // MARK: - Agent 6: Pomodoro Timer Section
+    
+    private var pomodoroTimerSection: some View {
+        Section {
+            VStack(alignment: .leading, spacing: DesignSystem.Spacing.formFieldSpacing) {
+                // Timer Preset
+                Button {
+                    showFocusCustomization = true
+                } label: {
+                    HStack {
+                        VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
+                            Text("Timer Configuration")
+                                .font(Theme.body)
+                                .foregroundStyle(Theme.textPrimary)
+                            Text(focusPreferencesStore.preferences.useCustomIntervals 
+                                 ? "Custom: \(Int(focusPreferencesStore.preferences.customFocusDuration / 60)) min focus, \(Int(focusPreferencesStore.preferences.customShortBreakDuration / 60)) min break"
+                                 : focusPreferencesStore.preferences.selectedPreset.displayName)
+                                .font(Theme.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .buttonStyle(.plain)
+                
+                Divider()
+                
+                // Auto-start Breaks
+                Toggle(isOn: Binding(
+                    get: { focusPreferencesStore.preferences.autoStartBreaks },
+                    set: { focusPreferencesStore.setAutoStartBreaks($0) }
+                )) {
+                    VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
+                        Text("Auto-start Breaks")
+                            .font(Theme.body)
+                        Text("Automatically start break timer after focus session")
+                            .font(Theme.caption)
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+                .tint(.white)
+                
+                Divider()
+                
+                // Auto-start Next Session
+                Toggle(isOn: Binding(
+                    get: { focusPreferencesStore.preferences.autoStartNextSession },
+                    set: { focusPreferencesStore.setAutoStartNextSession($0) }
+                )) {
+                    VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
+                        Text("Auto-start Next Session")
+                            .font(Theme.body)
+                        Text("Automatically start next focus session after break")
+                            .font(Theme.caption)
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+                .tint(.white)
+                
+                Divider()
+                
+                // Focus Mode Integration
+                Toggle(isOn: Binding(
+                    get: { focusPreferencesStore.preferences.enableFocusMode },
+                    set: { 
+                        focusPreferencesStore.preferences.enableFocusMode = $0
+                        focusPreferencesStore.savePreferences()
+                    }
+                )) {
+                    VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
+                        Text("Focus Mode Integration")
+                            .font(Theme.body)
+                        Text("Suggest iOS Focus Mode activation during sessions")
+                            .font(Theme.caption)
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+                .tint(.white)
+            }
+        } header: {
+            Text("Pomodoro Timer").textCase(.none)
+        } footer: {
+            Text("Customize your Pomodoro timer settings and preferences.")
+        }
+        .sheet(isPresented: $showFocusCustomization) {
+            FocusCustomizationView()
+                .environmentObject(focusPreferencesStore)
+                .iPadOptimizedSheetPresentation()
         }
     }
 

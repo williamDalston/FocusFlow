@@ -5,8 +5,8 @@ final class ThemeStore: ObservableObject {
     /// Optional override for system appearance. Keep `nil` to follow system.
     @Published var colorScheme: ColorScheme? = nil
     
-    /// Current color theme (feminine or masculine)
-    @AppStorage("colorTheme") var colorTheme: Theme.ColorTheme = .feminine {
+    /// Current color theme (calmFocus, energeticTomato, or monochromePro)
+    @AppStorage("colorTheme") var colorTheme: Theme.ColorTheme = .calmFocus {
         didSet {
             Theme.currentTheme = colorTheme
             // Trigger UI refresh

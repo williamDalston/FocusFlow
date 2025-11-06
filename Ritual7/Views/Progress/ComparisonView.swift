@@ -1,10 +1,11 @@
 import SwiftUI
 import Charts
 
-/// Agent 10: Comparison View - Compare workouts across different time periods
+/// Agent 10: Comparison View - Compare focus sessions across different time periods
+/// Agent 15: Updated to use FocusAnalytics and FocusTrendAnalyzer
 struct ComparisonView: View {
-    @ObservedObject var analytics: WorkoutAnalytics
-    @ObservedObject var trendAnalyzer: TrendAnalyzer
+    @ObservedObject var analytics: FocusAnalytics
+    @ObservedObject var trendAnalyzer: FocusTrendAnalyzer
     @EnvironmentObject private var theme: ThemeStore
     @State private var selectedComparison: ComparisonType = .week
     
@@ -61,14 +62,14 @@ struct ComparisonView: View {
             Chart {
                 BarMark(
                     x: .value("Period", "Last Week"),
-                    y: .value("Workouts", comparison.lastWeek)
+                    y: .value("Focus Sessions", comparison.lastWeek)
                 )
                 .foregroundStyle(Theme.accentA.opacity(0.6))
                 .cornerRadius(DesignSystem.CornerRadius.small)
                 
                 BarMark(
                     x: .value("Period", "This Week"),
-                    y: .value("Workouts", comparison.thisWeek)
+                    y: .value("Focus Sessions", comparison.thisWeek)
                 )
                 .foregroundStyle(Theme.accentB.gradient)
                 .cornerRadius(DesignSystem.CornerRadius.small)
@@ -108,14 +109,14 @@ struct ComparisonView: View {
             Chart {
                 BarMark(
                     x: .value("Period", "Last Month"),
-                    y: .value("Workouts", comparison.lastMonth)
+                    y: .value("Focus Sessions", comparison.lastMonth)
                 )
                 .foregroundStyle(Theme.accentA.opacity(0.6))
                 .cornerRadius(DesignSystem.CornerRadius.small)
                 
                 BarMark(
                     x: .value("Period", "This Month"),
-                    y: .value("Workouts", comparison.thisMonth)
+                    y: .value("Focus Sessions", comparison.thisMonth)
                 )
                 .foregroundStyle(Theme.accentC.gradient)
                 .cornerRadius(DesignSystem.CornerRadius.small)
@@ -155,14 +156,14 @@ struct ComparisonView: View {
             Chart {
                 BarMark(
                     x: .value("Period", "Previous 15 Days"),
-                    y: .value("Workouts", trend.previousPeriod)
+                    y: .value("Focus Sessions", trend.previousPeriod)
                 )
                 .foregroundStyle(Theme.accentA.opacity(0.6))
                 .cornerRadius(DesignSystem.CornerRadius.small)
                 
                 BarMark(
                     x: .value("Period", "Recent 15 Days"),
-                    y: .value("Workouts", trend.recentPeriod)
+                    y: .value("Focus Sessions", trend.recentPeriod)
                 )
                 .foregroundStyle(Theme.accentB.gradient)
                 .cornerRadius(DesignSystem.CornerRadius.small)

@@ -1,9 +1,8 @@
 import SwiftUI
 
-/// Agent 30: Enhanced Help Center with comprehensive help content and contextual guidance
+/// Agent 7: Enhanced Help Center with comprehensive help content and contextual guidance for Pomodoro Timer app
 struct HelpCenterView: View {
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var workoutStore: WorkoutStore
     @State private var searchText = ""
     @State private var selectedCategory: HelpCategory? = nil
     
@@ -156,7 +155,7 @@ struct HelpCenterView: View {
             
             Button {
                 // Open support email or contact form
-                if let url = URL(string: "mailto:support@ritual7.app?subject=Help%20Request") {
+                if let url = URL(string: "mailto:support@pomodorotimer.app?subject=Pomodoro%20Timer%20Help%20Request") {
                     UIApplication.shared.open(url)
                 }
             } label: {
@@ -268,7 +267,7 @@ private struct HelpContentCard: View {
 
 enum HelpCategory: String, CaseIterable {
     case gettingStarted = "Getting Started"
-    case workouts = "Workouts"
+    case focusSessions = "Focus Sessions"
     case progress = "Progress"
     case settings = "Settings"
     
@@ -280,8 +279,8 @@ enum HelpCategory: String, CaseIterable {
         switch self {
         case .gettingStarted:
             return "play.circle.fill"
-        case .workouts:
-            return "figure.run"
+        case .focusSessions:
+            return "brain.head.profile"
         case .progress:
             return "chart.bar.fill"
         case .settings:
@@ -293,7 +292,7 @@ enum HelpCategory: String, CaseIterable {
         switch self {
         case .gettingStarted:
             return Theme.accentA
-        case .workouts:
+        case .focusSessions:
             return Theme.accentB
         case .progress:
             return Theme.accentC
@@ -314,40 +313,52 @@ struct HelpCenterContent: Identifiable {
     
     static let all: [HelpCenterContent] = [
         HelpCenterContent(
-            title: "How do I start my first workout?",
-            description: "Learn how to begin your fitness journey",
-            content: "Starting your first workout is easy! Simply tap the 'Start Workout' button on the main screen. Your workout will begin automatically with a short preparation countdown. You can customize your workout duration, rest periods, and exercises before starting.",
+            title: "How do I start my first focus session?",
+            description: "Learn how to begin using the Pomodoro Technique",
+            content: "Starting your first focus session is easy! Simply tap the 'Start Focus' button on the main screen. Your timer will begin automatically with a 25-minute focus session. You can customize your timer presets and durations in Settings before starting.",
             category: .gettingStarted
         ),
         HelpCenterContent(
-            title: "How do I customize my workout?",
-            description: "Adjust exercise duration, rest periods, and more",
-            content: "To customize your workout, tap the 'Customize' button on the main screen. From there, you can adjust exercise duration (default 30 seconds), rest periods (default 10 seconds), and select which exercises to include. Changes are saved automatically.",
-            category: .workouts
+            title: "What is the Pomodoro Technique?",
+            description: "Learn about the Pomodoro Technique",
+            content: "The Pomodoro Technique is a time management method that uses a timer to break work into intervals. You work in focused 25-minute sessions, take 5-minute breaks, and enjoy a 15-minute long break after every 4 sessions. This proven method helps maintain concentration and avoid burnout. Tap the Pomodoro Guide in Settings to learn more.",
+            category: .gettingStarted
+        ),
+        HelpCenterContent(
+            title: "How do I customize my timer?",
+            description: "Adjust focus duration, break duration, and presets",
+            content: "To customize your timer, go to Settings > Timer Settings. From there, you can adjust focus duration (default 25 minutes), short break duration (default 5 minutes), and long break duration (default 15 minutes). You can also select from preset configurations like Classic, Deep Work, or Short Sprints. Changes are saved automatically.",
+            category: .focusSessions
         ),
         HelpCenterContent(
             title: "How does streak tracking work?",
-            description: "Understand how your workout streak is calculated",
-            content: "Your streak is the number of consecutive days you've completed a workout. Work out every day to keep your streak growing! If you miss a day, your streak resets to zero. The longer your streak, the more motivated you'll stay!",
+            description: "Understand how your focus streak is calculated",
+            content: "Your streak is the number of consecutive days you've completed at least one focus session. Complete sessions daily to keep your streak growing! If you miss a day, your streak resets to zero. The longer your streak, the more motivated you'll stay and the stronger your productivity habit becomes.",
             category: .progress
         ),
         HelpCenterContent(
-            title: "How do I pause or skip during a workout?",
-            description: "Control your workout with pause, skip, and other options",
-            content: "During a workout, you can pause by tapping the pause button or swiping right. You can skip rest periods by tapping the skip button or swiping left. You can also navigate between exercises using the previous/next buttons.",
-            category: .workouts
+            title: "How do I pause during a focus session?",
+            description: "Control your timer with pause and resume",
+            content: "During a focus session, you can pause by tapping the pause button. You can resume anytime by tapping the resume button. The timer will continue from where you left off. Note: Pausing doesn't count as a break - make sure to take your scheduled breaks to maintain the Pomodoro rhythm.",
+            category: .focusSessions
         ),
         HelpCenterContent(
-            title: "How do I connect with Apple Health?",
-            description: "Sync your workouts with Apple Health",
-            content: "To connect with Apple Health, go to Settings > Health Integration and tap 'Connect with Health'. Grant the necessary permissions to sync your workouts, calories, and exercise minutes automatically. Your health data is private and secure.",
+            title: "What happens after 4 sessions?",
+            description: "Understanding Pomodoro cycles and long breaks",
+            content: "After completing 4 focus sessions (with short breaks in between), you'll automatically get a 15-minute long break. This is part of the Pomodoro cycle designed to give your brain a longer recovery period. The cycle then resets, and you can start a new set of 4 sessions.",
+            category: .focusSessions
+        ),
+        HelpCenterContent(
+            title: "How do I set up focus reminders?",
+            description: "Get notified to start your daily focus sessions",
+            content: "To set up reminders, go to Settings > Reminders & Notifications. Enable 'Daily Focus Reminder' and choose your preferred time. You can also enable streak reminders and weekly progress summaries. Notifications help you build a consistent focus habit.",
             category: .settings
         ),
         HelpCenterContent(
-            title: "How do I set up workout reminders?",
-            description: "Get notified to complete your daily workout",
-            content: "To set up reminders, go to Settings > Reminders & Notifications. Enable 'Daily Workout Reminder' and choose your preferred time. You can also enable streak reminders, gentle nudges, and weekly summaries.",
-            category: .settings
+            title: "How do I view my focus statistics?",
+            description: "Track your progress and productivity",
+            content: "View your focus statistics by tapping the 'History' or 'Statistics' button on the main screen. You'll see your daily focus time, completed sessions, current streak, and weekly/monthly trends. This helps you understand your productivity patterns and stay motivated.",
+            category: .progress
         )
     ]
     

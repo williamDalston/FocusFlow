@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Agent 24: Progressive Onboarding System - Enhanced with skip option and improved progressive disclosure
+/// Agent 7: Progressive Onboarding System for Pomodoro Timer - Enhanced with skip option and improved progressive disclosure
 struct OnboardingView: View {
     @ObservedObject private var onboardingManager = OnboardingManager.shared
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -13,20 +13,20 @@ struct OnboardingView: View {
     // Onboarding steps with progressive disclosure
     private let steps: [OnboardingStep] = [
         OnboardingStep(
-            title: "Welcome to Ritual7 👋",
-            description: "Transform your life in just 7 minutes a day. Build strength, improve fitness, and create lasting habits with our science-backed workout program.",
-            icon: "figure.run",
+            title: "Welcome to Pomodoro Timer 🍅",
+            description: "Master the Pomodoro Technique and boost your productivity. Focus deeply, take breaks, and accomplish more with proven time management.",
+            icon: "timer",
             iconColors: [Theme.accentA, Theme.accentB]
         ),
         OnboardingStep(
-            title: "12 Exercises, 7 Minutes 💪",
-            description: "Complete a full-body workout with 12 exercises, each lasting 30 seconds with 10-second rest periods. No equipment needed—just your commitment.",
-            icon: "timer",
+            title: "The Pomodoro Technique 📚",
+            description: "Work in focused 25-minute sessions, take 5-minute breaks, and enjoy a 15-minute long break after every 4 sessions. This proven method helps you maintain concentration and avoid burnout.",
+            icon: "brain.head.profile",
             iconColors: [Theme.accentB, Theme.accentC]
         ),
         OnboardingStep(
-            title: "Build a Streak 🔥",
-            description: "Work out daily to grow your streak. Small consistent efforts compound into big results. Track your progress and celebrate your achievements.",
+            title: "Build Your Focus Streak 🔥",
+            description: "Complete focus sessions daily to grow your streak. Track your progress, build lasting productivity habits, and celebrate your achievements.",
             icon: "flame.fill",
             iconColors: [Theme.accentC, Theme.accentA]
         )
@@ -99,7 +99,7 @@ struct OnboardingView: View {
             Spacer()
             
             // Title
-            Text("Stay consistent")
+            Text("Stay Focused")
                 .font(isIPad ? Theme.largeTitle : Theme.title)
                 .foregroundStyle(Theme.textOnDark)
                 .multilineTextAlignment(.center)
@@ -108,7 +108,7 @@ struct OnboardingView: View {
                 .padding(.horizontal, isIPad ? DesignSystem.Spacing.xxl : DesignSystem.Spacing.xl)
             
             // Description
-            Text("Get a gentle daily reminder at a time you choose to help you build your workout habit.")
+            Text("Get a gentle daily reminder at a time you choose to help you build your focus habit and stay productive.")
                 .font(isIPad ? Theme.title2 : Theme.title3)
                 .foregroundStyle(Theme.textSecondaryOnDark)
                 .multilineTextAlignment(.center)
@@ -120,7 +120,7 @@ struct OnboardingView: View {
             // Toggle card with consistent styling
             GlassCard(material: .ultraThinMaterial) {
                 Toggle(isOn: $reminderEnabled) {
-                    Label("Enable Daily Workout Reminder", systemImage: "bell.badge")
+                    Label("Enable Daily Focus Reminder", systemImage: "bell.badge")
                         .font(Theme.body)
                         .foregroundStyle(Theme.textOnDark)
                 }

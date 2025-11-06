@@ -1,13 +1,14 @@
 import SwiftUI
 import Charts
 
-/// Agent 2: Progress Charts - Beautiful charts for workout progress visualization
+/// Agent 2 & 3: Progress Charts - Beautiful charts for focus session progress visualization
 /// Agent 10: Enhanced with interactivity and export functionality
+/// Agent 15: Updated to use FocusAnalytics
 struct ProgressChartView: View {
-    @ObservedObject var analytics: WorkoutAnalytics
+    @ObservedObject var analytics: FocusAnalytics
     @EnvironmentObject private var theme: ThemeStore
     @State private var selectedTimeframe: Timeframe = .week
-    @State private var selectedDataPoint: DailyWorkoutCount?
+    @State private var selectedDataPoint: DailyFocusCount?
     @State private var showingExportSheet = false
     @State private var isLoading = true  // Agent 16: Loading state for skeleton loaders
     
@@ -33,7 +34,7 @@ struct ProgressChartView: View {
                 } label: {
                     Image(systemName: "square.and.arrow.up")
                         .font(Theme.body)
-                        .foregroundStyle(Theme.accentA)
+                        .foregroundStyle(Theme.accent)
                         .frame(width: DesignSystem.IconSize.medium, height: DesignSystem.IconSize.medium)
                 }
                 .accessibilityLabel("Export Chart")
@@ -48,7 +49,7 @@ struct ProgressChartView: View {
                 }
             }
             .pickerStyle(.segmented)
-            .tint(Theme.accentA)
+            .tint(Theme.accent)
             
             // Agent 16: Show skeleton loader while loading
             if isLoading {
@@ -111,7 +112,7 @@ struct ProgressChartView: View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
             HStack {
                 Image(systemName: "info.circle.fill")
-                    .foregroundStyle(Theme.accentA)
+                    .foregroundStyle(Theme.accent)
                     .font(Theme.subheadline)
                 Text("Selected Date")
                     .font(Theme.subheadline)
@@ -134,7 +135,7 @@ struct ProgressChartView: View {
                     Text(dataPoint.date.formatted(date: .abbreviated, time: .omitted))
                         .font(Theme.caption)
                         .foregroundStyle(.secondary)
-                    Text("\(dataPoint.count) workout\(dataPoint.count == 1 ? "" : "s")")
+                    Text("\(dataPoint.count) focus session\(dataPoint.count == 1 ? "" : "s")")
                         .font(Theme.title3)
                         .foregroundStyle(Theme.textPrimary)
                         .monospacedDigit()
@@ -146,10 +147,10 @@ struct ProgressChartView: View {
         .cardPadding()
         .background(
             RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
-                .fill(Theme.accentA.opacity(DesignSystem.Opacity.subtle * 0.5))
+                .fill(Theme.accent.opacity(DesignSystem.Opacity.subtle * 0.5))
                 .overlay(
                     RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
-                        .stroke(Theme.accentA.opacity(DesignSystem.Opacity.subtle * 1.5), lineWidth: DesignSystem.Border.standard)
+                        .stroke(Theme.accent.opacity(DesignSystem.Opacity.subtle * 1.5), lineWidth: DesignSystem.Border.standard)
                 )
         )
     }
@@ -158,7 +159,7 @@ struct ProgressChartView: View {
     
     private var weeklyChart: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.xl) {
-            Text("Workouts This Week")
+            Text("Focus Sessions This Week")
                 .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
                 .padding(.bottom, DesignSystem.Spacing.xs)
@@ -166,16 +167,16 @@ struct ProgressChartView: View {
             Chart(analytics.weeklyTrend) { day in
                 BarMark(
                     x: .value("Day", day.date, unit: .day),
-                    y: .value("Workouts", day.count)
+                    y: .value("Focus Sessions", day.count)
                 )
-                .foregroundStyle(Theme.accentA.gradient)
+                .foregroundStyle(Theme.accent.gradient)
                 .cornerRadius(DesignSystem.CornerRadius.small)
                 .opacity(selectedDataPoint?.id == day.id ? 1.0 : 0.7)
                 
                 // Agent 10: Interactive annotation
                 if selectedDataPoint?.id == day.id {
                     RuleMark(x: .value("Day", day.date, unit: .day))
-                        .foregroundStyle(Theme.accentA.opacity(0.5))
+                        .foregroundStyle(Theme.accent.opacity(0.5))
                 }
             }
             .frame(height: 200)
@@ -199,7 +200,7 @@ struct ProgressChartView: View {
     
     private var monthlyChart: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.xl) {
-            Text("Workouts Last 30 Days")
+            Text("Focus Sessions Last 30 Days")
                 .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
                 .padding(.bottom, DesignSystem.Spacing.xs)
@@ -207,18 +208,18 @@ struct ProgressChartView: View {
             Chart(analytics.monthlyTrend) { day in
                 LineMark(
                     x: .value("Date", day.date, unit: .day),
-                    y: .value("Workouts", day.count)
+                    y: .value("Focus Sessions", day.count)
                 )
-                .foregroundStyle(Theme.accentB)
+                .foregroundStyle(Theme.ringBreakShort)
                 .interpolationMethod(.catmullRom)
                 
                 AreaMark(
                     x: .value("Date", day.date, unit: .day),
-                    y: .value("Workouts", day.count)
+                    y: .value("Focus Sessions", day.count)
                 )
                 .foregroundStyle(
                     LinearGradient(
-                        colors: [Theme.accentB.opacity(0.3), Theme.accentB.opacity(0.0)],
+                        colors: [Theme.ringBreakShort.opacity(0.3), Theme.ringBreakShort.opacity(0.0)],
                         startPoint: .top,
                         endPoint: .bottom
                     )
@@ -245,7 +246,7 @@ struct ProgressChartView: View {
     
     private var yearlyChart: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.xl) {
-            Text("Workouts Last 12 Months")
+            Text("Focus Sessions Last 12 Months")
                 .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
                 .padding(.bottom, DesignSystem.Spacing.xs)
@@ -253,9 +254,9 @@ struct ProgressChartView: View {
             Chart(analytics.yearlyTrend) { month in
                 BarMark(
                     x: .value("Month", month.month, unit: .month),
-                    y: .value("Workouts", month.count)
+                    y: .value("Focus Sessions", month.count)
                 )
-                .foregroundStyle(Theme.accentC.gradient)
+                .foregroundStyle(Theme.ringBreakLong.gradient)
                 .cornerRadius(8)
             }
             .frame(height: 200)
@@ -278,7 +279,7 @@ struct ProgressChartView: View {
 // MARK: - Exercise Completion Chart
 
 struct ExerciseCompletionChartView: View {
-    @ObservedObject var analytics: WorkoutAnalytics
+    @ObservedObject var analytics: FocusAnalytics
     @EnvironmentObject private var theme: ThemeStore
     
     var body: some View {
@@ -297,7 +298,7 @@ struct ExerciseCompletionChartView: View {
                             innerRadius: .ratio(0.6),
                             angularInset: 2
                         )
-                        .foregroundStyle(Theme.accentA.gradient)
+                        .foregroundStyle(Theme.accent.gradient)
                         
                         SectorMark(
                             angle: .value("Remaining", 100 - completionRate),
@@ -324,7 +325,7 @@ struct ExerciseCompletionChartView: View {
                         BarMark(
                             x: .value("Completion", analytics.averageCompletionRate)
                         )
-                        .foregroundStyle(Theme.accentA.gradient)
+                        .foregroundStyle(Theme.accent.gradient)
                     }
                     .frame(height: 200)
                     .overlay {
@@ -356,8 +357,8 @@ struct ExerciseCompletionChartView: View {
 
 // MARK: - Workout Frequency Chart
 
-struct WorkoutFrequencyChartView: View {
-    @ObservedObject var analytics: WorkoutAnalytics
+struct FocusFrequencyChartView: View {
+    @ObservedObject var analytics: FocusAnalytics
     @EnvironmentObject private var theme: ThemeStore
     @State private var selectedType: FrequencyType = .timeOfDay
     
@@ -375,7 +376,7 @@ struct WorkoutFrequencyChartView: View {
                 }
             }
             .pickerStyle(.segmented)
-            .tint(Theme.accentA)
+            .tint(Theme.accent)
             .padding(.horizontal, DesignSystem.Spacing.lg)
             .padding(.bottom, DesignSystem.Spacing.xs)
             
@@ -401,16 +402,16 @@ struct WorkoutFrequencyChartView: View {
     
     private var timeOfDayChart: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.xl) {
-            Text("Workout Time Distribution")
+            Text("Focus Time Distribution")
                 .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
                 .padding(.bottom, DesignSystem.Spacing.xs)
             
-            let frequency = analytics.workoutFrequencyByTime
+            let frequency = analytics.focusFrequencyByTime
             Chart(TimeOfDay.allCases.filter { $0 != .unknown }) { time in
                 BarMark(
                     x: .value("Time", time.displayName),
-                    y: .value("Workouts", frequency[time] ?? 0)
+                    y: .value("Focus Sessions", frequency[time] ?? 0)
                 )
                 .foregroundStyle(Theme.accentA.gradient)
                 .cornerRadius(DesignSystem.CornerRadius.small)
@@ -427,18 +428,18 @@ struct WorkoutFrequencyChartView: View {
     
     private var dayOfWeekChart: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.xl) {
-            Text("Workout Day Distribution")
+            Text("Focus Day Distribution")
                 .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
                 .padding(.bottom, DesignSystem.Spacing.xs)
             
-            let frequency = analytics.workoutFrequencyByDay
+            let frequency = analytics.focusFrequencyByDay
             Chart(DayOfWeek.allCases) { day in
                 BarMark(
                     x: .value("Day", day.shortName),
-                    y: .value("Workouts", frequency[day] ?? 0)
+                    y: .value("Focus Sessions", frequency[day] ?? 0)
                 )
-                .foregroundStyle(Theme.accentB.gradient)
+                .foregroundStyle(Theme.ringBreakShort.gradient)
                 .cornerRadius(8)
             }
             .frame(height: 200)
@@ -455,7 +456,7 @@ struct WorkoutFrequencyChartView: View {
 // MARK: - Agent 10: Chart Export Sheet
 
 private struct ProgressChartExportSheet: View {
-    @ObservedObject var analytics: WorkoutAnalytics
+    @ObservedObject var analytics: FocusAnalytics
     let timeframe: ProgressChartView.Timeframe
     @Environment(\.dismiss) private var dismiss
     @State private var exportFormat: ExportFormat = .png
@@ -467,7 +468,7 @@ private struct ProgressChartExportSheet: View {
     
     var body: some View {
         NavigationStack {
-            VStack(spacing: 24) {
+            VStack(spacing: DesignSystem.Spacing.md) {
                 Text("Export Chart")
                     .font(Theme.headline)
                     .foregroundStyle(Theme.textPrimary)
@@ -497,6 +498,11 @@ private struct ProgressChartExportSheet: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") {
+                        // Show interstitial ad after viewing statistics (natural break point)
+                        Task { @MainActor in
+                            try? await Task.sleep(nanoseconds: 300_000_000) // 0.3 second delay
+                            InterstitialAdManager.shared.present(from: nil)
+                        }
                         dismiss()
                     }
                 }
@@ -514,8 +520,8 @@ private struct ProgressChartExportSheet: View {
 // MARK: - Chart X Selection Modifier (iOS 17+ compatibility)
 
 struct ChartXSelectionModifier: ViewModifier {
-    @Binding var selectedDataPoint: DailyWorkoutCount?
-    let analytics: WorkoutAnalytics
+    @Binding var selectedDataPoint: DailyFocusCount?
+    let analytics: FocusAnalytics
     
     func body(content: Content) -> some View {
         if #available(iOS 17.0, *) {

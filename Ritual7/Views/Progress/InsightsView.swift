@@ -1,8 +1,9 @@
 import SwiftUI
 
 /// Agent 2: Insights View - Personalized insights and recommendations
+/// Agent 15: Updated to use FocusAnalytics
 struct InsightsView: View {
-    @ObservedObject var analytics: WorkoutAnalytics
+    @ObservedObject var analytics: FocusAnalytics
     @EnvironmentObject private var theme: ThemeStore
     
     var body: some View {
@@ -31,11 +32,11 @@ struct InsightsView: View {
     
     private var header: some View {
         VStack(spacing: DesignSystem.Spacing.sm) {
-            Text("Your Workout Insights")
+            Text("Your Focus Insights")
                 .font(Theme.title2)
                 .foregroundStyle(Theme.textPrimary)
             
-            Text("Personalized insights based on your workout patterns")
+            Text("Personalized insights based on your focus patterns")
                 .font(Theme.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -69,7 +70,7 @@ struct InsightsView: View {
                 .font(Theme.title)
                 .foregroundStyle(.secondary)
             
-            Text("Complete more workouts to see insights")
+            Text("Complete more focus sessions to see insights")
                 .font(Theme.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -193,20 +194,20 @@ struct InsightsView: View {
         }
         
         // Frequency recommendations
-        if analytics.store.workoutsThisWeek < 3 {
-            recommendations.append("Try to complete 3 workouts this week for better results.")
+        if analytics.store.sessionsThisWeek < 3 {
+            recommendations.append("Try to complete 3 focus sessions this week for better results.")
         }
         
         // Time of day recommendations
-        if analytics.bestWorkoutTime == .morning {
-            recommendations.append("You work out best in the morning. Keep this routine!")
-        } else if analytics.bestWorkoutTime == .evening {
-            recommendations.append("Evening workouts work well for you. Consider making it a habit!")
+        if analytics.bestFocusTime == .morning {
+            recommendations.append("You focus best in the morning. Keep this routine!")
+        } else if analytics.bestFocusTime == .evening {
+            recommendations.append("Evening focus sessions work well for you. Consider making it a habit!")
         }
         
         // Completion rate recommendations
         if analytics.averageCompletionRate < 80 {
-            recommendations.append("Try to complete all exercises for maximum benefit!")
+            recommendations.append("Try to complete all focus sessions for maximum benefit!")
         }
         
         return recommendations.isEmpty ? ["Keep up the great work!"] : recommendations
@@ -216,7 +217,7 @@ struct InsightsView: View {
 // MARK: - Insight Card
 
 struct InsightCard: View {
-    let insight: WorkoutInsight
+    let insight: FocusInsight
     @EnvironmentObject private var theme: ThemeStore
     
     var body: some View {

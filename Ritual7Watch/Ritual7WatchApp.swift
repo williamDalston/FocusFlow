@@ -2,12 +2,12 @@ import SwiftUI
 
 @main
 struct Ritual7WatchApp: App {
-    @StateObject private var workoutStore = WatchWorkoutStore()
+    @StateObject private var focusStore = WatchFocusStore()
     
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(workoutStore)
+                .environmentObject(focusStore)
         }
     }
 }

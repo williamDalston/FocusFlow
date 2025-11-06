@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-2214618538122354~5208701479</string>
+	<string>ca-app-pub-2214618538122354~8774936617</string>
 	<key>UIApplicationSceneManifest</key>
 	<false/>
 	<key>UILaunchScreen</key>
@@ -18,9 +18,9 @@
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Ritual7</string>
+	<string>Pomodoro Timer</string>
 	<key>CFBundleName</key>
-	<string>Ritual7</string>
+	<string>Pomodoro Timer</string>
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
@@ -33,15 +33,15 @@
 			<key>UIApplicationShortcutItemIconType</key>
 			<string>UIApplicationShortcutIconTypePlay</string>
 			<key>UIApplicationShortcutItemTitle</key>
-			<string>Start Ritual7</string>
+			<string>Start Focus Session</string>
 			<key>UIApplicationShortcutItemType</key>
-			<string>com.williamalston.Ritual7.startworkout</string>
+			<string>com.williamalston.Ritual7.startFocus</string>
 		</dict>
 	</array>
 	<key>NSHealthShareUsageDescription</key>
-	<string>We use HealthKit to read your weight and activity level to provide better calorie estimates and personalized recommendations for your workouts.</string>
+	<string>We use HealthKit to track your focus time and productivity sessions so you can monitor your mental wellness and work patterns in the Health app.</string>
 	<key>NSHealthUpdateUsageDescription</key>
-	<string>We use HealthKit to save your workout sessions, including exercise minutes and calories burned, so you can track your progress in the Health and Activity apps.</string>
+	<string>We use HealthKit to save your focus sessions, including focus time and completed Pomodoro sessions, so you can track your productivity in the Health app.</string>
 	<key>NSUserTrackingUsageDescription</key>
 	<string>We use this to show relevant ads and support free features.</string>
 	<key>UIBackgroundModes</key>

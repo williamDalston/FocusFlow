@@ -11,7 +11,7 @@ enum AdConfig {
     private static let testInterstitial = "ca-app-pub-3940256099942544/4411468910"
 
     // MARK: - Production IDs (your real ones from AdMob dashboard)
-    private static let prodInterstitial = "ca-app-pub-2214618538122354/7280223242"
+    private static let prodInterstitial = "ca-app-pub-2214618538122354/7521672497"
 
     // MARK: - Public accessors
     static var interstitialUnit: String { useTest ? testInterstitial : prodInterstitial }

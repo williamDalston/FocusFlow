@@ -1,6 +1,9 @@
 import ClockKit
 import SwiftUI
+import Foundation
 
+/// Complication controller for Apple Watch
+/// Provides complications for focus streak, quick start, today's sessions, and weekly progress
 class ComplicationController: NSObject, CLKComplicationDataSource {
     
     // MARK: - Complication Configuration
@@ -27,22 +30,22 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         
         let descriptors = [
             CLKComplicationDescriptor(
-                identifier: "workout_streak",
-                displayName: "Workout Streak",
+                identifier: "focus_streak",
+                displayName: "Focus Streak",
                 supportedFamilies: allFamilies
             ),
             CLKComplicationDescriptor(
-                identifier: "workout_quick_start",
+                identifier: "focus_quick_start",
                 displayName: "Quick Start",
                 supportedFamilies: allFamilies
             ),
             CLKComplicationDescriptor(
-                identifier: "workout_today",
-                displayName: "Today's Workouts",
+                identifier: "focus_today",
+                displayName: "Today's Focus",
                 supportedFamilies: allFamilies
             ),
             CLKComplicationDescriptor(
-                identifier: "workout_progress",
+                identifier: "focus_progress",
                 displayName: "Weekly Progress",
                 supportedFamilies: allFamilies
             )
@@ -103,13 +106,13 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     
     private func createTemplate(for complication: CLKComplication, date: Date) -> CLKComplicationTemplate? {
         switch complication.identifier {
-        case "workout_streak":
+        case "focus_streak":
             return createStreakTemplate(for: complication, date: date)
-        case "workout_quick_start":
+        case "focus_quick_start":
             return createQuickStartTemplate(for: complication, date: date)
-        case "workout_today":
+        case "focus_today":
             return createTodayTemplate(for: complication, date: date)
-        case "workout_progress":
+        case "focus_progress":
             return createProgressTemplate(for: complication, date: date)
         default:
             return createStreakTemplate(for: complication, date: date)
@@ -133,15 +136,15 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             )
         case .utilitarianSmall:
             return CLKComplicationTemplateUtilitarianSmallFlat(
-                textProvider: CLKSimpleTextProvider(text: "🔥\(streak)")
+                textProvider: CLKSimpleTextProvider(text: "🧠\(streak)")
             )
         case .utilitarianSmallFlat:
             return CLKComplicationTemplateUtilitarianSmallFlat(
-                textProvider: CLKSimpleTextProvider(text: "💪\(streak)")
+                textProvider: CLKSimpleTextProvider(text: "🍅\(streak)")
             )
         case .utilitarianLarge:
             return CLKComplicationTemplateUtilitarianLargeFlat(
-                textProvider: CLKSimpleTextProvider(text: "🔥 \(streak) Day Streak")
+                textProvider: CLKSimpleTextProvider(text: "🧠 \(streak) Day Streak")
             )
         case .extraLarge:
             if #available(watchOS 7.0, *) {
@@ -170,7 +173,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         case .graphicRectangular:
             if #available(watchOS 7.0, *) {
                 return CLKComplicationTemplateGraphicRectangularStackText(
-                    line1TextProvider: CLKSimpleTextProvider(text: "Workout Streak"),
+                    line1TextProvider: CLKSimpleTextProvider(text: "Focus Streak"),
                     line2TextProvider: CLKSimpleTextProvider(text: "\(streak) Days")
                 )
             }
@@ -206,7 +209,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         case .accessoryRectangular:
             if #available(watchOS 9.0, *) {
                 return CLKComplicationTemplateAccessoryRectangularStackText(
-                    line1TextProvider: CLKSimpleTextProvider(text: "Workout Streak"),
+                    line1TextProvider: CLKSimpleTextProvider(text: "Focus Streak"),
                     line2TextProvider: CLKSimpleTextProvider(text: "\(streak) Days")
                 )
             }
@@ -214,7 +217,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         case .accessoryInline:
             if #available(watchOS 9.0, *) {
                 return CLKComplicationTemplateAccessoryInlineStackText(
-                    line1TextProvider: CLKSimpleTextProvider(text: "🔥 \(streak)"),
+                    line1TextProvider: CLKSimpleTextProvider(text: "🧠 \(streak)"),
                     line2TextProvider: CLKSimpleTextProvider(text: "Day Streak")
                 )
             }
@@ -233,8 +236,8 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     }
     
     private func createQuickStartTemplate(for complication: CLKComplication, date: Date) -> CLKComplicationTemplate? {
-        let workoutImage = UIImage(systemName: "figure.run") ?? UIImage()
-        let imageProvider = CLKImageProvider(onePieceImage: workoutImage)
+        let focusImage = UIImage(systemName: "brain.head.profile") ?? UIImage()
+        let imageProvider = CLKImageProvider(onePieceImage: focusImage)
         
         switch complication.family {
         case .circularSmall:
@@ -243,15 +246,15 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             return CLKComplicationTemplateCircularMediumSimpleImage(imageProvider: imageProvider)
         case .utilitarianSmall:
             return CLKComplicationTemplateUtilitarianSmallFlat(
-                textProvider: CLKSimpleTextProvider(text: "7 Min")
+                textProvider: CLKSimpleTextProvider(text: "25 Min")
             )
         case .utilitarianSmallFlat:
             return CLKComplicationTemplateUtilitarianSmallFlat(
-                textProvider: CLKSimpleTextProvider(text: "Start")
+                textProvider: CLKSimpleTextProvider(text: "Focus")
             )
         case .utilitarianLarge:
             return CLKComplicationTemplateUtilitarianLargeFlat(
-                textProvider: CLKSimpleTextProvider(text: "7-Min Workout")
+                textProvider: CLKSimpleTextProvider(text: "Start Focus")
             )
         case .extraLarge:
             if #available(watchOS 7.0, *) {
@@ -262,7 +265,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             if #available(watchOS 7.0, *) {
                 return CLKComplicationTemplateGraphicCornerStackImage(
                     line1ImageProvider: imageProvider,
-                    line2TextProvider: CLKSimpleTextProvider(text: "7 Min")
+                    line2TextProvider: CLKSimpleTextProvider(text: "Focus")
                 )
             }
             return nil
@@ -275,7 +278,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             if #available(watchOS 7.0, *) {
                 return CLKComplicationTemplateGraphicRectangularStackImage(
                     line1ImageProvider: imageProvider,
-                    line2TextProvider: CLKSimpleTextProvider(text: "7-Minute Workout")
+                    line2TextProvider: CLKSimpleTextProvider(text: "Pomodoro Timer")
                 )
             }
             return nil
@@ -305,15 +308,15 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             if #available(watchOS 9.0, *) {
                 return CLKComplicationTemplateAccessoryRectangularStackImage(
                     line1ImageProvider: imageProvider,
-                    line2TextProvider: CLKSimpleTextProvider(text: "7-Min Workout")
+                    line2TextProvider: CLKSimpleTextProvider(text: "Pomodoro")
                 )
             }
             return nil
         case .accessoryInline:
             if #available(watchOS 9.0, *) {
                 return CLKComplicationTemplateAccessoryInlineStackText(
-                    line1TextProvider: CLKSimpleTextProvider(text: "🏃"),
-                    line2TextProvider: CLKSimpleTextProvider(text: "7 Min")
+                    line1TextProvider: CLKSimpleTextProvider(text: "🧠"),
+                    line2TextProvider: CLKSimpleTextProvider(text: "Focus")
                 )
             }
             return nil
@@ -333,8 +336,8 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     // Agent 15: Additional complication templates
     
     private func createTodayTemplate(for complication: CLKComplication, date: Date) -> CLKComplicationTemplate? {
-        let todayWorkouts = getTodayWorkouts()
-        let todayText = "\(todayWorkouts)"
+        let todaySessions = getTodaySessions()
+        let todayText = "\(todaySessions)"
         
         switch complication.family {
         case .circularSmall:
@@ -345,21 +348,21 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         case .circularMedium:
             return CLKComplicationTemplateCircularMediumStackText(
                 line1TextProvider: CLKSimpleTextProvider(text: todayText),
-                line2TextProvider: CLKSimpleTextProvider(text: "Workouts Today")
+                line2TextProvider: CLKSimpleTextProvider(text: "Sessions Today")
             )
         case .utilitarianSmall:
             return CLKComplicationTemplateUtilitarianSmallFlat(
-                textProvider: CLKSimpleTextProvider(text: "💪\(todayWorkouts)")
+                textProvider: CLKSimpleTextProvider(text: "🧠\(todaySessions)")
             )
         case .utilitarianLarge:
             return CLKComplicationTemplateUtilitarianLargeFlat(
-                textProvider: CLKSimpleTextProvider(text: "\(todayWorkouts) Workouts Today")
+                textProvider: CLKSimpleTextProvider(text: "\(todaySessions) Sessions Today")
             )
         case .graphicRectangular:
             if #available(watchOS 7.0, *) {
                 return CLKComplicationTemplateGraphicRectangularStackText(
-                    line1TextProvider: CLKSimpleTextProvider(text: "Today's Workouts"),
-                    line2TextProvider: CLKSimpleTextProvider(text: "\(todayWorkouts)")
+                    line1TextProvider: CLKSimpleTextProvider(text: "Today's Focus"),
+                    line2TextProvider: CLKSimpleTextProvider(text: "\(todaySessions)")
                 )
             }
             return nil
@@ -367,7 +370,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             if #available(watchOS 9.0, *) {
                 return CLKComplicationTemplateAccessoryRectangularStackText(
                     line1TextProvider: CLKSimpleTextProvider(text: "Today"),
-                    line2TextProvider: CLKSimpleTextProvider(text: "\(todayWorkouts) Workouts")
+                    line2TextProvider: CLKSimpleTextProvider(text: "\(todaySessions) Sessions")
                 )
             }
             return nil
@@ -377,18 +380,18 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     }
     
     private func createProgressTemplate(for complication: CLKComplication, date: Date) -> CLKComplicationTemplate? {
-        let weeklyWorkouts = getWeeklyWorkouts()
+        let weeklySessions = getWeeklySessions()
         
         switch complication.family {
         case .utilitarianLarge:
             return CLKComplicationTemplateUtilitarianLargeFlat(
-                textProvider: CLKSimpleTextProvider(text: "\(weeklyWorkouts) This Week")
+                textProvider: CLKSimpleTextProvider(text: "\(weeklySessions) This Week")
             )
         case .graphicRectangular:
             if #available(watchOS 7.0, *) {
                 return CLKComplicationTemplateGraphicRectangularStackText(
                     line1TextProvider: CLKSimpleTextProvider(text: "Weekly Progress"),
-                    line2TextProvider: CLKSimpleTextProvider(text: "\(weeklyWorkouts) Workouts")
+                    line2TextProvider: CLKSimpleTextProvider(text: "\(weeklySessions) Sessions")
                 )
             }
             return nil
@@ -396,7 +399,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             if #available(watchOS 9.0, *) {
                 return CLKComplicationTemplateAccessoryRectangularStackText(
                     line1TextProvider: CLKSimpleTextProvider(text: "This Week"),
-                    line2TextProvider: CLKSimpleTextProvider(text: "\(weeklyWorkouts) Workouts")
+                    line2TextProvider: CLKSimpleTextProvider(text: "\(weeklySessions) Sessions")
                 )
             }
             return nil
@@ -407,13 +410,13 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     
     private func createSampleTemplate(for complication: CLKComplication) -> CLKComplicationTemplate? {
         switch complication.identifier {
-        case "workout_streak":
+        case "focus_streak":
             return createStreakTemplate(for: complication, date: Date())
-        case "workout_quick_start":
+        case "focus_quick_start":
             return createQuickStartTemplate(for: complication, date: Date())
-        case "workout_today":
+        case "focus_today":
             return createTodayTemplate(for: complication, date: Date())
-        case "workout_progress":
+        case "focus_progress":
             return createProgressTemplate(for: complication, date: Date())
         default:
             return createStreakTemplate(for: complication, date: Date())
@@ -423,27 +426,42 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     // MARK: - Data Helpers
     
     private func getCurrentStreak() -> Int {
-        // In a real implementation, you'd fetch this from WatchWorkoutStore
-        // For now, return a sample value
-        if let data = UserDefaults.standard.data(forKey: "watch_workout_streak"),
-           let streak = try? JSONDecoder().decode(Int.self, from: data) {
-            return streak
-        }
-        return UserDefaults.standard.integer(forKey: "watch_workout_streak")
+        // Fetch from UserDefaults (synced by WatchFocusStore)
+        return UserDefaults.standard.integer(forKey: "watch_focus_streak")
     }
     
-    private func getTodayWorkouts() -> Int {
-        // Get today's workout count
+    private func getTodaySessions() -> Int {
+        // Get today's focus session count from stored sessions
         let calendar = Calendar.current
         let today = Date()
-        // This would be fetched from WatchWorkoutStore in a real implementation
-        return UserDefaults.standard.integer(forKey: "watch_today_workouts")
+        
+        // Load sessions from UserDefaults
+        if let data = UserDefaults.standard.data(forKey: "watch_focus_sessions"),
+           let sessions = try? JSONDecoder().decode([FocusSession].self, from: data) {
+            return sessions.filter { session in
+                calendar.isDate(session.date, inSameDayAs: today) && session.phaseType == .focus
+            }.count
+        }
+        return 0
     }
     
-    private func getWeeklyWorkouts() -> Int {
-        // Get this week's workout count
-        // This would be fetched from WatchWorkoutStore in a real implementation
-        return UserDefaults.standard.integer(forKey: "watch_weekly_workouts")
+    private func getWeeklySessions() -> Int {
+        // Get this week's focus session count from stored sessions
+        let calendar = Calendar.current
+        let today = Date()
+        guard let startOfWeek = calendar.dateInterval(of: .weekOfYear, for: today)?.start,
+              let endOfWeek = calendar.dateInterval(of: .weekOfYear, for: today)?.end else {
+            return 0
+        }
+        
+        // Load sessions from UserDefaults
+        if let data = UserDefaults.standard.data(forKey: "watch_focus_sessions"),
+           let sessions = try? JSONDecoder().decode([FocusSession].self, from: data) {
+            return sessions.filter { session in
+                session.date >= startOfWeek && session.date < endOfWeek && session.phaseType == .focus
+            }.count
+        }
+        return 0
     }
 }
 

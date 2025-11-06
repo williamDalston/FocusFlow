@@ -7,7 +7,7 @@ struct RootView: View {
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.verticalSizeClass) private var verticalSizeClass
-    @EnvironmentObject private var workoutStore: WorkoutStore
+    @EnvironmentObject private var focusStore: FocusStore
     @EnvironmentObject private var theme: ThemeStore
     
     // Agent 24: Onboarding state management
@@ -34,7 +34,7 @@ struct RootView: View {
                 } else {
                     // iPhone: Use TabView for proper navigation
                     TabView {
-                        // Main Workout Tab
+                        // Main Focus Tab
                         NavigationStack {
                         ZStack {
                             ThemeBackground().ignoresSafeArea()
@@ -44,7 +44,7 @@ struct RootView: View {
                                 if notifStatus == .denied {
                                     PermissionBanner(
                                         title: "Notifications are Off",
-                                        message: "Turn on a daily reminder so you don't miss your workout.",
+                                        message: "Turn on a daily reminder so you don't miss your focus session.",
                                         actionTitle: "Open Settings",
                                         action: openSystemSettings
                                     )
@@ -53,15 +53,15 @@ struct RootView: View {
                                 }
                                 
                                 // Main content - removed PopupContainer framing per Apple HIG
-                                WorkoutContentView()
+                                FocusContentView() // Agent 19: Updated to use FocusContentView
                                     .padding(.horizontal, DesignSystem.Spacing.md)
                                     .padding(.top, DesignSystem.Spacing.md)
                             }
                         }
                     }
                         .tabItem {
-                            Image(systemName: "figure.run")
-                            Text("Workout")
+                            Image(systemName: "brain.head.profile")
+                            Text("Focus")
                         }
                         
                         // History Tab
@@ -69,8 +69,8 @@ struct RootView: View {
                         ZStack {
                             ThemeBackground().ignoresSafeArea()
                             
-                            WorkoutHistoryView()
-                                .environmentObject(workoutStore)
+                            FocusHistoryView() // Agent 11: Updated to use FocusHistoryView
+                                .environmentObject(focusStore)
                                 .padding(.horizontal, DesignSystem.Spacing.md)
                                 .padding(.top, DesignSystem.Spacing.md)
                         }
@@ -84,13 +84,40 @@ struct RootView: View {
                             Text("History")
                         }
                         
+                        // Stats Tab
+                        NavigationStack {
+                        ZStack {
+                            ThemeBackground().ignoresSafeArea()
+                            
+                            // Placeholder for Stats view - will be created by Agent 4
+                            VStack {
+                                Text("Stats")
+                                    .font(Theme.largeTitle)
+                                    .foregroundStyle(Theme.textPrimary)
+                                Text("Focus statistics coming soon")
+                                    .font(Theme.body)
+                                    .foregroundStyle(Theme.textSecondary)
+                            }
+                            .padding(.horizontal, DesignSystem.Spacing.md)
+                            .padding(.top, DesignSystem.Spacing.md)
+                        }
+                        .navigationTitle("Stats")
+                        .navigationBarTitleDisplayMode(.large)
+                        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+                        .toolbarBackground(.visible, for: .navigationBar)
+                        }
+                        .tabItem {
+                            Image(systemName: "chart.bar.fill")
+                            Text("Stats")
+                        }
+                        
                         // Settings Tab
                         NavigationStack {
                         ZStack {
                             ThemeBackground().ignoresSafeArea()
                             
                             SettingsView()
-                                .environmentObject(workoutStore)
+                                .environmentObject(focusStore)
                                 .environmentObject(theme)
                                 .padding(.horizontal, DesignSystem.Spacing.md)
                                 .padding(.top, DesignSystem.Spacing.md)
@@ -105,7 +132,7 @@ struct RootView: View {
                             Text("Settings")
                         }
                     }
-                    .accentColor(Theme.accentA)
+                    .accentColor(Theme.accent)
                     .onAppear {
                             // Configure tab bar appearance per spec: cap at ~72pt, one shadow, bump active tab contrast
                         let appearance = UITabBarAppearance()
@@ -116,9 +143,9 @@ struct RootView: View {
                         appearance.shadowImage = UIImage()
                         
                         // Bump active tab contrast (label + icon)
-                        appearance.stackedLayoutAppearance.selected.iconColor = UIColor(Theme.accentA)
+                        appearance.stackedLayoutAppearance.selected.iconColor = UIColor(Theme.accent)
                         appearance.stackedLayoutAppearance.selected.titleTextAttributes = [
-                            .foregroundColor: UIColor(Theme.accentA),
+                            .foregroundColor: UIColor(Theme.accent),
                             .font: UIFont.systemFont(ofSize: 10, weight: .semibold)
                         ]
                         
@@ -174,13 +201,13 @@ struct RootView: View {
             // Handle home screen quick action
             handleShortcutStart()
         }
-        .onContinueUserActivity(AppConstants.ActivityTypes.startWorkout) { userActivity in
-            // Agent 8: Handle shortcut invocation
+        .onContinueUserActivity(AppConstants.ActivityTypes.startFocus) { userActivity in
+            // Agent 11: Handle focus shortcut invocation
             handleShortcutActivity(userActivity)
         }
         .onOpenURL { url in
-            // Agent 8: Handle URL-based shortcuts
-            if url.scheme == AppConstants.URLSchemes.workoutScheme && url.host == AppConstants.URLSchemes.startHost {
+            // Agent 11: Handle URL-based shortcuts for Pomodoro timer
+            if url.scheme == AppConstants.URLSchemes.pomodoroScheme && url.host == AppConstants.URLSchemes.startFocusHost {
                 handleShortcutStart()
             }
         }
@@ -190,13 +217,15 @@ struct RootView: View {
     // MARK: - Shortcut Handling
     
     private func handleShortcutActivity(_ userActivity: NSUserActivity) {
-        _ = WorkoutShortcuts.handleShortcut(userActivity)
-        // Trigger workout start (this would need to be connected to WorkoutContentView)
-        NotificationCenter.default.post(name: NSNotification.Name(AppConstants.NotificationNames.startWorkoutFromShortcut), object: nil)
+        // Agent 11: Updated to use Focus shortcuts
+        // TODO: Create FocusShortcuts if needed (Agent 9 should handle this)
+        // For now, trigger focus start notification
+        NotificationCenter.default.post(name: NSNotification.Name(AppConstants.NotificationNames.startFocusFromShortcut), object: nil)
     }
     
     private func handleShortcutStart() {
-        NotificationCenter.default.post(name: NSNotification.Name(AppConstants.NotificationNames.startWorkoutFromShortcut), object: nil)
+        // Agent 11: Updated to trigger focus session start
+        NotificationCenter.default.post(name: NSNotification.Name(AppConstants.NotificationNames.startFocusFromShortcut), object: nil)
     }
 
     // MARK: - ATT (App Tracking Transparency)
@@ -247,7 +276,7 @@ struct RootView: View {
 
             // If you have your NotificationManager, prefer it:
             if let schedule = try? NotificationManagerSchedule() {
-                schedule.at(hour: 20, minute: 0, id: "daily.workout.default")
+                schedule.at(hour: 20, minute: 0, id: "daily.focus.default")
                 DispatchQueue.main.async { reminderScheduled = true }
                 return
             }
@@ -255,12 +284,12 @@ struct RootView: View {
             // Fallback inline scheduler (no dependency)
             var dc = DateComponents(); dc.hour = 20; dc.minute = 0
             let content = UNMutableNotificationContent()
-            content.title = "Time for Your Ritual7"
-            content.body = "Quick and effective! Start your daily workout now."
+            content.title = "Time for Your Focus Session"
+            content.body = "Start your Pomodoro timer and stay focused!"
             content.sound = .default
 
             let trigger = UNCalendarNotificationTrigger(dateMatching: dc, repeats: true)
-            let req = UNNotificationRequest(identifier: "daily_workout",
+            let req = UNNotificationRequest(identifier: "daily_focus",
                                             content: content, trigger: trigger)
             UNUserNotificationCenter.current().add(req) { _ in
                 DispatchQueue.main.async { reminderScheduled = true }
@@ -278,13 +307,13 @@ struct RootView: View {
         NavigationSplitView {
             // Sidebar for iPad
             iPadSidebar(selectedTab: $selectedTab, showingJournal: $showingJournal)
-                .environmentObject(workoutStore)
+                .environmentObject(focusStore)
                 .environmentObject(theme)
                 .navigationSplitViewColumnWidth(min: 280, ideal: 320, max: 400)
         } detail: {
             // Main content area
             iPadMainContent(selectedTab: $selectedTab, showingJournal: $showingJournal)
-                .environmentObject(workoutStore)
+                .environmentObject(focusStore)
                 .environmentObject(theme)
         }
         .navigationSplitViewStyle(.balanced)
@@ -304,7 +333,7 @@ struct RootView: View {
 struct iPadSidebar: View {
     @Binding var selectedTab: Int
     @Binding var showingJournal: Bool
-    @EnvironmentObject private var workoutStore: WorkoutStore
+    @EnvironmentObject private var focusStore: FocusStore
     @EnvironmentObject private var theme: ThemeStore
     
     var body: some View {
@@ -312,11 +341,11 @@ struct iPadSidebar: View {
             // Header
             VStack(spacing: DesignSystem.Spacing.lg) {
                 HStack {
-                    Image(systemName: "figure.run")
+                    Image(systemName: "brain.head.profile")
                         .font(Theme.title2)
-                        .foregroundStyle(Theme.accentA)
+                        .foregroundStyle(Theme.accent)
                     
-                    Text("Ritual7")
+                    Text("Focus Timer")
                         .font(Theme.title2)
                         .foregroundStyle(Theme.textPrimary)
                     
@@ -326,18 +355,18 @@ struct iPadSidebar: View {
                 // Quick stats
                 HStack(spacing: DesignSystem.Spacing.formFieldSpacing) {
                     VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
-                        Text("\(workoutStore.totalWorkouts)")
+                        Text("\(focusStore.totalSessions)")
                             .font(Theme.title2)
-                            .foregroundStyle(Theme.accentA)
-                        Text("Workouts")
+                            .foregroundStyle(Theme.accent)
+                        Text("Sessions")
                             .font(Theme.caption)
                             .foregroundStyle(.secondary)
                     }
                     
                     VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
-                        Text("\(workoutStore.streak)")
+                        Text("\(focusStore.streak)")
                             .font(Theme.title2)
-                            .foregroundStyle(Theme.accentB)
+                            .foregroundStyle(Theme.accent)
                         Text("Day Streak")
                             .font(Theme.caption)
                             .foregroundStyle(.secondary)
@@ -356,8 +385,8 @@ struct iPadSidebar: View {
             // Navigation
             VStack(spacing: DesignSystem.Spacing.sm) {
                 iPadSidebarButton(
-                    title: "Workout",
-                    icon: "figure.run",
+                    title: "Focus",
+                    icon: "brain.head.profile",
                     isSelected: selectedTab == 0,
                     action: { selectedTab = 0 }
                 )
@@ -373,8 +402,8 @@ struct iPadSidebar: View {
                 )
                 
                 iPadSidebarButton(
-                    title: "Exercises",
-                    icon: "list.bullet",
+                    title: "Stats",
+                    icon: "chart.bar.fill",
                     isSelected: selectedTab == 2,
                     action: { selectedTab = 2 }
                 )
@@ -391,8 +420,8 @@ struct iPadSidebar: View {
             
             Spacer()
             
-            // Recent workouts preview
-            if !workoutStore.sessions.isEmpty {
+            // Recent focus sessions preview
+            if !focusStore.sessions.isEmpty {
                 VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
                     Text("Recent")
                         .font(Theme.headline)
@@ -401,8 +430,8 @@ struct iPadSidebar: View {
                     
                     ScrollView {
                         LazyVStack(spacing: DesignSystem.Spacing.sm) {
-                            ForEach(workoutStore.sessions.prefix(3)) { session in
-                                iPadRecentWorkoutCard(session: session)
+                            ForEach(focusStore.sessions.prefix(3)) { session in
+                                iPadRecentFocusCard(session: session)
                             }
                         }
                         .padding(.horizontal, DesignSystem.Spacing.formFieldSpacing)
@@ -416,7 +445,7 @@ struct iPadSidebar: View {
         .overlay(
             Rectangle()
                 .fill(LinearGradient(
-                    colors: [Theme.accentA.opacity(0.1), .clear],
+                    colors: [Theme.accent.opacity(0.1), .clear],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 ))
@@ -430,30 +459,38 @@ struct iPadSidebar: View {
 struct iPadMainContent: View {
     @Binding var selectedTab: Int
     @Binding var showingJournal: Bool
-    @EnvironmentObject private var workoutStore: WorkoutStore
+    @EnvironmentObject private var focusStore: FocusStore
     @EnvironmentObject private var theme: ThemeStore
-    @EnvironmentObject private var preferencesStore: WorkoutPreferencesStore
+    @EnvironmentObject private var preferencesStore: FocusPreferencesStore
     
     var body: some View {
         Group {
             switch selectedTab {
             case 0:
-                WorkoutContentView()
-                    .environmentObject(workoutStore)
+                FocusContentView() // Agent 11: Updated to use FocusContentView
+                    .environmentObject(focusStore)
                     .environmentObject(theme)
                     .environmentObject(preferencesStore)
             case 1:
-                WorkoutHistoryView()
-                    .environmentObject(workoutStore)
+                FocusHistoryView() // Agent 11: Updated to use FocusHistoryView
+                    .environmentObject(focusStore)
             case 2:
-                ExerciseListView()
+                // Stats view placeholder - will be created by Agent 4
+                VStack {
+                    Text("Stats")
+                        .font(Theme.largeTitle)
+                        .foregroundStyle(Theme.textPrimary)
+                    Text("Focus statistics coming soon")
+                        .font(Theme.body)
+                        .foregroundStyle(Theme.textSecondary)
+                }
             case 3:
                 SettingsView()
-                    .environmentObject(workoutStore)
+                    .environmentObject(focusStore)
                     .environmentObject(theme)
             default:
-                WorkoutContentView()
-                    .environmentObject(workoutStore)
+                FocusContentView() // Agent 11: Updated to use FocusContentView
+                    .environmentObject(focusStore)
                     .environmentObject(theme)
                     .environmentObject(preferencesStore)
             }
@@ -494,16 +531,16 @@ struct iPadSidebarButton: View {
             .padding(.vertical, DesignSystem.Spacing.md)
             .background(
                 RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
-                    .fill(isSelected ? Theme.accentA : .clear)
+                    .fill(isSelected ? Theme.accent : .clear)
                     .overlay(
                         RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
                             .stroke(
-                                isSelected ? Theme.accentA.opacity(DesignSystem.Opacity.light * 1.5) : Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle),
+                                isSelected ? Theme.accent.opacity(DesignSystem.Opacity.light * 1.5) : Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle),
                                 lineWidth: isSelected ? DesignSystem.Border.standard : DesignSystem.Border.hairline
                             )
                     )
             )
-            .shadow(color: isSelected ? Theme.accentA.opacity(DesignSystem.Opacity.subtle) : Color.clear, 
+            .shadow(color: isSelected ? Theme.accent.opacity(DesignSystem.Opacity.subtle) : Color.clear, 
                    radius: isSelected ? DesignSystem.Shadow.verySoft.radius : 0, 
                    y: isSelected ? DesignSystem.Shadow.verySoft.y : 0)
         }
@@ -511,20 +548,20 @@ struct iPadSidebarButton: View {
     }
 }
 
-// MARK: - iPad Recent Workout Card
+// MARK: - iPad Recent Focus Card
 
-struct iPadRecentWorkoutCard: View {
-    let session: WorkoutSession
+struct iPadRecentFocusCard: View {
+    let session: FocusSession
     
     var body: some View {
         HStack(alignment: .top, spacing: DesignSystem.Spacing.md) {
             Circle()
-                .fill(Theme.accentA.opacity(0.2))
+                .fill(phaseColor.opacity(0.2))
                 .frame(width: DesignSystem.IconSize.small, height: DesignSystem.IconSize.small)
                 .padding(.top, DesignSystem.Spacing.sm)
             
             VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
-                Text("\(session.exercisesCompleted) exercises")
+                Text(session.phaseType.displayName)
                     .font(Theme.caption)
                     .foregroundStyle(Theme.textPrimary)
                     .lineLimit(2)
@@ -548,7 +585,7 @@ struct iPadRecentWorkoutCard: View {
                     .fill(
                         LinearGradient(
                             colors: [
-                                Theme.accentA.opacity(DesignSystem.Opacity.highlight * 0.3),
+                                phaseColor.opacity(DesignSystem.Opacity.highlight * 0.3),
                                 Color.clear
                             ],
                             startPoint: .topLeading,
@@ -563,6 +600,17 @@ struct iPadRecentWorkoutCard: View {
             )
         )
         .softShadow()
+    }
+    
+    private var phaseColor: Color {
+        switch session.phaseType {
+        case .focus:
+            return Theme.ringFocus
+        case .shortBreak:
+            return Theme.ringBreakShort
+        case .longBreak:
+            return Theme.ringBreakLong
+        }
     }
 }
 
@@ -587,28 +635,28 @@ struct iPadInsightsView: View {
                         title: "Total Workouts",
                         value: "\(workoutStore.totalWorkouts)",
                         icon: "figure.run",
-                        color: Theme.accentA
+                        color: Theme.accent
                     )
                     
                     iPadInsightCard(
                         title: "Current Streak",
                         value: "\(workoutStore.streak) days",
                         icon: "flame.fill",
-                        color: Theme.accentB
+                        color: Theme.ringBreakShort
                     )
                     
                     iPadInsightCard(
                         title: "This Month",
                         value: "\(workoutStore.workoutsThisMonth) workouts",
                         icon: "calendar",
-                        color: Theme.accentC
+                        color: Theme.ringBreakLong
                     )
                     
                     iPadInsightCard(
                         title: "Total Minutes",
                         value: "\(Int(workoutStore.totalMinutes)) min",
                         icon: "clock.fill",
-                        color: Theme.accentC
+                        color: Theme.ringBreakLong
                     )
                 }
                 
@@ -627,7 +675,7 @@ struct iPadInsightsView: View {
                                     LinearGradient(
                                         colors: [
                                             Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.5),
-                                            Theme.accentA.opacity(DesignSystem.Opacity.light * 0.5),
+                                            Theme.accent.opacity(DesignSystem.Opacity.light * 0.5),
                                             Theme.strokeOuter.opacity(DesignSystem.Opacity.borderSubtle * 1.5)
                                         ],
                                         startPoint: .topLeading,
@@ -641,7 +689,7 @@ struct iPadInsightsView: View {
                             VStack {
                                 Image(systemName: "chart.bar.fill")
                                     .font(Theme.largeTitle)
-                                    .foregroundStyle(Theme.accentA.opacity(0.6))
+                                    .foregroundStyle(Theme.accent.opacity(0.6))
                                 Text("Chart Coming Soon")
                                     .font(Theme.caption)
                                     .foregroundStyle(.secondary)
@@ -701,7 +749,7 @@ struct RootView_Previews: PreviewProvider {
     static var previews: some View {
         RootView()
             .environmentObject(ThemeStore())
-            .environmentObject(WorkoutStore())
+            .environmentObject(FocusStore())
     }
 }
 #endif

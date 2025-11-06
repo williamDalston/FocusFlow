@@ -1,54 +1,54 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject private var workoutStore: WatchWorkoutStore
-    @State private var showingWorkout = false
-    @StateObject private var workoutEngine = WorkoutEngineWatch()
+    @EnvironmentObject private var focusStore: WatchFocusStore
+    @State private var showingFocus = false
+    @StateObject private var pomodoroEngine = PomodoroEngineWatch()
     
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 12) {
                     // Header with streak
-                    WatchHeaderView()
-                        .environmentObject(workoutStore)
+                    WatchFocusHeaderView()
+                        .environmentObject(focusStore)
                     
                     // Quick start button
                     Button(action: {
-                        showingWorkout = true
+                        showingFocus = true
                     }) {
                         HStack {
-                            Image(systemName: "play.fill")
+                            Image(systemName: "brain.head.profile")
                                 .font(.title3)
-                            Text("Start Workout")
+                            Text("Start Focus")
                                 .font(.headline.weight(.semibold))
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 12)
                         .background(
                             RoundedRectangle(cornerRadius: 12)
-                                .fill(Color.green)
+                                .fill(Color.blue)
                         )
                         .foregroundStyle(.white)
                     }
                     .buttonStyle(.plain)
                     
                     // Today's stats
-                    WatchStatsView()
-                        .environmentObject(workoutStore)
+                    WatchFocusStatsView()
+                        .environmentObject(focusStore)
                 }
                 .padding(.horizontal, 8)
                 .padding(.top, 4)
             }
-            .navigationTitle("7 Min Workout")
+            .navigationTitle("Pomodoro")
             .navigationBarTitleDisplayMode(.inline)
-            .sheet(isPresented: $showingWorkout) {
+            .sheet(isPresented: $showingFocus) {
                 NavigationStack {
-                    WorkoutTimerView(engine: workoutEngine, store: workoutStore)
+                    FocusTimerView(engine: pomodoroEngine, store: focusStore)
                 }
             }
             .onAppear {
-                workoutStore.load()
+                focusStore.load()
             }
         }
     }
@@ -56,5 +56,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .environmentObject(WatchWorkoutStore())
+        .environmentObject(WatchFocusStore())
 }

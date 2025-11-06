@@ -1,13 +1,14 @@
 import SwiftUI
 
-/// Agent 2: Weekly Calendar - Beautiful heatmap calendar showing workout days
+/// Agent 2: Weekly Calendar - Beautiful heatmap calendar showing focus session days
+/// Agent 15: Updated to use FocusAnalytics
 struct WeeklyCalendarView: View {
-    @ObservedObject var analytics: WorkoutAnalytics
+    @ObservedObject var analytics: FocusAnalytics
     @EnvironmentObject private var theme: ThemeStore
     
     var body: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.xl) {
-            Text("Workout Calendar")
+            Text("Focus Calendar")
                 .font(Theme.headline)
                 .foregroundStyle(Theme.textPrimary)
                 .padding(.bottom, DesignSystem.Spacing.xs)
@@ -76,8 +77,8 @@ struct WeeklyCalendarView: View {
         let targetWeek = calendar.date(byAdding: .weekOfYear, value: -weekOffset, to: startOfWeek) ?? today
         let targetDate = calendar.date(byAdding: .day, value: day.rawValue - 1, to: targetWeek) ?? today
         
-        let workoutCount = workoutCount(for: targetDate)
-        let intensity = min(workoutCount, 3)
+        let focusCount = focusCount(for: targetDate)
+        let intensity = min(focusCount, 3)
         
         let backgroundColor: Color = {
             switch intensity {
@@ -94,10 +95,10 @@ struct WeeklyCalendarView: View {
             .frame(height: DesignSystem.Spacing.xxl)
             .overlay(
                 Group {
-                    if workoutCount > 0 {
-                        Text("\(workoutCount)")
+                    if focusCount > 0 {
+                        Text("\(focusCount)")
                             .font(Theme.caption2)
-                            .foregroundStyle(workoutCount >= 3 ? .white : Theme.textPrimary)
+                            .foregroundStyle(focusCount >= 3 ? .white : Theme.textPrimary)
                             .monospacedDigit()
                     }
                 }
@@ -105,10 +106,10 @@ struct WeeklyCalendarView: View {
             .padding(DesignSystem.Spacing.xs * 0.5)
     }
     
-    private func workoutCount(for date: Date) -> Int {
+    private func focusCount(for date: Date) -> Int {
         let calendar = Calendar.current
         return analytics.store.sessions.filter { session in
-            calendar.isDate(session.date, inSameDayAs: date)
+            calendar.isDate(session.date, inSameDayAs: date) && session.phaseType == .focus
         }.count
     }
     
@@ -130,7 +131,7 @@ struct WeeklyCalendarView: View {
     }
     
     private func legendItem(color: Color, label: String) -> some View {
-        HStack(spacing: 4) {
+        HStack(spacing: DesignSystem.Spacing.tight) {
             Rectangle()
                 .fill(color)
                 .frame(width: 12, height: 12)
@@ -144,7 +145,7 @@ struct WeeklyCalendarView: View {
 // MARK: - Monthly Calendar View
 
 struct MonthlyCalendarView: View {
-    @ObservedObject var analytics: WorkoutAnalytics
+    @ObservedObject var analytics: FocusAnalytics
     @EnvironmentObject private var theme: ThemeStore
     
     var body: some View {
@@ -165,7 +166,7 @@ struct MonthlyCalendarView: View {
                         .font(Theme.subheadline)
                         .foregroundStyle(Theme.textPrimary)
                     Spacer()
-                    Text("\(analytics.store.workoutsThisMonth) workouts")
+                    Text("\(analytics.store.sessionsThisMonth) focus sessions")
                         .font(Theme.caption)
                         .foregroundStyle(.secondary)
                         .monospacedDigit()
@@ -195,10 +196,10 @@ struct MonthlyCalendarView: View {
             
             // Legend
             HStack(spacing: DesignSystem.Spacing.lg) {
-                legendItem(color: .gray.opacity(DesignSystem.Opacity.subtle), label: "No workout")
-                legendItem(color: Theme.accentA.opacity(DesignSystem.Opacity.medium), label: "1 workout")
-                legendItem(color: Theme.accentA.opacity(DesignSystem.Opacity.strong), label: "2 workouts")
-                legendItem(color: Theme.accentA, label: "3+ workouts")
+                legendItem(color: .gray.opacity(DesignSystem.Opacity.subtle), label: "No focus session")
+                legendItem(color: Theme.accentA.opacity(DesignSystem.Opacity.medium), label: "1 focus session")
+                legendItem(color: Theme.accentA.opacity(DesignSystem.Opacity.strong), label: "2 focus sessions")
+                legendItem(color: Theme.accentA, label: "3+ focus sessions")
             }
             .font(Theme.caption2)
             .padding(.top, DesignSystem.Spacing.sm)
@@ -222,8 +223,8 @@ struct MonthlyCalendarView: View {
         let isToday = calendar.isDateInToday(date)
         let isCurrentMonth = calendar.isDate(date, equalTo: today, toGranularity: .month)
         
-        let workoutCount = workoutCount(for: date)
-        let intensity = min(workoutCount, 3)
+        let focusCount = focusCount(for: date)
+        let intensity = min(focusCount, 3)
         
         let backgroundColor: Color = {
             if !isCurrentMonth {
@@ -244,14 +245,14 @@ struct MonthlyCalendarView: View {
                 .font(Theme.caption2)
                 .foregroundStyle(isCurrentMonth ? Theme.textPrimary : .secondary)
             
-            if workoutCount > 0 {
+            if focusCount > 0 {
                 Circle()
                     .fill(backgroundColor)
                     .frame(width: DesignSystem.Spacing.xl, height: DesignSystem.Spacing.xl)
                     .overlay(
-                        Text("\(workoutCount)")
+                        Text("\(focusCount)")
                             .font(Theme.caption2)
-                            .foregroundStyle(workoutCount >= 3 ? .white : Theme.textPrimary)
+                            .foregroundStyle(focusCount >= 3 ? .white : Theme.textPrimary)
                             .monospacedDigit()
                     )
             } else {
@@ -267,10 +268,10 @@ struct MonthlyCalendarView: View {
         )
     }
     
-    private func workoutCount(for date: Date) -> Int {
+    private func focusCount(for date: Date) -> Int {
         let calendar = Calendar.current
         return analytics.store.sessions.filter { session in
-            calendar.isDate(session.date, inSameDayAs: date)
+            calendar.isDate(session.date, inSameDayAs: date) && session.phaseType == .focus
         }.count
     }
     
@@ -314,7 +315,7 @@ struct MonthlyCalendarView: View {
     }
     
     private func legendItem(color: Color, label: String) -> some View {
-        HStack(spacing: 4) {
+        HStack(spacing: DesignSystem.Spacing.tight) {
             Rectangle()
                 .fill(color)
                 .frame(width: 12, height: 12)

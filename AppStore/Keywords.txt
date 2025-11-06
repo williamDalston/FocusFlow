@@ -1,178 +1,83 @@
-# App Store Keywords for Ritual7
+# App Store Keywords for Pomodoro Timer: Focus & Study
 # Maximum 100 characters including commas and spaces
 
 ---
 
-## CURRENT KEYWORDS (99 characters) ✅
-fitness,workout,HIIT,exercise,7 minute,home workout,no equipment,Apple Watch,HealthKit,strength,cardio,interval,bodyweight
+## RECOMMENDED KEYWORDS (99 characters) ✅
+pomodoro,focus timer,study timer,productivity timer,time management,pomodoro technique,focus app,study app,productivity app,concentration timer,work timer
 
-**Status:** Currently active - good baseline, but can be optimized further
-
----
-
-## OPTIMIZED OPTIONS (Test These)
-
-### Version 1 - High Volume Keywords (98 characters)
-**Focus:** Target high-search-volume keywords
-```
-7 minute workout,HIIT,home workout,no equipment,quick workout,bodyweight,exercise,interval training,cardio,strength training,fitness app,workout timer
-```
-
-**Why:** Includes popular search terms like "7 minute workout" (exact phrase), "interval training", "strength training", "fitness app", "workout timer"
-
-**Test Period:** 2 weeks, then measure rankings
+**Status:** Optimized for Pomodoro and focus-related searches
 
 ---
 
-### Version 2 - Long-Tail Focus (97 characters)
+## KEYWORD OPTIMIZATION STRATEGY
+
+### Primary Keywords (High Volume)
+- **pomodoro** - Exact match for primary search term
+- **focus timer** - High search volume, core feature
+- **study timer** - Target audience: students
+- **productivity timer** - Target audience: professionals
+- **time management** - Broad category keyword
+
+### Secondary Keywords (Specific)
+- **pomodoro technique** - Exact technique name
+- **focus app** - App category keyword
+- **study app** - Target audience keyword
+- **productivity app** - Category keyword
+- **concentration timer** - Alternative search term
+- **work timer** - Alternative search term
+
+---
+
+## ALTERNATIVE KEYWORD SETS (Test These)
+
+### Version 1 - Technique Focus (98 characters)
+**Focus:** Emphasize Pomodoro technique and focus
+```
+pomodoro,pomodoro technique,focus timer,study timer,productivity timer,time management,focus app,study app,productivity,concentration
+```
+
+### Version 2 - App Category Focus (97 characters)
+**Focus:** Emphasize app category and use cases
+```
+pomodoro,focus timer,study timer,productivity app,time management app,focus app,study app,work timer,concentration timer,productivity
+```
+
+### Version 3 - Long-Tail Focus (99 characters)
 **Focus:** Target specific, less competitive long-tail keywords
 ```
-7 minute workout,HIIT training,home fitness,no equipment workout,bodyweight exercise,interval training,quick fitness,cardio workout,strength training,Apple Watch,HealthKit
+pomodoro timer,focus timer app,study timer app,productivity timer,time management,pomodoro technique,focus,study,productivity,concentration
 ```
 
-**Why:** Includes long-tail variations like "HIIT training", "no equipment workout", "bodyweight exercise" - less competition, better conversion
+---
 
-**Test Period:** 2 weeks after Version 1
+## KEYWORD TESTING SCHEDULE
+
+1. **Week 1-2**: Use recommended keywords (baseline)
+2. **Week 3-4**: Test Version 1 (technique focus)
+3. **Week 5-6**: Test Version 2 (app category focus)
+4. **Week 7-8**: Test Version 3 (long-tail focus)
+5. **Week 9+**: Use best-performing set
 
 ---
 
-### Version 3 - Branded + Category Mix (99 characters)
-**Focus:** Balance branded keywords with high-volume category terms
-```
-7 minute workout,HIIT,home workout,no equipment,quick workout,bodyweight,exercise,interval training,cardio,strength,fitness,workout timer,Apple Watch,HealthKit
-```
+## KEYWORD RANKING TRACKING
 
-**Why:** Includes both platform differentiators (Apple Watch, HealthKit) and category keywords
-
-**Test Period:** 2 weeks after Version 2
-
----
-
-## TESTING STRATEGY
-
-**Month 1:** Use Version 1 (High Volume)
-- Track rankings for: "7 minute workout", "HIIT", "home workout"
-- Measure conversion rate
-- Monitor organic downloads
-
-**Month 2:** Switch to Version 2 (Long-Tail)
-- Compare rankings to Month 1
-- Measure conversion rate (should be higher with long-tail)
-- Monitor organic downloads
-
-**Month 3:** Switch to Version 3 (Balanced)
-- Compare rankings to Months 1 & 2
-- Measure conversion rate
-- Monitor organic downloads
-
-**Month 4:** Use winner from Months 1-3
-- Keep the best-performing version
-- Continue optimizing based on data
+Track rankings for:
+- pomodoro
+- focus timer
+- study timer
+- productivity timer
+- pomodoro technique
+- time management
 
 ---
 
-## KEYWORD PRIORITY LIST
+## NOTES
 
-### Primary Keywords (Must Include):
-1. **7 minute workout** - Exact brand/search term (highest volume)
-2. **HIIT** - Category keyword (high volume)
-3. **home workout** - Benefit keyword (high volume)
-4. **no equipment** - Unique selling point (differentiator)
-
-### Secondary Keywords (Should Include):
-5. **quick workout** - Benefit keyword (medium volume)
-6. **bodyweight** - Type keyword (medium volume)
-7. **exercise** - Category keyword (high volume, but generic)
-8. **interval training** - Type keyword (medium volume)
-
-### Tertiary Keywords (Nice to Have):
-9. **cardio** - Type keyword (medium volume)
-10. **strength** - Type keyword (medium volume)
-11. **fitness app** - Category keyword (low volume, but specific)
-12. **workout timer** - Feature keyword (low volume)
-
-### Platform Keywords (Differentiators):
-13. **Apple Watch** - Platform keyword (differentiator, but lower search volume)
-14. **HealthKit** - Platform keyword (differentiator, but lower search volume)
-
-**Recommendation:** Prioritize primary + secondary keywords. Include platform keywords only if space allows.
-
----
-
-## CHARACTER SAVING OPTIONS
-
-If you need more space for keywords:
-
-- Replace "7 minute" with "7min" (saves 2 characters)
-- Replace "home workout" with "home" (saves 8 characters)
-- Replace "interval training" with "interval" (saves 8 characters)
-- Replace "strength training" with "strength" (saves 8 characters)
-- Remove "no equipment" if space is needed (saves 13 characters)
-- Remove "Apple Watch" if space is needed (saves 11 characters)
-- Remove "HealthKit" if space is needed (saves 9 characters)
-
----
-
-## KEYWORD RESEARCH NOTES
-
-### Best Practices:
-- ✅ Use exact match phrases users search for
-- ✅ Include common misspellings if space allows
-- ✅ Prioritize high-volume, relevant keywords
-- ✅ Test different keyword combinations monthly
-- ✅ Monitor rankings daily
-- ✅ Track conversion rates
-
-### Avoid:
-- ❌ Generic terms that won't help ranking ("fitness" alone)
-- ❌ Keyword stuffing (use naturally)
-- ❌ Duplicate keywords
-- ❌ Irrelevant keywords
-- ❌ Setting and forgetting (test monthly)
-
----
-
-## COMPETITOR ANALYSIS
-
-**Research Competitors:**
-- Check their keywords (if visible)
-- Analyze their rankings
-- Identify keyword gaps
-- Find opportunities
-
-**Tools:**
-- App Store Connect (free)
-- AppTweak (paid, but comprehensive)
-- Sensor Tower (paid, competitor analysis)
-- MobileAction (paid, keyword tracking)
-
----
-
-## QUICK REFERENCE
-
-**Current Active:** Version (99 chars) ✅
-**Recommended Test Order:** Version 1 → Version 2 → Version 3
-**Test Duration:** 2 weeks per version
-**Success Metric:** Rankings improve + conversion rate increases
-
-**Remember:** Keywords are only one part of ASO. Also optimize:
-- App name/subtitle
-- Screenshots
-- App preview video
-- Description
-- Ratings & reviews
-
-## Keyword Research Notes
-- Include brand terms: "7 minute", "HIIT"
-- Include category terms: "fitness", "workout", "exercise"
-- Include platform terms: "Apple Watch", "HealthKit"
-- Include benefit terms: "no equipment", "home workout", "quick workout"
-- Include type terms: "strength", "cardio", "interval", "bodyweight"
-
-## App Store Search Optimization Tips
-1. Use exact match phrases users search for
-2. Include common misspellings if space allows
-3. Prioritize high-volume, relevant keywords
-4. Avoid generic terms that won't help ranking
-5. Test different keyword combinations
-
+- Keywords are comma-separated (no spaces after commas)
+- Maximum 100 characters total
+- Include relevant variations and synonyms
+- Focus on high-volume, relevant keywords
+- Avoid brand names (unless your own)
+- Test different combinations to find optimal set

@@ -187,4 +187,130 @@ enum NotificationManager {
             withIdentifiers: ["daily.workout", "streak.reminder", "no.workout.nudge", "weekly.summary"]
         )
     }
+    
+    // MARK: - Agent 6: Focus Session Notifications
+    
+    /// Schedule daily focus reminder with actionable buttons
+    static func scheduleDailyFocusReminder(at components: DateComponents, identifier: String = "daily.focus") {
+        let center = UNUserNotificationCenter.current()
+        center.removePendingNotificationRequests(withIdentifiers: [identifier])
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
+        let content = UNMutableNotificationContent()
+        content.title = "Time for Your Focus Session"
+        content.categoryIdentifier = "FOCUS_REMINDER"
+        content.body = "Ready to start your Pomodoro? Let's get focused!"
+        content.sound = .default
+        
+        // Add actionable buttons
+        let startAction = UNNotificationAction(
+            identifier: "START_FOCUS",
+            title: "Start Focus",
+            options: [.foreground]
+        )
+        let viewProgressAction = UNNotificationAction(
+            identifier: "VIEW_PROGRESS",
+            title: "View Progress",
+            options: [.foreground]
+        )
+        let category = UNNotificationCategory(
+            identifier: "FOCUS_REMINDER",
+            actions: [startAction, viewProgressAction],
+            intentIdentifiers: [],
+            options: []
+        )
+        center.setNotificationCategories([category])
+        
+        let req = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+        Task {
+            do {
+                try await center.add(req)
+            } catch {
+                print("Focus reminder schedule error:", error)
+            }
+        }
+    }
+    
+    /// Schedule break reminder notification
+    static func scheduleBreakReminder(at components: DateComponents) {
+        let center = UNUserNotificationCenter.current()
+        let identifier = "break.reminder"
+        
+        center.removePendingNotificationRequests(withIdentifiers: [identifier])
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
+        let content = UNMutableNotificationContent()
+        content.title = "⏰ Break Time!"
+        content.body = "Your focus session is complete. Take a well-deserved break."
+        content.sound = .default
+        content.categoryIdentifier = "FOCUS_REMINDER"
+        
+        let req = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+        center.add(req) { err in
+            if let err = err { print("Break reminder schedule error:", err) }
+        }
+    }
+    
+    /// Schedule streak maintenance reminder for focus sessions
+    static func scheduleFocusStreakReminder(at components: DateComponents, streak: Int) {
+        let center = UNUserNotificationCenter.current()
+        let identifier = "focus.streak.reminder"
+        
+        center.removePendingNotificationRequests(withIdentifiers: [identifier])
+        
+        guard streak > 0 else { return }
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
+        let content = UNMutableNotificationContent()
+        content.title = "🔥 Don't Break Your Focus Streak!"
+        content.body = "You're on a \(streak)-day focus streak! Complete a session today to keep it going."
+        content.sound = .default
+        content.categoryIdentifier = "FOCUS_REMINDER"
+        
+        let req = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+        center.add(req) { err in
+            if let err = err { print("Focus streak reminder schedule error:", err) }
+        }
+    }
+    
+    /// Schedule focus session completion notification
+    static func scheduleFocusSessionComplete() {
+        let center = UNUserNotificationCenter.current()
+        let content = UNMutableNotificationContent()
+        content.title = "🎉 Focus Session Complete!"
+        content.body = "Great job staying focused! Time for a break."
+        content.sound = .default
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        let request = UNNotificationRequest(
+            identifier: "focus.session.complete",
+            content: content,
+            trigger: trigger
+        )
+        
+        center.add(request) { error in
+            if let error = error {
+                print("Failed to schedule focus completion notification: \(error)")
+            }
+        }
+    }
+    
+    static func cancelDailyFocusReminder(identifier: String = "daily.focus") {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
+    }
+    
+    static func cancelBreakReminder() {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["break.reminder"])
+    }
+    
+    static func cancelFocusStreakReminder() {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["focus.streak.reminder"])
+    }
+    
+    /// Cancel all focus-related notifications
+    static func cancelAllFocusNotifications() {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(
+            withIdentifiers: ["daily.focus", "break.reminder", "focus.streak.reminder", "focus.session.complete"]
+        )
+    }
 }

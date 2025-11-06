@@ -4,29 +4,61 @@ import SwiftUI
 /// Ensures consistent spacing, sizing, and visual elements throughout the app
 enum DesignSystem {
     
-    // MARK: - Spacing Scale (Strict 8pt grid system per Apple HIG)
+    // MARK: - Spacing Scale (Enhanced 8pt grid system with visual comfort)
     
     enum Spacing {
-        // Strict 8pt grid: 8, 16, 24, 32
-        static let xs: CGFloat = 8
-        static let sm: CGFloat = 16
-        static let md: CGFloat = 24
-        static let lg: CGFloat = 32
+        // Core 8pt grid scale - optimized for visual comfort
+        static let xs: CGFloat = 8      // Tight spacing, icon padding, compact lists
+        static let sm: CGFloat = 16    // Standard spacing, card padding, list items
+        static let md: CGFloat = 24    // Comfortable spacing, section gaps, hero cards
+        static let lg: CGFloat = 32    // Generous spacing, major sections
+        static let xl: CGFloat = 40    // Extra generous spacing, major breaks
+        static let xxl: CGFloat = 48   // Large spacing, screen edges
+        static let xxxl: CGFloat = 64  // Extra large spacing, major separations
+        
+        // Fine-tuned spacing for visual harmony (non-grid but visually pleasing)
+        static let tight: CGFloat = 4   // Very tight (icons, badges)
+        static let comfortable: CGFloat = 12  // Comfortable medium-tight spacing
+        static let relaxed: CGFloat = 20  // Relaxed medium spacing
+        static let spacious: CGFloat = 36  // Spacious medium-large spacing
+        
+        // Semantic spacing (optimized for visual hierarchy and eye comfort)
+        static let cardPadding: CGFloat = 24      // Hero cards - comfortable breathing room
+        static let regularCardPadding: CGFloat = 20  // Regular cards - slightly more than sm for comfort
+        static let compactCardPadding: CGFloat = 16   // Compact cards - standard spacing
+        static let sectionSpacing: CGFloat = 40       // Between major sections - generous for clarity
+        static let sectionSpacingIPad: CGFloat = 48   // iPad - more generous for larger screens
+        static let subsectionSpacing: CGFloat = 24    // Within sections - comfortable
+        static let gridSpacing: CGFloat = 16         // Grid layouts - standard
+        static let listItemSpacing: CGFloat = 12      // List items - comfortable (not too tight)
+        static let formFieldSpacing: CGFloat = 24     // Form fields - comfortable
+        static let buttonSpacing: CGFloat = 12        // Between buttons - comfortable
+        static let textSpacing: CGFloat = 8          // Between text elements - tight
+        static let iconSpacing: CGFloat = 8           // Icon to text - tight
+        static let statBoxSpacing: CGFloat = 16       // Between stat boxes - standard
+        
+        // Vertical rhythm (for consistent vertical spacing)
+        static let verticalRhythm: CGFloat = 8        // Base vertical rhythm unit
+        static let verticalTight: CGFloat = 4        // Very tight vertical
+        static let verticalStandard: CGFloat = 16     // Standard vertical
+        static let verticalComfortable: CGFloat = 24  // Comfortable vertical
+        static let verticalGenerous: CGFloat = 32     // Generous vertical
+        static let verticalSpacious: CGFloat = 40     // Spacious vertical
+        
+        // Horizontal rhythm
+        static let horizontalTight: CGFloat = 8       // Tight horizontal
+        static let horizontalStandard: CGFloat = 16  // Standard horizontal
+        static let horizontalComfortable: CGFloat = 24 // Comfortable horizontal
+        static let horizontalGenerous: CGFloat = 32   // Generous horizontal
+        
+        // Content spacing (for content areas)
+        static let contentPadding: CGFloat = 20      // Content area padding
+        static let contentSpacing: CGFloat = 24      // Spacing within content
+        static let screenEdgePadding: CGFloat = 16   // Screen edge padding (iPhone)
+        static let screenEdgePaddingIPad: CGFloat = 32 // Screen edge padding (iPad)
         
         // Legacy spacing (kept for backward compatibility, will migrate)
-        static let xl: CGFloat = 24
-        static let xxl: CGFloat = 32
-        static let xxxl: CGFloat = 48
         static let huge: CGFloat = 64
-        
-        // Semantic spacing (8pt grid aligned)
-        static let cardPadding: CGFloat = 24  // Hero cards (8pt grid: 24 = 3×8)
-        static let regularCardPadding: CGFloat = 16  // Regular cards (8pt grid: 16 = 2×8)
-        static let sectionSpacing: CGFloat = 32  // Spacing between major sections (8pt grid: 32 = 4×8)
-        static let sectionSpacingIPad: CGFloat = 32  // Same as iPhone (8pt grid aligned)
-        static let gridSpacing: CGFloat = 16  // Grid spacing (8pt grid: 16 = 2×8)
-        static let listItemSpacing: CGFloat = 16  // List items (8pt grid: 16 = 2×8)
-        static let formFieldSpacing: CGFloat = 24  // Form fields (8pt grid: 24 = 3×8)
     }
     
     // MARK: - Corner Radius (Apple HIG aligned)
@@ -250,28 +282,76 @@ enum DesignSystem {
     }
 }
 
-// MARK: - Spacing Extensions
+// MARK: - Spacing Extensions (Enhanced for Visual Comfort)
 
 extension View {
-    /// Apply standard spacing between sections
+    // MARK: - Section Spacing
+    
+    /// Apply standard spacing between major sections (generous for clarity)
     func sectionSpacing() -> some View {
         self.padding(.vertical, DesignSystem.Spacing.sectionSpacing)
     }
     
-    /// Apply standard card padding (hero cards - 24pt)
+    /// Apply spacing between subsections (comfortable)
+    func subsectionSpacing() -> some View {
+        self.padding(.vertical, DesignSystem.Spacing.subsectionSpacing)
+    }
+    
+    // MARK: - Card Padding
+    
+    /// Apply standard card padding (hero cards - comfortable breathing room)
     func cardPadding() -> some View {
         self.padding(DesignSystem.Spacing.cardPadding)
     }
     
-    /// Apply regular card padding (regular cards - 20pt)
+    /// Apply regular card padding (regular cards - slightly more than compact)
     func regularCardPadding() -> some View {
         self.padding(DesignSystem.Spacing.regularCardPadding)
     }
     
-    /// Apply standard content padding
+    /// Apply compact card padding (compact cards - standard)
+    func compactCardPadding() -> some View {
+        self.padding(DesignSystem.Spacing.compactCardPadding)
+    }
+    
+    // MARK: - Content Padding
+    
+    /// Apply standard content padding (comfortable all around)
     func contentPadding() -> some View {
-        self.padding(.horizontal, DesignSystem.Spacing.lg)
-            .padding(.vertical, DesignSystem.Spacing.xl)
+        self.padding(DesignSystem.Spacing.contentPadding)
+    }
+    
+    /// Apply screen edge padding (responsive to device)
+    func screenEdgePadding() -> some View {
+        self.padding(.horizontal, DesignSystem.Spacing.screenEdgePadding)
+            .padding(.vertical, DesignSystem.Spacing.md)
+    }
+    
+    /// Apply horizontal content padding
+    func horizontalContentPadding() -> some View {
+        self.padding(.horizontal, DesignSystem.Spacing.contentPadding)
+    }
+    
+    /// Apply vertical content padding
+    func verticalContentPadding() -> some View {
+        self.padding(.vertical, DesignSystem.Spacing.contentSpacing)
+    }
+    
+    // MARK: - Spacing Helpers
+    
+    /// Apply comfortable spacing between elements
+    func comfortableSpacing() -> some View {
+        self.padding(.vertical, DesignSystem.Spacing.comfortable)
+    }
+    
+    /// Apply relaxed spacing between elements
+    func relaxedSpacing() -> some View {
+        self.padding(.vertical, DesignSystem.Spacing.relaxed)
+    }
+    
+    /// Apply generous spacing between elements
+    func generousSpacing() -> some View {
+        self.padding(.vertical, DesignSystem.Spacing.lg)
     }
 }
 

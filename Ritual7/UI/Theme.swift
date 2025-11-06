@@ -8,26 +8,29 @@ enum Theme {
     // MARK: - Color Themes
     
     enum ColorTheme: String, CaseIterable {
-        case feminine = "Feminine"
-        case masculine = "Masculine"
+        case calmFocus = "CalmFocus"
+        case energeticTomato = "EnergeticTomato"
+        case monochromePro = "MonochromePro"
         
         var displayName: String {
             switch self {
-            case .feminine: return "Soft & Gentle"
-            case .masculine: return "Bold & Strong"
+            case .calmFocus: return "Calm Focus"
+            case .energeticTomato: return "Energetic Tomato"
+            case .monochromePro: return "Monochrome Pro"
             }
         }
         
         var description: String {
             switch self {
-            case .feminine: return "Warm purples and soft blues"
-            case .masculine: return "Deep blues and rich teals"
+            case .calmFocus: return "Cool, minimal – best default"
+            case .energeticTomato: return "Warm, Pomodoro brand"
+            case .monochromePro: return "Ultra-clean, for screenshots"
             }
         }
     }
     
     // Current theme (will be set by ThemeStore)
-    static var currentTheme: ColorTheme = .feminine
+    static var currentTheme: ColorTheme = .calmFocus
 
     // MARK: - Typography System (Refined for Elegance)
     
@@ -75,54 +78,161 @@ enum Theme {
         caption
     }
 
-    // MARK: - Enhanced Color Palettes (Sophisticated & Elegant)
+    // MARK: - Enhanced Color Palettes (Three Focus Themes)
     
-    // Feminine Theme - Refined with sophisticated color harmony
-    // Based on color theory: harmonious purple-blue palette with refined saturation
-    // Lightened for better visual appeal and less darkness
-    private static let feminineAccentA = Color(hue: 0.75, saturation: 0.68, brightness: 0.85) // elegant lavender - lighter and brighter
-    private static let feminineAccentB = Color(hue: 0.58, saturation: 0.74, brightness: 0.88) // refined periwinkle - lighter and brighter
-    private static let feminineAccentC = Color(hue: 0.80, saturation: 0.64, brightness: 0.80) // deep amethyst - lighter
-    private static let feminineAccentD = Color(hue: 0.70, saturation: 0.62, brightness: 0.86) // soft violet - lighter
-    private static let feminineAccentE = Color(hue: 0.56, saturation: 0.72, brightness: 0.90) // light periwinkle - lighter
+    // MARK: - 1) Calm Focus (cool, minimal – default)
+    private static let calmFocusBackgroundStart = Color(hex: "0E172A")
+    private static let calmFocusBackgroundMid = Color(hex: "132E4B")
+    private static let calmFocusBackgroundEnd = Color(hex: "0A2F2E")
+    private static let calmFocusSurfaceFill = Color.white.opacity(0.10)
+    private static let calmFocusSurfaceBorder = Color.white.opacity(0.18)
+    private static let calmFocusTextPrimary = Color(hex: "F8FAFC")
+    private static let calmFocusTextSecondary = Color(hex: "C7D2FE")
+    private static let calmFocusAccent = Color(hex: "22D3EE") // cyan-400
+    private static let calmFocusAccentPressed = Color(hex: "06B6D4")
+    private static let calmFocusRingFocus = Color(hex: "22D3EE")
+    private static let calmFocusRingBreakShort = Color(hex: "34D399")
+    private static let calmFocusRingBreakLong = Color(hex: "60A5FA")
+    private static let calmFocusWarn = Color(hex: "F59E0B")
+    private static let calmFocusError = Color(hex: "EF4444")
     
-    // Masculine Theme - Refined with sophisticated color harmony
-    // Based on color theory: harmonious blue-teal palette with refined saturation
-    private static let masculineAccentA = Color(hue: 0.54, saturation: 0.72, brightness: 0.72) // sophisticated navy - elegant
-    private static let masculineAccentB = Color(hue: 0.47, saturation: 0.78, brightness: 0.75) // refined teal - elegant
-    private static let masculineAccentC = Color(hue: 0.60, saturation: 0.68, brightness: 0.62) // deep slate blue - elegant
-    private static let masculineAccentD = Color(hue: 0.51, saturation: 0.70, brightness: 0.70) // steel blue - elegant
-    private static let masculineAccentE = Color(hue: 0.44, saturation: 0.75, brightness: 0.73) // emerald teal - elegant
+    // MARK: - 2) Energetic Tomato (warm, Pomodoro brand)
+    private static let energeticTomatoBackgroundStart = Color(hex: "1A0E2B")
+    private static let energeticTomatoBackgroundMid = Color(hex: "41164F")
+    private static let energeticTomatoBackgroundEnd = Color(hex: "5F1133")
+    private static let energeticTomatoSurfaceFill = Color.white.opacity(0.12)
+    private static let energeticTomatoSurfaceBorder = Color.white.opacity(0.20)
+    private static let energeticTomatoTextPrimary = Color(hex: "FFF7ED")
+    private static let energeticTomatoTextSecondary = Color(hex: "FECACA")
+    private static let energeticTomatoAccent = Color(hex: "F97316") // orange
+    private static let energeticTomatoAccentPressed = Color(hex: "FB7185") // rose
+    private static let energeticTomatoRingFocus = Color(hex: "F43F5E")
+    private static let energeticTomatoRingBreakShort = Color(hex: "22C55E")
+    private static let energeticTomatoRingBreakLong = Color(hex: "F59E0B")
+    private static let energeticTomatoWarn = Color(hex: "F59E0B")
+    private static let energeticTomatoError = Color(hex: "DC2626")
     
-    // Dynamic colors based on current theme
-    static var accentA: Color {
+    // MARK: - 3) Monochrome Pro (ultra-clean)
+    private static let monochromeProBackgroundStart = Color(hex: "0B0F1A")
+    private static let monochromeProBackgroundEnd = Color(hex: "111827")
+    private static let monochromeProSurfaceFill = Color.white.opacity(0.08)
+    private static let monochromeProSurfaceBorder = Color.white.opacity(0.14)
+    private static let monochromeProTextPrimary = Color(hex: "E5E7EB")
+    private static let monochromeProTextSecondary = Color(hex: "9CA3AF")
+    private static let monochromeProAccent = Color(hex: "A78BFA") // violet-400
+    private static let monochromeProAccentPressed = Color(hex: "A78BFA").opacity(0.8)
+    private static let monochromeProRingFocus = Color(hex: "A78BFA")
+    private static let monochromeProRingBreakShort = Color(hex: "67E8F9")
+    private static let monochromeProRingBreakLong = Color(hex: "93C5FD")
+    private static let monochromeProWarn = Color(hex: "F59E0B")
+    private static let monochromeProError = Color(hex: "F87171")
+    
+    // MARK: - Dynamic Colors Based on Current Theme
+    
+    // Background gradients
+    static var backgroundGradient: LinearGradient {
         switch currentTheme {
-        case .feminine: return feminineAccentA
-        case .masculine: return masculineAccentA
+        case .calmFocus:
+            return LinearGradient(
+                colors: [calmFocusBackgroundStart, calmFocusBackgroundMid, calmFocusBackgroundEnd],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        case .energeticTomato:
+            return LinearGradient(
+                colors: [energeticTomatoBackgroundStart, energeticTomatoBackgroundMid, energeticTomatoBackgroundEnd],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        case .monochromePro:
+            return LinearGradient(
+                colors: [monochromeProBackgroundStart, monochromeProBackgroundEnd],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
         }
     }
     
-    static var accentB: Color {
+    // Surface colors (for cards)
+    static var surfaceFill: Color {
         switch currentTheme {
-        case .feminine: return feminineAccentB
-        case .masculine: return masculineAccentB
+        case .calmFocus: return calmFocusSurfaceFill
+        case .energeticTomato: return energeticTomatoSurfaceFill
+        case .monochromePro: return monochromeProSurfaceFill
         }
     }
     
-    static var accentC: Color {
+    static var surfaceBorder: Color {
         switch currentTheme {
-        case .feminine: return feminineAccentC
-        case .masculine: return masculineAccentC
+        case .calmFocus: return calmFocusSurfaceBorder
+        case .energeticTomato: return energeticTomatoSurfaceBorder
+        case .monochromePro: return monochromeProSurfaceBorder
         }
     }
-
-    // Adaptive text colors that work on both light and dark backgrounds
-    static var textPrimary: Color { 
-        Color.primary
+    
+    // Text colors
+    static var textPrimary: Color {
+        switch currentTheme {
+        case .calmFocus: return calmFocusTextPrimary
+        case .energeticTomato: return energeticTomatoTextPrimary
+        case .monochromePro: return monochromeProTextPrimary
+        }
     }
-    static var textSecondary: Color { 
-        Color.secondary
+    
+    static var textSecondary: Color {
+        switch currentTheme {
+        case .calmFocus: return calmFocusTextSecondary
+        case .energeticTomato: return energeticTomatoTextSecondary
+        case .monochromePro: return monochromeProTextSecondary
+        }
     }
+    
+    // Accent colors (for CTAs and buttons)
+    static var accent: Color {
+        switch currentTheme {
+        case .calmFocus: return calmFocusAccent
+        case .energeticTomato: return energeticTomatoAccent
+        case .monochromePro: return monochromeProAccent
+        }
+    }
+    
+    static var accentPressed: Color {
+        switch currentTheme {
+        case .calmFocus: return calmFocusAccentPressed
+        case .energeticTomato: return energeticTomatoAccentPressed
+        case .monochromePro: return monochromeProAccentPressed
+        }
+    }
+    
+    // Semantic timer ring colors (Focus = cyan, Short break = green, Long break = blue)
+    static var ringFocus: Color {
+        switch currentTheme {
+        case .calmFocus: return calmFocusRingFocus
+        case .energeticTomato: return energeticTomatoRingFocus
+        case .monochromePro: return monochromeProRingFocus
+        }
+    }
+    
+    static var ringBreakShort: Color {
+        switch currentTheme {
+        case .calmFocus: return calmFocusRingBreakShort
+        case .energeticTomato: return energeticTomatoRingBreakShort
+        case .monochromePro: return monochromeProRingBreakShort
+        }
+    }
+    
+    static var ringBreakLong: Color {
+        switch currentTheme {
+        case .calmFocus: return calmFocusRingBreakLong
+        case .energeticTomato: return energeticTomatoRingBreakLong
+        case .monochromePro: return monochromeProRingBreakLong
+        }
+    }
+    
+    // Legacy compatibility (for backward compatibility during refactor)
+    static var accentA: Color { accent }
+    static var accentB: Color { ringBreakShort }
+    static var accentC: Color { ringBreakLong }
     
     // High contrast text colors for better accessibility
     static var textHighContrast: Color {
@@ -142,17 +252,25 @@ enum Theme {
     
     // Error color for validation and error states
     static var error: Color {
-        Color(uiColor: UIColor.systemRed)
+        switch currentTheme {
+        case .calmFocus: return calmFocusError
+        case .energeticTomato: return energeticTomatoError
+        case .monochromePro: return monochromeProError
+        }
     }
     
-    // Success color for positive feedback
+    // Success color for positive feedback (using short break green)
     static var success: Color {
-        Color(uiColor: UIColor.systemGreen)
+        ringBreakShort
     }
     
     // Warning color for warnings
     static var warning: Color {
-        Color(uiColor: UIColor.systemOrange)
+        switch currentTheme {
+        case .calmFocus: return calmFocusWarn
+        case .energeticTomato: return energeticTomatoWarn
+        case .monochromePro: return monochromeProWarn
+        }
     }
 
     // MARK: - Neutral Colors (Sophisticated Grayscale)
@@ -241,168 +359,79 @@ enum Theme {
 
     // MARK: - Enhanced Gradients and Visual Effects
     
-    // Primary gradient with enhanced color depth and consistent stops
+    // Primary gradient - uses background gradient
     static var accentGradient: LinearGradient {
-        switch currentTheme {
-        case .feminine:
-            return LinearGradient(
-                colors: [feminineAccentA, feminineAccentB, feminineAccentC, feminineAccentD],
-                startPoint: .topLeading, endPoint: .bottomTrailing
-            )
-        case .masculine:
-            return LinearGradient(
-                colors: [masculineAccentA, masculineAccentB, masculineAccentC, masculineAccentD],
-                startPoint: .topLeading, endPoint: .bottomTrailing
-            )
-        }
+        backgroundGradient
     }
     
     // Gradient overlay for depth (subtle overlay effect)
     static var accentGradientOverlay: LinearGradient {
-        switch currentTheme {
-        case .feminine:
-            return LinearGradient(
-                colors: [
-                    feminineAccentA.opacity(0.15),
-                    feminineAccentB.opacity(0.12),
-                    feminineAccentC.opacity(0.10),
-                    Color.clear
-                ],
-                startPoint: .topLeading, endPoint: .bottomTrailing
-            )
-        case .masculine:
-            return LinearGradient(
-                colors: [
-                    masculineAccentA.opacity(0.15),
-                    masculineAccentB.opacity(0.12),
-                    masculineAccentC.opacity(0.10),
-                    Color.clear
-                ],
-                startPoint: .topLeading, endPoint: .bottomTrailing
-            )
-        }
+        LinearGradient(
+            colors: [
+                accent.opacity(0.15),
+                ringBreakShort.opacity(0.12),
+                ringBreakLong.opacity(0.10),
+                Color.clear
+            ],
+            startPoint: .topLeading, endPoint: .bottomTrailing
+        )
     }
     
-    // Radial gradient for special effects with refined color stops
+    // Radial gradient for special effects
     static var accentRadialGradient: RadialGradient {
-        switch currentTheme {
-        case .feminine:
-            return RadialGradient(
-                colors: [
-                    feminineAccentA.opacity(0.8),
-                    feminineAccentB.opacity(0.6),
-                    feminineAccentC.opacity(0.4),
-                    feminineAccentD.opacity(0.2),
-                    Color.clear
-                ],
-                center: .center, startRadius: 0, endRadius: 200
-            )
-        case .masculine:
-            return RadialGradient(
-                colors: [
-                    masculineAccentA.opacity(0.8),
-                    masculineAccentB.opacity(0.6),
-                    masculineAccentC.opacity(0.4),
-                    masculineAccentD.opacity(0.2),
-                    Color.clear
-                ],
-                center: .center, startRadius: 0, endRadius: 200
-            )
-        }
+        RadialGradient(
+            colors: [
+                accent.opacity(0.8),
+                ringBreakShort.opacity(0.6),
+                ringBreakLong.opacity(0.4),
+                Color.clear
+            ],
+            center: .center, startRadius: 0, endRadius: 200
+        )
     }
     
-    // Angular gradient for premium effects with smooth color transitions
+    // Angular gradient for premium effects
     static var accentAngularGradient: AngularGradient {
-        switch currentTheme {
-        case .feminine:
-            return AngularGradient(
-                colors: [
-                    feminineAccentA,
-                    feminineAccentB,
-                    feminineAccentC,
-                    feminineAccentD,
-                    feminineAccentE,
-                    feminineAccentA
-                ],
-                center: .center, startAngle: .degrees(0), endAngle: .degrees(360)
-            )
-        case .masculine:
-            return AngularGradient(
-                colors: [
-                    masculineAccentA,
-                    masculineAccentB,
-                    masculineAccentC,
-                    masculineAccentD,
-                    masculineAccentE,
-                    masculineAccentA
-                ],
-                center: .center, startAngle: .degrees(0), endAngle: .degrees(360)
-            )
-        }
+        AngularGradient(
+            colors: [
+                accent,
+                ringBreakShort,
+                ringBreakLong,
+                accent
+            ],
+            center: .center, startAngle: .degrees(0), endAngle: .degrees(360)
+        )
     }
     
-    // Enhanced shadow colors for elegant depth (refined for sophistication)
+    // Enhanced shadow colors for glass effect (y=10, blur=24, rgba(0,0,0,0.28) for dark)
     static var enhancedShadow: Color {
-        Color(uiColor: UIColor { tc in
-            switch currentTheme {
-            case .feminine:
-                return tc.userInterfaceStyle == .dark
-                    ? UIColor(hue: 0.75, saturation: 0.70, brightness: 0.08, alpha: 0.55)
-                    : UIColor(hue: 0.75, saturation: 0.70, brightness: 0.12, alpha: 0.50)
-            case .masculine:
-                return tc.userInterfaceStyle == .dark
-                    ? UIColor(hue: 0.54, saturation: 0.75, brightness: 0.08, alpha: 0.60)
-                    : UIColor(hue: 0.54, saturation: 0.75, brightness: 0.10, alpha: 0.55)
-            }
-        })
+        Color.black.opacity(0.28)
     }
     
-    // Refined glow effect colors (more subtle and sophisticated)
+    // Refined glow effect colors
     static var glowColor: Color {
-        switch currentTheme {
-        case .feminine:
-            return Color(hue: 0.75, saturation: 0.85, brightness: 0.95, opacity: 0.65)
-        case .masculine:
-            return Color(hue: 0.54, saturation: 0.88, brightness: 0.92, opacity: 0.70)
-        }
+        accent.opacity(0.65)
     }
     
     // Inner glow color for premium feel
     static var innerGlowColor: Color {
-        switch currentTheme {
-        case .feminine:
-            return Color(hue: 0.75, saturation: 0.80, brightness: 0.98, opacity: 0.55)
-        case .masculine:
-            return Color(hue: 0.54, saturation: 0.85, brightness: 0.95, opacity: 0.60)
-        }
+        accent.opacity(0.55)
     }
     
     // Light ray color for emphasis effects
     static var lightRayColor: Color {
-        switch currentTheme {
-        case .feminine:
-            return Color(hue: 0.75, saturation: 0.90, brightness: 1.0, opacity: 0.50)
-        case .masculine:
-            return Color(hue: 0.54, saturation: 0.92, brightness: 0.98, opacity: 0.55)
-        }
+        accent.opacity(0.50)
     }
     
-    // MARK: - Background Colors (Refined for Elegance)
+    // MARK: - Background Colors
     
-    // Background colors with sophisticated neutral tones
+    // Background colors - now using gradient backgrounds
     static var bgDeep: Color {
-        Color(uiColor: UIColor { tc in
-            switch currentTheme {
-            case .feminine:
-                return tc.userInterfaceStyle == .dark
-                    ? UIColor(hue: 0.75, saturation: 0.45, brightness: 0.08, alpha: 1)
-                    : UIColor(hue: 0.75, saturation: 0.12, brightness: 0.97, alpha: 1)
-            case .masculine:
-                return tc.userInterfaceStyle == .dark
-                    ? UIColor(hue: 0.54, saturation: 0.50, brightness: 0.08, alpha: 1)
-                    : UIColor(hue: 0.54, saturation: 0.10, brightness: 0.97, alpha: 1)
-            }
-        })
+        switch currentTheme {
+        case .calmFocus: return calmFocusBackgroundStart
+        case .energeticTomato: return energeticTomatoBackgroundStart
+        case .monochromePro: return monochromeProBackgroundStart
+        }
     }
     
     // Secondary background for cards and elevated surfaces
@@ -426,3 +455,33 @@ enum Theme {
 
 // NOTE: Do NOT define ThemeStore here to avoid duplicate type errors.
 // Keep a single ThemeStore in one file only.
+
+// MARK: - Color Extension for Hex Support
+
+extension Color {
+    /// Creates a Color from a hex string (e.g., "FF5733" or "#FF5733")
+    init(hex: String) {
+        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        var int: UInt64 = 0
+        Scanner(string: hex).scanHexInt64(&int)
+        let a, r, g, b: UInt64
+        switch hex.count {
+        case 3: // RGB (12-bit)
+            (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
+        case 6: // RGB (24-bit)
+            (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
+        case 8: // ARGB (32-bit)
+            (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
+        default:
+            (a, r, g, b) = (255, 0, 0, 0)
+        }
+        
+        self.init(
+            .sRGB,
+            red: Double(r) / 255,
+            green: Double(g) / 255,
+            blue: Double(b) / 255,
+            opacity: Double(a) / 255
+        )
+    }
+}

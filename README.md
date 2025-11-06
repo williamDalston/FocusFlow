@@ -1,27 +1,27 @@
 # Ritual7 iOS App
 
-A beautiful, native iOS workout app featuring the scientifically-backed 7-minute high-intensity interval training (HIIT) routine. Built with SwiftUI for iPhone, iPad, and Apple Watch.
+A beautiful, native iOS Pomodoro timer app for focused work sessions. Built with SwiftUI for iPhone, iPad, and Apple Watch.
 
 ## 🎯 Overview
 
-Ritual7 brings you the scientifically-backed high-intensity interval training routine that delivers maximum results in minimal time. Perfect for busy schedules, no gym required, and no equipment needed—just you, your phone, and 7 minutes of commitment.
+Ritual7 is a Pomodoro timer app that helps you stay focused and productive. Perfect for managing work sessions, study time, and any task that requires deep focus—just you, your phone, and 25 minutes of focused work.
 
 ## ✨ Features
 
 ### Core Features
-- **12 High-Intensity Exercises**: Complete the full 7-minute workout routine
-- **Beautiful UI**: Modern SwiftUI interface with circular progress indicators
-- **Sound & Haptics**: Audio feedback and vibration for workout transitions
-- **Progress Tracking**: Track your workout history, streaks, and statistics
-- **Apple Watch Support**: Full workout companion app for Apple Watch
-- **HealthKit Integration**: Seamless sync with Apple Health and Activity apps
+- **Pomodoro Timer**: Classic 25-minute focus sessions with 5-minute breaks
+- **Customizable Presets**: Quick Focus (15 min), Classic Pomodoro (25 min), Deep Work (45 min)
+- **Beautiful UI**: Modern SwiftUI interface with glassmorphism design
+- **Sound & Haptics**: Audio feedback and vibration for phase transitions
+- **Progress Tracking**: Track your focus sessions, streaks, and statistics
+- **Apple Watch Support**: Full Pomodoro timer companion app for Apple Watch
 
 ### Advanced Features
 - **Comprehensive Analytics**: Weekly/monthly/yearly trends, progress charts, and insights
-- **Achievement System**: 15+ achievements with celebrations and notifications
-- **Smart Notifications**: Daily reminders, streak maintenance, and motivational messages
-- **Customization**: Adjustable exercise/rest durations, custom workouts, presets
-- **Exercise Guide**: Detailed form instructions, modifications, and safety tips
+- **Achievement System**: Focus achievements with celebrations and notifications
+- **Smart Notifications**: Daily reminders, streak maintenance, and productivity tips
+- **Customization**: Adjustable focus/break durations, custom Pomodoro presets
+- **Pomodoro Cycles**: Automatic long breaks after 4 focus sessions
 - **Accessibility**: Full VoiceOver support, Dynamic Type, high contrast mode
 
 ## 📱 Platform Support
@@ -35,20 +35,19 @@ Ritual7 brings you the scientifically-backed high-intensity interval training ro
 ## 🏗️ Project Structure
 
 ```
-SevenMinuteWorkout/
-├── SevenMinuteWorkout.xcodeproj/    # Xcode project file
-├── SevenMinuteWorkout/              # Main iOS app code
-│   ├── Workout/                     # Workout engine, timer, and views
-│   ├── Models/                      # Data models (WorkoutStore, Exercise, etc.)
+Ritual7/
+├── Ritual7.xcodeproj/               # Xcode project file
+├── Ritual7/                         # Main iOS app code
+│   ├── Focus/                       # Pomodoro engine, timer, and views
+│   ├── Models/                      # Data models (FocusStore, FocusSession, etc.)
 │   ├── UI/                          # UI components and design system
 │   ├── Views/                       # Main view files
 │   ├── Analytics/                   # Analytics and insights
-│   ├── Health/                      # HealthKit integration
 │   ├── Motivation/                  # Achievement and motivational features
 │   ├── Notifications/               # Notification management
 │   ├── System/                      # System utilities
 │   └── Widgets/                     # iOS Widget extension
-├── SevenMinuteWorkoutWatch/         # Apple Watch app
+├── Ritual7Watch/                   # Apple Watch app
 └── AppStore/                        # App Store assets and documentation
 ```
 
@@ -73,7 +72,7 @@ SevenMinuteWorkout/
 
 3. **Configure Signing**
    - Select your development team in Signing & Capabilities
-   - Ensure bundle identifier matches: `williamalston.SevenMinuteWorkout`
+   - Ensure bundle identifier matches: `com.williamalston.Ritual7`
 
 4. **Build and Run**
    - Select your target device or simulator
@@ -130,11 +129,11 @@ Analytics are collected locally and anonymously to improve the app experience.
 ## 📊 Architecture
 
 ### Core Components
-- **WorkoutEngine**: Manages workout state and timing
-- **WorkoutStore**: Handles data persistence and statistics
+- **PomodoroEngine**: Manages Pomodoro timer state and timing
+- **FocusStore**: Handles data persistence and statistics
 - **NotificationManager**: Manages smart notifications
 - **AchievementNotifier**: Tracks and notifies achievements
-- **HealthKitManager**: Handles HealthKit integration
+- **FocusPreferencesStore**: Manages user preferences and presets
 
 ### Design Patterns
 - MVVM architecture
@@ -153,8 +152,7 @@ The app uses a custom design system:
 
 ## 🔒 Privacy & Security
 
-- All workout data stored locally on device
-- HealthKit integration is optional and privacy-respecting
+- All focus session data stored locally on device
 - No personal data transmitted to servers
 - Analytics are anonymized
 - Full privacy policy available in `AppStore/PrivacyPolicy.md`
@@ -175,10 +173,10 @@ The app uses a custom design system:
 - Clean build folder: `Product > Clean Build Folder`
 - Reset package caches if needed
 
-**HealthKit Not Working**
-- Verify HealthKit capability is enabled
-- Check permissions in iOS Settings > Privacy & Security > Health
-- Ensure device supports HealthKit
+**Timer Not Working**
+- Verify app is not in background when timer is running
+- Check notification permissions for timer alerts
+- Ensure device time is correctly set
 
 **Watch Sync Issues**
 - Verify Watch app is installed
@@ -201,13 +199,13 @@ See LICENSE file for details.
 
 ## 🙏 Acknowledgments
 
-- Based on the 7-minute workout research from the American College of Sports Medicine
+- Based on the Pomodoro Technique by Francesco Cirillo
 - Built with SwiftUI and modern iOS development practices
-- Inspired by the need for quick, effective home workouts
+- Inspired by the need for focused, productive work sessions
 
 ---
 
-**Version**: 1.3  
-**Last Updated**: November 2024  
+**Version**: 2.0 (Pomodoro Timer)  
+**Last Updated**: December 2024  
 **Minimum iOS**: 16.0  
-**Bundle ID**: williamalston.SevenMinuteWorkout
+**Bundle ID**: com.williamalston.Ritual7

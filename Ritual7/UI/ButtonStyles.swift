@@ -31,10 +31,10 @@ struct PrimaryProminentButtonStyle: ButtonStyle {
                         .fill(
                             LinearGradient(
                                 colors: [
-                                    Theme.accentA.opacity(configuration.isPressed ? DesignSystem.Opacity.subtle * 0.7 : DesignSystem.Opacity.subtle * 1.2),
-                                    Theme.accentB.opacity(configuration.isPressed ? DesignSystem.Opacity.subtle * 0.4 : DesignSystem.Opacity.subtle * 0.8),
-                                    Theme.accentC.opacity(configuration.isPressed ? DesignSystem.Opacity.subtle * 0.7 : DesignSystem.Opacity.subtle * 1.1),
-                                    Theme.accentA.opacity(configuration.isPressed ? DesignSystem.Opacity.subtle * 0.3 : DesignSystem.Opacity.subtle * 0.5)
+                                    Theme.accent.opacity(configuration.isPressed ? DesignSystem.Opacity.subtle * 0.7 : DesignSystem.Opacity.subtle * 1.2),
+                                    Theme.ringBreakShort.opacity(configuration.isPressed ? DesignSystem.Opacity.subtle * 0.4 : DesignSystem.Opacity.subtle * 0.8),
+                                    Theme.ringBreakLong.opacity(configuration.isPressed ? DesignSystem.Opacity.subtle * 0.7 : DesignSystem.Opacity.subtle * 1.1),
+                                    Theme.accent.opacity(configuration.isPressed ? DesignSystem.Opacity.subtle * 0.3 : DesignSystem.Opacity.subtle * 0.5)
                                 ],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
@@ -63,10 +63,10 @@ struct PrimaryProminentButtonStyle: ButtonStyle {
                     .stroke(
                         LinearGradient(
                             colors: [
-                                Theme.accentA.opacity(configuration.isPressed ? DesignSystem.Opacity.light * 0.7 : DesignSystem.Opacity.light * 1.2),
-                                Theme.accentB.opacity(configuration.isPressed ? DesignSystem.Opacity.subtle * 0.7 : DesignSystem.Opacity.subtle * 1.1),
-                                Theme.accentC.opacity(configuration.isPressed ? DesignSystem.Opacity.light * 0.7 : DesignSystem.Opacity.light * 1.2),
-                                Theme.accentA.opacity(configuration.isPressed ? DesignSystem.Opacity.subtle * 0.2 : DesignSystem.Opacity.subtle * 0.4)
+                                Theme.accent.opacity(configuration.isPressed ? DesignSystem.Opacity.light * 0.7 : DesignSystem.Opacity.light * 1.2),
+                                Theme.ringBreakShort.opacity(configuration.isPressed ? DesignSystem.Opacity.subtle * 0.7 : DesignSystem.Opacity.subtle * 1.1),
+                                Theme.ringBreakLong.opacity(configuration.isPressed ? DesignSystem.Opacity.light * 0.7 : DesignSystem.Opacity.light * 1.2),
+                                Theme.accent.opacity(configuration.isPressed ? DesignSystem.Opacity.subtle * 0.2 : DesignSystem.Opacity.subtle * 0.4)
                             ],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
@@ -75,13 +75,13 @@ struct PrimaryProminentButtonStyle: ButtonStyle {
                     )
             )
             .overlay(
-                // Premium inner glow effect
+                    // Premium inner glow effect
                 RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.button, style: .continuous)
                     .stroke(
                         LinearGradient(
                             colors: [
                                 Theme.glowColor.opacity(configuration.isPressed ? DesignSystem.Opacity.glow * 0.5 : DesignSystem.Opacity.glow * 1.2),
-                                Theme.accentA.opacity(configuration.isPressed ? DesignSystem.Opacity.glow * 0.3 : DesignSystem.Opacity.glow * 0.8)
+                                Theme.accent.opacity(configuration.isPressed ? DesignSystem.Opacity.glow * 0.3 : DesignSystem.Opacity.glow * 0.8)
                             ],
                             startPoint: .topLeading,
                             endPoint: .center
@@ -178,10 +178,10 @@ struct SecondaryGlassButtonStyle: ButtonStyle {
                         .fill(
                             LinearGradient(
                                 colors: [
-                                    Theme.accentA.opacity(configuration.isPressed ? DesignSystem.Opacity.subtle * 0.4 : DesignSystem.Opacity.subtle * 0.8),
-                                    Theme.accentB.opacity(configuration.isPressed ? DesignSystem.Opacity.subtle * 0.25 : DesignSystem.Opacity.subtle * 0.5),
-                                    Theme.accentC.opacity(configuration.isPressed ? DesignSystem.Opacity.subtle * 0.4 : DesignSystem.Opacity.subtle * 0.8),
-                                    Theme.accentA.opacity(configuration.isPressed ? DesignSystem.Opacity.subtle * 0.15 : DesignSystem.Opacity.subtle * 0.3)
+                                    Theme.accent.opacity(configuration.isPressed ? DesignSystem.Opacity.subtle * 0.4 : DesignSystem.Opacity.subtle * 0.8),
+                                    Theme.ringBreakShort.opacity(configuration.isPressed ? DesignSystem.Opacity.subtle * 0.25 : DesignSystem.Opacity.subtle * 0.5),
+                                    Theme.ringBreakLong.opacity(configuration.isPressed ? DesignSystem.Opacity.subtle * 0.4 : DesignSystem.Opacity.subtle * 0.8),
+                                    Theme.accent.opacity(configuration.isPressed ? DesignSystem.Opacity.subtle * 0.15 : DesignSystem.Opacity.subtle * 0.3)
                                 ],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
@@ -210,8 +210,8 @@ struct SecondaryGlassButtonStyle: ButtonStyle {
                         LinearGradient(
                             colors: [
                                 Theme.strokeOuter.opacity(configuration.isPressed ? DesignSystem.Opacity.borderSubtle : DesignSystem.Opacity.borderSubtle * 1.5),
-                                Theme.accentA.opacity(configuration.isPressed ? DesignSystem.Opacity.strong * 0.7 : DesignSystem.Opacity.strong * 1.2),
-                                Theme.accentB.opacity(configuration.isPressed ? DesignSystem.Opacity.light * 0.7 : DesignSystem.Opacity.light * 1.1),
+                                Theme.accent.opacity(configuration.isPressed ? DesignSystem.Opacity.strong * 0.7 : DesignSystem.Opacity.strong * 1.2),
+                                Theme.ringBreakShort.opacity(configuration.isPressed ? DesignSystem.Opacity.light * 0.7 : DesignSystem.Opacity.light * 1.1),
                                 Theme.strokeOuter.opacity(configuration.isPressed ? DesignSystem.Opacity.borderSubtle : DesignSystem.Opacity.borderSubtle * 1.5)
                             ],
                             startPoint: .topLeading,
@@ -227,7 +227,7 @@ struct SecondaryGlassButtonStyle: ButtonStyle {
                         LinearGradient(
                             colors: [
                                 Theme.glowColor.opacity(configuration.isPressed ? DesignSystem.Opacity.glow * 0.5 : DesignSystem.Opacity.glow * 1.1),
-                                Theme.accentA.opacity(configuration.isPressed ? DesignSystem.Opacity.glow * 0.3 : DesignSystem.Opacity.glow * 0.7)
+                                Theme.accent.opacity(configuration.isPressed ? DesignSystem.Opacity.glow * 0.3 : DesignSystem.Opacity.glow * 0.7)
                             ],
                             startPoint: .topLeading,
                             endPoint: .center
