@@ -25,7 +25,7 @@ final class ThemeStore: ObservableObject {
 }
 //
 //  ThemeStore.swift
-//  Ritual7
+//  FocusFlow
 //
 //  Created by William Alston on 9/15/25.
 //

@@ -2,10 +2,10 @@ import SwiftUI
 import GoogleMobileAds
 import os.log
 
-/// Agent 9: App Entry Point - Ritual7 Pomodoro Timer App
+/// Agent 9: App Entry Point - FocusFlow Pomodoro Timer App
 /// Comprehensive app entry point with exceptional architecture, error handling, and performance optimization
 @main
-struct Ritual7App: App {
+struct FocusFlowApp: App {
     // Wire up the UIKit delegate (lifecycle + quick actions + SDK init lives there)
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
 

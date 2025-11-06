@@ -4,9 +4,9 @@ struct WatchFocusHeaderView: View {
     @EnvironmentObject private var focusStore: WatchFocusStore
     
     var body: some View {
-        VStack(spacing: 4) {
+        VStack(spacing: DesignSystem.Spacing.tight) {
             // App icon and title
-            HStack(spacing: 6) {
+            HStack(spacing: DesignSystem.Spacing.iconSpacing) {
                 Image(systemName: "brain.head.profile")
                     .font(.title3)
                     .foregroundStyle(.blue)
@@ -17,8 +17,8 @@ struct WatchFocusHeaderView: View {
             }
             
             // Streak display
-            HStack(spacing: 8) {
-                VStack(spacing: 2) {
+            HStack(spacing: DesignSystem.Spacing.xs) {
+                VStack(spacing: DesignSystem.Spacing.tight) {
                     Text("\(focusStore.streak)")
                         .font(.title2.weight(.bold))
                         .foregroundStyle(.orange)
@@ -29,7 +29,7 @@ struct WatchFocusHeaderView: View {
                 }
                 
                 // Today's focus sessions count
-                VStack(spacing: 2) {
+                VStack(spacing: DesignSystem.Spacing.tight) {
                     Text("\(todaysSessions)")
                         .font(.title2.weight(.bold))
                         .foregroundStyle(.blue)
@@ -40,13 +40,13 @@ struct WatchFocusHeaderView: View {
                 }
             }
         }
-        .padding(.vertical, 8)
-        .padding(.horizontal, 12)
+        .padding(.vertical, DesignSystem.Spacing.xs)
+        .padding(.horizontal, DesignSystem.Spacing.comfortable)
         .background(
-            RoundedRectangle(cornerRadius: 16)
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.card)
                 .fill(.ultraThinMaterial)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 16)
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.card)
                         .stroke(Color.blue.opacity(0.3), lineWidth: 1)
                 )
         )

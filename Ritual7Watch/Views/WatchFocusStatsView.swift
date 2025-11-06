@@ -4,15 +4,15 @@ struct WatchFocusStatsView: View {
     @EnvironmentObject private var focusStore: WatchFocusStore
     
     var body: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: DesignSystem.Spacing.xs) {
             Text("This Week")
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(.secondary)
             
             // Weekly progress
-            HStack(spacing: 12) {
+            HStack(spacing: DesignSystem.Spacing.comfortable) {
                 ForEach(weekDays, id: \.self) { day in
-                    VStack(spacing: 2) {
+                    VStack(spacing: DesignSystem.Spacing.tight) {
                         Circle()
                             .fill(dayHasFocusSession(day) ? Color.blue : Color.gray.opacity(0.3))
                             .frame(width: 8, height: 8)
@@ -29,10 +29,10 @@ struct WatchFocusStatsView: View {
                 .font(.caption2)
                 .foregroundStyle(.blue)
         }
-        .padding(.vertical, 8)
-        .padding(.horizontal, 12)
+        .padding(.vertical, DesignSystem.Spacing.xs)
+        .padding(.horizontal, DesignSystem.Spacing.comfortable)
         .background(
-            RoundedRectangle(cornerRadius: 12)
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.button)
                 .fill(.ultraThinMaterial)
         )
     }

@@ -5,6 +5,8 @@ import WatchKit
 /// Refactored from WorkoutTimerView for Pomodoro Timer app
 /// Agent 14: Enhanced spacing for better visual comfort
 struct FocusTimerView: View {
+    // Use main DesignSystem if accessible, otherwise use WatchDesignSystem
+    // For now, we'll use main DesignSystem assuming it's shared
     @ObservedObject var engine: PomodoroEngineWatch
     @ObservedObject var store: WatchFocusStore
     @Environment(\.dismiss) private var dismiss

@@ -95,14 +95,14 @@ final class MotivationalMessageManager: ObservableObject {
         switch hour {
         case 5..<12:
             messages = [
-                "Good morning! Start your day by investing in yourself. Your Ritual7 is waiting.",
+                "Good morning! Start your day by investing in yourself. Your FocusFlow is waiting.",
                 "Morning is when champions are made. Take these 7 minutes to set the tone for an extraordinary day.",
                 "Rise and shine! Your body is ready for movement, your mind is ready for growth. Time to honor your commitment.",
                 "Every sunrise is a new beginning. Make this morning count with your workout."
             ]
         case 12..<17:
             messages = [
-                "Afternoon energy dip? Transform it into strength. Your Ritual7 will recharge both body and mind.",
+                "Afternoon energy dip? Transform it into strength. Your FocusFlow will recharge both body and mind.",
                 "Perfect time for a midday reset. Give yourself the gift of movement and renewed energy.",
                 "Revitalize your afternoon with purpose. This workout is a choice to prioritize your well-being.",
                 "The middle of the day is when discipline shines brightest. Show yourself what you're made of."
@@ -110,7 +110,7 @@ final class MotivationalMessageManager: ObservableObject {
         case 17..<22:
             messages = [
                 "Evening workout time! Finish your day knowing you chose growth over comfort. That's how champions end their day.",
-                "Unwind with intention. Your Ritual7 is a celebration of what your body can do, not a punishment.",
+                "Unwind with intention. Your FocusFlow is a celebration of what your body can do, not a punishment.",
                 "End your day on a high note. Every workout completed is a victory, and this one is yours to claim.",
                 "Evening is when you prove to yourself that your commitment matters more than your fatigue."
             ]

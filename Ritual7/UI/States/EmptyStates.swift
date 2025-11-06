@@ -115,6 +115,17 @@ extension EmptyStateView {
         )
     }
     
+    /// Agent 13: Enhanced empty state for no focus sessions
+    static func noFocusSessions(action: @escaping () -> Void) -> EmptyStateView {
+        return EmptyStateView(
+            icon: "brain.head.profile",
+            title: "No Focus Sessions Yet",
+            message: "Your focus journey starts with a single session. Begin your first Pomodoro timer session to build momentum.",
+            actionTitle: "Start Focus Session",
+            action: action
+        )
+    }
+    
     /// Agent 30: Enhanced empty state for no history found using MicrocopyManager
     static func noHistoryFound(action: @escaping () -> Void) -> EmptyStateView {
         let emptyState = MicrocopyManager.shared.emptyStateMessage(for: .noHistoryFound)

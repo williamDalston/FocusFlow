@@ -35,7 +35,7 @@
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>Start Focus Session</string>
 			<key>UIApplicationShortcutItemType</key>
-			<string>com.williamalston.Ritual7.startFocus</string>
+			<string>com.williamalston.FocusFlow.startFocus</string>
 		</dict>
 	</array>
 	<key>NSHealthShareUsageDescription</key>
@@ -50,6 +50,30 @@
 	</array>
 	<key>NSSupportsLiveActivities</key>
 	<true/>
+	<key>CFBundleIcons</key>
+	<dict>
+		<key>CFBundleAlternateIcons</key>
+		<dict>
+			<key>AppIconWarm</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>AppIconWarm</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
+		</dict>
+		<key>CFBundlePrimaryIcon</key>
+		<dict>
+			<key>CFBundleIconFiles</key>
+			<array>
+				<string>AppIcon</string>
+			</array>
+			<key>UIPrerenderedIcon</key>
+			<false/>
+		</dict>
+	</dict>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

@@ -17,7 +17,7 @@ struct WorkoutWidget: Widget {
                     .background(Color(.systemBackground))
             }
         }
-        .configurationDisplayName("Ritual7")
+        .configurationDisplayName("FocusFlow")
         .description("Track your workout streak and start a quick session.")
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }
@@ -193,7 +193,7 @@ struct LargeWidgetView: View {
         VStack(spacing: 16) {
             HStack {
                 VStack(alignment: .leading) {
-                    Text("Ritual7")
+                    Text("FocusFlow")
                         .font(.title2.weight(.bold))
                     
                     Text("Track your progress")

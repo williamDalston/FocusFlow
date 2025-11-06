@@ -25,7 +25,7 @@ enum WorkoutShortcuts {
         
         // Create a user activity for the shortcut
         let activity = NSUserActivity(activityType: AppConstants.ActivityTypes.startWorkout)
-        activity.title = "Start Ritual7"
+        activity.title = "Start FocusFlow"
         activity.suggestedInvocationPhrase = "Start workout"
         activity.isEligibleForPrediction = true
         activity.isEligibleForSearch = true

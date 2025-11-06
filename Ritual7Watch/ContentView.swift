@@ -8,7 +8,7 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: 12) {
+                VStack(spacing: DesignSystem.Spacing.comfortable) {
                     // Header with streak
                     WatchFocusHeaderView()
                         .environmentObject(focusStore)
@@ -17,16 +17,16 @@ struct ContentView: View {
                     Button(action: {
                         showingFocus = true
                     }) {
-                        HStack {
+                        HStack(spacing: DesignSystem.Spacing.iconSpacing) {
                             Image(systemName: "brain.head.profile")
                                 .font(.title3)
                             Text("Start Focus")
                                 .font(.headline.weight(.semibold))
                         }
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, 12)
+                        .padding(.vertical, DesignSystem.Spacing.comfortable)
                         .background(
-                            RoundedRectangle(cornerRadius: 12)
+                            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.button)
                                 .fill(Color.blue)
                         )
                         .foregroundStyle(.white)
@@ -37,8 +37,8 @@ struct ContentView: View {
                     WatchFocusStatsView()
                         .environmentObject(focusStore)
                 }
-                .padding(.horizontal, 8)
-                .padding(.top, 4)
+                .padding(.horizontal, DesignSystem.Spacing.xs)
+                .padding(.top, DesignSystem.Spacing.tight)
             }
             .navigationTitle("Pomodoro")
             .navigationBarTitleDisplayMode(.inline)

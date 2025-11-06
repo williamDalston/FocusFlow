@@ -594,7 +594,7 @@ struct SettingsView: View {
                             Text("Daily Workout Reminder")
                                 .font(Theme.body)
                                 .foregroundStyle(Theme.textPrimary)
-                            Text("Get reminded to complete your daily Ritual7.")
+                            Text("Get reminded to complete your daily FocusFlow.")
                                 .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                                 .lineSpacing(DesignSystem.Typography.captionLineHeight - 1.0)
@@ -1004,7 +1004,7 @@ struct SettingsView: View {
             let enc = JSONEncoder()
             enc.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
             let data = try enc.encode(workoutStore.sessions)
-            let url = FileManager.default.temporaryDirectory.appendingPathComponent("Ritual7.json")
+            let url = FileManager.default.temporaryDirectory.appendingPathComponent("FocusFlow.json")
             try data.write(to: url, options: .atomic)
             shareItems = [url]
             Haptics.tap()
@@ -1026,7 +1026,7 @@ struct SettingsView: View {
             csv += "\"\(ts)\",\(e.duration),\(e.exercisesCompleted),\"\(escaped)\"\n"
         }
         let data = Data(csv.utf8)
-        let url = FileManager.default.temporaryDirectory.appendingPathComponent("Ritual7.csv")
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("FocusFlow.csv")
         do {
             try data.write(to: url, options: .atomic)
             shareItems = [url]

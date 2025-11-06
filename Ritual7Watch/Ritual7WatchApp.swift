@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct Ritual7WatchApp: App {
+struct FocusFlowWatchApp: App {
     @StateObject private var focusStore = WatchFocusStore()
     
     var body: some Scene {

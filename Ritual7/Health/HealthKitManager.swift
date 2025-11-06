@@ -133,8 +133,8 @@ class HealthKitManager {
         // Create workout metadata
         let metadata: [String: Any] = [
             "exercisesCompleted": exercisesCompleted,
-            "workoutType": "Ritual7",
-            "appName": "Ritual7"
+            "workoutType": "FocusFlow",
+            "appName": "FocusFlow"
         ]
         
         // Create the workout

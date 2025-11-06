@@ -280,10 +280,18 @@ struct FocusContentView: View {
         .sheet(isPresented: $showAnalytics) {
             if let analytics = analytics, let manager = achievementManager {
                 NavigationStack {
-                    AnalyticsMainView()
-                        .environmentObject(store)
-                        .environmentObject(analytics)
-                        .environmentObject(manager)
+                    // TODO: Agent 15 - Create FocusAnalyticsMainView
+                    Text("Analytics View - Coming Soon")
+                        .navigationTitle("Analytics")
+                        .navigationBarTitleDisplayMode(.large)
+                        .toolbar {
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                Button("Done") {
+                                    showAnalytics = false
+                                    Haptics.tap()
+                                }
+                            }
+                        }
                 }
                 .iPadOptimizedSheetPresentation()
             }
@@ -299,7 +307,18 @@ struct FocusContentView: View {
         .sheet(isPresented: $showInsights) {
             if let analytics = analytics {
                 NavigationStack {
-                    InsightsView(analytics: analytics)
+                    // TODO: Agent 15 - Create FocusInsightsView
+                    Text("Insights View - Coming Soon")
+                        .navigationTitle("Insights")
+                        .navigationBarTitleDisplayMode(.large)
+                        .toolbar {
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                Button("Done") {
+                                    showInsights = false
+                                    Haptics.tap()
+                                }
+                            }
+                        }
                 }
                 .iPadOptimizedSheetPresentation()
             }
@@ -314,8 +333,13 @@ struct FocusContentView: View {
         }
         .sheet(isPresented: $showPresets) {
             NavigationStack {
-                PomodoroPresetSelectionView()
-                    .environmentObject(preferencesStore)
+                PomodoroPresetSelectorView(
+                    selectedPreset: Binding(
+                        get: { preferencesStore.preferences.selectedPreset },
+                        set: { preferencesStore.updateSelectedPreset($0) }
+                    )
+                )
+                .environmentObject(preferencesStore)
             }
             .iPadOptimizedSheetPresentation()
         }
