@@ -438,7 +438,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = FocusFlow/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Flow Focus Timer";
+				INFOPLIST_KEY_CFBundleDisplayName = "Alston Focus Timer";
 				INFOPLIST_KEY_NSUserTrackingUsageDescription = "We use this to show relevant ads and support free features.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = NO;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = NO;
@@ -482,7 +482,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = FocusFlow/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Flow Focus Timer";
+				INFOPLIST_KEY_CFBundleDisplayName = "Alston Focus Timer";
 				INFOPLIST_KEY_NSUserTrackingUsageDescription = "We use this to show relevant ads and support free features.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = NO;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = NO;

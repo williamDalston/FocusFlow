@@ -18,9 +18,9 @@
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Flow Focus Timer</string>
+	<string>Alston Focus Timer</string>
 	<key>CFBundleName</key>
-	<string>Flow Focus Timer</string>
+	<string>Alston Focus Timer</string>
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
