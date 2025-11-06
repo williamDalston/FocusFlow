@@ -617,7 +617,7 @@ struct iPadRecentFocusCard: View {
 // MARK: - iPad Insights View
 
 struct iPadInsightsView: View {
-    @EnvironmentObject private var workoutStore: WorkoutStore
+    @EnvironmentObject private var focusStore: FocusStore
     
     var body: some View {
         ScrollView {
@@ -632,29 +632,29 @@ struct iPadInsightsView: View {
                     GridItem(.flexible())
                 ], spacing: DesignSystem.Spacing.formFieldSpacing) {
                     iPadInsightCard(
-                        title: "Total Workouts",
-                        value: "\(workoutStore.totalWorkouts)",
-                        icon: "figure.run",
+                        title: "Total Sessions",
+                        value: "\(focusStore.totalSessions)",
+                        icon: "brain.head.profile",
                         color: Theme.accent
                     )
                     
                     iPadInsightCard(
                         title: "Current Streak",
-                        value: "\(workoutStore.streak) days",
+                        value: "\(focusStore.streak) days",
                         icon: "flame.fill",
                         color: Theme.ringBreakShort
                     )
                     
                     iPadInsightCard(
                         title: "This Month",
-                        value: "\(workoutStore.workoutsThisMonth) workouts",
+                        value: "\(focusStore.sessionsThisMonth) sessions",
                         icon: "calendar",
                         color: Theme.ringBreakLong
                     )
                     
                     iPadInsightCard(
                         title: "Total Minutes",
-                        value: "\(Int(workoutStore.totalMinutes)) min",
+                        value: "\(Int(focusStore.totalFocusTime)) min",
                         icon: "clock.fill",
                         color: Theme.ringBreakLong
                     )

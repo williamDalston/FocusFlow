@@ -4,17 +4,13 @@ import Combine
 import UIKit
 import os.log
 
-/// Agent 8 & 11: Manages sound effects and voice cues for the workout app
-/// Enhanced with voice cues integration and audio preferences
+/// Manages sound effects and audio preferences for the FocusFlow app
 @MainActor
 class SoundManager: ObservableObject {
     static let shared = SoundManager()
     
     @Published var soundEnabled: Bool = true
     @Published var vibrationEnabled: Bool = true
-    
-    // Agent 11: Voice cues integration
-    private let voiceCuesManager = VoiceCuesManager.shared
     
     private var audioPlayer: AVAudioPlayer?
     private let soundEnabledKey = AppConstants.UserDefaultsKeys.soundEnabled
@@ -51,12 +47,10 @@ class SoundManager: ObservableObject {
         switch type {
         case .start:
             await playTone(frequency: 440.0, duration: 0.3)
-            // Agent 11: Voice cues are handled separately in VoiceCuesManager
         case .rest:
             await playTone(frequency: 523.25, duration: 0.3)
         case .tick:
             await playTone(frequency: 880.0, duration: 0.1)
-            // Agent 11: Optional voice countdown (handled by VoiceCuesManager)
         case .complete:
             await playTone(frequency: 523.25, duration: 0.15)
             try? await Task.sleep(nanoseconds: 50_000_000) // 0.05 second pause
