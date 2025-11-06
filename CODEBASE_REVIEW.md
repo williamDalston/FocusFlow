@@ -217,7 +217,7 @@ var longestStreak: Int {
 #### Build Settings
 - ✅ Version: 1.3
 - ✅ Build: 3
-- ✅ Bundle ID: `williamalston.Ritual7`
+- ✅ Bundle ID: `williamalston.FocusFlow`
 - ✅ Deployment target: iOS 16.0
 - ✅ Code signing: Automatic
 

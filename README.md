@@ -72,7 +72,7 @@ Ritual7/
 
 3. **Configure Signing**
    - Select your development team in Signing & Capabilities
-   - Ensure bundle identifier matches: `com.williamalston.Ritual7`
+   - Ensure bundle identifier matches: `com.williamalston.FocusFlow`
 
 4. **Build and Run**
    - Select your target device or simulator
@@ -208,4 +208,4 @@ See LICENSE file for details.
 **Version**: 2.0 (Pomodoro Timer)  
 **Last Updated**: December 2024  
 **Minimum iOS**: 16.0  
-**Bundle ID**: com.williamalston.Ritual7
+**Bundle ID**: com.williamalston.FocusFlow

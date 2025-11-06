@@ -64,7 +64,7 @@ enum PosterExporter {
     ) -> UIImage {
         let minutes = Int(duration) / 60
         let seconds = Int(duration) % 60
-        let text = "Just completed Ritual7! 💪\n\n⏱️ \(minutes):\(String(format: "%02d", seconds))\n🏃 \(exercisesCompleted)/12 exercises"
+        let text = "Just completed FocusFlow! 💪\n\n⏱️ \(minutes):\(String(format: "%02d", seconds))\n🏃 \(exercisesCompleted)/12 exercises"
         
         return image(text: text, date: date, streak: streak, scale: scale)
     }
@@ -245,7 +245,7 @@ private struct BrandMark: View {
             Image(systemName: "figure.run")
                 .symbolRenderingMode(.palette)
                 .foregroundStyle(.white, .orange)
-            Text("Ritual7")
+            Text("FocusFlow")
                 .font(.system(.title2, design: .rounded).weight(.bold))
                 .minimumScaleFactor(0.7)
         }
@@ -291,6 +291,6 @@ private extension Bundle {
     var displayName: String {
         if let name = object(forInfoDictionaryKey: "CFBundleDisplayName") as? String { return name }
         if let name = object(forInfoDictionaryKey: "CFBundleName") as? String { return name }
-        return "Ritual7"
+        return "FocusFlow"
     }
 }

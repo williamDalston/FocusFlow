@@ -1,7 +1,7 @@
 # App Store Connect Privacy Questionnaire - Data Collection
 
-**App Name:** Ritual7  
-**Bundle ID:** williamalston.Ritual7  
+**App Name:** FocusFlow  
+**Bundle ID:** williamalston.FocusFlow  
 **Date:** 2024
 
 ---

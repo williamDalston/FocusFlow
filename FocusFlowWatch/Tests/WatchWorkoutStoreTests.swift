@@ -1,5 +1,5 @@
 import XCTest
-@testable import Ritual7Watch
+@testable import FocusFlowWatch
 
 /// Agent 4: Unit tests for WatchWorkoutStore
 /// Tests workout data management on Apple Watch

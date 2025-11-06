@@ -1,7 +1,7 @@
-# 📱 Complete App Store Submission Guide for Ritual7
+# 📱 Complete App Store Submission Guide for FocusFlow
 
 **Version:** 1.3  
-**Bundle ID:** williamalston.Ritual7  
+**Bundle ID:** williamalston.FocusFlow  
 **Last Updated:** November 2024
 
 ---

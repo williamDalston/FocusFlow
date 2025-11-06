@@ -30,27 +30,27 @@ enum PomodoroPhase: Equatable {
 }
 
 /// Protocol for haptic feedback during Pomodoro sessions
-protocol HapticFeedbackProvider {
+protocol FocusHapticFeedbackProvider {
     func tap()
     func gentle()
     func success()
 }
 
 /// Protocol for sound and vibration feedback during Pomodoro sessions
-protocol SoundFeedbackProvider {
+protocol FocusSoundFeedbackProvider {
     func playSound(_ type: SoundType) async
     func vibrate(_ pattern: VibrationPattern) async
 }
 
-/// Default haptic feedback implementation using system Haptics
-struct DefaultHapticFeedback: HapticFeedbackProvider {
+/// Default haptic feedback implementation using system Haptics for Pomodoro
+struct PomodoroDefaultHapticFeedback: FocusHapticFeedbackProvider {
     func tap() { Haptics.tap() }
     func gentle() { Haptics.gentle() }
     func success() { Haptics.success() }
 }
 
-/// Default sound feedback implementation using SoundManager
-struct DefaultSoundFeedback: SoundFeedbackProvider {
+/// Default sound feedback implementation using SoundManager for Pomodoro
+struct PomodoroDefaultSoundFeedback: FocusSoundFeedbackProvider {
     func playSound(_ type: SoundType) async {
         await SoundManager.shared.playSound(type)
     }
@@ -117,10 +117,10 @@ final class PomodoroEngine: ObservableObject {
     private let timer: FocusTimerProtocol
     
     /// Haptic feedback provider
-    private let haptics: HapticFeedbackProvider
+    private let haptics: FocusHapticFeedbackProvider
     
     /// Sound and vibration feedback provider
-    private let sound: SoundFeedbackProvider
+    private let sound: FocusSoundFeedbackProvider
     
     /// Cycle manager for Pomodoro cycles
     private let cycleManager: PomodoroCycleManager
@@ -146,8 +146,8 @@ final class PomodoroEngine: ObservableObject {
     ///   - cycleManager: Cycle manager (defaults to new instance)
     init(
         timer: FocusTimerProtocol? = nil,
-        haptics: HapticFeedbackProvider = DefaultHapticFeedback(),
-        sound: SoundFeedbackProvider = DefaultSoundFeedback(),
+        haptics: FocusHapticFeedbackProvider = PomodoroDefaultHapticFeedback(),
+        sound: FocusSoundFeedbackProvider = PomodoroDefaultSoundFeedback(),
         cycleManager: PomodoroCycleManager? = nil
     ) {
         // Initialize timer on main actor if not provided

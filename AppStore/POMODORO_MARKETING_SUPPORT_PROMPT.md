@@ -2,7 +2,7 @@
 
 ## Context
 
-You are tasked with creating two HTML pages for a Pomodoro Timer app called **Ritual7**:
+You are tasked with creating two HTML pages for a Pomodoro Timer app called **FocusFlow**:
 
 1. **Marketing Page** (`marketing.html`) - A beautiful landing page to promote the app
 2. **Support Page** (`support.html`) - A help and support page for users
@@ -11,11 +11,11 @@ The app has been refactored from a 7-minute workout app to a **Pomodoro Timer/Fo
 
 ## App Information
 
-**App Name:** Ritual7  
+**App Name:** FocusFlow  
 **App Type:** Pomodoro Timer / Focus Timer App  
 **Platform:** iOS (iPhone, iPad, Apple Watch)  
 **Target Audience:** Students, remote workers, professionals seeking better focus and productivity  
-**Bundle ID:** com.williamalston.Ritual7
+**Bundle ID:** com.williamalston.FocusFlow
 
 ## Key Features to Highlight
 
@@ -76,7 +76,7 @@ The app has been refactored from a 7-minute workout app to a **Pomodoro Timer/Fo
 ### Marketing Page Sections
 
 1. **Hero Section**
-   - App name: "Ritual7"
+   - App name: "FocusFlow"
    - Tagline: "Master Focus with the Pomodoro Technique" or similar
    - Subheading about productivity and focus
    - Download button (link to App Store)
@@ -113,11 +113,11 @@ The app has been refactored from a 7-minute workout app to a **Pomodoro Timer/Fo
 ### Support Page Sections
 
 1. **Header**
-   - "Ritual7 Support"
+   - "FocusFlow Support"
    - "Need help? We're here for you."
 
 2. **Contact Section**
-   - Email Support button (mailto:support@ritual7.app)
+   - Email Support button (mailto:support@focusflow.app)
    - Report an Issue button (mailto with bug report subject)
 
 3. **Information Section**

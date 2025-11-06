@@ -4,7 +4,7 @@ import SwiftUI
 /// Agent 10: Goal Manager - Manages workout goals and progress tracking
 @MainActor
 final class GoalManager: ObservableObject {
-    private let store: WorkoutStore
+    private let store: FocusStore
     
     @Published private(set) var weeklyGoal: Int = 0
     @Published private(set) var monthlyGoal: Int = 0
@@ -14,7 +14,7 @@ final class GoalManager: ObservableObject {
     private let weeklyGoalKey = "goal.weekly.v1"
     private let monthlyGoalKey = "goal.monthly.v1"
     
-    init(store: WorkoutStore) {
+    init(store: FocusStore) {
         self.store = store
         load()
         updateProgress()

@@ -1,5 +1,5 @@
 import Foundation
-@testable import Ritual7
+@testable import FocusFlow
 
 /// Mock implementation of HapticFeedbackProvider for testing
 final class MockHapticFeedback: HapticFeedbackProvider {

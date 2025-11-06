@@ -174,7 +174,7 @@ final class PredictiveFocusAnalytics: ObservableObject {
             morningCompletionRate: morningRate,
             afternoonCompletionRate: afternoonRate,
             eveningCompletionRate: eveningRate,
-            bestTime: [.morning: morningRate, .afternoon: afternoonRate, .evening: eveningRate]
+            bestTime: [CorrelationTimeOfDay.morning: morningRate, .afternoon: afternoonRate, .evening: eveningRate]
                 .max(by: { $0.value < $1.value })?.key ?? .morning
         )
     }

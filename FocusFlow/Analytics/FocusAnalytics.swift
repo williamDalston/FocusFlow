@@ -555,8 +555,9 @@ struct FocusLikelihood {
 }
 
 // MARK: - Protocol for FocusStore (to be implemented by Agent 2)
-
-protocol FocusStore {
+// Note: This protocol is for reference only - the actual FocusStore class is in Models/FocusStore.swift
+// Renamed to avoid conflict with the class
+protocol FocusStoreProtocol {
     var sessions: [FocusSession] { get }
     var streak: Int { get }
     var totalSessions: Int { get }

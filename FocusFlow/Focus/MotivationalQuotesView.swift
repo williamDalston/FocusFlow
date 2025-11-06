@@ -7,44 +7,44 @@ struct MotivationalQuotesView: View {
     @State private var currentQuoteIndex: Int = 0
     @State private var fadeOpacity: Double = 1.0
     
-    private let quotes: [MotivationalQuote] = [
-        MotivationalQuote(
+    private let quotes: [FocusMotivationalQuote] = [
+        FocusMotivationalQuote(
             text: "The way to get started is to quit talking and begin doing.",
             author: "Walt Disney"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "Focus on being productive instead of busy.",
             author: "Tim Ferriss"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "You don't have to be great to start, but you have to start to be great.",
             author: "Zig Ziglar"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "The only way to do great work is to love what you do.",
             author: "Steve Jobs"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "Concentrate all your thoughts upon the work at hand. The sun's rays do not burn until brought to a focus.",
             author: "Alexander Graham Bell"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "Productivity is never an accident. It is always the result of a commitment to excellence.",
             author: "Paul J. Meyer"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "Focus on progress, not perfection.",
             author: "Unknown"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "The secret of getting ahead is getting started.",
             author: "Mark Twain"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "Time is the most valuable thing a man can spend.",
             author: "Theophrastus"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "Take a break, but don't break your momentum.",
             author: "Unknown"
         )
@@ -124,10 +124,7 @@ struct MotivationalQuotesView: View {
     }
 }
 
-struct MotivationalQuote {
-    let text: String
-    let author: String
-}
+// Note: FocusMotivationalQuote is defined in MotivationalQuotesManager.swift
 
 #Preview {
     MotivationalQuotesView()

@@ -43,7 +43,7 @@ Agent 8 has completed all tasks for final polish, interstitial ad optimization, 
   - `CFBundleName`: "Pomodoro Timer"
 - ✅ Updated app shortcut:
   - Changed from "Start Ritual7" to "Start Focus Session"
-  - Updated shortcut type to `com.williamalston.Ritual7.startFocus`
+  - Updated shortcut type to `com.williamalston.FocusFlow.startFocus`
 - ✅ Updated HealthKit usage descriptions for focus app:
   - `NSHealthShareUsageDescription`: Focus on tracking focus time and productivity sessions
   - `NSHealthUpdateUsageDescription`: Focus on saving focus sessions and Pomodoro data

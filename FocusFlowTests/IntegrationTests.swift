@@ -1,6 +1,6 @@
 import XCTest
 import HealthKit
-@testable import Ritual7
+@testable import FocusFlow
 
 /// Agent 9: Integration tests for HealthKit sync and data persistence
 @MainActor

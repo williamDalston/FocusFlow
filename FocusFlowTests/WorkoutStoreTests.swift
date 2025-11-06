@@ -1,6 +1,6 @@
 import XCTest
 import Combine
-@testable import Ritual7
+@testable import FocusFlow
 
 /// Agent 9: Comprehensive unit tests for WorkoutStore
 /// Target: >90% code coverage

@@ -33,9 +33,22 @@
 		EF9A2ECF2E78B73A0047B4FD /* FocusFlowUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FocusFlowUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		EF80DEAE2EBB7B4300D7E41B /* Exceptions for "FocusFlow" folder in "FocusFlow" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = EF9A2EB62E78B7390047B4FD /* FocusFlow */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		EF9A2EB92E78B7390047B4FD /* FocusFlow */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				EF80DEAE2EBB7B4300D7E41B /* Exceptions for "FocusFlow" folder in "FocusFlow" target */,
+			);
 			path = FocusFlow;
 			sourceTree = "<group>";
 		};

@@ -10,7 +10,7 @@ class MicrocopyManager {
     // MARK: - Success Messages
     
     /// Personalized workout completion messages based on user stats
-    func completionMessage(for stats: WorkoutCompletionStats) -> String {
+    func completionMessage(for stats: FocusCompletionStats) -> String {
         if stats.isPersonalBest {
             return personalBestMessage()
         } else if stats.isStreakDay {
@@ -82,7 +82,7 @@ class MicrocopyManager {
     }
     
     /// Suggestion messages for next workout
-    func suggestionMessage(for stats: WorkoutCompletionStats) -> String {
+    func suggestionMessage(for stats: FocusCompletionStats) -> String {
         if stats.currentStreak >= 30 {
             return "You're on fire! Keep your incredible streak going tomorrow."
         } else if stats.currentStreak >= 14 {

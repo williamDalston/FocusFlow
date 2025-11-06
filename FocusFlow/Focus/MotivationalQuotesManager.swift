@@ -5,120 +5,120 @@ import SwiftUI
 class MotivationalQuotesManager {
     static let shared = MotivationalQuotesManager()
     
-    private let quotes: [MotivationalQuote] = [
-        MotivationalQuote(
+    private let quotes: [FocusMotivationalQuote] = [
+        FocusMotivationalQuote(
             text: "The way to get started is to quit talking and begin doing.",
             author: "Walt Disney"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "Focus on being productive instead of busy.",
             author: "Tim Ferriss"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "Concentration is the secret of strength.",
             author: "Ralph Waldo Emerson"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "The successful warrior is the average man with laser-like focus.",
             author: "Bruce Lee"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "You don't have to be great to start, but you have to start to be great.",
             author: "Zig Ziglar"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "The future depends on what you do today.",
             author: "Mahatma Gandhi"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "Focus is saying no to a hundred good ideas.",
             author: "Steve Jobs"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "Progress, not perfection.",
             author: "Unknown"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "The secret of getting ahead is getting started.",
             author: "Mark Twain"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "Small steps every day lead to big results.",
             author: "Unknown"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "Concentrate all your thoughts upon the work at hand. The sun's rays do not burn until brought to a focus.",
             author: "Alexander Graham Bell"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "It's not about time, it's about energy and focus.",
             author: "Gary Keller"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "Discipline is choosing between what you want now and what you want most.",
             author: "Abraham Lincoln"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "The best time to plant a tree was 20 years ago. The second best time is now.",
             author: "Chinese Proverb"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "Focus on the journey, not the destination.",
             author: "Greg Anderson"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "Success is the sum of small efforts repeated day in and day out.",
             author: "Robert Collier"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "You are what you do, not what you say you'll do.",
             author: "Carl Jung"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "The only way to do great work is to love what you do.",
             author: "Steve Jobs"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "Don't watch the clock; do what it does. Keep going.",
             author: "Sam Levenson"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "Focus on progress, not perfection.",
             author: "Unknown"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "Productivity is never an accident. It is always the result of a commitment to excellence, intelligent planning, and focused effort.",
             author: "Paul J. Meyer"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "Concentration and mental toughness are the margins of victory.",
             author: "Bill Russell"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "The most successful people are those who are good at plan B.",
             author: "James Yorke"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "Focus on solutions, not problems.",
             author: "Unknown"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "The future belongs to those who believe in the beauty of their dreams.",
             author: "Eleanor Roosevelt"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "You can't have a million-dollar dream with a minimum-wage work ethic.",
             author: "Stephen C. Hogan"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "The only limit to our realization of tomorrow will be our doubts of today.",
             author: "Franklin D. Roosevelt"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "It does not matter how slowly you go as long as you do not stop.",
             author: "Confucius"
         ),
-        MotivationalQuote(
+        FocusMotivationalQuote(
             text: "The best preparation for tomorrow is doing your best today.",
             author: "H. Jackson Brown Jr."
         )
@@ -129,17 +129,17 @@ class MotivationalQuotesManager {
     // MARK: - Public Methods
     
     /// Get a random motivational quote
-    func randomQuote() -> MotivationalQuote {
+    func randomQuote() -> FocusMotivationalQuote {
         quotes.randomElement() ?? quotes[0]
     }
     
     /// Get all quotes
-    func allQuotes() -> [MotivationalQuote] {
+    func allQuotes() -> [FocusMotivationalQuote] {
         quotes
     }
     
     /// Get a quote for a specific mood or context
-    func quoteForContext(_ context: QuoteContext) -> MotivationalQuote {
+    func quoteForContext(_ context: QuoteContext) -> FocusMotivationalQuote {
         // For now, just return a random quote
         // Could be enhanced to filter by context
         return randomQuote()
@@ -148,7 +148,7 @@ class MotivationalQuotesManager {
 
 // MARK: - Motivational Quote
 
-struct MotivationalQuote: Identifiable {
+struct FocusMotivationalQuote: Identifiable {
     let id = UUID()
     let text: String
     let author: String

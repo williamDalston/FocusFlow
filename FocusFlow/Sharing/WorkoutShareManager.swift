@@ -200,7 +200,7 @@ final class WorkoutShareManager {
     ) -> String {
         let minutes = Int(duration) / 60
         let seconds = Int(duration) % 60
-        var text = "Just completed Ritual7! 💪\n\n"
+        var text = "Just completed FocusFlow! 💪\n\n"
         text += "⏱️ Time: \(minutes):\(String(format: "%02d", seconds))\n"
         text += "🏃 Exercises: \(exercisesCompleted)/12\n"
         

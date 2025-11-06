@@ -1,5 +1,5 @@
 import Foundation
-@testable import Ritual7
+@testable import FocusFlow
 
 /// Mock implementation of WorkoutTimerProtocol for testing
 final class MockWorkoutTimer: WorkoutTimerProtocol {

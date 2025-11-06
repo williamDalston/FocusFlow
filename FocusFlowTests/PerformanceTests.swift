@@ -1,6 +1,6 @@
 import XCTest
 import Darwin
-@testable import Ritual7
+@testable import FocusFlow
 
 /// Agent 4: Performance tests for app performance and optimization
 /// Tests app launch time, memory usage, and performance under load

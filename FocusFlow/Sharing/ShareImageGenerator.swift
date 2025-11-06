@@ -195,7 +195,7 @@ private struct WorkoutCompletionShareView: View {
                     
                     Spacer()
                     
-                    Text("Ritual7")
+                    Text("FocusFlow")
                         .font(.system(.caption, design: .rounded).weight(.semibold))
                         .foregroundStyle(.white.opacity(0.7))
                 }
@@ -274,7 +274,7 @@ private struct StreakShareView: View {
                     
                     Spacer()
                     
-                    Text("Ritual7")
+                    Text("FocusFlow")
                         .font(.system(.caption, design: .rounded).weight(.semibold))
                         .foregroundStyle(.white.opacity(0.7))
                 }
@@ -350,7 +350,7 @@ private struct AchievementShareView: View {
                     
                     Spacer()
                     
-                    Text("Ritual7")
+                    Text("FocusFlow")
                         .font(.system(.caption, design: .rounded).weight(.semibold))
                         .foregroundStyle(.white.opacity(0.7))
                 }
@@ -436,7 +436,7 @@ private struct ProgressChartShareView: View {
                     
                     Spacer()
                     
-                    Text("Ritual7")
+                    Text("FocusFlow")
                         .font(.system(.caption, design: .rounded).weight(.semibold))
                         .foregroundStyle(.white.opacity(0.7))
                 }
@@ -517,7 +517,7 @@ private struct SummaryShareView: View {
                     
                     Spacer()
                     
-                    Text("Ritual7")
+                    Text("FocusFlow")
                         .font(.system(.caption, design: .rounded).weight(.semibold))
                         .foregroundStyle(.white.opacity(0.7))
                 }

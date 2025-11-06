@@ -20,7 +20,7 @@ struct PosterView: View {
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 28)
                 Spacer()
-                Text("Ritual7")
+                Text("FocusFlow")
                     .font(.footnote.weight(.semibold))
                     .foregroundStyle(.white.opacity(0.5))
             }
