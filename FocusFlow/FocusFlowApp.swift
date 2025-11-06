@@ -80,6 +80,9 @@ struct FocusFlowApp: App {
                 // Agent 9: Validate FocusStore initialization
                 validateFocusStore()
                 
+                // Agent 35: Configure WatchSessionManager with FocusStore
+                WatchSessionManager.shared.configure(with: focusStore)
+                
                 // Agent 9: Validate preferences store
                 validatePreferencesStore()
                 

@@ -12,7 +12,6 @@ final class WatchSessionManager: NSObject, ObservableObject {
     @Published private(set) var isReachable = false
     
     private var session: WCSession?
-    private weak var workoutStore: WorkoutStore?
     private weak var focusStore: FocusStore?
     
     override init() {
@@ -20,14 +19,8 @@ final class WatchSessionManager: NSObject, ObservableObject {
         setupWatchConnectivity()
     }
     
-    func configure(with workoutStore: WorkoutStore) {
-        self.workoutStore = workoutStore
-        self.focusStore = nil
-    }
-    
     func configure(with focusStore: FocusStore) {
         self.focusStore = focusStore
-        self.workoutStore = nil
     }
     
     private func setupWatchConnectivity() {
@@ -50,54 +43,24 @@ final class WatchSessionManager: NSObject, ObservableObject {
             return
         }
         
-        // Support both FocusStore and WorkoutStore
-        if let focusStore = focusStore {
-            let message = [
-                "action": "sync_sessions",
-                "sessions": (try? JSONEncoder().encode(focusStore.sessions)) as Any,
-                "streak": focusStore.streak,
-                "totalSessions": focusStore.totalSessions,
-                "totalFocusMinutes": focusStore.totalFocusTime
-            ] as [String : Any]
-            
-            session.sendMessage(message, replyHandler: { response in
-                print("✅ Successfully sent focus sessions to Watch")
-            }, errorHandler: { error in
-                print("❌ Failed to send focus sessions to Watch: \(error.localizedDescription)")
-            })
-        } else if let workoutStore = workoutStore {
-            let message = [
-                "action": "sync_sessions",
-                "sessions": (try? JSONEncoder().encode(workoutStore.sessions)) as Any,
-                "streak": workoutStore.streak,
-                "totalWorkouts": workoutStore.totalWorkouts,
-                "totalMinutes": workoutStore.totalMinutes
-            ] as [String : Any]
-            
-            session.sendMessage(message, replyHandler: { response in
-                print("✅ Successfully sent workout sessions to Watch")
-            }, errorHandler: { error in
-                print("❌ Failed to send workout sessions to Watch: \(error.localizedDescription)")
-            })
-        }
-    }
-    
-    func sendNewSessionToWatch(_ workoutSession: WorkoutSession) {
-        guard let wcSession = session,
-              wcSession.isReachable else {
-            print("⚠️ Watch not reachable, will sync later")
+        // Send focus sessions to Watch
+        guard let focusStore = focusStore else {
+            print("⚠️ FocusStore not configured")
             return
         }
         
         let message = [
-            "action": "add_session",
-            "session": (try? JSONEncoder().encode(workoutSession)) as Any
+            "action": "sync_sessions",
+            "sessions": (try? JSONEncoder().encode(focusStore.sessions)) as Any,
+            "streak": focusStore.streak,
+            "totalSessions": focusStore.totalSessions,
+            "totalFocusMinutes": focusStore.totalFocusTime
         ] as [String : Any]
         
-        wcSession.sendMessage(message, replyHandler: { response in
-            print("✅ Successfully sent new workout session to Watch")
+        session.sendMessage(message, replyHandler: { response in
+            print("✅ Successfully sent focus sessions to Watch")
         }, errorHandler: { error in
-            print("❌ Failed to send new workout session to Watch: \(error.localizedDescription)")
+            print("❌ Failed to send focus sessions to Watch: \(error.localizedDescription)")
         })
     }
     
@@ -127,40 +90,27 @@ final class WatchSessionManager: NSObject, ObservableObject {
             return
         }
         
-        // Request focus data if using FocusStore, otherwise request workout data
-        let action = focusStore != nil ? "request_focus_data" : "request_workout_data"
-        let message = ["action": action]
+        // Request focus data from Watch
+        let message = ["action": "request_focus_data"]
         session.sendMessage(message, replyHandler: { response in
             DispatchQueue.main.async {
-                if let focusStore = self.focusStore,
-                   let sessionsData = response["sessions"] as? Data,
-                   let sessions = try? JSONDecoder().decode([FocusSession].self, from: sessionsData) {
-                    // Merge focus sessions from Watch
-                    for session in sessions {
-                        let contains = focusStore.sessions.contains(where: { $0.id == session.id })
-                        if !contains {
-                            focusStore.addSession(
-                                duration: session.duration,
-                                phaseType: session.phaseType,
-                                completed: session.completed,
-                                notes: session.notes,
-                                startDate: session.date
-                            )
-                        }
-                    }
-                } else if let workoutStore = self.workoutStore,
-                          let sessionsData = response["sessions"] as? Data,
-                          let sessions = try? JSONDecoder().decode([WorkoutSession].self, from: sessionsData) {
-                    // Merge workout sessions from Watch
-                    for session in sessions {
-                        let contains = workoutStore.sessions.contains(where: { $0.id == session.id }) ?? false
-                        if !contains {
-                            workoutStore.addSession(
-                                duration: session.duration,
-                                exercisesCompleted: session.exercisesCompleted,
-                                notes: session.notes
-                            )
-                        }
+                guard let focusStore = self.focusStore,
+                      let sessionsData = response["sessions"] as? Data,
+                      let sessions = try? JSONDecoder().decode([FocusSession].self, from: sessionsData) else {
+                    return
+                }
+                
+                // Merge focus sessions from Watch
+                for session in sessions {
+                    let contains = focusStore.sessions.contains(where: { $0.id == session.id })
+                    if !contains {
+                        focusStore.addSession(
+                            duration: session.duration,
+                            phaseType: session.phaseType,
+                            completed: session.completed,
+                            notes: session.notes,
+                            startDate: session.date
+                        )
                     }
                 }
             }
@@ -173,33 +123,17 @@ final class WatchSessionManager: NSObject, ObservableObject {
         guard let session = session else { return }
         
         // Update complications with current streak
-        if let focusStore = focusStore {
-            let userInfo = [
-                "streak": focusStore.streak,
-                "todays_focus_sessions": todaysFocusSessionCount,
-                "last_updated": Date().timeIntervalSince1970
-            ] as [String : Any]
-            session.transferUserInfo(userInfo)
-        } else if let workoutStore = workoutStore {
-            let userInfo = [
-                "streak": workoutStore.streak,
-                "todays_workouts": todaysWorkoutCount,
-                "last_updated": Date().timeIntervalSince1970
-            ] as [String : Any]
-            session.transferUserInfo(userInfo)
-        }
+        guard let focusStore = focusStore else { return }
+        
+        let userInfo = [
+            "streak": focusStore.streak,
+            "todays_focus_sessions": todaysFocusSessionCount,
+            "last_updated": Date().timeIntervalSince1970
+        ] as [String : Any]
+        session.transferUserInfo(userInfo)
     }
     
     // MARK: - Private Helpers
-    
-    private var todaysWorkoutCount: Int {
-        guard let workoutStore = workoutStore else { return 0 }
-        let calendar = Calendar.current
-        let today = Date()
-        return workoutStore.sessions.filter { session in
-            calendar.isDate(session.date, inSameDayAs: today)
-        }.count
-    }
     
     private var todaysFocusSessionCount: Int {
         guard let focusStore = focusStore else { return 0 }
@@ -282,34 +216,23 @@ extension WatchSessionManager: @MainActor WCSessionDelegate {
             
             switch action {
             case "add_session":
-                // Try to decode as FocusSession first, then WorkoutSession
-                if let data = message["session"] as? Data {
-                    if let focusSession = try? JSONDecoder().decode(FocusSession.self, from: data),
-                       let focusStore = self.focusStore {
-                        let contains = focusStore.sessions.contains(where: { $0.id == focusSession.id })
-                        if !contains {
-                            focusStore.addSession(
-                                duration: focusSession.duration,
-                                phaseType: focusSession.phaseType,
-                                completed: focusSession.completed,
-                                notes: focusSession.notes,
-                                startDate: focusSession.date
-                            )
-                        }
-                    } else if let workoutSession = try? JSONDecoder().decode(WorkoutSession.self, from: data),
-                              let workoutStore = self.workoutStore {
-                        let contains = workoutStore.sessions.contains(where: { $0.id == workoutSession.id }) ?? false
-                        if !contains {
-                            workoutStore.addSession(
-                                duration: workoutSession.duration,
-                                exercisesCompleted: workoutSession.exercisesCompleted,
-                                notes: workoutSession.notes
-                            )
-                        }
+                // Decode as FocusSession
+                if let data = message["session"] as? Data,
+                   let focusSession = try? JSONDecoder().decode(FocusSession.self, from: data),
+                   let focusStore = self.focusStore {
+                    let contains = focusStore.sessions.contains(where: { $0.id == focusSession.id })
+                    if !contains {
+                        focusStore.addSession(
+                            duration: focusSession.duration,
+                            phaseType: focusSession.phaseType,
+                            completed: focusSession.completed,
+                            notes: focusSession.notes,
+                            startDate: focusSession.date
+                        )
                     }
                 }
                 
-            case "request_focus_data", "request_workout_data":
+            case "request_focus_data":
                 // Watch is requesting current data
                 self.sendSessionsToWatch()
                 
@@ -333,64 +256,38 @@ extension WatchSessionManager: @MainActor WCSessionDelegate {
             
             switch action {
             case "request_focus_data":
-                if let focusStore = self.focusStore {
-                    let response = [
-                        "sessions": (try? JSONEncoder().encode(focusStore.sessions)) as Any,
-                        "streak": focusStore.streak,
-                        "totalSessions": focusStore.totalSessions,
-                        "totalFocusMinutes": focusStore.totalFocusTime
-                    ] as [String : Any]
-                    replyHandler(response)
-                } else {
+                guard let focusStore = self.focusStore else {
                     replyHandler(["error": "No focus data available"])
+                    return
                 }
                 
-            case "request_workout_data":
-                if let workoutStore = self.workoutStore {
-                    let response = [
-                        "sessions": (try? JSONEncoder().encode(workoutStore.sessions)) as Any,
-                        "streak": workoutStore.streak,
-                        "totalWorkouts": workoutStore.totalWorkouts,
-                        "totalMinutes": workoutStore.totalMinutes
-                    ] as [String : Any]
-                    replyHandler(response)
-                } else {
-                    replyHandler(["error": "No workout data available"])
-                }
+                let response = [
+                    "sessions": (try? JSONEncoder().encode(focusStore.sessions)) as Any,
+                    "streak": focusStore.streak,
+                    "totalSessions": focusStore.totalSessions,
+                    "totalFocusMinutes": focusStore.totalFocusTime
+                ] as [String : Any]
+                replyHandler(response)
                 
             case "add_session":
-                if let data = message["session"] as? Data {
-                    // Try FocusSession first
-                    if let focusSession = try? JSONDecoder().decode(FocusSession.self, from: data),
-                       let focusStore = self.focusStore {
-                        let contains = focusStore.sessions.contains(where: { $0.id == focusSession.id })
-                        if !contains {
-                            focusStore.addSession(
-                                duration: focusSession.duration,
-                                phaseType: focusSession.phaseType,
-                                completed: focusSession.completed,
-                                notes: focusSession.notes,
-                                startDate: focusSession.date
-                            )
-                        }
-                        replyHandler(["success": true])
-                    } else if let workoutSession = try? JSONDecoder().decode(WorkoutSession.self, from: data),
-                              let workoutStore = self.workoutStore {
-                        let contains = workoutStore.sessions.contains(where: { $0.id == workoutSession.id }) ?? false
-                        if !contains {
-                            workoutStore.addSession(
-                                duration: workoutSession.duration,
-                                exercisesCompleted: workoutSession.exercisesCompleted,
-                                notes: workoutSession.notes
-                            )
-                        }
-                        replyHandler(["success": true])
-                    } else {
-                        replyHandler(["error": "Invalid session data"])
-                    }
-                } else {
-                    replyHandler(["error": "No session data"])
+                guard let data = message["session"] as? Data,
+                      let focusSession = try? JSONDecoder().decode(FocusSession.self, from: data),
+                      let focusStore = self.focusStore else {
+                    replyHandler(["error": "Invalid session data"])
+                    return
                 }
+                
+                let contains = focusStore.sessions.contains(where: { $0.id == focusSession.id })
+                if !contains {
+                    focusStore.addSession(
+                        duration: focusSession.duration,
+                        phaseType: focusSession.phaseType,
+                        completed: focusSession.completed,
+                        notes: focusSession.notes,
+                        startDate: focusSession.date
+                    )
+                }
+                replyHandler(["success": true])
                 
             default:
                 replyHandler(["error": "Unknown action"])
@@ -403,33 +300,19 @@ extension WatchSessionManager: @MainActor WCSessionDelegate {
         
         DispatchQueue.main.async {
             // Handle any user info updates from Watch
-            if let watchSessions = userInfo["sessions"] as? Data {
-                // Try FocusSession first
-                if let focusStore = self.focusStore,
-                   let sessions = try? JSONDecoder().decode([FocusSession].self, from: watchSessions) {
-                    for session in sessions {
-                        let contains = focusStore.sessions.contains(where: { $0.id == session.id })
-                        if !contains {
-                            focusStore.addSession(
-                                duration: session.duration,
-                                phaseType: session.phaseType,
-                                completed: session.completed,
-                                notes: session.notes,
-                                startDate: session.date
-                            )
-                        }
-                    }
-                } else if let workoutStore = self.workoutStore,
-                          let sessions = try? JSONDecoder().decode([WorkoutSession].self, from: watchSessions) {
-                    for session in sessions {
-                        let contains = workoutStore.sessions.contains(where: { $0.id == session.id }) ?? false
-                        if !contains {
-                            workoutStore.addSession(
-                                duration: session.duration,
-                                exercisesCompleted: session.exercisesCompleted,
-                                notes: session.notes
-                            )
-                        }
+            if let watchSessions = userInfo["sessions"] as? Data,
+               let focusStore = self.focusStore,
+               let sessions = try? JSONDecoder().decode([FocusSession].self, from: watchSessions) {
+                for session in sessions {
+                    let contains = focusStore.sessions.contains(where: { $0.id == session.id })
+                    if !contains {
+                        focusStore.addSession(
+                            duration: session.duration,
+                            phaseType: session.phaseType,
+                            completed: session.completed,
+                            notes: session.notes,
+                            startDate: session.date
+                        )
                     }
                 }
             }

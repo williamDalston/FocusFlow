@@ -1,24 +1,24 @@
 import Foundation
 import SwiftUI
 
-/// Agent 16: Habit Learner - Recognizes workout patterns and optimal times
+/// Agent 23: Habit Learner - Recognizes focus session patterns and optimal times
 @MainActor
 final class HabitLearner: ObservableObject {
     @Published var habitPatterns: HabitPatterns
     
     private let patternsKey = "habit.patterns.v1"
-    private let workoutStore: WorkoutStore
+    private let focusStore: FocusStore
     
-    init(workoutStore: WorkoutStore) {
-        self.workoutStore = workoutStore
+    init(focusStore: FocusStore) {
+        self.focusStore = focusStore
         self.habitPatterns = HabitLearner.loadPatterns()
     }
     
     // MARK: - Pattern Recognition
     
-    /// Analyze workout history and learn patterns
+    /// Analyze focus session history and learn patterns
     func analyzePatterns() {
-        let sessions = workoutStore.sessions
+        let sessions = focusStore.sessions
         
         guard !sessions.isEmpty else {
             habitPatterns = HabitPatterns()
@@ -42,7 +42,7 @@ final class HabitLearner: ObservableObject {
     }
     
     /// Analyze time-of-day patterns
-    private func analyzeTimePatterns(sessions: [WorkoutSession]) {
+    private func analyzeTimePatterns(sessions: [FocusSession]) {
         let calendar = Calendar.current
         var hourFrequency: [Int: Int] = [:]
         var weekdayFrequency: [Int: Int] = [:]
@@ -57,12 +57,12 @@ final class HabitLearner: ObservableObject {
         
         // Find most frequent hour
         if let mostFrequentHour = hourFrequency.max(by: { $0.value < $1.value }) {
-            habitPatterns.optimalWorkoutHour = mostFrequentHour.key
+            habitPatterns.optimalFocusHour = mostFrequentHour.key
         }
         
         // Find most frequent weekday
         if let mostFrequentDay = weekdayFrequency.max(by: { $0.value < $1.value }) {
-            habitPatterns.optimalWorkoutDay = mostFrequentDay.key
+            habitPatterns.optimalFocusDay = mostFrequentDay.key
         }
         
         // Calculate hour distribution
@@ -71,16 +71,16 @@ final class HabitLearner: ObservableObject {
     }
     
     /// Analyze frequency patterns
-    private func analyzeFrequencyPatterns(sessions: [WorkoutSession]) {
+    private func analyzeFrequencyPatterns(sessions: [FocusSession]) {
         let calendar = Calendar.current
         let now = Date()
         
-        // Calculate workouts per week
+        // Calculate focus sessions per week
         let sevenDaysAgo = calendar.date(byAdding: .day, value: -7, to: now) ?? now
         let recentSessions = sessions.filter { $0.date >= sevenDaysAgo }
-        habitPatterns.workoutsPerWeek = Double(recentSessions.count)
+        habitPatterns.sessionsPerWeek = Double(recentSessions.count)
         
-        // Calculate average days between workouts
+        // Calculate average days between sessions
         if sessions.count >= 2 {
             let intervals: [TimeInterval] = (1..<sessions.count).compactMap { index in
                 guard index > 0 && index < sessions.count else { return nil }
@@ -88,31 +88,30 @@ final class HabitLearner: ObservableObject {
             }
             guard !intervals.isEmpty else { return }
             let averageInterval = intervals.reduce(0, +) / Double(intervals.count)
-            habitPatterns.averageDaysBetweenWorkouts = averageInterval / (24 * 60 * 60)
+            habitPatterns.averageDaysBetweenSessions = averageInterval / (24 * 60 * 60)
         }
     }
     
     /// Analyze completion patterns
-    private func analyzeCompletionPatterns(sessions: [WorkoutSession]) {
+    private func analyzeCompletionPatterns(sessions: [FocusSession]) {
         guard !sessions.isEmpty else { return }
         
-        // Calculate average completion rate
-        let totalExercises = sessions.reduce(0) { $0 + $1.exercisesCompleted }
-        let averageExercises = Double(totalExercises) / Double(sessions.count)
-        habitPatterns.averageExercisesCompleted = averageExercises
+        // Calculate average completion rate for focus sessions
+        let completedSessions = sessions.filter { $0.completed }.count
+        habitPatterns.averageCompletionRate = Double(completedSessions) / Double(sessions.count)
         
-        // Calculate completion rate percentage (assuming 12 exercises per workout)
-        habitPatterns.averageCompletionRate = averageExercises / 12.0
-        
-        // Track full workout completions
-        let fullCompletions = sessions.filter { $0.exercisesCompleted >= 12 }.count
-        habitPatterns.fullWorkoutCompletionRate = Double(fullCompletions) / Double(sessions.count)
+        // Track focus phase completion
+        let focusSessions = sessions.filter { $0.phaseType == .focus }
+        let completedFocus = focusSessions.filter { $0.completed }.count
+        if !focusSessions.isEmpty {
+            habitPatterns.fullSessionCompletionRate = Double(completedFocus) / Double(focusSessions.count)
+        }
     }
     
     /// Analyze consistency patterns
-    private func analyzeConsistencyPatterns(sessions: [WorkoutSession]) {
+    private func analyzeConsistencyPatterns(sessions: [FocusSession]) {
         // Calculate streak stability
-        let currentStreak = workoutStore.streak
+        let currentStreak = focusStore.streak
         habitPatterns.currentStreak = currentStreak
         
         // Calculate longest streak (simplified - would need full history)
@@ -125,7 +124,7 @@ final class HabitLearner: ObservableObject {
     }
     
     /// Calculate longest streak from sessions
-    private func calculateLongestStreak(sessions: [WorkoutSession]) -> Int? {
+    private func calculateLongestStreak(sessions: [FocusSession]) -> Int? {
         guard !sessions.isEmpty else { return nil }
         
         let calendar = Calendar.current
@@ -155,7 +154,7 @@ final class HabitLearner: ObservableObject {
     }
     
     /// Calculate consistency score
-    private func calculateConsistencyScore(sessions: [WorkoutSession]) -> Double {
+    private func calculateConsistencyScore(sessions: [FocusSession]) -> Double {
         guard !sessions.isEmpty else { return 0.0 }
         
         let calendar = Calendar.current
@@ -166,15 +165,15 @@ final class HabitLearner: ObservableObject {
         
         guard !recentSessions.isEmpty else { return 0.0 }
         
-        // Calculate expected workouts (aim for 3-4 per week)
+        // Calculate expected focus sessions (aim for daily usage)
         let daysSince = calendar.dateComponents([.day], from: thirtyDaysAgo, to: now).day ?? 30
-        let expectedWorkouts = (Double(daysSince) / 7.0) * 3.5 // 3.5 workouts per week
+        let expectedSessions = Double(daysSince) * 0.5 // 0.5 sessions per day target
         
-        // Calculate actual workouts
-        let actualWorkouts = Double(recentSessions.count)
+        // Calculate actual sessions
+        let actualSessions = Double(recentSessions.count)
         
         // Calculate score (capped at 1.0)
-        let score = min(1.0, actualWorkouts / expectedWorkouts)
+        let score = min(1.0, actualSessions / expectedSessions)
         
         return score
     }
@@ -189,7 +188,7 @@ final class HabitLearner: ObservableObject {
         let completionWeight = 0.3
         
         let consistencyScore = habitPatterns.consistencyScore
-        let frequencyScore = min(1.0, habitPatterns.workoutsPerWeek / 5.0) // 5 workouts per week = 1.0
+        let frequencyScore = min(1.0, habitPatterns.sessionsPerWeek / 7.0) // 7 sessions per week = 1.0
         let completionScore = habitPatterns.averageCompletionRate
         
         return (consistencyScore * consistencyWeight) +
@@ -197,8 +196,8 @@ final class HabitLearner: ObservableObject {
                (completionScore * completionWeight)
     }
     
-    /// Predict likelihood of working out today
-    func predictWorkoutLikelihood() -> Double {
+    /// Predict likelihood of focusing today
+    func predictFocusLikelihood() -> Double {
         let calendar = Calendar.current
         let today = Date()
         let weekday = calendar.component(.weekday, from: today)
@@ -208,12 +207,12 @@ final class HabitLearner: ObservableObject {
         var likelihood: Double = 0.5 // Default 50%
         
         // Adjust based on optimal day
-        if let optimalDay = habitPatterns.optimalWorkoutDay, weekday == optimalDay {
+        if let optimalDay = habitPatterns.optimalFocusDay, weekday == optimalDay {
             likelihood += 0.2
         }
         
         // Adjust based on optimal hour
-        if let optimalHour = habitPatterns.optimalWorkoutHour {
+        if let optimalHour = habitPatterns.optimalFocusHour {
             let hourDiff = abs(hour - optimalHour)
             if hourDiff <= 1 {
                 likelihood += 0.2
@@ -226,7 +225,7 @@ final class HabitLearner: ObservableObject {
         likelihood += habitPatterns.consistencyScore * 0.1
         
         // Adjust based on recent activity
-        let recentSessions = workoutStore.sessions.filter { $0.date >= calendar.date(byAdding: .day, value: -7, to: today) ?? today }
+        let recentSessions = focusStore.sessions.filter { $0.date >= calendar.date(byAdding: .day, value: -7, to: today) ?? today }
         if !recentSessions.isEmpty {
             likelihood += 0.1
         }
@@ -235,9 +234,9 @@ final class HabitLearner: ObservableObject {
         return min(1.0, likelihood)
     }
     
-    /// Get optimal workout time for today
-    func getOptimalWorkoutTime() -> Date? {
-        guard let optimalHour = habitPatterns.optimalWorkoutHour else {
+    /// Get optimal focus time for today
+    func getOptimalFocusTime() -> Date? {
+        guard let optimalHour = habitPatterns.optimalFocusHour else {
             return nil
         }
         
@@ -258,7 +257,7 @@ final class HabitLearner: ObservableObject {
             insights.append(.init(
                 type: .excellent,
                 title: "Excellent Consistency",
-                message: "You're maintaining a strong workout habit! Keep it up."
+                message: "You're maintaining a strong focus habit! Keep it up."
             ))
         } else if habitPatterns.consistencyScore >= 0.6 {
             insights.append(.init(
@@ -270,17 +269,17 @@ final class HabitLearner: ObservableObject {
             insights.append(.init(
                 type: .suggestion,
                 title: "Build Consistency",
-                message: "Try to work out at the same time each day to strengthen your habit."
+                message: "Try to focus at the same time each day to strengthen your habit."
             ))
         }
         
         // Time pattern insight
-        if let optimalHour = habitPatterns.optimalWorkoutHour {
+        if let optimalHour = habitPatterns.optimalFocusHour {
             let hourName = getHourName(optimalHour)
             insights.append(.init(
                 type: .info,
                 title: "Your Optimal Time",
-                message: "You tend to work out most consistently at \(hourName)."
+                message: "You tend to focus most consistently at \(hourName)."
             ))
         }
         
@@ -289,13 +288,13 @@ final class HabitLearner: ObservableObject {
             insights.append(.init(
                 type: .excellent,
                 title: "High Completion Rate",
-                message: "You're completing most of your workouts! Great job."
+                message: "You're completing most of your focus sessions! Great job."
             ))
         } else if habitPatterns.averageCompletionRate < 0.7 {
             insights.append(.init(
                 type: .suggestion,
                 title: "Improve Completion",
-                message: "Consider shorter workouts or adjusting intensity to complete more exercises."
+                message: "Consider shorter focus sessions or adjusting your Pomodoro preset to complete more cycles."
             ))
         }
         
@@ -339,15 +338,14 @@ final class HabitLearner: ObservableObject {
 
 /// Habit pattern data
 struct HabitPatterns: Codable {
-    var optimalWorkoutHour: Int? // Hour of day (0-23)
-    var optimalWorkoutDay: Int? // Weekday (1-7)
+    var optimalFocusHour: Int? // Hour of day (0-23)
+    var optimalFocusDay: Int? // Weekday (1-7)
     var hourDistribution: [Int: Int] = [:] // Hour -> Count
     var weekdayDistribution: [Int: Int] = [:] // Weekday -> Count
-    var workoutsPerWeek: Double = 0.0
-    var averageDaysBetweenWorkouts: Double = 0.0
-    var averageExercisesCompleted: Double = 0.0
+    var sessionsPerWeek: Double = 0.0
+    var averageDaysBetweenSessions: Double = 0.0
     var averageCompletionRate: Double = 0.0
-    var fullWorkoutCompletionRate: Double = 0.0
+    var fullSessionCompletionRate: Double = 0.0
     var currentStreak: Int = 0
     var longestStreak: Int = 0
     var consistencyScore: Double = 0.0

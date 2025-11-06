@@ -2,11 +2,11 @@ import XCTest
 import Combine
 @testable import FocusFlow
 
-/// Agent 9: Comprehensive unit tests for WorkoutStore
+/// Agent 27: Comprehensive unit tests for FocusStore
 /// Target: >90% code coverage
 @MainActor
-final class WorkoutStoreTests: XCTestCase {
-    var store: WorkoutStore!
+final class FocusStoreTests: XCTestCase {
+    var store: FocusStore!
     var cancellables: Set<AnyCancellable>!
     
     override func setUp() {
@@ -14,7 +14,7 @@ final class WorkoutStoreTests: XCTestCase {
         // Clear UserDefaults for clean test state
         clearUserDefaults()
         cancellables = []
-        store = WorkoutStore()
+        store = FocusStore()
     }
     
     override func tearDown() {
@@ -29,11 +29,11 @@ final class WorkoutStoreTests: XCTestCase {
     private func clearUserDefaults() {
         let defaults = UserDefaults.standard
         let keys = [
-            "workout.sessions.v1",
-            "workout.streak.v1",
-            "workout.lastDay.v1",
-            "workout.totalWorkouts.v1",
-            "workout.totalMinutes.v1"
+            "focus.sessions.v1",
+            "focus.streak.v1",
+            "focus.lastDay.v1",
+            "focus.totalSessions.v1",
+            "focus.totalMinutes.v1"
         ]
         for key in keys {
             defaults.removeObject(forKey: key)
@@ -46,46 +46,62 @@ final class WorkoutStoreTests: XCTestCase {
     func testInitialization() {
         XCTAssertEqual(store.sessions.count, 0)
         XCTAssertEqual(store.streak, 0)
-        XCTAssertEqual(store.totalWorkouts, 0)
-        XCTAssertEqual(store.totalMinutes, 0)
+        XCTAssertEqual(store.totalSessions, 0)
+        XCTAssertEqual(store.totalFocusTime, 0)
     }
     
     func testInitializationWithExistingData() {
-        // Add a session first
-        store.addSession(duration: 420, exercisesCompleted: 12)
+        // Add a focus session first
+        store.addSession(duration: 1500, phaseType: .focus, completed: true)
         let sessionCount = store.sessions.count
         
         // Create new store instance (simulating app restart)
-        let newStore = WorkoutStore()
+        let newStore = FocusStore()
         
         XCTAssertEqual(newStore.sessions.count, sessionCount)
-        XCTAssertGreaterThan(newStore.totalWorkouts, 0)
+        XCTAssertGreaterThan(newStore.totalSessions, 0)
     }
     
     // MARK: - Add Session Tests
     
-    func testAddSession() {
-        let duration: TimeInterval = 420 // 7 minutes
-        let exercisesCompleted = 12
+    func testAddFocusSession() {
+        let duration: TimeInterval = 1500 // 25 minutes
         
-        store.addSession(duration: duration, exercisesCompleted: exercisesCompleted)
+        store.addSession(duration: duration, phaseType: .focus, completed: true)
         
         XCTAssertEqual(store.sessions.count, 1)
-        XCTAssertEqual(store.totalWorkouts, 1)
-        XCTAssertEqual(store.totalMinutes, duration / 60.0, accuracy: 0.01)
+        XCTAssertEqual(store.totalSessions, 1)
+        XCTAssertEqual(store.totalFocusTime, duration / 60.0, accuracy: 0.01)
         
         guard let session = store.sessions.first else {
             XCTFail("Expected session to exist")
             return
         }
         XCTAssertEqual(session.duration, duration)
-        XCTAssertEqual(session.exercisesCompleted, exercisesCompleted)
+        XCTAssertEqual(session.phaseType, .focus)
+        XCTAssertTrue(session.completed)
+    }
+    
+    func testAddBreakSession() {
+        let duration: TimeInterval = 300 // 5 minutes
+        
+        store.addSession(duration: duration, phaseType: .shortBreak, completed: true)
+        
+        XCTAssertEqual(store.sessions.count, 1)
+        // Breaks don't count toward totalSessions
+        XCTAssertEqual(store.totalSessions, 0)
+        
+        guard let session = store.sessions.first else {
+            XCTFail("Expected session to exist")
+            return
+        }
+        XCTAssertEqual(session.phaseType, .shortBreak)
     }
     
     func testAddSessionWithNotes() {
-        let notes = "Great workout!"
+        let notes = "Great focus session!"
         
-        store.addSession(duration: 420, exercisesCompleted: 12, notes: notes)
+        store.addSession(duration: 1500, phaseType: .focus, completed: true, notes: notes)
         
         guard let session = store.sessions.first else {
             XCTFail("Expected session to exist")
@@ -97,7 +113,7 @@ final class WorkoutStoreTests: XCTestCase {
     func testAddSessionWithCustomDate() {
         let customDate = Date().addingTimeInterval(-86400) // Yesterday
         
-        store.addSession(duration: 420, exercisesCompleted: 12, startDate: customDate)
+        store.addSession(duration: 1500, phaseType: .focus, completed: true, notes: nil, startDate: customDate)
         
         guard let session = store.sessions.first else {
             XCTFail("Expected session to exist")
@@ -109,12 +125,12 @@ final class WorkoutStoreTests: XCTestCase {
     
     func testAddMultipleSessions() {
         for i in 0..<5 {
-            store.addSession(duration: 420, exercisesCompleted: 12)
+            store.addSession(duration: 1500 + Double(i * 60), phaseType: .focus, completed: true)
         }
         
         XCTAssertEqual(store.sessions.count, 5)
-        XCTAssertEqual(store.totalWorkouts, 5)
-        XCTAssertEqual(store.totalMinutes, 5 * 7.0, accuracy: 0.01)
+        XCTAssertEqual(store.totalSessions, 5)
+        XCTAssertEqual(store.totalFocusTime, (1500 + 1560 + 1620 + 1680 + 1740) / 60.0, accuracy: 0.01)
     }
     
     func testSessionsAreOrderedByDate() {
@@ -125,7 +141,7 @@ final class WorkoutStoreTests: XCTestCase {
         ]
         
         for date in dates {
-            store.addSession(duration: 420, exercisesCompleted: 12, startDate: date)
+            store.addSession(duration: 1500, phaseType: .focus, completed: true, notes: nil, startDate: date)
         }
         
         // Sessions should be ordered by most recent first
@@ -138,53 +154,53 @@ final class WorkoutStoreTests: XCTestCase {
     // MARK: - Delete Session Tests
     
     func testDeleteSession() {
-        store.addSession(duration: 420, exercisesCompleted: 12)
-        let initialTotal = store.totalWorkouts
+        store.addSession(duration: 1500, phaseType: .focus, completed: true)
+        let initialTotal = store.totalSessions
         
         store.deleteSession(at: IndexSet(integer: 0))
         
         XCTAssertEqual(store.sessions.count, 0)
-        XCTAssertEqual(store.totalWorkouts, initialTotal - 1)
+        XCTAssertEqual(store.totalSessions, initialTotal - 1)
     }
     
     func testDeleteMultipleSessions() {
         for _ in 0..<5 {
-            store.addSession(duration: 420, exercisesCompleted: 12)
+            store.addSession(duration: 1500, phaseType: .focus, completed: true)
         }
         
         store.deleteSession(at: IndexSet([0, 1, 2]))
         
         XCTAssertEqual(store.sessions.count, 2)
-        XCTAssertEqual(store.totalWorkouts, 2)
+        XCTAssertEqual(store.totalSessions, 2)
     }
     
-    func testDeleteSessionUpdatesTotalMinutes() {
-        store.addSession(duration: 420, exercisesCompleted: 12) // 7 minutes
-        store.addSession(duration: 600, exercisesCompleted: 12) // 10 minutes
-        let initialMinutes = store.totalMinutes
+    func testDeleteSessionUpdatesTotalFocusTime() {
+        store.addSession(duration: 1500, phaseType: .focus, completed: true) // 25 minutes
+        store.addSession(duration: 1800, phaseType: .focus, completed: true) // 30 minutes
+        let initialFocusTime = store.totalFocusTime
         
         store.deleteSession(at: IndexSet(integer: 0))
         
-        let expectedMinutes = initialMinutes - (420 / 60.0)
-        XCTAssertEqual(store.totalMinutes, expectedMinutes, accuracy: 0.01)
+        let expectedFocusTime = initialFocusTime - (1500 / 60.0)
+        XCTAssertEqual(store.totalFocusTime, expectedFocusTime, accuracy: 0.01)
     }
     
     // MARK: - Reset Tests
     
     func testReset() {
-        store.addSession(duration: 420, exercisesCompleted: 12)
+        store.addSession(duration: 1500, phaseType: .focus, completed: true)
         store.reset()
         
         XCTAssertEqual(store.sessions.count, 0)
         XCTAssertEqual(store.streak, 0)
-        XCTAssertEqual(store.totalWorkouts, 0)
-        XCTAssertEqual(store.totalMinutes, 0)
+        XCTAssertEqual(store.totalSessions, 0)
+        XCTAssertEqual(store.totalFocusTime, 0)
     }
     
     // MARK: - Streak Tests
     
-    func testStreakFirstWorkout() {
-        store.addSession(duration: 420, exercisesCompleted: 12)
+    func testStreakFirstFocusSession() {
+        store.addSession(duration: 1500, phaseType: .focus, completed: true)
         
         XCTAssertEqual(store.streak, 1)
     }
@@ -193,14 +209,14 @@ final class WorkoutStoreTests: XCTestCase {
         let calendar = Calendar.current
         
         // Today
-        store.addSession(duration: 420, exercisesCompleted: 12, startDate: Date())
+        store.addSession(duration: 1500, phaseType: .focus, completed: true, notes: nil, startDate: Date())
         
         // Tomorrow
         guard let tomorrow = calendar.date(byAdding: .day, value: 1, to: Date()) else {
             XCTFail("Failed to create tomorrow date")
             return
         }
-        store.addSession(duration: 420, exercisesCompleted: 12, startDate: tomorrow)
+        store.addSession(duration: 1500, phaseType: .focus, completed: true, notes: nil, startDate: tomorrow)
         
         // Note: Since we're testing with dates, streak calculation depends on the actual date logic
         // This test verifies that streak is tracked
@@ -208,15 +224,15 @@ final class WorkoutStoreTests: XCTestCase {
     }
     
     func testStreakBroken() {
-        // Add workout today
-        store.addSession(duration: 420, exercisesCompleted: 12)
+        // Add focus session today
+        store.addSession(duration: 1500, phaseType: .focus, completed: true)
         
-        // Add workout 3 days later (breaks streak)
+        // Add focus session 3 days later (breaks streak)
         guard let threeDaysLater = Calendar.current.date(byAdding: .day, value: 3, to: Date()) else {
             XCTFail("Failed to create threeDaysLater date")
             return
         }
-        store.addSession(duration: 420, exercisesCompleted: 12, startDate: threeDaysLater)
+        store.addSession(duration: 1500, phaseType: .focus, completed: true, notes: nil, startDate: threeDaysLater)
         
         // Streak should reset to 1
         XCTAssertEqual(store.streak, 1)
@@ -224,63 +240,56 @@ final class WorkoutStoreTests: XCTestCase {
     
     // MARK: - Statistics Tests
     
-    func testWorkoutsThisWeek() {
+    func testSessionsThisWeek() {
         let calendar = Calendar.current
         
-        // Add workout today
-        store.addSession(duration: 420, exercisesCompleted: 12)
+        // Add focus session today
+        store.addSession(duration: 1500, phaseType: .focus, completed: true)
         
-        // Add workout 3 days ago
+        // Add focus session 3 days ago
         guard let threeDaysAgo = calendar.date(byAdding: .day, value: -3, to: Date()) else {
             XCTFail("Failed to create threeDaysAgo date")
             return
         }
-        store.addSession(duration: 420, exercisesCompleted: 12, startDate: threeDaysAgo)
+        store.addSession(duration: 1500, phaseType: .focus, completed: true, notes: nil, startDate: threeDaysAgo)
         
-        // Add workout 10 days ago (outside this week)
+        // Add focus session 10 days ago (outside this week)
         guard let tenDaysAgo = calendar.date(byAdding: .day, value: -10, to: Date()) else {
             XCTFail("Failed to create tenDaysAgo date")
             return
         }
-        store.addSession(duration: 420, exercisesCompleted: 12, startDate: tenDaysAgo)
+        store.addSession(duration: 1500, phaseType: .focus, completed: true, notes: nil, startDate: tenDaysAgo)
         
-        XCTAssertGreaterThanOrEqual(store.workoutsThisWeek, 2)
+        XCTAssertGreaterThanOrEqual(store.sessionsThisWeek, 2)
     }
     
-    func testWorkoutsThisMonth() {
+    func testSessionsThisMonth() {
         let calendar = Calendar.current
         
-        // Add workout today
-        store.addSession(duration: 420, exercisesCompleted: 12)
+        // Add focus session today
+        store.addSession(duration: 1500, phaseType: .focus, completed: true)
         
-        // Add workout 15 days ago (same month)
+        // Add focus session 15 days ago (same month)
         guard let fifteenDaysAgo = calendar.date(byAdding: .day, value: -15, to: Date()) else {
             XCTFail("Failed to create fifteenDaysAgo date")
             return
         }
-        store.addSession(duration: 420, exercisesCompleted: 12, startDate: fifteenDaysAgo)
+        store.addSession(duration: 1500, phaseType: .focus, completed: true, notes: nil, startDate: fifteenDaysAgo)
         
-        XCTAssertGreaterThanOrEqual(store.workoutsThisMonth, 2)
+        XCTAssertGreaterThanOrEqual(store.sessionsThisMonth, 2)
     }
     
-    func testAverageWorkoutDuration() {
-        store.addSession(duration: 420, exercisesCompleted: 12) // 7 minutes
-        store.addSession(duration: 600, exercisesCompleted: 12) // 10 minutes
-        store.addSession(duration: 480, exercisesCompleted: 12) // 8 minutes
+    func testAverageSessionDuration() {
+        store.addSession(duration: 1500, phaseType: .focus, completed: true) // 25 minutes
+        store.addSession(duration: 1800, phaseType: .focus, completed: true) // 30 minutes
+        store.addSession(duration: 1200, phaseType: .focus, completed: true) // 20 minutes
         
-        let expectedAverage = (420 + 600 + 480) / 3.0
-        XCTAssertEqual(store.averageWorkoutDuration, expectedAverage, accuracy: 0.1)
+        let expectedAverage = (1500 + 1800 + 1200) / 3.0
+        XCTAssertEqual(store.averageSessionDuration, expectedAverage, accuracy: 0.1)
     }
     
-    func testAverageWorkoutDurationEmpty() {
-        XCTAssertEqual(store.averageWorkoutDuration, 0)
-    }
-    
-    func testEstimatedTotalCalories() {
-        store.addSession(duration: 420, exercisesCompleted: 12)
-        store.addSession(duration: 420, exercisesCompleted: 12)
-        
-        XCTAssertEqual(store.estimatedTotalCalories, 200) // 2 workouts × 100 calories
+    func testAverageSessionDurationEmpty() {
+        XCTAssertEqual(store.averageSessionDuration, 0)
     }
     
     // MARK: - Query Tests
@@ -293,15 +302,15 @@ final class WorkoutStoreTests: XCTestCase {
         }
         let endDate = Date()
         
-        // Add workout in range
-        store.addSession(duration: 420, exercisesCompleted: 12, startDate: Date())
+        // Add focus session in range
+        store.addSession(duration: 1500, phaseType: .focus, completed: true, notes: nil, startDate: Date())
         
-        // Add workout outside range
+        // Add focus session outside range
         guard let tenDaysAgo = calendar.date(byAdding: .day, value: -10, to: Date()) else {
             XCTFail("Failed to create tenDaysAgo date")
             return
         }
-        store.addSession(duration: 420, exercisesCompleted: 12, startDate: tenDaysAgo)
+        store.addSession(duration: 1500, phaseType: .focus, completed: true, notes: nil, startDate: tenDaysAgo)
         
         let sessionsInRange = store.sessions(in: startDate...endDate)
         XCTAssertGreaterThanOrEqual(sessionsInRange.count, 1)
@@ -311,14 +320,14 @@ final class WorkoutStoreTests: XCTestCase {
         let calendar = Calendar.current
         let targetDate = Date()
         
-        store.addSession(duration: 420, exercisesCompleted: 12, startDate: targetDate)
+        store.addSession(duration: 1500, phaseType: .focus, completed: true, notes: nil, startDate: targetDate)
         
-        // Add workout on different date
+        // Add focus session on different date
         guard let yesterday = calendar.date(byAdding: .day, value: -1, to: targetDate) else {
             XCTFail("Failed to create yesterday date")
             return
         }
-        store.addSession(duration: 420, exercisesCompleted: 12, startDate: yesterday)
+        store.addSession(duration: 1500, phaseType: .focus, completed: true, notes: nil, startDate: yesterday)
         
         let sessionsOnDate = store.sessions(on: targetDate)
         XCTAssertEqual(sessionsOnDate.count, 1)
@@ -328,15 +337,15 @@ final class WorkoutStoreTests: XCTestCase {
         let calendar = Calendar.current
         let targetMonth = Date()
         
-        // Add workout this month
-        store.addSession(duration: 420, exercisesCompleted: 12, startDate: Date())
+        // Add focus session this month
+        store.addSession(duration: 1500, phaseType: .focus, completed: true, notes: nil, startDate: Date())
         
-        // Add workout last month
+        // Add focus session last month
         guard let lastMonth = calendar.date(byAdding: .month, value: -1, to: Date()) else {
             XCTFail("Failed to create lastMonth date")
             return
         }
-        store.addSession(duration: 420, exercisesCompleted: 12, startDate: lastMonth)
+        store.addSession(duration: 1500, phaseType: .focus, completed: true, notes: nil, startDate: lastMonth)
         
         let sessionsInMonth = store.sessions(in: targetMonth)
         XCTAssertGreaterThanOrEqual(sessionsInMonth.count, 1)
@@ -345,31 +354,31 @@ final class WorkoutStoreTests: XCTestCase {
     // MARK: - Persistence Tests
     
     func testPersistence() {
-        store.addSession(duration: 420, exercisesCompleted: 12)
+        store.addSession(duration: 1500, phaseType: .focus, completed: true)
         guard let firstSession = store.sessions.first else {
             XCTFail("Expected session to exist")
             return
         }
         let sessionId = firstSession.id
-        let totalWorkouts = store.totalWorkouts
+        let totalSessions = store.totalSessions
         
         // Create new store instance (simulating app restart)
-        let newStore = WorkoutStore()
+        let newStore = FocusStore()
         
         XCTAssertEqual(newStore.sessions.count, 1)
         XCTAssertEqual(newStore.sessions.first?.id, sessionId)
-        XCTAssertEqual(newStore.totalWorkouts, totalWorkouts)
+        XCTAssertEqual(newStore.totalSessions, totalSessions)
     }
     
     func testPersistenceWithMultipleSessions() {
         for i in 0..<10 {
-            store.addSession(duration: 420 + Double(i), exercisesCompleted: 12)
+            store.addSession(duration: 1500 + Double(i), phaseType: .focus, completed: true)
         }
         
-        let newStore = WorkoutStore()
+        let newStore = FocusStore()
         
         XCTAssertEqual(newStore.sessions.count, 10)
-        XCTAssertEqual(newStore.totalWorkouts, 10)
+        XCTAssertEqual(newStore.totalSessions, 10)
     }
     
     // MARK: - Data Integrity Tests
@@ -381,10 +390,10 @@ final class WorkoutStoreTests: XCTestCase {
             XCTFail("Failed to create corrupted data")
             return
         }
-        defaults.set(corruptedData, forKey: "workout.sessions.v1")
+        defaults.set(corruptedData, forKey: "focus.sessions.v1")
         
         // Create store - should handle corrupted data gracefully
-        let newStore = WorkoutStore()
+        let newStore = FocusStore()
         
         // Should default to empty sessions
         XCTAssertEqual(newStore.sessions.count, 0)
@@ -402,23 +411,23 @@ final class WorkoutStoreTests: XCTestCase {
             }
             .store(in: &cancellables)
         
-        store.addSession(duration: 420, exercisesCompleted: 12)
+        store.addSession(duration: 1500, phaseType: .focus, completed: true)
         
         wait(for: [expectation], timeout: 1.0)
     }
     
-    func testTotalWorkoutsPublished() {
-        let expectation = XCTestExpectation(description: "Total workouts updated")
+    func testTotalSessionsPublished() {
+        let expectation = XCTestExpectation(description: "Total sessions updated")
         
-        store.$totalWorkouts
+        store.$totalSessions
             .dropFirst()
-            .sink { totalWorkouts in
-                XCTAssertEqual(totalWorkouts, 1)
+            .sink { totalSessions in
+                XCTAssertEqual(totalSessions, 1)
                 expectation.fulfill()
             }
             .store(in: &cancellables)
         
-        store.addSession(duration: 420, exercisesCompleted: 12)
+        store.addSession(duration: 1500, phaseType: .focus, completed: true)
         
         wait(for: [expectation], timeout: 1.0)
     }
@@ -426,20 +435,10 @@ final class WorkoutStoreTests: XCTestCase {
     // MARK: - Edge Cases
     
     func testAddSessionWithZeroDuration() {
-        store.addSession(duration: 0, exercisesCompleted: 12)
+        store.addSession(duration: 0, phaseType: .focus, completed: true)
         
         XCTAssertEqual(store.sessions.count, 1)
-        XCTAssertEqual(store.totalMinutes, 0)
-    }
-    
-    func testAddSessionWithZeroExercises() {
-        store.addSession(duration: 420, exercisesCompleted: 0)
-        
-        guard let session = store.sessions.first else {
-            XCTFail("Expected session to exist")
-            return
-        }
-        XCTAssertEqual(session.exercisesCompleted, 0)
+        XCTAssertEqual(store.totalFocusTime, 0)
     }
     
     func testDeleteSessionWithEmptyStore() {
@@ -450,7 +449,7 @@ final class WorkoutStoreTests: XCTestCase {
     }
     
     func testDeleteSessionWithInvalidIndex() {
-        store.addSession(duration: 420, exercisesCompleted: 12)
+        store.addSession(duration: 1500, phaseType: .focus, completed: true)
         
         store.deleteSession(at: IndexSet(integer: 999))
         

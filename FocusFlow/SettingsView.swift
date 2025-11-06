@@ -7,7 +7,7 @@ struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @EnvironmentObject private var theme: ThemeStore
-    @EnvironmentObject private var workoutStore: WorkoutStore
+    @EnvironmentObject private var focusStore: FocusStore
 
     @State private var showResetConfirm = false
     @State private var showShare = false
@@ -125,9 +125,9 @@ struct SettingsView: View {
             }
             .alert("Reset All Data?", isPresented: $showResetConfirm) {
                 Button("Cancel", role: .cancel) { }
-                Button("Delete", role: .destructive) { workoutStore.reset() }
+                Button("Delete", role: .destructive) { focusStore.reset() }
             } message: {
-                Text("This will permanently remove all your workout sessions and your streak.")
+                Text("This will permanently remove all your focus sessions and your streak.")
             }
             .sheet(isPresented: $showShare) {
                 ActivityView(activityItems: shareItems).ignoresSafeArea()
@@ -172,11 +172,11 @@ struct SettingsView: View {
                 if reminderEnabled { scheduleDailyReminder(hour: reminderHour, minute: reminderMinute) }
             }
             .onChange(of: streakReminderEnabled) { _ in
-                if streakReminderEnabled && workoutStore.streak > 0 {
+                if streakReminderEnabled && focusStore.streak > 0 {
                     var comps = DateComponents()
                     comps.hour = reminderHour + 2 // 2 hours after main reminder
                     comps.minute = reminderMinute
-                    NotificationManager.scheduleStreakReminder(at: comps, streak: workoutStore.streak)
+                    NotificationManager.scheduleStreakReminder(at: comps, streak: focusStore.streak)
                 } else {
                     NotificationManager.cancelStreakReminder()
                 }
@@ -217,7 +217,7 @@ struct SettingsView: View {
                     VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                         Text("Sound Effects")
                             .font(Theme.body)
-                        Text("Play sounds during workout transitions and countdown.")
+                        Text("Play sounds during focus session transitions and countdown.")
                             .font(Theme.caption)
                             .foregroundStyle(.secondary)
                             .fixedSize(horizontal: false, vertical: true)
@@ -233,7 +233,7 @@ struct SettingsView: View {
                     VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                         Text("Vibration")
                             .font(Theme.body)
-                        Text("Haptic feedback during workout.")
+                        Text("Haptic feedback during focus sessions.")
                             .font(Theme.caption)
                             .foregroundStyle(.secondary)
                             .fixedSize(horizontal: false, vertical: true)
@@ -540,7 +540,7 @@ struct SettingsView: View {
                                 Image(systemName: "mic.fill")
                                     .font(Theme.caption)
                                     .foregroundStyle(Theme.accentB)
-                                Text("Voice-to-text workout notes")
+                                Text("Voice-to-text focus session notes")
                                     .font(Theme.caption2)
                             }
                             
@@ -591,10 +591,10 @@ struct SettingsView: View {
                 HStack {
                     Toggle(isOn: $reminderEnabled) {
                         VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
-                            Text("Daily Workout Reminder")
+                            Text("Daily Focus Reminder")
                                 .font(Theme.body)
                                 .foregroundStyle(Theme.textPrimary)
-                            Text("Get reminded to complete your daily FocusFlow.")
+                            Text("Get reminded to complete your daily focus session.")
                                 .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                                 .lineSpacing(DesignSystem.Typography.captionLineHeight - 1.0)
@@ -639,7 +639,7 @@ struct SettingsView: View {
                                 Text("Streak Reminders")
                                     .font(Theme.body)
                                     .foregroundStyle(Theme.textPrimary)
-                                Text("Get notified if you haven't worked out today and have an active streak.")
+                                Text("Get notified if you haven't completed a focus session today and have an active streak.")
                                     .font(Theme.caption)
                                     .foregroundStyle(.secondary)
                                     .lineSpacing(DesignSystem.Typography.captionLineHeight - 1.0)
@@ -652,7 +652,7 @@ struct SettingsView: View {
                                 Text("Gentle Nudges")
                                     .font(Theme.body)
                                     .foregroundStyle(Theme.textPrimary)
-                                Text("Receive a gentle reminder if you haven't worked out today.")
+                                Text("Receive a gentle reminder if you haven't completed a focus session today.")
                                     .font(Theme.caption)
                                     .foregroundStyle(.secondary)
                                     .lineSpacing(DesignSystem.Typography.captionLineHeight - 1.0)
@@ -665,7 +665,7 @@ struct SettingsView: View {
                                 Text("Weekly Progress Summary")
                                     .font(Theme.body)
                                     .foregroundStyle(Theme.textPrimary)
-                                Text("Get a weekly summary of your workout progress every Sunday.")
+                                Text("Get a weekly summary of your focus progress every Sunday.")
                                     .font(Theme.caption)
                                     .foregroundStyle(.secondary)
                                     .lineSpacing(DesignSystem.Typography.captionLineHeight - 1.0)
@@ -803,7 +803,7 @@ struct SettingsView: View {
                     }
                     .buttonStyle(.bordered)
                     .accessibilityLabel("Connect with Health")
-                    .accessibilityHint("Double tap to connect your workouts with Apple Health")
+                    .accessibilityHint("Double tap to connect your focus sessions with Apple Health")
                 } else {
                     Button {
                         openHealthSettings()
@@ -825,7 +825,7 @@ struct SettingsView: View {
                     VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                         SyncFeatureRow(
                             icon: "figure.run",
-                            text: "Workout sessions"
+                            text: "Focus sessions"
                         )
                         
                         SyncFeatureRow(
@@ -871,7 +871,7 @@ struct SettingsView: View {
             Text("Health Integration").textCase(.none)
         } footer: {
             if healthKitStore.isAvailable {
-                Text("Your workouts are automatically synced to Apple Health and Activity apps. Your health data is private and secure.")
+                Text("Your focus sessions are automatically synced to Apple Health and Activity apps. Your health data is private and secure.")
             } else {
                 Text("HealthKit is only available on iOS devices.")
             }
@@ -916,7 +916,7 @@ struct SettingsView: View {
         } header: {
             Text("Data").textCase(.none)
         } footer: {
-            Text("Exports include your workout sessions with timestamps. You can import into other apps or keep a personal backup.")
+            Text("Exports include your focus sessions with timestamps. You can import into other apps or keep a personal backup.")
         }
     }
 
@@ -1003,7 +1003,7 @@ struct SettingsView: View {
         do {
             let enc = JSONEncoder()
             enc.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
-            let data = try enc.encode(workoutStore.sessions)
+            let data = try enc.encode(focusStore.sessions)
             let url = FileManager.default.temporaryDirectory.appendingPathComponent("FocusFlow.json")
             try data.write(to: url, options: .atomic)
             shareItems = [url]
@@ -1015,15 +1015,15 @@ struct SettingsView: View {
     }
 
     private func exportCSV() {
-        var csv = "date,duration,exercisesCompleted,notes\n"
+        var csv = "date,duration,phaseType,completed,notes\n"
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        for e in workoutStore.sessions.sorted(by: { $0.date < $1.date }) {
+        for e in focusStore.sessions.sorted(by: { $0.date < $1.date }) {
             let ts = formatter.string(from: e.date)
             let escaped = (e.notes ?? "")
                 .replacingOccurrences(of: "\"", with: "\"\"")
                 .replacingOccurrences(of: "\n", with: " ")
-            csv += "\"\(ts)\",\(e.duration),\(e.exercisesCompleted),\"\(escaped)\"\n"
+            csv += "\"\(ts)\",\(e.duration),\(e.phaseType.rawValue),\(e.completed),\"\(escaped)\"\n"
         }
         let data = Data(csv.utf8)
         let url = FileManager.default.temporaryDirectory.appendingPathComponent("FocusFlow.csv")

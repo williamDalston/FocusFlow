@@ -100,7 +100,7 @@ final class PredictiveFocusAnalytics: ObservableObject {
         return OptimalTimePrediction(
             hour: bestHour,
             timeOfDay: timeOfDay,
-            workoutCount: hourCounts[bestHour] ?? 0,
+            sessionCount: hourCounts[bestHour] ?? 0,
             averageCompletionRate: avgCompletionRate,
             confidence: hourCounts[bestHour] ?? 0 >= 3 ? .high : .medium
         )
@@ -133,7 +133,7 @@ final class PredictiveFocusAnalytics: ObservableObject {
             predicted: Int(predictedTotal),
             probability: probability,
             confidence: confidence,
-            workoutsNeeded: needs,
+            sessionsNeeded: needs,
             recommendedDaily: recommendedDaily
         )
     }

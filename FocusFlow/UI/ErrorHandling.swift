@@ -24,21 +24,21 @@ enum ErrorHandling {
         var errorDescription: String? {
             switch self {
             case .workoutInProgress:
-                return "A workout is already in progress. Please complete or stop the current workout before starting a new one."
+                return "A focus session is already in progress. Please complete or stop the current session before starting a new one."
             case .engineNotReady:
-                return "The workout engine is not ready. Please try again in a moment."
+                return "The timer engine is not ready. Please try again in a moment."
             case .sessionExpired:
-                return "Your workout session has expired. Please start a new workout."
+                return "Your focus session has expired. Please start a new focus session."
             case .dataCorrupted:
-                return "Your workout data appears to be corrupted. The app will attempt to recover."
+                return "Your focus session data appears to be corrupted. The app will attempt to recover."
             case .networkUnavailable:
                 return "Network connection is unavailable. Some features may not work."
             case .invalidState:
                 return "The app is in an invalid state. Please restart the app."
             case .workoutInterrupted:
-                return "Your workout was interrupted. You can resume from where you left off."
+                return "Your focus session was interrupted. You can resume from where you left off."
             case .backgroundTransitionFailed:
-                return "Failed to handle background transition. Your workout progress has been saved."
+                return "Failed to handle background transition. Your focus session progress has been saved."
             case .lowMemory:
                 return "The device is running low on memory. Some features may be limited."
             case .batterySaverMode:
@@ -55,11 +55,11 @@ enum ErrorHandling {
         var recoverySuggestion: String? {
             switch self {
             case .workoutInProgress:
-                return "Stop the current workout or wait for it to complete."
+                return "Stop the current focus session or wait for it to complete."
             case .engineNotReady:
                 return "Wait a moment and try again."
             case .sessionExpired:
-                return "Start a new workout session."
+                return "Start a new focus session."
             case .dataCorrupted:
                 return "The app will attempt to recover your data automatically."
             case .networkUnavailable:
@@ -67,9 +67,9 @@ enum ErrorHandling {
             case .invalidState:
                 return "Try restarting the app to reset the state."
             case .workoutInterrupted:
-                return "You can resume your workout from the main screen."
+                return "You can resume your focus session from the main screen."
             case .backgroundTransitionFailed:
-                return "Your workout progress has been saved. You can continue from where you left off."
+                return "Your focus session progress has been saved. You can continue from where you left off."
             case .lowMemory:
                 return "Close other apps to free up memory, then try again."
             case .batterySaverMode:
@@ -136,7 +136,7 @@ enum ErrorHandling {
             )
             return true
         case .sessionExpired:
-            // Reset session - this would be handled by WorkoutEngine
+            // Reset session - this would be handled by PomodoroEngine
             // Post notification to reset session
             NotificationCenter.default.post(
                 name: NSNotification.Name(AppConstants.NotificationNames.errorOccurred),
@@ -163,11 +163,11 @@ enum ErrorHandling {
             // Reset state
             return attemptBasicRecovery()
         case .workoutInterrupted:
-            // Save current state for resume - this is handled by WorkoutEngine
+            // Save current state for resume - this is handled by PomodoroEngine
             // Recovery is successful if state can be saved
             return true
         case .backgroundTransitionFailed:
-            // Save state and allow resume - this is handled by WorkoutEngine
+            // Save state and allow resume - this is handled by PomodoroEngine
             // Recovery is successful if state can be saved
             return true
         case .lowMemory:
@@ -193,13 +193,13 @@ enum ErrorHandling {
         os_log("Attempting data recovery", log: .default, type: .info)
         
         // Try to load backup data if available
-        if let backupData = UserDefaults.standard.data(forKey: AppConstants.UserDefaultsKeys.workoutSessionsBackup) {
+        if let backupData = UserDefaults.standard.data(forKey: AppConstants.UserDefaultsKeys.focusSessionsBackup) {
             do {
                 let decoder = JSONDecoder()
-                let _ = try decoder.decode([WorkoutSession].self, from: backupData)
+                let _ = try decoder.decode([FocusSession].self, from: backupData)
                 // Validate backup data before restoring
                 // Restore from backup
-                UserDefaults.standard.set(backupData, forKey: AppConstants.UserDefaultsKeys.workoutSessions)
+                UserDefaults.standard.set(backupData, forKey: AppConstants.UserDefaultsKeys.focusSessions)
                 os_log("Data recovery successful from backup", log: .default, type: .info)
                 return true
             } catch {
@@ -224,11 +224,12 @@ enum ErrorHandling {
         // Clear image cache if available
         // Note: In a real app, you might have a custom image cache to clear
         
-        // Attempt to recover workout state
+        // Attempt to recover focus state (legacy - FocusStore handles state recovery now)
+        // Note: This check is kept for backward compatibility during migration
         if UserDefaults.standard.dictionary(forKey: AppConstants.UserDefaultsKeys.workoutStateRecovery) != nil {
             // State exists, try to restore it
-            // This would be handled by WorkoutEngine.restoreWorkoutState()
-            os_log("Workout state found, recovery may be possible", log: .default, type: .info)
+            // This would be handled by PomodoroEngine.restoreSessionState()
+            os_log("Focus state found, recovery may be possible", log: .default, type: .info)
         }
         
         return true
@@ -266,30 +267,33 @@ enum ErrorHandling {
         // Use constants for consistency - duration must be > minWorkoutDuration (currently 0.0)
         // But we enforce a practical minimum of > 0 to prevent invalid sessions
         guard duration > AppConstants.ValidationConstants.minWorkoutDuration else {
-            return .failure(.invalidData(description: "Workout duration must be greater than 0"))
+            return .failure(.invalidData(description: "Focus session duration must be greater than 0"))
         }
         
         guard duration <= AppConstants.ValidationConstants.maxWorkoutDuration else {
-            return .failure(.invalidData(description: "Workout duration exceeds maximum allowed (\(Int(AppConstants.ValidationConstants.maxWorkoutDuration)) seconds)"))
+            return .failure(.invalidData(description: "Focus session duration exceeds maximum allowed (\(Int(AppConstants.ValidationConstants.maxWorkoutDuration)) seconds)"))
         }
         
         guard exercisesCompleted >= AppConstants.ValidationConstants.minExercisesCompleted && 
               exercisesCompleted <= AppConstants.ValidationConstants.maxExercisesCompleted else {
-            return .failure(.invalidData(description: "Exercises completed must be between \(AppConstants.ValidationConstants.minExercisesCompleted) and \(AppConstants.ValidationConstants.maxExercisesCompleted)"))
+            return .failure(.invalidData(description: "Session completion must be valid"))
         }
         
         return .success(())
     }
     
-    /// Validates exercise data
-    static func validateExerciseData(exercise: Exercise) -> Result<Void, WorkoutError> {
-        guard !exercise.name.isEmpty else {
-            return .failure(.invalidData(description: "Exercise name cannot be empty"))
+    /// Validates Pomodoro preset data
+    static func validatePresetData(preset: PomodoroPreset) -> Result<Void, WorkoutError> {
+        guard !preset.displayName.isEmpty else {
+            return .failure(.invalidData(description: "Preset name cannot be empty"))
         }
         
-        guard exercise.order >= AppConstants.ValidationConstants.minExerciseOrder && 
-              exercise.order <= AppConstants.ValidationConstants.maxExerciseOrder else {
-            return .failure(.invalidData(description: "Exercise order must be between 0 and 11"))
+        guard preset.focusDuration > 0 else {
+            return .failure(.invalidData(description: "Focus duration must be greater than 0"))
+        }
+        
+        guard preset.focusDuration <= 3600 else {
+            return .failure(.invalidData(description: "Focus duration cannot exceed 60 minutes"))
         }
         
         return .success(())

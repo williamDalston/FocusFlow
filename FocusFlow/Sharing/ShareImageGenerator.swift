@@ -1,27 +1,23 @@
 import SwiftUI
 import UIKit
 
-/// Agent 12: Social Features & Sharing - Generate beautiful shareable images for workouts, streaks, achievements, and progress
+/// Agent 25: Updated for Focus - Generate beautiful shareable images for focus sessions, streaks, achievements, and progress
 @MainActor
 enum ShareImageGenerator {
     
-    // MARK: - Workout Completion Image
+    // MARK: - Focus Session Completion Image
     
-    /// Generate a beautiful image for workout completion with stats
-    static func generateWorkoutCompletionImage(
-        duration: TimeInterval,
-        exercisesCompleted: Int,
-        calories: Int? = nil,
+    /// Generate a beautiful image for focus session completion with stats
+    static func generateFocusCompletionImage(
+        session: FocusSession,
         streak: Int = 0,
-        date: Date = Date(),
         scale: CGFloat = 2.0
     ) -> UIImage {
-        let view = WorkoutCompletionShareView(
-            duration: duration,
-            exercisesCompleted: exercisesCompleted,
-            calories: calories,
+        let view = FocusCompletionShareView(
+            duration: session.duration,
+            phaseType: session.phaseType,
             streak: streak,
-            date: date
+            date: session.date
         )
         .frame(maxWidth: min(UIScreen.main.bounds.width * 0.9, 600))
         .aspectRatio(4/5, contentMode: .fit)
@@ -33,17 +29,34 @@ enum ShareImageGenerator {
         return renderer.uiImage ?? UIImage()
     }
     
+    /// Generate a beautiful image for focus session completion with individual parameters
+    static func generateFocusCompletionImage(
+        duration: TimeInterval,
+        phaseType: FocusSession.PhaseType,
+        streak: Int = 0,
+        date: Date = Date(),
+        scale: CGFloat = 2.0
+    ) -> UIImage {
+        let session = FocusSession(
+            date: date,
+            duration: duration,
+            phaseType: phaseType,
+            completed: true
+        )
+        return generateFocusCompletionImage(session: session, streak: streak, scale: scale)
+    }
+    
     // MARK: - Streak Image
     
     /// Generate a beautiful image for streak sharing
     static func generateStreakImage(
         streak: Int,
-        totalWorkouts: Int = 0,
+        totalSessions: Int = 0,
         scale: CGFloat = 2.0
     ) -> UIImage {
         let view = StreakShareView(
             streak: streak,
-            totalWorkouts: totalWorkouts
+            totalSessions: totalSessions
         )
         .frame(maxWidth: min(UIScreen.main.bounds.width * 0.9, 600))
         .aspectRatio(4/5, contentMode: .fit)
@@ -83,8 +96,8 @@ enum ShareImageGenerator {
     
     /// Generate a progress chart visualization for sharing
     static func generateProgressChartImage(
-        weeklyData: [DailyWorkoutCount],
-        monthlyData: [MonthlyWorkoutCount]? = nil,
+        weeklyData: [DailyFocusCount],
+        monthlyData: [MonthlyFocusCount]? = nil,
         scale: CGFloat = 2.0
     ) -> UIImage {
         let view = ProgressChartShareView(
@@ -103,19 +116,17 @@ enum ShareImageGenerator {
     
     // MARK: - Summary Image
     
-    /// Generate a comprehensive workout summary image
+    /// Generate a comprehensive focus summary image
     static func generateSummaryImage(
-        totalWorkouts: Int,
+        totalSessions: Int,
         streak: Int,
         totalMinutes: TimeInterval,
-        estimatedCalories: Int,
         scale: CGFloat = 2.0
     ) -> UIImage {
         let view = SummaryShareView(
-            totalWorkouts: totalWorkouts,
+            totalSessions: totalSessions,
             streak: streak,
-            totalMinutes: totalMinutes,
-            estimatedCalories: estimatedCalories
+            totalMinutes: totalMinutes
         )
         .frame(maxWidth: min(UIScreen.main.bounds.width * 0.9, 600))
         .aspectRatio(4/5, contentMode: .fit)
@@ -128,12 +139,12 @@ enum ShareImageGenerator {
     }
 }
 
-// MARK: - Workout Completion Share View
+// MARK: - Focus Completion Share View
 
-private struct WorkoutCompletionShareView: View {
+/// Agent 25: Updated for Focus - Share view for focus session completion
+private struct FocusCompletionShareView: View {
     let duration: TimeInterval
-    let exercisesCompleted: Int
-    let calories: Int?
+    let phaseType: FocusSession.PhaseType
     let streak: Int
     let date: Date
     
@@ -145,11 +156,11 @@ private struct WorkoutCompletionShareView: View {
                 Spacer(minLength: 60)
                 
                 // Success icon
-                Image(systemName: "checkmark.circle.fill")
+                Image(systemName: phaseType.icon)
                     .font(.system(size: 80))
                     .foregroundStyle(.green)
                 
-                Text("Workout Complete!")
+                Text("\(phaseType.displayName) Complete!")
                     .font(.system(size: 36, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
                 
@@ -157,23 +168,15 @@ private struct WorkoutCompletionShareView: View {
                 VStack(spacing: 20) {
                     StatRow(
                         icon: "clock.fill",
-                        label: "Time",
+                        label: "Duration",
                         value: formatDuration(duration)
                     )
                     
                     StatRow(
-                        icon: "figure.run",
-                        label: "Exercises",
-                        value: "\(exercisesCompleted)/12"
+                        icon: phaseType.icon,
+                        label: "Phase",
+                        value: phaseType.displayName
                     )
-                    
-                    if let calories = calories {
-                        StatRow(
-                            icon: "flame.fill",
-                            label: "Calories",
-                            value: "~\(calories)"
-                        )
-                    }
                     
                     if streak > 0 {
                         StatRow(
@@ -227,9 +230,10 @@ private struct WorkoutCompletionShareView: View {
 
 // MARK: - Streak Share View
 
+/// Agent 25: Updated for Focus - Share view for streak
 private struct StreakShareView: View {
     let streak: Int
-    let totalWorkouts: Int
+    let totalSessions: Int
     
     var body: some View {
         ZStack {
@@ -258,8 +262,8 @@ private struct StreakShareView: View {
                     .font(.system(size: 32, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
                 
-                if totalWorkouts > 0 {
-                    Text("\(totalWorkouts) total workouts")
+                if totalSessions > 0 {
+                    Text("\(totalSessions) total focus sessions")
                         .font(.system(size: 20, design: .rounded))
                         .foregroundStyle(.white.opacity(0.8))
                 }
@@ -376,9 +380,10 @@ private struct AchievementShareView: View {
 
 // MARK: - Progress Chart Share View
 
+/// Agent 25: Updated for Focus - Share view for progress charts
 private struct ProgressChartShareView: View {
-    let weeklyData: [DailyWorkoutCount]
-    let monthlyData: [MonthlyWorkoutCount]?
+    let weeklyData: [DailyFocusCount]
+    let monthlyData: [MonthlyFocusCount]?
     
     var body: some View {
         ZStack {
@@ -387,7 +392,7 @@ private struct ProgressChartShareView: View {
             VStack(spacing: 24) {
                 Spacer(minLength: 60)
                 
-                Text("Workout Progress")
+                Text("Focus Progress")
                     .font(.system(size: 36, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
                 
@@ -463,10 +468,9 @@ private struct ProgressChartShareView: View {
 // MARK: - Summary Share View
 
 private struct SummaryShareView: View {
-    let totalWorkouts: Int
+    let totalSessions: Int
     let streak: Int
     let totalMinutes: TimeInterval
-    let estimatedCalories: Int
     
     var body: some View {
         ZStack {
@@ -475,16 +479,16 @@ private struct SummaryShareView: View {
             VStack(spacing: 32) {
                 Spacer(minLength: 60)
                 
-                Text("My Workout Summary")
+                Text("My Focus Summary")
                     .font(.system(size: 36, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
                 
                 // Stats grid
                 VStack(spacing: 20) {
                     StatRow(
-                        icon: "figure.run",
-                        label: "Total Workouts",
-                        value: "\(totalWorkouts)"
+                        icon: "brain.head.profile",
+                        label: "Total Sessions",
+                        value: "\(totalSessions)"
                     )
                     
                     StatRow(
@@ -497,12 +501,6 @@ private struct SummaryShareView: View {
                         icon: "clock.fill",
                         label: "Total Time",
                         value: formatTotalTime(totalMinutes)
-                    )
-                    
-                    StatRow(
-                        icon: "flame.fill",
-                        label: "Calories Burned",
-                        value: "~\(estimatedCalories)"
                     )
                 }
                 .padding(.horizontal, 32)
@@ -586,4 +584,7 @@ private struct StatRow: View {
         )
     }
 }
+
+// MARK: - Supporting Types
+// Note: DailyFocusCount and MonthlyFocusCount are defined in FocusAnalytics.swift
 

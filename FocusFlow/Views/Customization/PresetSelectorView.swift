@@ -1,10 +1,10 @@
 import SwiftUI
 
-/// Agent 3: Preset Selector View - Choose from predefined workout presets
+/// Agent 3: Preset Selector View - Choose from predefined Pomodoro presets
 struct PresetSelectorView: View {
-    @EnvironmentObject private var preferencesStore: WorkoutPreferencesStore
+    @EnvironmentObject private var preferencesStore: FocusPreferencesStore
     @Environment(\.dismiss) private var dismiss
-    @Binding var selectedPreset: WorkoutPreset?
+    @Binding var selectedPreset: PomodoroPreset?
     
     var body: some View {
         NavigationStack {
@@ -13,13 +13,13 @@ struct PresetSelectorView: View {
                 
                 ScrollView {
                     LazyVStack(spacing: 16) {
-                        ForEach(WorkoutPreset.allCases) { preset in
+                        ForEach(PomodoroPreset.allCases) { preset in
                             PresetCard(
                                 preset: preset,
                                 isSelected: selectedPreset == preset
                             ) {
                                 selectedPreset = preset
-                                preferencesStore.updateSelectedPreset(preset)
+                                preferencesStore.selectedPreset = preset
                                 Haptics.tap()
                             }
                         }
@@ -28,7 +28,7 @@ struct PresetSelectorView: View {
                     .padding(.vertical, DesignSystem.Spacing.lg)
                 }
             }
-            .navigationTitle("Workout Presets")
+            .navigationTitle("Pomodoro Presets")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -45,7 +45,7 @@ struct PresetSelectorView: View {
 // MARK: - Preset Card
 
 private struct PresetCard: View {
-    let preset: WorkoutPreset
+    let preset: PomodoroPreset
     let isSelected: Bool
     let action: () -> Void
     
@@ -78,7 +78,7 @@ private struct PresetCard: View {
                             
                             Spacer()
                             
-                            Text("~\(preset.estimatedMinutes) min")
+                            Text("~\(Int(preset.focusDuration / 60)) min")
                                 .font(Theme.caption.weight(.semibold))
                                 .foregroundStyle(.secondary)
                                 .padding(.horizontal, DesignSystem.Spacing.sm)
@@ -96,15 +96,15 @@ private struct PresetCard: View {
                         
                         // Details
                         HStack(spacing: 12) {
-                            Label("\(preset.exerciseIndices.count) exercises", systemImage: "figure.run")
+                            Label("\(Int(preset.focusDuration / 60)) min focus", systemImage: "brain.head.profile")
                                 .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                             
-                            Label("\(Int(preset.exerciseDuration))s", systemImage: "timer")
+                            Label("\(Int(preset.shortBreakDuration / 60)) min break", systemImage: "pause.circle")
                                 .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                             
-                            Label("\(Int(preset.restDuration))s rest", systemImage: "pause.circle")
+                            Label("\(preset.cycleLength) cycles", systemImage: "arrow.clockwise")
                                 .font(Theme.caption)
                                 .foregroundStyle(.secondary)
                         }

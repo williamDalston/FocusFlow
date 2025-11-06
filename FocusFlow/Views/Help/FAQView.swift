@@ -7,44 +7,44 @@ struct FAQView: View {
     
     let faqs: [FAQ] = [
         FAQ(
-            question: "How long is each workout?",
-            answer: "Each workout is approximately 7 minutes long. You'll complete 12 exercises, each lasting 30 seconds with 10-second rest periods between exercises."
+            question: "How long is each focus session?",
+            answer: "Focus sessions can be customized, but the classic Pomodoro timer is 25 minutes of focused work followed by a 5-minute break. You can also use presets like Deep Work (45 minutes) or Quick Focus (15 minutes)."
         ),
         FAQ(
-            question: "Do I need any equipment?",
-            answer: "You only need a sturdy chair for some exercises like the wall sit, triceps dip, and step-up. Everything else can be done with just your body weight."
+            question: "What is the Pomodoro Technique?",
+            answer: "The Pomodoro Technique is a time management method that breaks work into focused intervals (typically 25 minutes) followed by short breaks. After 4 focus sessions, you take a longer break."
         ),
         FAQ(
-            question: "How many times should I do this workout?",
-            answer: "The workout is designed to be done daily. You can do it once a day or repeat it multiple times if you want a longer workout. Listen to your body and rest when needed."
+            question: "How many focus sessions should I do per day?",
+            answer: "Focus sessions can be done throughout the day as needed. The app tracks your sessions and helps you maintain consistency. Listen to your mind and take breaks when needed."
         ),
         FAQ(
-            question: "Can beginners do this workout?",
-            answer: "Yes! The workout can be modified for all fitness levels. Each exercise guide includes modifications for beginners, intermediate, and advanced levels. Start at your own pace and gradually increase intensity."
+            question: "Can I customize the timer intervals?",
+            answer: "Yes! The app includes several presets (Classic Pomodoro, Deep Work, Quick Focus) and you can customize the focus duration, short break, and long break times to match your preferences."
         ),
         FAQ(
-            question: "What if I can't complete an exercise?",
-            answer: "That's perfectly fine! Use the modifications provided in the exercise guide, or simply rest during that exercise. The goal is to do your best and gradually improve over time."
+            question: "What if I get interrupted during a focus session?",
+            answer: "You can pause the focus session at any time by tapping the pause button. The timer will stop and wait for you to resume when you're ready."
         ),
         FAQ(
-            question: "Can I pause the workout?",
-            answer: "Yes, you can pause the workout at any time by tapping the pause button. The timer will stop and wait for you to resume when you're ready."
+            question: "Can I pause the timer?",
+            answer: "Yes, you can pause the timer at any time by tapping the pause button. The timer will stop and wait for you to resume when you're ready."
         ),
         FAQ(
             question: "How do I track my progress?",
-            answer: "The app automatically tracks your workouts, streaks, and statistics. You can view your progress in the History tab and see your workout statistics on the main screen."
+            answer: "The app automatically tracks your focus sessions, streaks, and statistics. You can view your progress in the History tab and see your focus statistics on the main screen."
         ),
         FAQ(
-            question: "Is this workout safe for everyone?",
-            answer: "If you have any health concerns or medical conditions, please consult with a healthcare provider before starting any exercise program. Always listen to your body and stop if you experience pain."
+            question: "Is this app suitable for everyone?",
+            answer: "Yes! The Pomodoro Technique is a proven method for improving focus and productivity. Whether you're studying, working, or doing creative work, this app can help you stay focused."
         ),
         FAQ(
-            question: "Can I customize the workout?",
-            answer: "The workout follows a proven 12-exercise sequence, but you can modify individual exercises based on your fitness level. Check the exercise guide for modification options."
+            question: "Can I customize the Pomodoro settings?",
+            answer: "Yes! You can customize the focus duration, break durations, and cycle length. Check the Settings tab to customize your Pomodoro timer preferences."
         ),
         FAQ(
             question: "Does the app work offline?",
-            answer: "Yes! Once downloaded, the app works completely offline. You don't need an internet connection to use the workout timer or view your progress."
+            answer: "Yes! Once downloaded, the app works completely offline. You don't need an internet connection to use the timer or view your progress."
         )
     ]
     

@@ -206,7 +206,7 @@ struct AchievementCard: View {
             // Share button (only for unlocked achievements)
             if isUnlocked {
                 Button {
-                    WorkoutShareManager.shared.shareAchievement(
+                    FocusShareManager.shared.shareAchievement(
                         title: achievement.title,
                         description: achievement.description,
                         icon: achievement.icon

@@ -1,8 +1,9 @@
 import Foundation
 @testable import FocusFlow
 
-/// Mock implementation of WorkoutTimerProtocol for testing
-final class MockWorkoutTimer: WorkoutTimerProtocol {
+/// Mock implementation of FocusTimerProtocol for testing
+@MainActor
+final class MockFocusTimer: FocusTimerProtocol {
     var onUpdate: ((TimeInterval) -> Void)?
     var onComplete: (() -> Void)?
     
@@ -28,10 +29,10 @@ final class MockWorkoutTimer: WorkoutTimerProtocol {
         
         if shouldCallCompletionImmediately {
             // Immediately complete
-            DispatchQueue.main.async { [weak self] in
-                self?.timeRemaining = 0
-                self?.isRunning = false
-                self?.onComplete?()
+            Task { @MainActor in
+                self.timeRemaining = 0
+                self.isRunning = false
+                self.onComplete?()
             }
         } else if shouldSimulateTime {
             // Simulate timer updates

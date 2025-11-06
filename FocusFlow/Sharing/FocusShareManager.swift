@@ -39,10 +39,10 @@ final class FocusShareManager {
         from viewController: UIViewController? = nil
     ) {
         let session = FocusSession(
+            date: date,
             duration: duration,
             phaseType: phaseType,
-            completed: true,
-            date: date
+            completed: true
         )
         shareFocusSession(session: session, streak: streak, from: viewController)
     }
@@ -278,18 +278,5 @@ struct ShareSheet: UIViewControllerRepresentable {
 }
 
 // MARK: - Supporting Types
-
-/// Daily focus session count for progress charts
-struct DailyFocusCount: Identifiable {
-    let id = UUID()
-    let date: Date
-    let count: Int
-}
-
-/// Monthly focus session count for progress charts
-struct MonthlyFocusCount: Identifiable {
-    let id = UUID()
-    let month: Date
-    let count: Int
-}
+// Note: DailyFocusCount and MonthlyFocusCount are defined in FocusAnalytics.swift
 

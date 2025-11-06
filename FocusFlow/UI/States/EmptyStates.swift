@@ -103,14 +103,14 @@ struct EmptyStateView: View {
 
 /// Agent 7: Predefined empty states for common scenarios
 extension EmptyStateView {
-    /// Agent 30: Enhanced empty state for no workouts using MicrocopyManager
+    /// Agent 30: Enhanced empty state for no focus sessions using MicrocopyManager
     static func noWorkouts(action: @escaping () -> Void) -> EmptyStateView {
         let emptyState = MicrocopyManager.shared.emptyStateMessage(for: .noWorkouts)
         return EmptyStateView(
-            icon: "figure.run",
+            icon: "brain.head.profile",
             title: emptyState.title,
             message: emptyState.message,
-            actionTitle: emptyState.actionTitle ?? "Start Workout",
+            actionTitle: emptyState.actionTitle ?? "Start Focus Session",
             action: action
         )
     }
@@ -138,11 +138,11 @@ extension EmptyStateView {
         )
     }
     
-    /// Agent 30: Enhanced empty state for no exercises found using MicrocopyManager
+    /// Agent 30: Enhanced empty state for no focus sessions found using MicrocopyManager
     static func noExercisesFound(action: @escaping () -> Void) -> EmptyStateView {
         let emptyState = MicrocopyManager.shared.emptyStateMessage(for: .noExercisesFound)
         return EmptyStateView(
-            icon: "figure.run.circle",
+            icon: "brain.head.profile",
             title: emptyState.title,
             message: emptyState.message,
             actionTitle: emptyState.actionTitle ?? "Clear Filters",

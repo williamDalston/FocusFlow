@@ -218,8 +218,8 @@ struct RootView: View {
     
     private func handleShortcutActivity(_ userActivity: NSUserActivity) {
         // Agent 11: Updated to use Focus shortcuts
-        // TODO: Create FocusShortcuts if needed (Agent 9 should handle this)
-        // For now, trigger focus start notification
+        // Note: FocusShortcuts is already implemented and handles shortcut registration
+        // This handler responds to shortcut activities by triggering focus start
         NotificationCenter.default.post(name: NSNotification.Name(AppConstants.NotificationNames.startFocusFromShortcut), object: nil)
     }
     

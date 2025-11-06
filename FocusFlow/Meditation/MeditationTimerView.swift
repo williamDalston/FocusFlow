@@ -6,7 +6,8 @@ struct MeditationTimerView: View {
     @StateObject private var engine = MeditationEngine()
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var theme: ThemeStore
-    @StateObject private var breathingCoordinator = BreathingAnimationCoordinator()
+    // Note: BreathingAnimationCoordinator removed - not applicable to meditation timer
+    // @StateObject private var breathingCoordinator = BreathingAnimationCoordinator()
     @State private var showCompletionCelebration = false
     @State private var showConfetti = false
     @State private var motivationalMessage: String = ""

@@ -8,7 +8,7 @@ import os.log
 /// - Review prompt triggers and success rates
 /// - User engagement metrics
 /// - Conversion funnel events
-/// - Workout completion rates
+/// - Focus session completion rates
 @MainActor
 final class ASOAnalytics {
     static let shared = ASOAnalytics()
@@ -88,7 +88,7 @@ final class ASOAnalytics {
     /// Track user engagement event
     /// - Parameters:
     ///   - event: Event name (e.g., "workout_completed", "achievement_unlocked")
-    ///   - value: Optional value (e.g., workout count, streak length)
+    ///   - value: Optional value (e.g., session count, streak length)
     func trackEngagement(event: String, value: Int? = nil) {
         logger.info("📊 ASO: Engagement - event: \(event), value: \(value ?? 0)")
         

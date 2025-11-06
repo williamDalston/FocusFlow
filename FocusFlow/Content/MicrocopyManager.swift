@@ -9,7 +9,7 @@ class MicrocopyManager {
     
     // MARK: - Success Messages
     
-    /// Personalized workout completion messages based on user stats
+    /// Personalized focus session completion messages based on user stats
     func completionMessage(for stats: FocusCompletionStats) -> String {
         if stats.isPersonalBest {
             return personalBestMessage()
@@ -56,9 +56,9 @@ class MicrocopyManager {
     
     private func generalCompletionMessage() -> String {
         let messages = [
-            "Great job completing your workout!",
+            "Great job completing your focus session!",
             "You did it! Well done!",
-            "Workout complete! You're awesome!",
+            "Focus session complete! You're awesome!",
             "Excellent work! You finished strong!",
             "You nailed it! Keep it up!"
         ]
@@ -68,31 +68,31 @@ class MicrocopyManager {
     /// Milestone celebration messages for special achievements
     func milestoneMessage(for milestone: Milestone) -> String {
         switch milestone {
-        case .firstWorkout:
-            return "First workout complete! Welcome to your fitness journey! 🎉"
+        case .firstSession:
+            return "First focus session complete! Welcome to your productivity journey! 🎉"
         case .weekStreak:
             return "7 days in a row! You're building a powerful habit! 🔥"
         case .monthStreak:
             return "30 days strong! You're unstoppable! 🌟"
-        case .hundredWorkouts:
-            return "100 workouts completed! You're a fitness champion! 🏆"
-        case .fiveHundredWorkouts:
-            return "500 workouts! You're a legend! ⭐"
+        case .hundredSessions:
+            return "100 focus sessions completed! You're a focus champion! 🏆"
+        case .fiveHundredSessions:
+            return "500 focus sessions! You're a legend! ⭐"
         }
     }
     
-    /// Suggestion messages for next workout
+    /// Suggestion messages for next focus session
     func suggestionMessage(for stats: FocusCompletionStats) -> String {
         if stats.currentStreak >= 30 {
             return "You're on fire! Keep your incredible streak going tomorrow."
         } else if stats.currentStreak >= 14 {
-            return "You're building an amazing habit! Work out again tomorrow to keep growing your streak."
+            return "You're building an amazing habit! Focus again tomorrow to keep growing your streak."
         } else if stats.currentStreak >= 7 {
-            return "Great momentum! Work out again tomorrow to reach your first week streak!"
+            return "Great momentum! Focus again tomorrow to reach your first week streak!"
         } else if stats.currentStreak > 0 {
-            return "You're building a great habit! Work out again tomorrow to grow your streak."
+            return "You're building a great habit! Focus again tomorrow to grow your streak."
         } else {
-            return "Start a streak by working out again tomorrow! Every day counts."
+            return "Start a streak by focusing again tomorrow! Every day counts."
         }
     }
     
@@ -261,11 +261,11 @@ enum ButtonLabel {
 }
 
 enum Milestone {
-    case firstWorkout
+    case firstSession
     case weekStreak
     case monthStreak
-    case hundredWorkouts
-    case fiveHundredWorkouts
+    case hundredSessions
+    case fiveHundredSessions
 }
 
 enum HelpFeature {

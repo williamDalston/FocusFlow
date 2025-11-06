@@ -24,20 +24,19 @@ final class FocusStore: ObservableObject {
     private let totalFocusTimeKey = AppConstants.UserDefaultsKeys.focusTotalMinutes
     private let currentCycleKey = AppConstants.UserDefaultsKeys.focusCurrentCycle
     
-    // TODO: Agent 5 - WatchSessionManager needs to be updated to support FocusStore
-    // For now, watch connectivity is disabled until Watch app refactoring is complete
-    // private var watchSessionManager: WatchSessionManager?
+    // Agent 35: WatchSessionManager configured for FocusStore
+    private var watchSessionManager: WatchSessionManager?
     
     // Synchronization for loading state
     private var isLoading = false
     private let loadLock = NSLock()
     private var loadCompleted = false
     
-    // TODO: Agent 5 - Re-enable watch connectivity after WatchSessionManager supports FocusStore
-    // private func setupWatchConnectivity() {
-    //     watchSessionManager = WatchSessionManager.shared
-    //     watchSessionManager?.configure(with: self)
-    // }
+    // Agent 35: Watch connectivity setup - WatchSessionManager now supports FocusStore
+    private func setupWatchConnectivity() {
+        watchSessionManager = WatchSessionManager.shared
+        watchSessionManager?.configure(with: self)
+    }
     
     // MARK: - Public API
     
@@ -93,9 +92,9 @@ final class FocusStore: ObservableObject {
         // Check for achievements
         checkAchievements(focusTime: sessionDate)
         
-        // TODO: Agent 5 - Re-enable watch sync after WatchSessionManager supports FocusStore
-        // Send to Watch if needed
-        // watchSessionManager?.updateWatchComplications()
+        // Agent 35: Watch sync - send new session and update complications
+        watchSessionManager?.sendNewSessionToWatch(newSession)
+        watchSessionManager?.updateWatchComplications()
         
         // Notify personalization components
         NotificationCenter.default.post(
@@ -553,16 +552,16 @@ final class FocusStore: ObservableObject {
         let achievementNotifier = AchievementNotifier.shared
         
         // Check first focus session
-        if let firstFocus = achievementNotifier.checkFirstWorkout(totalWorkouts: totalSessions) {
+        if let firstFocus = achievementNotifier.checkFirstSession(totalSessions: totalSessions) {
             NotificationManager.scheduleAchievementNotification(firstFocus)
         }
         
         // Check other achievements
         let newAchievements = achievementNotifier.checkAchievements(
             streak: streak,
-            totalWorkouts: totalSessions,
-            workoutsThisWeek: sessionsThisWeek,
-            workoutTime: focusTime
+            totalSessions: totalSessions,
+            sessionsThisWeek: sessionsThisWeek,
+            sessionTime: focusTime
         )
         
         // Schedule notifications for new achievements
@@ -586,11 +585,10 @@ final class FocusStore: ObservableObject {
             recalcStreakIfNeeded()
         }
         
-        // TODO: Agent 5 - Re-enable watch connectivity after WatchSessionManager supports FocusStore
-        // Defer watch connectivity setup (non-critical for initial render)
-        // DispatchQueue.main.asyncAfter(deadline: .now() + TimeInterval(AppConstants.TimingConstants.watchConnectivityDelay) / 1_000_000_000) { [weak self] in
-        //     self?.setupWatchConnectivity()
-        // }
+        // Agent 35: Watch connectivity setup - defer to avoid blocking initial render
+        DispatchQueue.main.asyncAfter(deadline: .now() + TimeInterval(AppConstants.TimingConstants.watchConnectivityDelay) / 1_000_000_000) { [weak self] in
+            self?.setupWatchConnectivity()
+        }
     }
 }
 

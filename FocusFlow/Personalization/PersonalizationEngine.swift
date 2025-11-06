@@ -1,37 +1,35 @@
 import Foundation
 import SwiftUI
 
-/// Agent 16: Personalization Engine - Learns user preferences and adapts recommendations
+/// Agent 23: Personalization Engine - Learns user preferences and adapts recommendations
 @MainActor
 final class PersonalizationEngine: ObservableObject {
     @Published var personalizationData: PersonalizationData
     
     private let dataKey = "personalization.data.v1"
-    private let workoutStore: WorkoutStore
+    private let focusStore: FocusStore
     
-    init(workoutStore: WorkoutStore) {
-        self.workoutStore = workoutStore
+    init(focusStore: FocusStore) {
+        self.focusStore = focusStore
         self.personalizationData = PersonalizationEngine.loadData()
     }
     
     // MARK: - Learning & Adaptation
     
-    /// Learn from a completed workout session
-    func learnFromWorkout(session: WorkoutSession, workoutType: WorkoutType? = nil) {
+    /// Learn from a completed focus session
+    func learnFromSession(session: FocusSession) {
         let calendar = Calendar.current
         let hour = calendar.component(.hour, from: session.date)
         let weekday = calendar.component(.weekday, from: session.date)
         
-        // Update workout time preferences
-        updatePreferredWorkoutTime(hour: hour)
+        // Update focus time preferences
+        updatePreferredFocusTime(hour: hour)
         
         // Update weekday preferences
-        updatePreferredWorkoutDay(weekday: weekday)
+        updatePreferredFocusDay(weekday: weekday)
         
-        // Update workout type preferences
-        if let workoutType = workoutType {
-            updatePreferredWorkoutType(workoutType)
-        }
+        // Update phase type preferences
+        // Note: Focus sessions have phase types (focus/shortBreak/longBreak) for Pomodoro cycles
         
         // Update consistency patterns
         updateConsistencyPattern(date: session.date)
@@ -40,79 +38,63 @@ final class PersonalizationEngine: ObservableObject {
         saveData()
     }
     
-    /// Update preferred workout time based on usage patterns
-    private func updatePreferredWorkoutTime(hour: Int) {
-        var timeFrequency = personalizationData.workoutTimeFrequency
+    /// Update preferred focus time based on usage patterns
+    private func updatePreferredFocusTime(hour: Int) {
+        var timeFrequency = personalizationData.focusTimeFrequency
         timeFrequency[hour, default: 0] += 1
-        personalizationData.workoutTimeFrequency = timeFrequency
+        personalizationData.focusTimeFrequency = timeFrequency
         
         // Calculate most frequent hour
         if let mostFrequent = timeFrequency.max(by: { $0.value < $1.value }) {
-            personalizationData.preferredWorkoutTime = mostFrequent.key
+            personalizationData.preferredFocusTime = mostFrequent.key
         }
     }
     
-    /// Update preferred workout day based on usage patterns
-    private func updatePreferredWorkoutDay(weekday: Int) {
-        var dayFrequency = personalizationData.workoutDayFrequency
+    /// Update preferred focus day based on usage patterns
+    private func updatePreferredFocusDay(weekday: Int) {
+        var dayFrequency = personalizationData.focusDayFrequency
         dayFrequency[weekday, default: 0] += 1
-        personalizationData.workoutDayFrequency = dayFrequency
+        personalizationData.focusDayFrequency = dayFrequency
         
         // Calculate most frequent day
         if let mostFrequent = dayFrequency.max(by: { $0.value < $1.value }) {
-            personalizationData.preferredWorkoutDay = mostFrequent.key
-        }
-    }
-    
-    /// Update preferred workout type
-    private func updatePreferredWorkoutType(_ type: WorkoutType) {
-        var typeFrequency = personalizationData.workoutTypeFrequency
-        typeFrequency[type, default: 0] += 1
-        personalizationData.workoutTypeFrequency = typeFrequency
-        
-        // Calculate most frequent type
-        if let mostFrequent = typeFrequency.max(by: { $0.value < $1.value }) {
-            personalizationData.preferredWorkoutType = mostFrequent.key
+            personalizationData.preferredFocusDay = mostFrequent.key
         }
     }
     
     /// Update consistency patterns
     private func updateConsistencyPattern(date: Date) {
-        personalizationData.lastWorkoutDate = date
-        personalizationData.totalWorkouts += 1
+        personalizationData.lastSessionDate = date
+        personalizationData.totalSessions += 1
         
-        // Calculate average workouts per week
-        let weeksSinceFirst = max(1, Date().timeIntervalSince(personalizationData.firstWorkoutDate ?? date) / (7 * 24 * 60 * 60))
-        personalizationData.averageWorkoutsPerWeek = Double(personalizationData.totalWorkouts) / weeksSinceFirst
+        // Calculate average sessions per week
+        let weeksSinceFirst = max(1, Date().timeIntervalSince(personalizationData.firstSessionDate ?? date) / (7 * 24 * 60 * 60))
+        personalizationData.averageSessionsPerWeek = Double(personalizationData.totalSessions) / weeksSinceFirst
     }
     
     // MARK: - Recommendations
     
-    /// Get personalized workout recommendation
-    func getRecommendedWorkout() -> WorkoutRecommendation {
+    /// Get personalized focus recommendation
+    func getRecommendedFocus() -> FocusRecommendation {
         let calendar = Calendar.current
         let currentWeekday = calendar.component(.weekday, from: Date())
         
-        // Determine best time for workout today
-        let optimalTime = getOptimalWorkoutTime(for: currentWeekday)
-        
-        // Get workout type recommendation
-        let recommendedType = getRecommendedWorkoutType()
+        // Determine best time for focus today
+        let optimalTime = getOptimalFocusTime(for: currentWeekday)
         
         // Get duration recommendation
         let recommendedDuration = getRecommendedDuration()
         
-        return WorkoutRecommendation(
+        return FocusRecommendation(
             optimalTime: optimalTime,
-            recommendedWorkoutType: recommendedType,
             recommendedDuration: recommendedDuration,
             confidence: calculateConfidence()
         )
     }
     
-    /// Get optimal workout time for a specific day
-    func getOptimalWorkoutTime(for weekday: Int) -> Date? {
-        guard let preferredHour = personalizationData.preferredWorkoutTime else {
+    /// Get optimal focus time for a specific day
+    func getOptimalFocusTime(for weekday: Int) -> Date? {
+        guard let preferredHour = personalizationData.preferredFocusTime else {
             // Default to morning (8 AM) if no preference learned
             let calendar = Calendar.current
             var components = calendar.dateComponents([.year, .month, .day], from: Date())
@@ -128,99 +110,54 @@ final class PersonalizationEngine: ObservableObject {
         return calendar.date(from: components)
     }
     
-    /// Get recommended workout type based on time and patterns
-    func getRecommendedWorkoutType() -> WorkoutType {
-        let calendar = Calendar.current
-        let hour = calendar.component(.hour, from: Date())
-        
-        // Use preferred type if available
-        if let preferred = personalizationData.preferredWorkoutType {
-            return preferred
-        }
-        
-        // Suggest based on time of day
-        switch hour {
-        case 5..<12:
-            return .morningEnergizer
-        case 12..<17:
-            return .officeBreak
-        case 17..<22:
-            return .full7
-        default:
-            return .eveningStretch
-        }
-    }
-    
-    /// Get recommended workout duration based on patterns
+    /// Get recommended focus duration based on patterns
     func getRecommendedDuration() -> TimeInterval {
-        // Get average workout duration from history
-        let averageDuration = workoutStore.averageWorkoutDuration
+        // Get average focus session duration from history
+        let sessions = focusStore.sessions.filter { $0.phaseType == .focus }
+        guard !sessions.isEmpty else {
+            // Default to 25 minutes (Classic Pomodoro)
+            return 25 * 60
+        }
+        
+        let averageDuration = sessions.reduce(0.0) { $0 + $1.duration } / Double(sessions.count)
         
         if averageDuration > 0 {
-            // Recommend based on average, with some variation
+            // Recommend based on average
             return averageDuration
         }
         
-        // Default to 7 minutes
-        return 7 * 60
+        // Default to 25 minutes (Classic Pomodoro)
+        return 25 * 60
     }
     
     /// Calculate confidence in recommendations (0.0 to 1.0)
     private func calculateConfidence() -> Double {
-        let totalWorkouts = personalizationData.totalWorkouts
+        let totalSessions = personalizationData.totalSessions
         
-        // Need at least 5 workouts for meaningful patterns
-        guard totalWorkouts >= 5 else {
-            return Double(totalWorkouts) / 5.0
+        // Need at least 5 sessions for meaningful patterns
+        guard totalSessions >= 5 else {
+            return Double(totalSessions) / 5.0
         }
         
         // Calculate confidence based on consistency
-        let consistency = min(1.0, personalizationData.averageWorkoutsPerWeek / 3.0)
-        let patternStrength = min(1.0, Double(totalWorkouts) / 20.0)
+        let consistency = min(1.0, personalizationData.averageSessionsPerWeek / 3.0)
+        let patternStrength = min(1.0, Double(personalizationData.totalSessions) / 20.0)
         
         return (consistency + patternStrength) / 2.0
     }
     
-    /// Get adaptive rest duration suggestion
-    func getAdaptiveRestDuration(basedOn exercise: Exercise, currentFitnessLevel: WorkoutPreferences.FitnessLevel) -> TimeInterval {
-        // Base rest duration on fitness level
-        var baseRest: TimeInterval
-        
-        switch currentFitnessLevel {
-        case .beginner:
-            baseRest = 15.0
-        case .intermediate:
-            baseRest = 10.0
-        case .advanced:
-            baseRest = 5.0
-        }
-        
-        // Adjust based on exercise intensity
-        switch exercise.intensityLevel {
-        case .beginner:
-            baseRest -= 2.0
-        case .intermediate:
-            break
-        case .advanced:
-            baseRest += 3.0
-        }
-        
-        // Ensure minimum rest
-        return max(5.0, baseRest)
-    }
-    
-    /// Get personalized workout schedule
-    func getPersonalizedSchedule() -> WorkoutSchedule {
+    /// Get personalized focus schedule
+    func getPersonalizedSchedule() -> FocusSchedule {
         // Analyze patterns to suggest schedule
         var suggestedDays: [Int] = []
         
         // Add preferred day if available
-        if let preferredDay = personalizationData.preferredWorkoutDay {
+        if let preferredDay = personalizationData.preferredFocusDay {
             suggestedDays.append(preferredDay)
         }
         
-        // Add most frequent workout days
-        let topDays = personalizationData.workoutDayFrequency
+        // Add most frequent focus days
+        let topDays = personalizationData.focusDayFrequency
             .sorted(by: { $0.value > $1.value })
             .prefix(3)
             .map { $0.key }
@@ -235,10 +172,10 @@ final class PersonalizationEngine: ObservableObject {
             suggestedDays = [2, 4, 6] // Monday, Wednesday, Friday
         }
         
-        return WorkoutSchedule(
+        return FocusSchedule(
             suggestedDays: suggestedDays,
-            preferredTime: personalizationData.preferredWorkoutTime ?? 8,
-            frequency: max(3, Int(personalizationData.averageWorkoutsPerWeek))
+            preferredTime: personalizationData.preferredFocusTime ?? 8,
+            frequency: max(3, Int(personalizationData.averageSessionsPerWeek))
         )
     }
     
@@ -263,53 +200,27 @@ final class PersonalizationEngine: ObservableObject {
 
 /// Personalization data model
 struct PersonalizationData: Codable {
-    var preferredWorkoutTime: Int? // Hour of day (0-23)
-    var preferredWorkoutDay: Int? // Weekday (1-7, Sunday = 1)
-    var preferredWorkoutType: WorkoutType?
-    var workoutTimeFrequency: [Int: Int] = [:] // Hour -> Count
-    var workoutDayFrequency: [Int: Int] = [:] // Weekday -> Count
-    var workoutTypeFrequency: [WorkoutType: Int] = [:] // Type -> Count
-    var firstWorkoutDate: Date?
-    var lastWorkoutDate: Date?
-    var totalWorkouts: Int = 0
-    var averageWorkoutsPerWeek: Double = 0.0
+    var preferredFocusTime: Int? // Hour of day (0-23)
+    var preferredFocusDay: Int? // Weekday (1-7, Sunday = 1)
+    var focusTimeFrequency: [Int: Int] = [:] // Hour -> Count
+    var focusDayFrequency: [Int: Int] = [:] // Weekday -> Count
+    var firstSessionDate: Date?
+    var lastSessionDate: Date?
+    var totalSessions: Int = 0
+    var averageSessionsPerWeek: Double = 0.0
     
     init() {
-        self.workoutTimeFrequency = [:]
-        self.workoutDayFrequency = [:]
-        self.workoutTypeFrequency = [:]
+        self.focusTimeFrequency = [:]
+        self.focusDayFrequency = [:]
     }
 }
 
-/// Workout type classification
-enum WorkoutType: String, Codable, Hashable {
-    case full7 = "full7"
-    case quick5 = "quick5"
-    case extended10 = "extended10"
-    case morningEnergizer = "morning"
-    case eveningStretch = "evening"
-    case officeBreak = "office"
-    case recoveryDay = "recovery"
-    case custom = "custom"
-    
-    var displayName: String {
-        switch self {
-        case .full7: return "Full 7"
-        case .quick5: return "Quick 5"
-        case .extended10: return "Extended 10"
-        case .morningEnergizer: return "Morning Energizer"
-        case .eveningStretch: return "Evening Stretch"
-        case .officeBreak: return "Office Break"
-        case .recoveryDay: return "Recovery Day"
-        case .custom: return "Custom"
-        }
-    }
-}
+// Note: PersonalizationEngine now uses FocusStore and FocusSession instead of WorkoutStore and WorkoutSession
+// Focus sessions use PomodoroPreset (Classic, Deep Work, Short Sprints) and phase types (focus/shortBreak/longBreak)
 
-/// Workout recommendation
-struct WorkoutRecommendation {
+/// Focus recommendation
+struct FocusRecommendation {
     let optimalTime: Date?
-    let recommendedWorkoutType: WorkoutType
     let recommendedDuration: TimeInterval
     let confidence: Double
     
@@ -318,11 +229,11 @@ struct WorkoutRecommendation {
     }
 }
 
-/// Personalized workout schedule
-struct WorkoutSchedule {
+/// Personalized focus schedule
+struct FocusSchedule {
     let suggestedDays: [Int] // Weekday numbers (1-7)
     let preferredTime: Int // Hour (0-23)
-    let frequency: Int // Workouts per week
+    let frequency: Int // Sessions per week
     
     var suggestedDayNames: [String] {
         let formatter = DateFormatter()

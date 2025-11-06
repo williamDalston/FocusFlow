@@ -6,11 +6,11 @@ import UIKit
 /// Create a high-res (1080x1350) poster image you can share anywhere.
 enum PosterExporter {
 
-    /// Renders a poster image with the given text, date, and streak.
+    /// Agent 25: Updated for Focus - Renders a poster image with the given text, date, and streak.
     /// - Parameters:
-    ///   - text: The body text (workout summary or motivational message).
+    ///   - text: The body text (focus session summary or motivational message).
     ///   - date: The date shown in the footer.
-    ///   - streak: Current workout streak number shown as a badge.
+    ///   - streak: Current focus streak number shown as a badge.
     ///   - appName: Tiny footer branding (defaults to app display name).
     ///   - scale: Pixel scale for crisp output (2.0–3.0 looks great).
     /// - Returns: A UIImage ready for sharing (PNG-like quality).
@@ -23,7 +23,7 @@ enum PosterExporter {
         scale: CGFloat = 2.0
     ) -> UIImage {
         let view = PosterCanvas(
-            text: text.isEmpty ? "7 minutes. 12 exercises. Infinite possibilities." : text,
+            text: text.isEmpty ? "Focus. Flow. Achieve." : text,
             date: date,
             streak: streak,
             appName: appName
@@ -51,35 +51,51 @@ enum PosterExporter {
         }
     }
     
-    // MARK: - Agent 12: Workout-Specific Convenience Methods
+    // MARK: - Agent 23: Focus-Specific Convenience Methods
     
-    /// Create a poster for workout completion
+    /// Create a poster for focus session completion
     @MainActor
-    static func workoutCompletionPoster(
+    static func focusCompletionPoster(
+        session: FocusSession,
+        streak: Int = 0,
+        scale: CGFloat = 2.0
+    ) -> UIImage {
+        let minutes = Int(session.duration) / 60
+        let seconds = Int(session.duration) % 60
+        let text = "Just completed a FocusFlow session! 🎯\n\n⏱️ \(minutes):\(String(format: "%02d", seconds))\n🎯 \(session.phaseType.displayName)"
+        
+        return image(text: text, date: session.date, streak: streak, scale: scale)
+    }
+    
+    /// Create a poster for focus session completion with individual parameters
+    @MainActor
+    static func focusCompletionPoster(
         duration: TimeInterval,
-        exercisesCompleted: Int,
+        phaseType: FocusSession.PhaseType,
         streak: Int = 0,
         date: Date = Date(),
         scale: CGFloat = 2.0
     ) -> UIImage {
-        let minutes = Int(duration) / 60
-        let seconds = Int(duration) % 60
-        let text = "Just completed FocusFlow! 💪\n\n⏱️ \(minutes):\(String(format: "%02d", seconds))\n🏃 \(exercisesCompleted)/12 exercises"
-        
-        return image(text: text, date: date, streak: streak, scale: scale)
+        let session = FocusSession(
+            date: date,
+            duration: duration,
+            phaseType: phaseType,
+            completed: true
+        )
+        return focusCompletionPoster(session: session, streak: streak, scale: scale)
     }
     
     /// Create a poster for streak milestone
     @MainActor
     static func streakPoster(
         streak: Int,
-        totalWorkouts: Int = 0,
+        totalSessions: Int = 0,
         date: Date = Date(),
         scale: CGFloat = 2.0
     ) -> UIImage {
-        var text = "🔥 \(streak)-day streak! 🔥\n\n"
-        if totalWorkouts > 0 {
-            text += "\(totalWorkouts) total workouts completed"
+        var text = "🔥 \(streak)-day focus streak! 🔥\n\n"
+        if totalSessions > 0 {
+            text += "\(totalSessions) total focus sessions completed"
         }
         text += "\n\nKeep the momentum going! 💪"
         
@@ -242,7 +258,7 @@ private struct StreakBadge: View {
 private struct BrandMark: View {
     var body: some View {
         HStack(spacing: 8) {
-            Image(systemName: "figure.run")
+            Image(systemName: "brain.head.profile")
                 .symbolRenderingMode(.palette)
                 .foregroundStyle(.white, .orange)
             Text("FocusFlow")

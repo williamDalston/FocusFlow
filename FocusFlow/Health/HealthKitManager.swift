@@ -2,7 +2,8 @@ import Foundation
 import HealthKit
 import ObjectiveC
 
-/// Agent 5: HealthKit Manager - Core HealthKit operations for workout tracking
+/// Agent 5: HealthKit Manager - Core HealthKit operations for focus session tracking
+/// Note: Uses HKWorkoutSession (HealthKit API) for session tracking - this is the correct API name
 @MainActor
 class HealthKitManager {
     static let shared = HealthKitManager()
@@ -11,7 +12,8 @@ class HealthKitManager {
     
     // MARK: - Agent 13: Real-time Heart Rate Monitoring
     
-    /// Current active workout session for real-time monitoring (iOS 17+)
+    /// Current active focus session for real-time monitoring (iOS 17+)
+    /// Note: Uses HKWorkoutSession (HealthKit API) - this is the correct API name for HealthKit workout sessions
     private var activeWorkoutSession: Any? // HKWorkoutSession? wrapped as Any to avoid @available on stored property
     private var heartRateQuery: HKAnchoredObjectQuery?
     private var heartRateUpdateHandler: ((Double) -> Void)?
@@ -45,7 +47,8 @@ class HealthKitManager {
     private let writeTypes: Set<HKSampleType> = {
         var types: Set<HKSampleType> = []
         
-        // Workout sessions (workoutType() returns non-optional)
+        // Focus sessions (stored as HealthKit workout sessions)
+        // Note: HealthKit uses "workout" terminology - this is the correct API name
         let workout = HKObjectType.workoutType()
         types.insert(workout)
         
@@ -54,7 +57,7 @@ class HealthKitManager {
             types.insert(activeEnergy)
         }
         
-        // Exercise minutes
+        // Exercise minutes (HealthKit tracks exercise time for focus sessions)
         if let exerciseTime = HKObjectType.quantityType(forIdentifier: .appleExerciseTime) {
             types.insert(exerciseTime)
         }

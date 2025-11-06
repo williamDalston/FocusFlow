@@ -1,8 +1,9 @@
 import XCTest
 
 /// Agent 9: UI tests for critical user flows
-/// Tests the complete workout experience from start to finish
-final class WorkoutUITests: XCTestCase {
+/// Agent 27: Updated to use Focus terminology
+/// Tests the complete focus session experience from start to finish
+final class FocusUITests: XCTestCase {
     var app: XCUIApplication!
     
     override func setUpWithError() throws {
@@ -27,32 +28,34 @@ final class WorkoutUITests: XCTestCase {
         }
     }
     
-    // MARK: - Workout Start Tests
+    // MARK: - Focus Session Start Tests
     
-    func testStartWorkout() throws {
+    func testStartFocusSession() throws {
         skipOnboardingIfNeeded()
         
-        // Find and tap start workout button
-        let startButton = app.buttons.matching(identifier: "Start Workout").firstMatch
+        // Find and tap start focus session button
+        let startButton = app.buttons.matching(identifier: "Start Focus").firstMatch
+            .union(app.buttons.matching(identifier: "Start").firstMatch)
         if startButton.exists {
             startButton.tap()
             
-            // Verify workout started (should see timer or exercise name)
+            // Verify focus session started (should see timer)
             XCTAssertTrue(app.waitForExistence(timeout: 2.0))
         }
     }
     
     // MARK: - Pause/Resume Tests
     
-    func testPauseResumeWorkout() throws {
+    func testPauseResumeFocusSession() throws {
         skipOnboardingIfNeeded()
         
-        // Start workout
-        let startButton = app.buttons.matching(identifier: "Start Workout").firstMatch
+        // Start focus session
+        let startButton = app.buttons.matching(identifier: "Start Focus").firstMatch
+            .union(app.buttons.matching(identifier: "Start").firstMatch)
         if startButton.exists {
             startButton.tap()
             
-            // Wait for workout to start
+            // Wait for focus session to start
             XCTAssertTrue(app.waitForExistence(timeout: 2.0))
             
             // Find pause button
@@ -74,9 +77,9 @@ final class WorkoutUITests: XCTestCase {
         }
     }
     
-    // MARK: - Workout Completion Tests
+    // MARK: - Focus Session Completion Tests
     
-    func testCompleteWorkout() throws {
+    func testCompleteFocusSession() throws {
         skipOnboardingIfNeeded()
         
         // Note: This test would require either:
@@ -84,7 +87,8 @@ final class WorkoutUITests: XCTestCase {
         // 2. Or just verifying the completion screen appears after time
         // For now, we'll just verify the UI elements exist
         
-        let startButton = app.buttons.matching(identifier: "Start Workout").firstMatch
+        let startButton = app.buttons.matching(identifier: "Start Focus").firstMatch
+            .union(app.buttons.matching(identifier: "Start").firstMatch)
         XCTAssertTrue(startButton.exists || !startButton.exists) // UI should be accessible
     }
     
@@ -122,7 +126,8 @@ final class WorkoutUITests: XCTestCase {
         skipOnboardingIfNeeded()
         
         // Verify key buttons have accessibility labels
-        let startButton = app.buttons.matching(identifier: "Start Workout").firstMatch
+        let startButton = app.buttons.matching(identifier: "Start Focus").firstMatch
+            .union(app.buttons.matching(identifier: "Start").firstMatch)
         if startButton.exists {
             XCTAssertFalse(startButton.label.isEmpty)
         }

@@ -590,19 +590,23 @@ struct FocusHistoryView: View {
     }
     
     private func shareSession(_ session: FocusSession) {
-        // TODO: Create FocusShareManager for proper sharing
-        // For now, use a simple share sheet
-        let text = "Just completed a \(session.phaseType.displayName.lowercased()) session of \(formatDuration(session.duration))! 🍅"
-        
-        let activityViewController = UIActivityViewController(
-            activityItems: [text],
-            applicationActivities: nil
-        )
+        // Use FocusShareManager for proper sharing with image and text
+        let streak = store.streak
         
         if let window = UIApplication.shared.firstKeyWindow,
            let rootViewController = window.rootViewController {
-            activityViewController.popoverPresentationController?.sourceView = window
-            rootViewController.present(activityViewController, animated: true)
+            FocusShareManager.shared.shareFocusSession(
+                session: session,
+                streak: streak,
+                from: rootViewController
+            )
+        } else {
+            // Fallback: Use basic share if window not available
+            FocusShareManager.shared.shareFocusSession(
+                session: session,
+                streak: streak,
+                from: nil
+            )
         }
     }
     
@@ -1633,5 +1637,71 @@ enum DayOfWeek: Int, CaseIterable, Identifiable {
         case .friday: return "Fri"
         case .saturday: return "Sat"
         }
+    }
+}
+
+// MARK: - Detail Stat Row
+
+private struct DetailStatRow: View {
+    let icon: String
+    let title: String
+    let value: String
+    let color: Color
+    
+    var body: some View {
+        HStack(spacing: DesignSystem.Spacing.md) {
+            Image(systemName: icon)
+                .font(Theme.title3)
+                .foregroundStyle(color)
+                .frame(width: DesignSystem.IconSize.medium)
+            
+            Text(title)
+                .font(Theme.subheadline)
+                .foregroundStyle(.secondary)
+            
+            Spacer()
+            
+            Text(value)
+                .font(Theme.subheadline.weight(.semibold))
+                .foregroundStyle(Theme.textPrimary)
+        }
+        .cardPadding()
+        .background(
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                .fill(.ultraThinMaterial)
+        )
+    }
+}
+
+// MARK: - Insight Row
+
+private struct InsightRow: View {
+    let icon: String
+    let title: String
+    let value: String
+    let color: Color
+    
+    var body: some View {
+        HStack(spacing: DesignSystem.Spacing.md) {
+            Image(systemName: icon)
+                .font(Theme.title3)
+                .foregroundStyle(color)
+                .frame(width: DesignSystem.IconSize.medium)
+            
+            Text(title)
+                .font(Theme.subheadline)
+                .foregroundStyle(.secondary)
+            
+            Spacer()
+            
+            Text(value)
+                .font(Theme.subheadline.weight(.semibold))
+                .foregroundStyle(color)
+        }
+        .cardPadding()
+        .background(
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                .fill(.ultraThinMaterial)
+        )
     }
 }

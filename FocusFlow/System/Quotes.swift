@@ -82,31 +82,36 @@ enum Quotes {
         }
     }
     
-    /// Get a motivational message for workout completion
-    static func forWorkoutCompletion(totalWorkouts: Int) -> String {
-        switch totalWorkouts {
+    /// Get a motivational message for focus session completion
+    static func forSessionCompletion(totalSessions: Int) -> String {
+        switch totalSessions {
         case 1:
-            return "🎉 Your first workout is complete! The hardest part—starting—is behind you. You've proven you can do this."
+            return "🎉 Your first focus session is complete! The hardest part—starting—is behind you. You've proven you can do this."
         case 5:
-            return "🌟 Five workouts conquered! You're building something special. Each session is an investment in your future self."
+            return "🌟 Five focus sessions conquered! You're building something special. Each session is an investment in your future self."
         case 10:
-            return "🔥 Ten workouts strong! You're not just exercising—you're creating a new identity. Consistency is becoming your superpower."
+            return "🔥 Ten focus sessions strong! You're not just focusing—you're creating a new identity. Consistency is becoming your superpower."
         case 25:
-            return "💪 Twenty-five workouts completed! You've transformed intention into action. This is no longer something you do—it's who you are."
+            return "💪 Twenty-five focus sessions completed! You've transformed intention into action. This is no longer something you do—it's who you are."
         case 50:
-            return "🏆 Fifty workouts achieved! You've shown the world and yourself what dedication looks like. You're unstoppable."
+            return "🏆 Fifty focus sessions achieved! You've shown the world and yourself what dedication looks like. You're unstoppable."
         case 100:
-            return "🏅 One hundred workouts mastered! You've achieved something extraordinary. You are living proof that small, consistent actions create remarkable transformations."
+            return "🏅 One hundred focus sessions mastered! You've achieved something extraordinary. You are living proof that small, consistent actions create remarkable transformations."
         default:
-            if totalWorkouts > 100 {
-                return "🌟 \(totalWorkouts) workouts completed! You've transcended goals and entered the realm of mastery. Your dedication is inspiring."
-            } else if totalWorkouts >= 50 {
-                return "🔥 \(totalWorkouts) workouts strong! Every single one has made you stronger, mentally and physically. You're a true champion."
-            } else if totalWorkouts >= 10 {
-                return "💪 \(totalWorkouts) workouts done! You're building a legacy of health and strength, one workout at a time. Keep going!"
+            if totalSessions > 100 {
+                return "🌟 \(totalSessions) focus sessions completed! You've transcended goals and entered the realm of mastery. Your dedication is inspiring."
+            } else if totalSessions >= 50 {
+                return "🔥 \(totalSessions) focus sessions strong! Every single one has made you stronger, mentally and physically. You're a true champion."
+            } else if totalSessions >= 10 {
+                return "💪 \(totalSessions) focus sessions done! You're building a legacy of focus and productivity, one session at a time. Keep going!"
             } else {
-                return "🎉 Another workout conquered! Each one makes you stronger, each one builds your confidence. You're doing amazing work!"
+                return "🎉 Another focus session conquered! Each one makes you stronger, each one builds your confidence. You're doing amazing work!"
             }
         }
+    }
+    
+    /// Get a motivational message for workout completion (deprecated - use forSessionCompletion)
+    static func forWorkoutCompletion(totalWorkouts: Int) -> String {
+        return forSessionCompletion(totalSessions: totalWorkouts)
     }
 }

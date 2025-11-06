@@ -107,17 +107,17 @@ enum InputValidator {
         return .valid
     }
     
-    /// Validates that a workout can be started (has exercises selected)
+    /// Validates that a focus session can be started (has valid preset)
     /// - Parameters:
-    ///   - exercises: Array of exercises
+    ///   - preset: Pomodoro preset to validate
     /// - Returns: Validation result with error message if invalid
-    static func validateWorkoutStart(exercises: [Exercise]) -> ValidationResult {
-        if exercises.isEmpty {
-            return .invalid("Please select exercises before starting")
+    static func validateFocusSessionStart(preset: PomodoroPreset) -> ValidationResult {
+        if preset.focusDuration <= 0 {
+            return .invalid("Focus duration must be greater than 0")
         }
         
-        if exercises.count < 1 {
-            return .invalid("At least one exercise is required")
+        if preset.focusDuration > 3600 {
+            return .invalid("Focus duration cannot exceed 60 minutes")
         }
         
         return .valid

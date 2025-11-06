@@ -3,15 +3,16 @@ import Darwin
 @testable import FocusFlow
 
 /// Agent 4: Performance tests for app performance and optimization
+/// Agent 27: Updated to use FocusStore and PomodoroEngine
 /// Tests app launch time, memory usage, and performance under load
 @MainActor
 final class PerformanceTests: XCTestCase {
-    var store: WorkoutStore!
+    var store: FocusStore!
     
     override func setUp() {
         super.setUp()
         clearUserDefaults()
-        store = WorkoutStore()
+        store = FocusStore()
     }
     
     override func tearDown() {
@@ -25,11 +26,11 @@ final class PerformanceTests: XCTestCase {
     private func clearUserDefaults() {
         let defaults = UserDefaults.standard
         let keys = [
-            "workout.sessions.v1",
-            "workout.streak.v1",
-            "workout.lastDay.v1",
-            "workout.totalWorkouts.v1",
-            "workout.totalMinutes.v1"
+            "focus.sessions.v1",
+            "focus.streak.v1",
+            "focus.lastDay.v1",
+            "focus.totalSessions.v1",
+            "focus.totalMinutes.v1"
         ]
         for key in keys {
             defaults.removeObject(forKey: key)
@@ -39,20 +40,20 @@ final class PerformanceTests: XCTestCase {
     
     // MARK: - App Launch Performance Tests
     
-    func testWorkoutStoreInitializationPerformance() {
+    func testFocusStoreInitializationPerformance() {
         measure {
-            let newStore = WorkoutStore()
+            let newStore = FocusStore()
             _ = newStore.sessions
             _ = newStore.streak
-            _ = newStore.totalWorkouts
+            _ = newStore.totalSessions
         }
     }
     
-    func testWorkoutEngineInitializationPerformance() {
+    func testPomodoroEngineInitializationPerformance() {
         measure {
-            let engine = WorkoutEngine()
-            _ = engine.exercises
+            let engine = PomodoroEngine()
             _ = engine.phase
+            _ = engine.timeRemaining
         }
     }
     
@@ -61,13 +62,13 @@ final class PerformanceTests: XCTestCase {
     func testAddSessionPerformance() {
         // Pre-warm
         for _ in 0..<10 {
-            store.addSession(duration: 420, exercisesCompleted: 12)
+            store.addSession(duration: 1500, phaseType: .focus, completed: true)
         }
         store.reset()
         
         measure {
             for _ in 0..<100 {
-                store.addSession(duration: 420, exercisesCompleted: 12)
+                store.addSession(duration: 1500, phaseType: .focus, completed: true)
             }
         }
     }
@@ -77,16 +78,18 @@ final class PerformanceTests: XCTestCase {
         for i in 0..<1000 {
             let date = Date().addingTimeInterval(-Double(i) * 86400)
             store.addSession(
-                duration: 420 + Double(i % 100),
-                exercisesCompleted: 12,
+                duration: 1500 + Double(i % 100),
+                phaseType: .focus,
+                completed: true,
+                notes: nil,
                 startDate: date
             )
         }
         
         measure {
-            _ = store.workoutsThisWeek
-            _ = store.workoutsThisMonth
-            _ = store.averageWorkoutDuration
+            _ = store.sessionsThisWeek
+            _ = store.sessionsThisMonth
+            _ = store.averageSessionDuration
             _ = store.sessions.count
         }
     }
@@ -96,16 +99,18 @@ final class PerformanceTests: XCTestCase {
         for i in 0..<5000 {
             let date = Date().addingTimeInterval(-Double(i) * 86400)
             store.addSession(
-                duration: 420,
-                exercisesCompleted: 12,
+                duration: 1500,
+                phaseType: .focus,
+                completed: true,
+                notes: nil,
                 startDate: date
             )
         }
         
         measure {
-            _ = store.workoutsThisWeek
-            _ = store.workoutsThisMonth
-            _ = store.averageWorkoutDuration
+            _ = store.sessionsThisWeek
+            _ = store.sessionsThisMonth
+            _ = store.averageSessionDuration
             let sessions = store.sessions(in: Date().addingTimeInterval(-365 * 86400)...Date())
             _ = sessions.count
         }
@@ -117,8 +122,10 @@ final class PerformanceTests: XCTestCase {
         // Add many sessions
         for i in 0..<1000 {
             store.addSession(
-                duration: 420,
-                exercisesCompleted: 12,
+                duration: 1500,
+                phaseType: .focus,
+                completed: true,
+                notes: nil,
                 startDate: Date().addingTimeInterval(-Double(i) * 86400)
             )
         }
@@ -127,9 +134,9 @@ final class PerformanceTests: XCTestCase {
         let memoryBefore = getMemoryUsage()
         
         // Perform operations
-        _ = store.workoutsThisWeek
-        _ = store.workoutsThisMonth
-        _ = store.averageWorkoutDuration
+        _ = store.sessionsThisWeek
+        _ = store.sessionsThisMonth
+        _ = store.averageSessionDuration
         
         let memoryAfter = getMemoryUsage()
         let memoryIncrease = memoryAfter - memoryBefore
@@ -142,7 +149,7 @@ final class PerformanceTests: XCTestCase {
         // Repeated add/delete operations should not leak memory
         for iteration in 0..<100 {
             for _ in 0..<10 {
-                store.addSession(duration: 420, exercisesCompleted: 12)
+                store.addSession(duration: 1500, phaseType: .focus, completed: true)
             }
             
             for i in 0..<10 {
@@ -153,7 +160,7 @@ final class PerformanceTests: XCTestCase {
             if iteration % 10 == 0 {
                 autoreleasepool {
                     // Create new store to force cleanup
-                    store = WorkoutStore()
+                    store = FocusStore()
                 }
             }
         }
@@ -172,8 +179,10 @@ final class PerformanceTests: XCTestCase {
         
         DispatchQueue.concurrentPerform(iterations: 100) { index in
             store.addSession(
-                duration: 420 + Double(index),
-                exercisesCompleted: 12,
+                duration: 1500 + Double(index),
+                phaseType: .focus,
+                completed: true,
+                notes: nil,
                 startDate: Date().addingTimeInterval(-Double(index) * 3600)
             )
             expectation.fulfill()
@@ -194,18 +203,20 @@ final class PerformanceTests: XCTestCase {
         // Add sessions
         for i in 0..<500 {
             store.addSession(
-                duration: 420,
-                exercisesCompleted: 12,
+                duration: 1500,
+                phaseType: .focus,
+                completed: true,
+                notes: nil,
                 startDate: Date().addingTimeInterval(-Double(i) * 86400)
             )
         }
         
         measure {
             // Create new store to force load from persistence
-            let newStore = WorkoutStore()
+            let newStore = FocusStore()
             _ = newStore.sessions
             _ = newStore.streak
-            _ = newStore.totalWorkouts
+            _ = newStore.totalSessions
         }
     }
     

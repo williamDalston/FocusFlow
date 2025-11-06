@@ -95,7 +95,7 @@ final class FocusTrendAnalyzer: ObservableObject {
         return ConsistencyTrend(
             consistencyScore: consistencyScore,
             level: level,
-            averageWorkoutsPerDay: average,
+            averageSessionsPerDay: average,
             standardDeviation: standardDeviation
         )
     }

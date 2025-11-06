@@ -108,7 +108,7 @@ struct ProgressChartView: View {
     
     // MARK: - Agent 10: Selected Data Point Info
     
-    private func selectedDataPointInfo(dataPoint: DailyWorkoutCount) -> some View {
+    private func selectedDataPointInfo(dataPoint: DailyFocusCount) -> some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
             HStack {
                 Image(systemName: "info.circle.fill")

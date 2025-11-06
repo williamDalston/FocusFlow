@@ -14,7 +14,7 @@ enum NotificationManager {
         }
     }
 
-    /// Schedule daily workout reminder with actionable buttons
+    /// Schedule daily focus reminder with actionable buttons
     static func scheduleDailyReminder(at components: DateComponents, identifier: String = "daily.workout") {
         let center = UNUserNotificationCenter.current()
         // Remove existing with same id for idempotency
@@ -35,7 +35,7 @@ enum NotificationManager {
             // Add actionable buttons
             let startAction = UNNotificationAction(
                 identifier: "START_WORKOUT",
-                title: "Start Workout",
+                title: "Start Focus",
                 options: [.foreground]
             )
             let viewProgressAction = UNNotificationAction(
@@ -76,7 +76,7 @@ enum NotificationManager {
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
         let content = UNMutableNotificationContent()
         content.title = "🔥 Don't Break Your Streak!"
-        content.body = "You're on a \(streak)-day streak! Complete your workout to keep it going."
+        content.body = "You're on a \(streak)-day streak! Complete a focus session to keep it going."
         content.sound = .default
         content.categoryIdentifier = "WORKOUT_REMINDER"
         
@@ -96,7 +96,7 @@ enum NotificationManager {
         
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
         let content = UNMutableNotificationContent()
-        content.title = "Remember Your Workout"
+        content.title = "Remember Your Focus Session"
         
         // Access MainActor-isolated property and method in a Task
         Task { @MainActor in
@@ -131,7 +131,7 @@ enum NotificationManager {
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
         let content = UNMutableNotificationContent()
         content.title = "📊 Your Weekly Progress"
-        content.body = "Check out your workout stats for the week!"
+        content.body = "Check out your focus stats for the week!"
         content.sound = .default
         
         let req = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
@@ -181,7 +181,7 @@ enum NotificationManager {
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["weekly.summary"])
     }
     
-    /// Cancel all workout-related notifications
+    /// Cancel all focus-related notifications
     static func cancelAllWorkoutNotifications() {
         UNUserNotificationCenter.current().removePendingNotificationRequests(
             withIdentifiers: ["daily.workout", "streak.reminder", "no.workout.nudge", "weekly.summary"]

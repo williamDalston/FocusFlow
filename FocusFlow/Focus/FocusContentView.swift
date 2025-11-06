@@ -63,6 +63,8 @@ struct FocusContentView: View {
                     VStack(spacing: 0) {
                         // Hero Focus Card - single hero card with primary CTA per Apple HIG
                         HeroFocusCard(
+                            focusStore: store,
+                            preferencesStore: preferencesStore,
                             onStartFocus: {
                                 configureEngineFromPreferences()
                                 engine.stop()
@@ -73,19 +75,11 @@ struct FocusContentView: View {
                                 showCustomization = true
                                 Haptics.tap()
                             },
-                            onViewPresets: {
-                                showPresets = true
-                                Haptics.tap()
-                            },
                             onViewHistory: {
                                 showHistory = true
                                 Haptics.tap()
                             },
-                            currentPreset: currentPreset,
-                            cycleProgress: cycleProgress,
-                            estimatedFocusTime: currentPreset.focusDuration,
-                            todayStreak: store.streak,
-                            isFirstFocusSession: store.sessions.isEmpty
+                            isFirstFocus: store.sessions.isEmpty
                         )
                         .padding(.bottom, DesignSystem.Spacing.md)
                         
@@ -278,12 +272,9 @@ struct FocusContentView: View {
                 .iPadOptimizedSheetPresentation()
         }
         .sheet(isPresented: $showAnalytics) {
-            if let analytics = analytics, let manager = achievementManager {
+            if let analytics = analytics {
                 NavigationStack {
-                    // TODO: Agent 15 - Create FocusAnalyticsMainView
-                    Text("Analytics View - Coming Soon")
-                        .navigationTitle("Analytics")
-                        .navigationBarTitleDisplayMode(.large)
+                    FocusAnalyticsMainView(analytics: analytics)
                         .toolbar {
                             ToolbarItem(placement: .navigationBarTrailing) {
                                 Button("Done") {
@@ -307,10 +298,7 @@ struct FocusContentView: View {
         .sheet(isPresented: $showInsights) {
             if let analytics = analytics {
                 NavigationStack {
-                    // TODO: Agent 15 - Create FocusInsightsView
-                    Text("Insights View - Coming Soon")
-                        .navigationTitle("Insights")
-                        .navigationBarTitleDisplayMode(.large)
+                    FocusInsightsView(analytics: analytics)
                         .toolbar {
                             ToolbarItem(placement: .navigationBarTrailing) {
                                 Button("Done") {

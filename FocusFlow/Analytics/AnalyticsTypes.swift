@@ -15,9 +15,14 @@ struct ProgressComparison {
 struct OptimalTimePrediction {
     let hour: Int
     let timeOfDay: String
-    let workoutCount: Int
+    let sessionCount: Int
     let averageCompletionRate: Double
     let confidence: Confidence
+    
+    /// Human-readable time description
+    var timeDescription: String {
+        return timeOfDay
+    }
 }
 
 // MARK: - Frequency Trend Types
@@ -59,7 +64,7 @@ enum ConsistencyLevel {
 struct ConsistencyTrend {
     let consistencyScore: Double
     let level: ConsistencyLevel
-    let averageWorkoutsPerDay: Double
+    let averageSessionsPerDay: Double
     let standardDeviation: Double
 }
 
@@ -72,7 +77,7 @@ struct GoalAchievementPrediction {
     let predicted: Int
     let probability: Double
     let confidence: Confidence
-    let workoutsNeeded: Int
+    let sessionsNeeded: Int
     let recommendedDaily: Double
 }
 
@@ -100,6 +105,9 @@ struct WeekComparison {
     let thisWeek: Int
     let lastWeek: Int
     let change: Double
+    let thisWeekCompletionRate: Double
+    let lastWeekCompletionRate: Double
+    let completionChange: Double
 }
 
 /// Month comparison result
@@ -107,15 +115,19 @@ struct MonthComparison {
     let thisMonth: Int
     let lastMonth: Int
     let change: Double
+    let thisMonthAvgDuration: Double
+    let lastMonthAvgDuration: Double
+    let durationChange: Double
 }
 
 // MARK: - Performance Trend Types
 
 /// Performance trend result
 struct PerformanceTrend {
+    let averageCompletionTime: Double
+    let averageCompletionRate: Double
+    let consistencyScore: Double
     let trend: TrendDirection
-    let change: Double
-    let confidence: Confidence
 }
 
 // MARK: - Personalized Recommendation Types
@@ -136,5 +148,21 @@ enum RecommendationType {
     case duration
     case goal
     case optimalTime
+}
+
+// MARK: - Daily and Monthly Focus Count Types
+
+/// Daily focus count for trend analysis
+struct DailyFocusCount: Identifiable {
+    let id = UUID()
+    let date: Date
+    let count: Int
+}
+
+/// Monthly focus count for trend analysis
+struct MonthlyFocusCount: Identifiable {
+    let id = UUID()
+    let month: Date
+    let count: Int
 }
 

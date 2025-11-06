@@ -56,18 +56,18 @@ struct HelpView: View {
                 }
                 
                 HelpCard(
-                    icon: "figure.run",
-                    title: "Exercise Guide",
-                    description: "Learn proper form and technique for each exercise",
+                    icon: "brain.head.profile",
+                    title: "Pomodoro Guide",
+                    description: "Learn about the Pomodoro Technique and focus strategies",
                     color: Theme.accentB
                 ) {
-                    // Navigation to exercise guide would go here
+                    // Navigation to Pomodoro guide would go here
                 }
                 
                 HelpCard(
                     icon: "timer",
                     title: "How to Use the App",
-                    description: "Get started with your first workout",
+                    description: "Get started with your first focus session",
                     color: Theme.accentC
                 ) {
                     // Navigation to tutorial would go here

@@ -69,17 +69,8 @@ final class PomodoroPresetManager: ObservableObject {
     
     /// Get current preset configuration (selected preset or custom)
     func getCurrentPreset() -> PomodoroPresetConfiguration {
-        // If a custom preset is selected, return it
-        if let customPreset = customPresets.first(where: { $0.id == selectedPreset.rawValue }) {
-            return PomodoroPresetConfiguration(
-                focusDuration: customPreset.focusDuration,
-                shortBreakDuration: customPreset.shortBreakDuration,
-                longBreakDuration: customPreset.longBreakDuration,
-                cycleLength: customPreset.cycleLength
-            )
-        }
-        
-        // Otherwise return the standard preset
+        // Return the standard preset configuration
+        // Note: Custom preset selection would require additional tracking mechanism
         return PomodoroPresetConfiguration(
             focusDuration: selectedPreset.focusDuration,
             shortBreakDuration: selectedPreset.shortBreakDuration,

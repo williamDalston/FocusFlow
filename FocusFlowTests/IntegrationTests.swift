@@ -3,14 +3,15 @@ import HealthKit
 @testable import FocusFlow
 
 /// Agent 9: Integration tests for HealthKit sync and data persistence
+/// Agent 27: Updated to use FocusStore
 @MainActor
 final class IntegrationTests: XCTestCase {
-    var store: WorkoutStore!
+    var store: FocusStore!
     
     override func setUp() {
         super.setUp()
         clearUserDefaults()
-        store = WorkoutStore()
+        store = FocusStore()
     }
     
     override func tearDown() {
@@ -24,11 +25,11 @@ final class IntegrationTests: XCTestCase {
     private func clearUserDefaults() {
         let defaults = UserDefaults.standard
         let keys = [
-            "workout.sessions.v1",
-            "workout.streak.v1",
-            "workout.lastDay.v1",
-            "workout.totalWorkouts.v1",
-            "workout.totalMinutes.v1"
+            "focus.sessions.v1",
+            "focus.streak.v1",
+            "focus.lastDay.v1",
+            "focus.totalSessions.v1",
+            "focus.totalMinutes.v1"
         ]
         for key in keys {
             defaults.removeObject(forKey: key)
@@ -38,27 +39,28 @@ final class IntegrationTests: XCTestCase {
     
     // MARK: - Data Persistence Integration Tests
     
-    func testFullWorkoutSessionPersistence() {
+    func testFullFocusSessionPersistence() {
         // Add multiple sessions
         for i in 0..<5 {
             let date = Date().addingTimeInterval(-Double(i) * 86400) // Spread over 5 days
             store.addSession(
-                duration: 420 + Double(i * 10),
-                exercisesCompleted: 12,
-                notes: "Test workout \(i)",
+                duration: 1500 + Double(i * 10),
+                phaseType: .focus,
+                completed: true,
+                notes: "Test focus session \(i)",
                 startDate: date
             )
         }
         
         // Create new store instance (simulating app restart)
-        let newStore = WorkoutStore()
+        let newStore = FocusStore()
         
         XCTAssertEqual(newStore.sessions.count, 5)
-        XCTAssertEqual(newStore.totalWorkouts, 5)
+        XCTAssertEqual(newStore.totalSessions, 5)
         
         // Verify all sessions persisted correctly
         for (index, session) in newStore.sessions.enumerated() {
-            XCTAssertEqual(session.exercisesCompleted, 12)
+            XCTAssertEqual(session.phaseType, .focus)
             XCTAssertNotNil(session.notes)
         }
     }
@@ -66,12 +68,12 @@ final class IntegrationTests: XCTestCase {
     func testStreakCalculationPersistence() {
         let calendar = Calendar.current
         
-        // Add workout today
-        store.addSession(duration: 420, exercisesCompleted: 12)
+        // Add focus session today
+        store.addSession(duration: 1500, phaseType: .focus, completed: true)
         let initialStreak = store.streak
         
         // Create new store
-        let newStore = WorkoutStore()
+        let newStore = FocusStore()
         
         // Streak should be maintained
         XCTAssertGreaterThanOrEqual(newStore.streak, initialStreak)
@@ -83,7 +85,7 @@ final class IntegrationTests: XCTestCase {
         // This test verifies that the store is ready for HealthKit sync
         // Actual HealthKit integration requires device/simulator setup
         
-        store.addSession(duration: 420, exercisesCompleted: 12)
+        store.addSession(duration: 1500, phaseType: .focus, completed: true)
         
         // Verify session was created (HealthKit sync happens asynchronously)
         XCTAssertEqual(store.sessions.count, 1)
@@ -99,7 +101,7 @@ final class IntegrationTests: XCTestCase {
     
     func testWatchDataSyncPreparation() {
         // Verify store is ready for Watch sync
-        store.addSession(duration: 420, exercisesCompleted: 12)
+        store.addSession(duration: 1500, phaseType: .focus, completed: true)
         
         // Verify data is available for sync
         XCTAssertEqual(store.sessions.count, 1)
@@ -117,27 +119,29 @@ final class IntegrationTests: XCTestCase {
     func testDataMigrationScenario() {
         // Simulate migrating from old data format
         // Add sessions in new format
-        store.addSession(duration: 420, exercisesCompleted: 12)
+        store.addSession(duration: 1500, phaseType: .focus, completed: true)
         
         // Verify new store can read old data
-        let newStore = WorkoutStore()
+        let newStore = FocusStore()
         XCTAssertEqual(newStore.sessions.count, 1)
     }
     
-    func testMultipleWorkoutSessionsInOneDay() {
+    func testMultipleFocusSessionsInOneDay() {
         let today = Date()
         
-        // Add multiple workouts today
+        // Add multiple focus sessions today
         for i in 0..<3 {
             store.addSession(
-                duration: 420 + Double(i * 10),
-                exercisesCompleted: 12,
+                duration: 1500 + Double(i * 10),
+                phaseType: .focus,
+                completed: true,
+                notes: nil,
                 startDate: today.addingTimeInterval(Double(i) * 3600) // 1 hour apart
             )
         }
         
         XCTAssertEqual(store.sessions.count, 3)
-        XCTAssertEqual(store.totalWorkouts, 3)
+        XCTAssertEqual(store.totalSessions, 3)
         
         // Verify all sessions are on the same day
         let calendar = Calendar.current
@@ -153,8 +157,10 @@ final class IntegrationTests: XCTestCase {
         
         for i in 0..<100 {
             store.addSession(
-                duration: 420,
-                exercisesCompleted: 12,
+                duration: 1500,
+                phaseType: .focus,
+                completed: true,
+                notes: nil,
                 startDate: Date().addingTimeInterval(-Double(i) * 86400)
             )
         }
@@ -166,9 +172,9 @@ final class IntegrationTests: XCTestCase {
         
         // Query performance
         let queryStartTime = Date()
-        _ = store.workoutsThisWeek
-        _ = store.workoutsThisMonth
-        _ = store.averageWorkoutDuration
+        _ = store.sessionsThisWeek
+        _ = store.sessionsThisMonth
+        _ = store.averageSessionDuration
         let queryTime = Date().timeIntervalSince(queryStartTime)
         
         // Queries should be fast (< 0.1 seconds)
@@ -181,33 +187,33 @@ final class IntegrationTests: XCTestCase {
         // Simulate corrupted UserDefaults data
         let defaults = UserDefaults.standard
         let corruptedData = "invalid json".data(using: .utf8)!
-        defaults.set(corruptedData, forKey: "workout.sessions.v1")
+        defaults.set(corruptedData, forKey: "focus.sessions.v1")
         
         // Create new store - should recover gracefully
-        let newStore = WorkoutStore()
+        let newStore = FocusStore()
         
         // Should default to empty state
         XCTAssertEqual(newStore.sessions.count, 0)
         
         // Should be able to add new sessions
-        newStore.addSession(duration: 420, exercisesCompleted: 12)
+        newStore.addSession(duration: 1500, phaseType: .focus, completed: true)
         XCTAssertEqual(newStore.sessions.count, 1)
     }
     
     func testRecoveryFromPartialData() {
         // Set some valid data but missing others
         let defaults = UserDefaults.standard
-        defaults.set(5, forKey: "workout.totalWorkouts.v1")
-        defaults.set(35.0, forKey: "workout.totalMinutes.v1")
+        defaults.set(5, forKey: "focus.totalSessions.v1")
+        defaults.set(35.0, forKey: "focus.totalMinutes.v1")
         // Don't set sessions - simulating partial data
         
-        let newStore = WorkoutStore()
+        let newStore = FocusStore()
         
         // Should handle missing sessions gracefully
         XCTAssertEqual(newStore.sessions.count, 0)
         
         // Should be able to continue normally
-        newStore.addSession(duration: 420, exercisesCompleted: 12)
+        newStore.addSession(duration: 1500, phaseType: .focus, completed: true)
         XCTAssertEqual(newStore.sessions.count, 1)
     }
 }

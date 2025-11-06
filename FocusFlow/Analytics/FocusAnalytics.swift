@@ -404,47 +404,43 @@ final class FocusAnalytics: ObservableObject {
         
         // Optimal time recommendation
         if let optimalTime = getOptimalFocusTime() {
-            recommendations.append(.init(
+            recommendations.append(PersonalizedRecommendation(
                 type: .optimalTime,
                 title: "Best Focus Time",
-                message: "You perform best at \(optimalTime.timeDescription). Try scheduling focus sessions around this time!",
-                icon: "clock.fill",
-                color: .blue
+                description: "You perform best at \(optimalTime.timeDescription). Try scheduling focus sessions around this time!",
+                priority: 1
             ))
         }
         
         // Goal achievement recommendation
         let frequencyTrend = getFrequencyTrend()
         if frequencyTrend.direction == .declining {
-            recommendations.append(.init(
+            recommendations.append(PersonalizedRecommendation(
                 type: .frequency,
                 title: "Getting Back on Track",
-                message: "Your focus frequency has decreased. Try setting a weekly goal to stay motivated!",
-                icon: "target",
-                color: .orange
+                description: "Your focus frequency has decreased. Try setting a weekly goal to stay motivated!",
+                priority: 2
             ))
         }
         
         // Consistency recommendation
         let consistency = getConsistencyTrend()
         if consistency.level == .inconsistent {
-            recommendations.append(.init(
+            recommendations.append(PersonalizedRecommendation(
                 type: .consistency,
                 title: "Build Consistency",
-                message: "Aim for more regular focus sessions. Even 2-3 times per week can make a big difference!",
-                icon: "calendar.badge.clock",
-                color: .purple
+                description: "Aim for more regular focus sessions. Even 2-3 times per week can make a big difference!",
+                priority: 3
             ))
         }
         
         // Streak recommendation
         if store.streak > 0 && store.streak < 7 {
-            recommendations.append(.init(
-                type: .streak,
+            recommendations.append(PersonalizedRecommendation(
+                type: .frequency,
                 title: "Keep the Streak Going!",
-                message: "You're on a \(store.streak)-day streak! Keep it up to reach 7 days!",
-                icon: "flame.fill",
-                color: .orange
+                description: "You're on a \(store.streak)-day streak! Keep it up to reach 7 days!",
+                priority: 1
             ))
         }
         
@@ -473,11 +469,16 @@ final class FocusAnalytics: ObservableObject {
         let performance = getPerformanceTrend()
         let consistency = getConsistencyTrend()
         
+        // Calculate average completion rate from sessions
+        let focusSessions = store.sessions.filter { $0.phaseType == .focus }
+        let completedSessions = focusSessions.filter { $0.completed }.count
+        let avgCompletionRate = focusSessions.isEmpty ? 0.0 : Double(completedSessions) / Double(focusSessions.count)
+        
         return FocusMonthlySummary(
             sessionsThisMonth: store.sessionsThisMonth,
             sessionsLastMonth: monthComparison.lastMonth,
             change: monthComparison.change,
-            averageCompletionRate: performance.averageCompletionRate,
+            averageCompletionRate: avgCompletionRate,
             consistencyScore: consistency.consistencyScore,
             trend: performance.trend
         )
@@ -505,18 +506,7 @@ struct FocusMonthlySummary {
 }
 
 // MARK: - Supporting Types
-
-struct DailyFocusCount: Identifiable {
-    let id = UUID()
-    let date: Date
-    let count: Int
-}
-
-struct MonthlyFocusCount: Identifiable {
-    let id = UUID()
-    let month: Date
-    let count: Int
-}
+// Note: DailyFocusCount and MonthlyFocusCount are defined in AnalyticsTypes.swift
 
 struct FocusInsight: Identifiable {
     let id = UUID()

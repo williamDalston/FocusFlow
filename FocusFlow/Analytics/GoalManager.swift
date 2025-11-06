@@ -1,7 +1,7 @@
 import Foundation
 import SwiftUI
 
-/// Agent 10: Goal Manager - Manages workout goals and progress tracking
+/// Agent 10: Goal Manager - Manages focus session goals and progress tracking
 @MainActor
 final class GoalManager: ObservableObject {
     private let store: FocusStore
@@ -22,7 +22,7 @@ final class GoalManager: ObservableObject {
     
     // MARK: - Goal Management
     
-    /// Set weekly workout goal
+    /// Set weekly focus session goal
     func setWeeklyGoal(_ goal: Int) {
         guard goal >= 0 && goal <= 14 else { return } // Max 2 per day
         weeklyGoal = goal
@@ -30,7 +30,7 @@ final class GoalManager: ObservableObject {
         updateProgress()
     }
     
-    /// Set monthly workout goal
+    /// Set monthly focus session goal
     func setMonthlyGoal(_ goal: Int) {
         guard goal >= 0 && goal <= 60 else { return } // Max ~2 per day
         monthlyGoal = goal

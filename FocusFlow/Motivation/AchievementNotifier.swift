@@ -17,36 +17,36 @@ final class AchievementNotifier {
     
     enum Achievement: String, CaseIterable, Identifiable {
         var id: String { rawValue }
-        case firstWorkout = "first_workout"
+        case firstSession = "first_session"
         case threeDayStreak = "three_day_streak"
         case sevenDayStreak = "seven_day_streak"
         case fourteenDayStreak = "fourteen_day_streak"
         case thirtyDayStreak = "thirty_day_streak"
         case fiftyDayStreak = "fifty_day_streak"
         case hundredDayStreak = "hundred_day_streak"
-        case fiveWorkouts = "five_workouts"
-        case tenWorkouts = "ten_workouts"
-        case twentyFiveWorkouts = "twenty_five_workouts"
-        case fiftyWorkouts = "fifty_workouts"
-        case hundredWorkouts = "hundred_workouts"
+        case fiveSessions = "five_sessions"
+        case tenSessions = "ten_sessions"
+        case twentyFiveSessions = "twenty_five_sessions"
+        case fiftySessions = "fifty_sessions"
+        case hundredSessions = "hundred_sessions"
         case perfectWeek = "perfect_week"
         case earlyBird = "early_bird"
         case nightOwl = "night_owl"
         
         var title: String {
             switch self {
-            case .firstWorkout: return "First Steps"
+            case .firstSession: return "First Steps"
             case .threeDayStreak: return "Getting Started"
             case .sevenDayStreak: return "Week Warrior"
             case .fourteenDayStreak: return "Two Weeks Strong"
             case .thirtyDayStreak: return "Month Master"
             case .fiftyDayStreak: return "Half Century"
             case .hundredDayStreak: return "Century Club"
-            case .fiveWorkouts: return "Building Momentum"
-            case .tenWorkouts: return "Double Digits"
-            case .twentyFiveWorkouts: return "Quarter Century"
-            case .fiftyWorkouts: return "Fifty Strong"
-            case .hundredWorkouts: return "Century Champion"
+            case .fiveSessions: return "Building Momentum"
+            case .tenSessions: return "Double Digits"
+            case .twentyFiveSessions: return "Quarter Century"
+            case .fiftySessions: return "Fifty Strong"
+            case .hundredSessions: return "Century Champion"
             case .perfectWeek: return "Perfect Week"
             case .earlyBird: return "Early Bird"
             case .nightOwl: return "Night Owl"
@@ -55,38 +55,38 @@ final class AchievementNotifier {
         
         var message: String {
             switch self {
-            case .firstWorkout: return "🎉 You've completed your first workout! The journey begins!"
+            case .firstSession: return "🎉 You've completed your first focus session! The journey begins!"
             case .threeDayStreak: return "🔥 3-day streak! You're building a powerful habit!"
             case .sevenDayStreak: return "🌟 7-day streak! You're a week warrior!"
             case .fourteenDayStreak: return "💪 14 days strong! Two weeks of consistency!"
             case .thirtyDayStreak: return "🏆 30-day streak! You've completed a full month!"
             case .fiftyDayStreak: return "🎯 50 days! Half century achieved!"
             case .hundredDayStreak: return "🏅 100 days! You're in the century club!"
-            case .fiveWorkouts: return "🔥 5 workouts complete! You're building momentum!"
-            case .tenWorkouts: return "🌟 10 workouts done! Double digits achieved!"
-            case .twentyFiveWorkouts: return "💪 25 workouts! Quarter century milestone!"
-            case .fiftyWorkouts: return "🏆 50 workouts! You're unstoppable!"
-            case .hundredWorkouts: return "🏅 100 workouts! You're a fitness champion!"
-            case .perfectWeek: return "✨ Perfect week! 7 workouts in 7 days!"
-            case .earlyBird: return "🌅 Early bird! You work out in the morning!"
-            case .nightOwl: return "🌙 Night owl! You work out in the evening!"
+            case .fiveSessions: return "🔥 5 focus sessions complete! You're building momentum!"
+            case .tenSessions: return "🌟 10 focus sessions done! Double digits achieved!"
+            case .twentyFiveSessions: return "💪 25 focus sessions! Quarter century milestone!"
+            case .fiftySessions: return "🏆 50 focus sessions! You're unstoppable!"
+            case .hundredSessions: return "🏅 100 focus sessions! You're a focus champion!"
+            case .perfectWeek: return "✨ Perfect week! 7 focus sessions in 7 days!"
+            case .earlyBird: return "🌅 Early bird! You focus in the morning!"
+            case .nightOwl: return "🌙 Night owl! You focus in the evening!"
             }
         }
         
         var icon: String {
             switch self {
-            case .firstWorkout: return "star.fill"
+            case .firstSession: return "star.fill"
             case .threeDayStreak: return "flame.fill"
             case .sevenDayStreak: return "flame.fill"
             case .fourteenDayStreak: return "flame.fill"
             case .thirtyDayStreak: return "trophy.fill"
             case .fiftyDayStreak: return "trophy.fill"
             case .hundredDayStreak: return "crown.fill"
-            case .fiveWorkouts: return "chart.line.uptrend.xyaxis"
-            case .tenWorkouts: return "chart.line.uptrend.xyaxis"
-            case .twentyFiveWorkouts: return "chart.line.uptrend.xyaxis"
-            case .fiftyWorkouts: return "trophy.fill"
-            case .hundredWorkouts: return "crown.fill"
+            case .fiveSessions: return "chart.line.uptrend.xyaxis"
+            case .tenSessions: return "chart.line.uptrend.xyaxis"
+            case .twentyFiveSessions: return "chart.line.uptrend.xyaxis"
+            case .fiftySessions: return "trophy.fill"
+            case .hundredSessions: return "crown.fill"
             case .perfectWeek: return "sparkles"
             case .earlyBird: return "sunrise.fill"
             case .nightOwl: return "moon.fill"
@@ -99,9 +99,9 @@ final class AchievementNotifier {
     /// Check for new achievements based on current stats
     func checkAchievements(
         streak: Int,
-        totalWorkouts: Int,
-        workoutsThisWeek: Int,
-        workoutTime: Date? = nil
+        totalSessions: Int,
+        sessionsThisWeek: Int,
+        sessionTime: Date? = nil
     ) -> [Achievement] {
         var newAchievements: [Achievement] = []
         
@@ -125,31 +125,31 @@ final class AchievementNotifier {
             newAchievements.append(.hundredDayStreak)
         }
         
-        // Total workout achievements
-        if totalWorkouts >= 5 && !achievedMilestones.contains(Achievement.fiveWorkouts.rawValue) {
-            newAchievements.append(.fiveWorkouts)
+        // Total session achievements
+        if totalSessions >= 5 && !achievedMilestones.contains(Achievement.fiveSessions.rawValue) {
+            newAchievements.append(.fiveSessions)
         }
-        if totalWorkouts >= 10 && !achievedMilestones.contains(Achievement.tenWorkouts.rawValue) {
-            newAchievements.append(.tenWorkouts)
+        if totalSessions >= 10 && !achievedMilestones.contains(Achievement.tenSessions.rawValue) {
+            newAchievements.append(.tenSessions)
         }
-        if totalWorkouts >= 25 && !achievedMilestones.contains(Achievement.twentyFiveWorkouts.rawValue) {
-            newAchievements.append(.twentyFiveWorkouts)
+        if totalSessions >= 25 && !achievedMilestones.contains(Achievement.twentyFiveSessions.rawValue) {
+            newAchievements.append(.twentyFiveSessions)
         }
-        if totalWorkouts >= 50 && !achievedMilestones.contains(Achievement.fiftyWorkouts.rawValue) {
-            newAchievements.append(.fiftyWorkouts)
+        if totalSessions >= 50 && !achievedMilestones.contains(Achievement.fiftySessions.rawValue) {
+            newAchievements.append(.fiftySessions)
         }
-        if totalWorkouts >= 100 && !achievedMilestones.contains(Achievement.hundredWorkouts.rawValue) {
-            newAchievements.append(.hundredWorkouts)
+        if totalSessions >= 100 && !achievedMilestones.contains(Achievement.hundredSessions.rawValue) {
+            newAchievements.append(.hundredSessions)
         }
         
         // Perfect week achievement
-        if workoutsThisWeek >= 7 && !achievedMilestones.contains(Achievement.perfectWeek.rawValue) {
+        if sessionsThisWeek >= 7 && !achievedMilestones.contains(Achievement.perfectWeek.rawValue) {
             newAchievements.append(.perfectWeek)
         }
         
-        // Time-based achievements (if workout time provided)
-        if let workoutTime = workoutTime {
-            let hour = Calendar.current.component(.hour, from: workoutTime)
+        // Time-based achievements (if session time provided)
+        if let sessionTime = sessionTime {
+            let hour = Calendar.current.component(.hour, from: sessionTime)
             if hour >= 5 && hour < 10 && !achievedMilestones.contains(Achievement.earlyBird.rawValue) {
                 newAchievements.append(.earlyBird)
             }
@@ -170,12 +170,12 @@ final class AchievementNotifier {
         return newAchievements
     }
     
-    /// Check for first workout achievement
-    func checkFirstWorkout(totalWorkouts: Int) -> Achievement? {
-        if totalWorkouts == 1 && !achievedMilestones.contains(Achievement.firstWorkout.rawValue) {
-            achievedMilestones.insert(Achievement.firstWorkout.rawValue)
+    /// Check for first session achievement
+    func checkFirstSession(totalSessions: Int) -> Achievement? {
+        if totalSessions == 1 && !achievedMilestones.contains(Achievement.firstSession.rawValue) {
+            achievedMilestones.insert(Achievement.firstSession.rawValue)
             saveAchievements()
-            return .firstWorkout
+            return .firstSession
         }
         return nil
     }

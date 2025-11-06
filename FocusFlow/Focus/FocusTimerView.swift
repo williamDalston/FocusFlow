@@ -288,7 +288,7 @@ struct FocusTimerView: View {
             .frame(maxWidth: .infinity)
         }
         .padding(.horizontal, LandscapeOptimizer.landscapePadding)
-        .padding(.vertical, DesignSystem.Spacing.landscapeSpacing)
+        .padding(.vertical, LandscapeOptimizer.landscapeSpacing)
         .padding(.bottom, DesignSystem.Spacing.xxxl + DesignSystem.Spacing.md)
     }
     
@@ -616,14 +616,14 @@ struct FocusTimerView: View {
     
     private var statsSection: some View {
         HStack(spacing: DesignSystem.Spacing.xl) {
-            StatCard(
+            TimerStatCard(
                 title: "Session",
                 value: "\(engine.currentSessionNumber)",
                 icon: "clock.fill",
                 color: Theme.ringBreakShort
             )
             
-            StatCard(
+            TimerStatCard(
                 title: "Progress",
                 value: "\(Int(engine.progress * 100))%",
                 icon: "chart.bar.fill",
@@ -993,7 +993,7 @@ private struct CompletionStatCard: View {
 
 // MARK: - Stat Card
 
-private struct StatCard: View {
+private struct TimerStatCard: View {
     let title: String
     let value: String
     let icon: String

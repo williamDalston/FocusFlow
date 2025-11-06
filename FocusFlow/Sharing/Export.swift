@@ -36,7 +36,7 @@ func exportFocusSessionsToCSV(sessions: [FocusSession]) -> String {
     var csv = "Date,Duration (minutes),Phase Type,Completed,Notes\n"
     
     for session in sessions {
-        let dateString = session.date.formatted(date: .iso8601, time: .standard)
+        let dateString = session.date.ISO8601Format()
         let durationMinutes = Int(session.duration) / 60
         let phaseType = session.phaseType.rawValue
         let completed = session.completed ? "Yes" : "No"
