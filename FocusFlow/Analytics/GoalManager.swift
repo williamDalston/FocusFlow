@@ -46,7 +46,7 @@ final class GoalManager: ObservableObject {
             let weeksOfData = calculateWeeksOfData()
             guard weeksOfData > 0 else { return 3 } // Default suggestion
             
-            let avgPerWeek = Double(store.totalWorkouts) / Double(weeksOfData)
+            let avgPerWeek = Double(store.totalSessions) / Double(weeksOfData)
             // Suggest slightly above average (20% increase)
             let suggestion = Int(avgPerWeek * 1.2)
             return max(1, min(7, suggestion)) // Between 1 and 7
@@ -56,7 +56,7 @@ final class GoalManager: ObservableObject {
             let monthsOfData = calculateMonthsOfData()
             guard monthsOfData > 0 else { return 12 } // Default suggestion
             
-            let avgPerMonth = Double(store.totalWorkouts) / Double(monthsOfData)
+            let avgPerMonth = Double(store.totalSessions) / Double(monthsOfData)
             // Suggest slightly above average (20% increase)
             let suggestion = Int(avgPerMonth * 1.2)
             return max(4, min(30, suggestion)) // Between 4 and 30
@@ -65,8 +65,8 @@ final class GoalManager: ObservableObject {
     
     /// Update progress tracking
     func updateProgress() {
-        weeklyProgress = store.workoutsThisWeek
-        monthlyProgress = store.workoutsThisMonth
+        weeklyProgress = store.sessionsThisWeek
+        monthlyProgress = store.sessionsThisMonth
     }
     
     // MARK: - Progress Calculation
@@ -152,9 +152,9 @@ final class GoalManager: ObservableObject {
         let probability = min(1.0, max(0.0, predicted / Double(weeklyGoal)))
         
         let confidence: Confidence
-        if store.totalWorkouts >= 20 {
+        if store.totalSessions >= 20 {
             confidence = .high
-        } else if store.totalWorkouts >= 10 {
+        } else if store.totalSessions >= 10 {
             confidence = .medium
         } else {
             confidence = .low
@@ -179,9 +179,9 @@ final class GoalManager: ObservableObject {
         let probability = min(1.0, max(0.0, predicted / Double(monthlyGoal)))
         
         let confidence: Confidence
-        if store.totalWorkouts >= 20 {
+        if store.totalSessions >= 20 {
             confidence = .high
-        } else if store.totalWorkouts >= 10 {
+        } else if store.totalSessions >= 10 {
             confidence = .medium
         } else {
             confidence = .low

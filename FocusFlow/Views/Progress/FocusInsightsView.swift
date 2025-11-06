@@ -173,7 +173,7 @@ struct FocusInsightsView: View {
                     color: Theme.accentA,
                     content: {
                         VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
-                            Text("\(optimalTime.timeOfDay.displayName)")
+                            Text(capitalizeTimeOfDay(optimalTime.timeOfDay))
                                 .font(Theme.title3.weight(.semibold))
                                 .foregroundStyle(Theme.textPrimary)
                             
@@ -772,6 +772,18 @@ extension Confidence {
         case .medium: return "Medium"
         case .low: return "Low"
         }
+    }
+}
+
+// MARK: - Helper Functions
+
+private func capitalizeTimeOfDay(_ timeOfDay: String) -> String {
+    switch timeOfDay.lowercased() {
+    case "morning": return "Morning"
+    case "afternoon": return "Afternoon"
+    case "evening": return "Evening"
+    case "night": return "Night"
+    default: return timeOfDay.capitalized
     }
 }
 

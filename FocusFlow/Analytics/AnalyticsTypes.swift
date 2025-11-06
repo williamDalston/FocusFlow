@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 
 // MARK: - Progress Comparison Types
 
@@ -32,6 +33,33 @@ enum TrendDirection {
     case improving
     case declining
     case stable
+    
+    /// Icon name for the trend direction
+    var icon: String {
+        switch self {
+        case .improving: return "arrow.up.right.circle.fill"
+        case .declining: return "arrow.down.right.circle.fill"
+        case .stable: return "minus.circle.fill"
+        }
+    }
+    
+    /// Color for the trend direction
+    var color: Color {
+        switch self {
+        case .improving: return .green
+        case .declining: return .red
+        case .stable: return .orange
+        }
+    }
+    
+    /// Description of the trend
+    var description: String {
+        switch self {
+        case .improving: return "Improving"
+        case .declining: return "Declining"
+        case .stable: return "Stable"
+        }
+    }
 }
 
 /// Confidence level for trend analysis
@@ -39,6 +67,15 @@ enum Confidence {
     case high
     case medium
     case low
+    
+    /// Description of the confidence level
+    var description: String {
+        switch self {
+        case .high: return "High"
+        case .medium: return "Medium"
+        case .low: return "Low"
+        }
+    }
 }
 
 /// Frequency trend analysis result
@@ -48,6 +85,11 @@ struct FrequencyTrend {
     let change: Double // Percentage change
     let direction: TrendDirection
     let confidence: Confidence
+    
+    /// Change as percentage (alias for change)
+    var changePercentage: Double {
+        change
+    }
 }
 
 // MARK: - Consistency Trend Types
@@ -108,6 +150,16 @@ struct WeekComparison {
     let thisWeekCompletionRate: Double
     let lastWeekCompletionRate: Double
     let completionChange: Double
+    
+    /// Whether the comparison shows improvement
+    var isImproving: Bool {
+        change > 0
+    }
+    
+    /// Change as percentage
+    var changePercentage: Double {
+        change
+    }
 }
 
 /// Month comparison result
@@ -118,6 +170,16 @@ struct MonthComparison {
     let thisMonthAvgDuration: Double
     let lastMonthAvgDuration: Double
     let durationChange: Double
+    
+    /// Whether the comparison shows improvement
+    var isImproving: Bool {
+        change > 0
+    }
+    
+    /// Change as percentage
+    var changePercentage: Double {
+        change
+    }
 }
 
 // MARK: - Performance Trend Types

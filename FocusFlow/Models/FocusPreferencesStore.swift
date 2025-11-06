@@ -28,7 +28,7 @@ final class FocusPreferencesStore: ObservableObject {
         if let data = UserDefaults.standard.data(forKey: preferencesKey),
            let decoded = try? JSONDecoder().decode(FocusPreferences.self, from: data) {
             // Agent 14: Validate loaded preferences
-            preferences = validatePreferences(decoded) ? decoded : FocusPreferences()
+            preferences = Self.validatePreferences(decoded) ? decoded : FocusPreferences()
         } else {
             preferences = FocusPreferences()
         }
@@ -80,7 +80,7 @@ final class FocusPreferencesStore: ObservableObject {
     func updateSoundPreferences(
         soundEnabled: Bool? = nil,
         hapticsEnabled: Bool? = nil,
-        soundType: SoundType? = nil
+        soundType: FocusPreferences.SoundType? = nil
     ) {
         if let sound = soundEnabled {
             preferences.soundEnabled = sound
@@ -116,7 +116,7 @@ final class FocusPreferencesStore: ObservableObject {
     // MARK: - Agent 14: Validation
     
     /// Validate preferences and fix invalid values
-    private func validatePreferences(_ prefs: FocusPreferences) -> Bool {
+    private static func validatePreferences(_ prefs: FocusPreferences) -> Bool {
         // Validate custom intervals if used
         if prefs.useCustomIntervals {
             guard prefs.customFocusDuration >= 60 && prefs.customFocusDuration <= 7200 else {
@@ -137,7 +137,7 @@ final class FocusPreferencesStore: ObservableObject {
     
     /// Validate and fix current preferences
     func validateAndFixPreferences() {
-        if !validatePreferences(preferences) {
+        if !Self.validatePreferences(preferences) {
             // Reset to defaults if invalid
             preferences = FocusPreferences()
             savePreferences()
@@ -163,7 +163,7 @@ final class FocusPreferencesStore: ObservableObject {
             let decoder = JSONDecoder()
             let imported = try decoder.decode(FocusPreferences.self, from: data)
             
-            if validatePreferences(imported) {
+            if Self.validatePreferences(imported) {
                 preferences = imported
                 savePreferences()
                 return true

@@ -355,7 +355,9 @@ struct FocusCustomizationView: View {
                         
                         Picker("Sound Type", selection: Binding(
                             get: { preferencesStore.preferences.soundType },
-                            set: { preferencesStore.updateSoundPreferences(soundType: $0) }
+                            set: { newValue in
+                                preferencesStore.updateSoundPreferences(soundType: newValue)
+                            }
                         )) {
                             ForEach(FocusPreferences.SoundType.allCases, id: \.self) { soundType in
                                 Text(soundType.displayName).tag(soundType)

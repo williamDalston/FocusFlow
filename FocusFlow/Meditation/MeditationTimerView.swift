@@ -6,11 +6,11 @@ struct MeditationTimerView: View {
     @StateObject private var engine = MeditationEngine()
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var theme: ThemeStore
-    // Note: BreathingAnimationCoordinator removed - not applicable to meditation timer
-    // @StateObject private var breathingCoordinator = BreathingAnimationCoordinator()
     @State private var showCompletionCelebration = false
     @State private var showConfetti = false
     @State private var motivationalMessage: String = ""
+    @State private var isBreathingIn = true
+    @State private var breathingScale: CGFloat = 1.0
     
     var body: some View {
         ZStack {
@@ -79,23 +79,21 @@ struct MeditationTimerView: View {
         }
         .onChange(of: engine.phase) { newPhase in
             if newPhase == .active {
-                breathingCoordinator.startAnimation()
                 updateMotivationalMessage()
+                // Start breathing animation
+                withAnimation(.easeInOut(duration: 4.0).repeatForever(autoreverses: true)) {
+                    isBreathingIn.toggle()
+                    breathingScale = isBreathingIn ? 1.2 : 1.0
+                }
             } else {
-                breathingCoordinator.stopAnimation()
+                // Stop breathing animation
+                isBreathingIn = true
+                breathingScale = 1.0
             }
             
             if newPhase == .completed {
                 showCompletion()
             }
-        }
-        .onAppear {
-            if engine.phase == .active {
-                breathingCoordinator.startAnimation()
-            }
-        }
-        .onDisappear {
-            breathingCoordinator.stopAnimation()
         }
     }
     
@@ -198,9 +196,9 @@ struct MeditationTimerView: View {
                             Circle()
                                 .fill(Theme.accentA)
                                 .frame(width: 8, height: 8)
-                                .opacity(breathingCoordinator.breathingPhase == .inhale ? 1.0 : 0.3)
-                                .scaleEffect(breathingCoordinator.breathingPhase == .inhale ? 1.2 : 1.0)
-                                .animation(.easeInOut(duration: 4.0).repeatForever(autoreverses: true), value: breathingCoordinator.breathingPhase)
+                                .opacity(isBreathingIn ? 1.0 : 0.3)
+                                .scaleEffect(isBreathingIn ? 1.2 : 1.0)
+                                .animation(.easeInOut(duration: 4.0).repeatForever(autoreverses: true), value: isBreathingIn)
                             
                             Text("Meditating")
                                 .font(Theme.subheadline)
@@ -240,7 +238,7 @@ struct MeditationTimerView: View {
                     Circle()
                         .fill(
                             LinearGradient(
-                                colors: breathingCoordinator.breathingPhase == .inhale
+                                colors: isBreathingIn
                                     ? [
                                         Theme.accentB.opacity(0.6),
                                         Theme.accentB.opacity(0.3)
@@ -254,13 +252,13 @@ struct MeditationTimerView: View {
                             )
                         )
                         .frame(width: 100, height: 100)
-                        .scaleEffect(breathingCoordinator.scale)
-                        .animation(.easeInOut(duration: 4.0), value: breathingCoordinator.scale)
+                        .scaleEffect(breathingScale)
+                        .animation(.easeInOut(duration: 4.0), value: breathingScale)
                 }
                 
                 // Breathing instruction
                 VStack(spacing: DesignSystem.Spacing.xs) {
-                    Text(breathingCoordinator.breathingPhase == .inhale ? "Breathe In" : "Breathe Out")
+                    Text(isBreathingIn ? "Breathe In" : "Breathe Out")
                         .font(Theme.title3.weight(.semibold))
                         .foregroundStyle(Theme.textPrimary)
                         .transition(.opacity)

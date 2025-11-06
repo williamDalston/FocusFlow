@@ -197,7 +197,7 @@ struct FocusFlowApp: App {
             )
             
         default:
-            os_log("Unknown deep link host: %{public}@", log: .default, type: .warning, url.host ?? "nil")
+            os_log("Unknown deep link host: %{public}@", log: .default, type: .default, url.host ?? "nil")
         }
     }
     

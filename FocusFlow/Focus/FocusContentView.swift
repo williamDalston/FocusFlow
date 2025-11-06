@@ -43,7 +43,7 @@ struct FocusContentView: View {
     }
     
     private var cycleProgress: Int {
-        store.currentCycle?.sessionsCompleted ?? 1
+        store.currentCycle?.completedSessions ?? 1
     }
     
     var body: some View {
@@ -172,7 +172,7 @@ struct FocusContentView: View {
                                 showAchievements = true
                                 Haptics.tap()
                             }
-                            .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Hierarchy.majorSectionSpacing : DesignSystem.Hierarchy.minorSectionSpacing)
+                            .padding(.bottom, horizontalSizeClass == .regular ? DesignSystem.Spacing.sectionSpacingIPad : DesignSystem.Spacing.sectionSpacing)
                         }
                         
                         // Achievement Progress Cards (showing closest achievements)
@@ -941,11 +941,12 @@ struct FocusContentView: View {
         let averageDuration = totalMinutes / totalSessions
         
         // Best focus time insight
-        if let bestTime = analytics.bestFocusTime {
+        let bestTime = analytics.bestFocusTime
+        if bestTime != .unknown {
             insights.append(FocusInsight(
-                id: UUID(),
+                type: .pattern,
                 title: "Best Focus Time",
-                message: "You're most productive at \(bestTime)",
+                message: "You're most productive at \(bestTime.displayName)",
                 icon: "clock.fill",
                 color: Theme.accentA
             ))
@@ -954,7 +955,7 @@ struct FocusContentView: View {
         // Streak insight
         if store.streak > 0 {
             insights.append(FocusInsight(
-                id: UUID(),
+                type: .streak,
                 title: "Current Streak",
                 message: "\(store.streak) day streak! Keep it up!",
                 icon: "flame.fill",
@@ -965,7 +966,7 @@ struct FocusContentView: View {
         // Average duration insight
         if averageDuration > 0 {
             insights.append(FocusInsight(
-                id: UUID(),
+                type: .progress,
                 title: "Average Session",
                 message: "\(averageDuration) minutes per session",
                 icon: "timer",
@@ -1182,6 +1183,175 @@ private struct QuickFocusInsightCard: View {
         .shadow(color: Theme.enhancedShadow.opacity(DesignSystem.Opacity.subtle * 0.5),
                radius: DesignSystem.Shadow.small.radius * 0.5,
                y: DesignSystem.Shadow.small.y * 0.5)
+    }
+}
+
+// MARK: - Next Achievement Card
+
+private struct NextAchievementCard: View {
+    let achievement: Achievement
+    let remaining: Int
+    let progressText: String
+    let achievementManager: AchievementManager
+    let onTap: () -> Void
+    @EnvironmentObject private var theme: ThemeStore
+    
+    var body: some View {
+        Button(action: onTap) {
+            HStack(spacing: DesignSystem.Spacing.md) {
+                // Icon
+                ZStack {
+                    Circle()
+                        .fill(achievement.color.opacity(DesignSystem.Opacity.subtle))
+                        .frame(width: DesignSystem.IconSize.xxlarge, height: DesignSystem.IconSize.xxlarge)
+                    
+                    Image(systemName: achievement.icon)
+                        .font(Theme.title3)
+                        .foregroundStyle(achievement.color)
+                }
+                
+                // Content
+                VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
+                    Text("Next Achievement")
+                        .font(Theme.caption)
+                        .foregroundStyle(.secondary)
+                    
+                    Text(achievement.title)
+                        .font(Theme.headline)
+                        .foregroundStyle(Theme.textPrimary)
+                    
+                    Text(progressText)
+                        .font(Theme.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                
+                Spacer()
+                
+                Image(systemName: "chevron.right")
+                    .font(Theme.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .cardPadding()
+            .background(
+                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                    .fill(.ultraThinMaterial)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                            .stroke(achievement.color.opacity(DesignSystem.Opacity.light), lineWidth: DesignSystem.Border.standard)
+                    )
+            )
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+// MARK: - Achievement Progress Card
+
+private struct AchievementProgressCard: View {
+    let achievement: Achievement
+    let remaining: Int
+    let progress: Double
+    let progressText: String
+    let achievementManager: AchievementManager
+    @EnvironmentObject private var theme: ThemeStore
+    
+    var body: some View {
+        VStack(spacing: DesignSystem.Spacing.sm) {
+            // Icon
+            ZStack {
+                Circle()
+                    .fill(achievement.color.opacity(DesignSystem.Opacity.subtle))
+                    .frame(width: DesignSystem.IconSize.xlarge, height: DesignSystem.IconSize.xlarge)
+                
+                Image(systemName: achievement.icon)
+                    .font(Theme.title3)
+                    .foregroundStyle(achievement.color)
+            }
+            
+            // Title
+            Text(achievement.title)
+                .font(Theme.subheadline.weight(.semibold))
+                .foregroundStyle(Theme.textPrimary)
+                .lineLimit(2)
+                .multilineTextAlignment(.center)
+            
+            // Progress
+            Text(progressText)
+                .font(Theme.caption)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+        }
+        .frame(width: 120)
+        .padding(DesignSystem.Spacing.md)
+        .background(
+            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                .fill(.ultraThinMaterial)
+                .overlay(
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                        .stroke(achievement.color.opacity(DesignSystem.Opacity.light), lineWidth: DesignSystem.Border.standard)
+                )
+        )
+    }
+}
+
+// MARK: - Goal Progress Card
+
+private struct GoalProgressCard: View {
+    let title: String
+    let current: Int
+    let goal: Int
+    let progress: Double
+    let isAchieved: Bool
+    let color: Color
+    let onEdit: () -> Void
+    @EnvironmentObject private var theme: ThemeStore
+    
+    var body: some View {
+        Button(action: onEdit) {
+            VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
+                HStack {
+                    Text(title)
+                        .font(Theme.headline)
+                        .foregroundStyle(Theme.textPrimary)
+                    
+                    Spacer()
+                    
+                    if isAchieved {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundStyle(.green)
+                    }
+                }
+                
+                // Progress bar
+                GeometryReader { geometry in
+                    ZStack(alignment: .leading) {
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(Color.gray.opacity(0.2))
+                            .frame(height: 8)
+                        
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(color.gradient)
+                            .frame(width: geometry.size.width * min(progress, 1.0), height: 8)
+                    }
+                }
+                .frame(height: 8)
+                
+                // Progress text
+                Text("\(current) / \(goal) sessions")
+                    .font(Theme.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+            .cardPadding()
+            .background(
+                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                    .fill(.ultraThinMaterial)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.statBox, style: .continuous)
+                            .stroke(color.opacity(DesignSystem.Opacity.light), lineWidth: DesignSystem.Border.standard)
+                    )
+            )
+        }
+        .buttonStyle(.plain)
     }
 }
 

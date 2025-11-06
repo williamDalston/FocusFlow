@@ -99,7 +99,7 @@ final class PredictiveFocusAnalytics: ObservableObject {
         
         return OptimalTimePrediction(
             hour: bestHour,
-            timeOfDay: timeOfDay,
+            timeOfDay: timeOfDay.rawValue,
             sessionCount: hourCounts[bestHour] ?? 0,
             averageCompletionRate: avgCompletionRate,
             confidence: hourCounts[bestHour] ?? 0 >= 3 ? .high : .medium

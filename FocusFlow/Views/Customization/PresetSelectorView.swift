@@ -8,36 +8,47 @@ struct PresetSelectorView: View {
     
     var body: some View {
         NavigationStack {
-            ZStack {
-                ThemeBackground()
-                
-                ScrollView {
-                    LazyVStack(spacing: 16) {
-                        ForEach(PomodoroPreset.allCases) { preset in
-                            PresetCard(
-                                preset: preset,
-                                isSelected: selectedPreset == preset
-                            ) {
-                                selectedPreset = preset
-                                preferencesStore.selectedPreset = preset
-                                Haptics.tap()
-                            }
-                        }
-                    }
-                    .padding(.horizontal, DesignSystem.Spacing.lg)
-                    .padding(.vertical, DesignSystem.Spacing.lg)
+            contentView
+        }
+    }
+    
+    private var contentView: some View {
+        ZStack {
+            ThemeBackground()
+            presetList
+        }
+        .navigationTitle("Pomodoro Presets")
+        .navigationBarTitleDisplayMode(.large)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Done") {
+                    dismiss()
+                }
+                .foregroundStyle(Theme.accentA)
+            }
+        }
+    }
+    
+    private var presetList: some View {
+        ScrollView {
+            LazyVStack(spacing: 16) {
+                ForEach(Array(PomodoroPreset.allCases), id: \.id) { preset in
+                    presetCard(for: preset)
                 }
             }
-            .navigationTitle("Pomodoro Presets")
-            .navigationBarTitleDisplayMode(.large)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
-                        dismiss()
-                    }
-                    .foregroundStyle(Theme.accentA)
-                }
-            }
+            .padding(.horizontal, DesignSystem.Spacing.lg)
+            .padding(.vertical, DesignSystem.Spacing.lg)
+        }
+    }
+    
+    private func presetCard(for preset: PomodoroPreset) -> some View {
+        PresetCard(
+            preset: preset,
+            isSelected: selectedPreset == preset
+        ) {
+            selectedPreset = preset
+            preferencesStore.updateSelectedPreset(preset)
+            Haptics.tap()
         }
     }
 }
