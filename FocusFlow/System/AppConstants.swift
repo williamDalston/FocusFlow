@@ -167,13 +167,13 @@ enum AppConstants {
     enum ActivityTypes {
         // MARK: - Deprecated: Workout Activity Type (Agent 14: Will be removed after migration)
         @available(*, deprecated, message: "Use startFocus instead. Will be removed after migration.")
-        static let startWorkout = "com.williamalston.FocusFlow.startWorkout"
+        static let startWorkout = "com.williamalston.FlowFocusTimer.startWorkout"
         
         // Agent 9: Focus/Pomodoro Timer Activity Types (Primary)
-        static let startFocus = "com.williamalston.FocusFlow.startFocus"
-        static let startDeepWork = "com.williamalston.FocusFlow.startDeepWork"
-        static let startQuickFocus = "com.williamalston.FocusFlow.startQuickFocus"
-        static let showFocusStats = "com.williamalston.FocusFlow.showFocusStats"
+        static let startFocus = "com.williamalston.FlowFocusTimer.startFocus"
+        static let startDeepWork = "com.williamalston.FlowFocusTimer.startDeepWork"
+        static let startQuickFocus = "com.williamalston.FlowFocusTimer.startQuickFocus"
+        static let showFocusStats = "com.williamalston.FlowFocusTimer.showFocusStats"
     }
 }
 

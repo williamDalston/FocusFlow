@@ -102,7 +102,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         performActionFor shortcutItem: UIApplicationShortcutItem,
         completionHandler: @escaping (Bool) -> Void
     ) {
-        if shortcutItem.type == "com.williamalston.FocusFlow.startworkout" {
+        if shortcutItem.type == "com.williamalston.FlowFocusTimer.startworkout" {
             NotificationCenter.default.post(name: AppDelegate.quickAction, object: nil)
             completionHandler(true)
         } else {

@@ -35,7 +35,7 @@
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>Start Focus Session</string>
 			<key>UIApplicationShortcutItemType</key>
-			<string>com.williamalston.FocusFlow.startFocus</string>
+			<string>com.williamalston.FlowFocusTimer.startFocus</string>
 		</dict>
 	</array>
 	<key>NSHealthShareUsageDescription</key>
