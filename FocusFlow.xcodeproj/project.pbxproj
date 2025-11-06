@@ -34,9 +34,9 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		EF9A2EB92E78B7390047B4FD /* Ritual7 */ = {
+		EF9A2EB92E78B7390047B4FD /* FocusFlow */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Ritual7;
+			path = FocusFlow;
 			sourceTree = "<group>";
 		};
 		EF9A2F502E79AAEC0047B4FD /* FocusFlowTests */ = {
@@ -75,7 +75,7 @@
 		EF9A2EAE2E78B7390047B4FD = {
 			isa = PBXGroup;
 			children = (
-				EF9A2EB92E78B7390047B4FD /* Ritual7 */,
+				EF9A2EB92E78B7390047B4FD /* FocusFlow */,
 				EF9A2F502E79AAEC0047B4FD /* FocusFlowTests */,
 				EF9A2EB82E78B7390047B4FD /* Products */,
 			);
@@ -108,7 +108,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				EF9A2EB92E78B7390047B4FD /* Ritual7 */,
+				EF9A2EB92E78B7390047B4FD /* FocusFlow */,
 			);
 			name = FocusFlow;
 			packageProductDependencies = (
@@ -184,7 +184,7 @@
 					};
 				};
 			};
-			buildConfigurationList = EF9A2EB22E78B7390047B4FD /* Build configuration list for PBXProject "Ritual7" */;
+			buildConfigurationList = EF9A2EB22E78B7390047B4FD /* Build configuration list for PBXProject "FocusFlow" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -417,14 +417,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Ritual7/Ritual7.entitlements;
+				CODE_SIGN_ENTITLEMENTS = FocusFlow/FocusFlow.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 4;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = AYZ9SP42W8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = Ritual7/Info.plist;
+				INFOPLIST_FILE = FocusFlow/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = FocusFlow;
 				INFOPLIST_KEY_NSUserTrackingUsageDescription = "We use this to show relevant ads and support free features.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = NO;
@@ -461,14 +461,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Ritual7/Ritual7.entitlements;
+				CODE_SIGN_ENTITLEMENTS = FocusFlow/FocusFlow.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 4;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = AYZ9SP42W8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = Ritual7/Info.plist;
+				INFOPLIST_FILE = FocusFlow/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = FocusFlow;
 				INFOPLIST_KEY_NSUserTrackingUsageDescription = "We use this to show relevant ads and support free features.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = NO;
@@ -601,7 +601,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		EF9A2EB22E78B7390047B4FD /* Build configuration list for PBXProject "Ritual7" */ = {
+		EF9A2EB22E78B7390047B4FD /* Build configuration list for PBXProject "FocusFlow" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EF9A2ED72E78B73A0047B4FD /* Debug */,
