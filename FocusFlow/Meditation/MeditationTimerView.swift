@@ -54,6 +54,7 @@ struct MeditationTimerView: View {
             
             // Confetti overlay
             ConfettiView(trigger: $showConfetti)
+                .allowsHitTesting(false)
             
             // Completion celebration overlay
             if showCompletionCelebration {
@@ -480,24 +481,25 @@ struct MeditationTimerView: View {
     // MARK: - Controls Section
     
     private var controlsSection: some View {
-            VStack(spacing: DesignSystem.Spacing.md) {
-                if engine.phase == .idle || engine.phase == .completed {
-                    Button {
-                        Haptics.buttonPress()
-                        withAnimation(AnimationConstants.smoothSpring) {
-                            engine.start(duration: engine.selectedDuration)
-                        }
-                    } label: {
-                        Label("Start Meditation", systemImage: "play.fill")
-                            .font(Theme.title3.weight(.bold))
-                            .frame(maxWidth: .infinity)
-                            .frame(height: DesignSystem.ButtonSize.large.height)
+        VStack(spacing: DesignSystem.Spacing.md) {
+            if engine.phase == .idle || engine.phase == .completed {
+                Button {
+                    Haptics.buttonPress()
+                    withAnimation(AnimationConstants.smoothSpring) {
+                        engine.start(duration: engine.selectedDuration)
                     }
-                    .buttonStyle(PrimaryProminentButtonStyle())
-                    .accessibilityLabel("Start Meditation")
-                    .accessibilityHint("Double tap to begin your meditation session")
-                    .transition(.scale.combined(with: .opacity))
-                } else if engine.phase == .active {
+                } label: {
+                    Label("Start Meditation", systemImage: "play.fill")
+                        .font(Theme.title3.weight(.bold))
+                        .frame(maxWidth: .infinity)
+                        .frame(height: DesignSystem.ButtonSize.large.height)
+                }
+                .buttonStyle(PrimaryProminentButtonStyle())
+                .contentShape(Rectangle())
+                .accessibilityLabel("Start Meditation")
+                .accessibilityHint("Double tap to begin your meditation session")
+                .transition(.scale.combined(with: .opacity))
+            } else if engine.phase == .active {
                 HStack(spacing: DesignSystem.Spacing.md) {
                     Button {
                         Haptics.buttonPress()
@@ -516,6 +518,7 @@ struct MeditationTimerView: View {
                             .frame(height: DesignSystem.ButtonSize.standard.height)
                     }
                     .buttonStyle(SecondaryGlassButtonStyle())
+                    .contentShape(Rectangle())
                     .accessibilityLabel(engine.isPaused ? "Resume meditation" : "Pause meditation")
                     .accessibilityHint("Double tap to \(engine.isPaused ? "resume" : "pause") the meditation")
                     
@@ -529,6 +532,7 @@ struct MeditationTimerView: View {
                             .frame(height: DesignSystem.ButtonSize.standard.height)
                     }
                     .buttonStyle(.bordered)
+                    .contentShape(Rectangle())
                     .accessibilityLabel("Stop Meditation")
                     .accessibilityHint("Double tap to stop the meditation and return to the main screen")
                 }

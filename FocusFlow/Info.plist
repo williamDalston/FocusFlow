@@ -18,9 +18,9 @@
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Pomodoro Timer</string>
+	<string>FocusFlow</string>
 	<key>CFBundleName</key>
-	<string>Pomodoro Timer</string>
+	<string>FocusFlow</string>
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>

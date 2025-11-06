@@ -119,7 +119,11 @@ enum AppConstants {
         @available(*, deprecated, message: "Not applicable for Pomodoro timer. Will be removed after migration.")
         static let maxExercisesCompleted = 12
         
-        // Exercise Validation
+        // MARK: - Focus Session Validation (Agent 20: Pomodoro Timer)
+        static let minFocusDuration: TimeInterval = 0.0
+        static let maxFocusDuration: TimeInterval = 3600.0 // 1 hour (60 minutes max)
+        
+        // Exercise Validation (Deprecated)
         @available(*, deprecated, message: "Not applicable for Pomodoro timer. Will be removed after migration.")
         static let minExerciseOrder = 0
         @available(*, deprecated, message: "Not applicable for Pomodoro timer. Will be removed after migration.")

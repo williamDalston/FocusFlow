@@ -91,6 +91,9 @@ final class MeditationEngine: ObservableObject {
             reset()
         }
         
+        // Ensure audio session is ready
+        setupAudioSession()
+        
         selectedDuration = duration
         timeRemaining = duration
         phase = .active
@@ -144,10 +147,19 @@ final class MeditationEngine: ObservableObject {
     }
     
     private func stopBackgroundSound() {
+        // Stop player first
         backgroundSoundPlayer?.stop()
-        backgroundSoundEngine?.stop()
-        backgroundSoundEngine = nil
         backgroundSoundPlayer = nil
+        
+        // Then stop and detach engine
+        if let engine = backgroundSoundEngine {
+            engine.stop()
+            // Clean up all nodes
+            engine.attachedNodes.forEach { node in
+                engine.detach(node)
+            }
+            backgroundSoundEngine = nil
+        }
     }
     
     func toggleBackgroundSound() {
@@ -172,31 +184,36 @@ final class MeditationEngine: ObservableObject {
     
     private func setupAudioSession() {
         do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.mixWithOthers])
-            try AVAudioSession.sharedInstance().setActive(true)
+            let audioSession = AVAudioSession.sharedInstance()
+            try audioSession.setCategory(.playback, mode: .default, options: [.mixWithOthers])
+            try audioSession.setActive(true, options: [])
         } catch {
-            print("Failed to setup audio session: \(error)")
+            print("Failed to setup audio session: \(error.localizedDescription)")
+            // Don't crash if audio setup fails - meditation can still work without sound
         }
     }
     
     private func startTimer() {
         timer?.invalidate()
+        timer = nil
         
-        timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
+        // Ensure we're on the main run loop
+        timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] timer in
             Task { @MainActor in
                 guard let self = self, !self.isPaused else { return }
                 
                 self.timeRemaining -= 0.1
                 
                 if self.timeRemaining <= 0 {
-                    self.timer?.invalidate()
+                    timer.invalidate()
+                    self.timer = nil
                     self.completeMeditation()
                 }
             }
         }
         
         if let timer = timer {
-            RunLoop.current.add(timer, forMode: .common)
+            RunLoop.main.add(timer, forMode: .common)
         }
     }
     
@@ -253,27 +270,36 @@ final class MeditationEngine: ObservableObject {
         let engine = AVAudioEngine()
         let playerNode = AVAudioPlayerNode()
         
-        engine.attach(playerNode)
-        engine.connect(playerNode, to: engine.mainMixerNode, format: format)
-        
         do {
+            engine.attach(playerNode)
+            engine.connect(playerNode, to: engine.mainMixerNode, format: format)
+            
+            // Prepare engine before starting
+            engine.prepare()
             try engine.start()
             
-            // Store references
+            // Store references only after successful start
             self.backgroundSoundEngine = engine
             self.backgroundSoundPlayer = playerNode
             
             // Schedule buffer to loop
             // Use a weak reference and MainActor context to avoid concurrency issues
             func scheduleLoop() {
-                guard let playerNode = self.backgroundSoundPlayer else { return }
+                guard let playerNode = self.backgroundSoundPlayer,
+                      let engine = self.backgroundSoundEngine,
+                      engine.isRunning else {
+                    return
+                }
                 
                 playerNode.scheduleBuffer(buffer, at: nil, options: []) { [weak self] in
                     // Re-schedule when buffer finishes to create loop
                     // Use Task with MainActor to safely access main actor-isolated properties
                     Task { @MainActor in
                         guard let self = self else { return }
-                        if self.backgroundSoundEnabled && self.phase == .active {
+                        // Check if engine is still running and we're still active
+                        if self.backgroundSoundEnabled && 
+                           self.phase == .active &&
+                           self.backgroundSoundEngine?.isRunning == true {
                             scheduleLoop()
                         }
                     }
@@ -284,7 +310,12 @@ final class MeditationEngine: ObservableObject {
             playerNode.play()
             
         } catch {
-            print("Failed to play background sound: \(error)")
+            print("Failed to play background sound: \(error.localizedDescription)")
+            // Clean up on failure
+            engine.stop()
+            engine.attachedNodes.forEach { node in
+                engine.detach(node)
+            }
         }
     }
     

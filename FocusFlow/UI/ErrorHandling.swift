@@ -224,13 +224,10 @@ enum ErrorHandling {
         // Clear image cache if available
         // Note: In a real app, you might have a custom image cache to clear
         
-        // Attempt to recover focus state (legacy - FocusStore handles state recovery now)
-        // Note: This check is kept for backward compatibility during migration
-        if UserDefaults.standard.dictionary(forKey: AppConstants.UserDefaultsKeys.workoutStateRecovery) != nil {
-            // State exists, try to restore it
-            // This would be handled by PomodoroEngine.restoreSessionState()
-            os_log("Focus state found, recovery may be possible", log: .default, type: .info)
-        }
+        // Attempt to recover focus state (FocusStore handles state recovery now)
+        // Note: FocusStore automatically handles state recovery, no need for legacy workout state check
+        // Check if FocusStore has any sessions to recover from
+        os_log("Attempting basic recovery - FocusStore handles state recovery automatically", log: .default, type: .info)
         
         return true
     }
@@ -261,22 +258,37 @@ enum ErrorHandling {
     
     // MARK: - Data Validation
     
-    /// Validates workout session data
+    /// Validates focus session data
     /// Uses consistent validation rules to prevent data inconsistencies
     static func validateSessionData(duration: TimeInterval, exercisesCompleted: Int) -> Result<Void, WorkoutError> {
-        // Use constants for consistency - duration must be > minWorkoutDuration (currently 0.0)
-        // But we enforce a practical minimum of > 0 to prevent invalid sessions
-        guard duration > AppConstants.ValidationConstants.minWorkoutDuration else {
+        // Use focus session validation constants
+        // Duration must be > 0 to prevent invalid sessions
+        guard duration > AppConstants.ValidationConstants.minFocusDuration else {
             return .failure(.invalidData(description: "Focus session duration must be greater than 0"))
         }
         
-        guard duration <= AppConstants.ValidationConstants.maxWorkoutDuration else {
-            return .failure(.invalidData(description: "Focus session duration exceeds maximum allowed (\(Int(AppConstants.ValidationConstants.maxWorkoutDuration)) seconds)"))
+        guard duration <= AppConstants.ValidationConstants.maxFocusDuration else {
+            return .failure(.invalidData(description: "Focus session duration exceeds maximum allowed (\(Int(AppConstants.ValidationConstants.maxFocusDuration)) seconds)"))
         }
         
-        guard exercisesCompleted >= AppConstants.ValidationConstants.minExercisesCompleted && 
-              exercisesCompleted <= AppConstants.ValidationConstants.maxExercisesCompleted else {
-            return .failure(.invalidData(description: "Session completion must be valid"))
+        // Note: exercisesCompleted parameter kept for backward compatibility but not validated for Pomodoro timer
+        // Focus sessions don't have exercises, so this parameter is ignored
+        // TODO: Remove exercisesCompleted parameter in future version
+        
+        return .success(())
+    }
+    
+    /// Validates focus session data (Pomodoro timer specific)
+    /// Uses consistent validation rules for focus sessions
+    static func validateFocusSessionData(duration: TimeInterval) -> Result<Void, WorkoutError> {
+        // Use focus session validation constants
+        // Duration must be > 0 to prevent invalid sessions
+        guard duration > AppConstants.ValidationConstants.minFocusDuration else {
+            return .failure(.invalidData(description: "Focus session duration must be greater than 0"))
+        }
+        
+        guard duration <= AppConstants.ValidationConstants.maxFocusDuration else {
+            return .failure(.invalidData(description: "Focus session duration exceeds maximum allowed (\(Int(AppConstants.ValidationConstants.maxFocusDuration)) seconds)"))
         }
         
         return .success(())

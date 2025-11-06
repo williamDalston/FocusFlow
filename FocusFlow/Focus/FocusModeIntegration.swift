@@ -57,7 +57,8 @@ final class FocusModeIntegration: ObservableObject {
     
     /// Get Focus Mode suggestion view controller (for iOS 15+)
     func getFocusModeSuggestionViewController() -> UIViewController? {
-        guard let intent = focusModeIntent else { return nil }
+        // Check if intent exists before creating view controller
+        guard focusModeIntent != nil else { return nil }
         
         // Create an intent view controller for Focus Mode suggestion
         // Note: INUIAddVoiceShortcutViewController requires different initialization
