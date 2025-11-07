@@ -14,25 +14,7 @@ Use this guide when filling out the **Privacy** section in App Store Connect.
 
 ## ✅ YES - Data Collected (Must Declare)
 
-### 1. **Health & Fitness Data** ⚠️ SENSITIVE
-- **Data Type:** Health & Fitness
-- **Checkboxes to select:**
-  - ✅ App Functionality
-  - ❌ Third-Party Advertising
-  - ❌ Developer's Advertising or Marketing
-  - ❌ Analytics
-  - ❌ Product Personalization
-  - ❌ Other Purposes
-- **Linked to User:** ✅ Yes
-- **Used to Track:** ❌ No
-- **Description:** "We collect workout data (duration, exercises completed, calories burned) to track your fitness progress and sync with Apple Health (with your permission)."
-- **Data Collected:**
-  - Workout sessions (dates, times, duration)
-  - Exercises completed
-  - Estimated calories burned
-  - Exercise minutes
-  - Heart rate (read-only, if available)
-  - Weight (read-only, if available)
+FocusFlow does not collect Health & Fitness data. Skip the HealthKit section in App Store Connect.
 
 ### 2. **Location Data** 📍
 - **Data Type:** Location → Coarse Location
@@ -149,13 +131,7 @@ Use this guide when filling out the **Privacy** section in App Store Connect.
 
 Your app already has these privacy usage descriptions:
 
-1. **NSHealthShareUsageDescription**
-   - "We use HealthKit to read your weight and activity level to provide better calorie estimates and personalized recommendations for your workouts."
-
-2. **NSHealthUpdateUsageDescription**
-   - "We use HealthKit to save your workout sessions, including exercise minutes and calories burned, so you can track your progress in the Health and Activity apps."
-
-3. **NSUserTrackingUsageDescription**
+1. **NSUserTrackingUsageDescription**
    - "We use this to show relevant ads and support free features."
 
 ---
@@ -168,20 +144,7 @@ Your app already has these privacy usage descriptions:
 
 ### 1. **Health & Fitness Data**
 
-**Select these checkboxes:**
-- ✅ **App Functionality**
-- ❌ Third-Party Advertising
-- ❌ Developer's Advertising or Marketing
-- ❌ Analytics
-- ❌ Product Personalization
-- ❌ Other Purposes
-
-**Additional Settings:**
-- Linked to User: ✅ **Yes**
-- Used to Track: ❌ **No**
-
-**Description to enter:**
-"We collect workout data (duration, exercises completed, calories burned) to track your fitness progress and sync with Apple Health (with your permission)."
+- Select **No**. Health & Fitness data is not collected and HealthKit is not used.
 
 ---
 
@@ -322,14 +285,13 @@ Your app already has these privacy usage descriptions:
 
 1. **Third-Party SDKs:** Most data collection comes from Google Mobile Ads (AdMob). This is normal and expected for apps with advertising.
 
-2. **HealthKit Data:** HealthKit data is stored by Apple Health, not by your app. You only read/write data with user permission.
+2. **Health Data:** HealthKit is not used in this version of FocusFlow.
 
 3. **Local Storage:** Data stored locally on the device (UserDefaults) typically doesn't need to be declared unless you sync it to a server.
 
 4. **Tracking:** The app uses App Tracking Transparency (ATT) for tracking. Users can opt out.
 
 5. **User Control:** Users can:
-   - Revoke HealthKit permissions anytime
    - Opt out of ad tracking in iOS Settings
    - Delete all app data from within the app
 
@@ -338,7 +300,6 @@ Your app already has these privacy usage descriptions:
 ## 🔗 Related Documentation
 
 - Privacy Policy: `AppStore/PrivacyPolicy.md`
-- HealthKit Setup: `APPLE_WATCH_SETUP.md`
 - AdMob Setup: `ADMOB_SETUP_VERIFICATION.md`
 
 ---

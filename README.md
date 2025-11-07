@@ -82,7 +82,7 @@ Ritual7/
 
 The project includes comprehensive test suites:
 - Unit tests for core functionality
-- Integration tests for HealthKit and Watch sync
+- Integration tests for cross-device sync
 - UI tests for user flows
 
 Run tests with `Cmd+U` in Xcode.
@@ -110,11 +110,8 @@ All App Store documentation is in the `AppStore/` directory:
 
 ## 🔧 Configuration
 
-### HealthKit
-HealthKit integration is optional. To enable:
-1. Ensure HealthKit capability is enabled in Xcode
-2. Grant HealthKit permissions when prompted
-3. Workouts will automatically sync to Apple Health
+### Health & Fitness Integrations
+FocusFlow does not require HealthKit. All focus tracking stays within the app so it can be shipped without Health-related capabilities.
 
 ### Notifications
 Notifications are customizable in Settings:

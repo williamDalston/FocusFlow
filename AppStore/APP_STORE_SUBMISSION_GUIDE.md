@@ -90,13 +90,11 @@ Ritual7 brings you the scientifically-backed high-intensity interval training (H
 • Complications for quick access
 • Seamless sync with iPhone
 
-🏥 HealthKit Integration
-• Automatically saves workouts to Apple Health
-• Contributes to Activity rings (Exercise, Move, Stand)
-• Tracks active calories burned
-• Records exercise minutes
-• Heart rate monitoring (if available)
-• Privacy-respecting implementation
+🏥 Health & Fitness
+• No HealthKit integration required for FocusFlow
+• All focus session data remains inside the app
+• No Activity ring contribution or calorie tracking
+• Simplifies review since Health data is not requested
 
 🎨 Customization & Flexibility
 • Adjustable exercise duration (15s, 30s, 45s, 60s)
@@ -177,7 +175,7 @@ Research shows that high-intensity interval training can deliver the same benefi
 ✅ Fully Customizable: Adjust to your fitness level
 ✅ Progress Tracking: See your improvement over time
 ✅ Apple Watch: Take your workouts on your wrist
-✅ HealthKit Integration: Seamless fitness tracking
+✅ No HealthKit Required: Works without health permissions
 ✅ Beautiful Design: Enjoy using the app
 ✅ Fully Accessible: Works for everyone
 
@@ -191,7 +189,7 @@ Research shows that high-intensity interval training can deliver the same benefi
 
 🔒 Privacy & Data
 
-Your workout data is stored securely on your device. HealthKit integration is optional and privacy-respecting. We never share your personal data.
+Your focus session data is stored securely on your device. HealthKit is not used in this version, so no health permissions are requested.
 
 🎁 What's New
 
@@ -212,7 +210,7 @@ Version 1.3
 ### 5. Keywords (100 characters max)
 **Enter exactly:** 
 ```
-fitness,workout,HIIT,exercise,7 minute,home workout,no equipment,Apple Watch,HealthKit,strength,cardio,interval,bodyweight
+focus,timer,pomodoro,productivity,study,deep work,concentration,breaks,apple watch,focus timer,productivity timer
 ```
 
 **Character count:** 99 characters ✅
@@ -301,7 +299,7 @@ You need screenshots for **at least one device size** (minimum requirement), but
 
 7. **screenshot_6p7_07_1284x2778.png** → Apple Watch integration (if available)
    - Shows Watch companion features
-   - Or HealthKit integration
+   - Or Siri Shortcuts / automation features
 
 8. **screenshot_6p7_08_1284x2778.png** → Additional feature highlight
    - Shows any other key feature
@@ -401,7 +399,7 @@ You need screenshots for **at least one device size** (minimum requirement), but
 ### Notes for Reviewer
 **Enter exactly:**
 ```
-This app provides a 7-minute high-intensity interval training (HIIT) workout routine. All exercises are bodyweight exercises that require no equipment (except a chair for wall sits). The app includes comprehensive exercise instructions, progress tracking, and HealthKit integration for fitness data. No account creation or login required. The app works entirely offline.
+FocusFlow delivers a guided Pomodoro focus timer with smart breaks, session analytics, and calming design. Users can customize focus/break lengths, view their history, and stay motivated with streaks and achievements. The app does not request HealthKit permissions and works entirely offline.
 ```
 
 ---
@@ -426,7 +424,7 @@ This app provides a 7-minute high-intensity interval training (HIIT) workout rou
 ### Privacy Practices
 
 **Data Collection:** 
-- Health & Fitness data (if user enables HealthKit)
+- Health & Fitness data (not collected)
 - Location (not collected)
 - Contact info (not collected)
 - User content (not collected)
@@ -507,7 +505,7 @@ Before submitting, verify:
 ### Compliance
 - [ ] Age rating is set to 4+
 - [ ] Privacy practices are accurately described
-- [ ] HealthKit usage description is in Info.plist
+- [ ] HealthKit usage description removed from Info.plist
 - [ ] All required permissions have usage descriptions
 
 ---
@@ -604,7 +602,7 @@ Before submitting, verify:
 - **Build not showing:** Wait 10-30 minutes, refresh page
 - **Screenshot rejected:** Check resolution, ensure no errors visible
 - **Privacy policy required:** Must be hosted on a public URL
-- **HealthKit rejected:** Ensure usage descriptions are in Info.plist
+- **HealthKit rejected:** Not applicable (no HealthKit usage)
 
 ---
 
@@ -615,7 +613,7 @@ Before submitting, verify:
 ```
 APP NAME: Ritual7
 SUBTITLE: 7 min HIIT, no equipment
-KEYWORDS: fitness,workout,HIIT,exercise,7 minute,home workout,no equipment,Apple Watch,HealthKit,strength,cardio,interval,bodyweight
+KEYWORDS: focus,timer,Pomodoro,productivity,study,deep work,concentration,breaks,Apple Watch,focus timer,productivity timer
 AGE RATING: 4+
 VERSION: 1.3
 MINIMUM SCREENSHOTS: 1 (iPhone 6.7" - 1290x2796)

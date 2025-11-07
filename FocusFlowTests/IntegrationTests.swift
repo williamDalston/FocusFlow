@@ -1,8 +1,7 @@
 import XCTest
-import HealthKit
 @testable import FocusFlow
 
-/// Agent 9: Integration tests for HealthKit sync and data persistence
+/// Agent 9: Integration tests for focus session sync and data persistence
 /// Agent 27: Updated to use FocusStore
 @MainActor
 final class IntegrationTests: XCTestCase {
@@ -77,24 +76,6 @@ final class IntegrationTests: XCTestCase {
         
         // Streak should be maintained
         XCTAssertGreaterThanOrEqual(newStore.streak, initialStreak)
-    }
-    
-    // MARK: - HealthKit Integration Tests (Mock/Simulated)
-    
-    func testHealthKitSyncPreparation() {
-        // This test verifies that the store is ready for HealthKit sync
-        // Actual HealthKit integration requires device/simulator setup
-        
-        store.addSession(duration: 1500, phaseType: .focus, completed: true)
-        
-        // Verify session was created (HealthKit sync happens asynchronously)
-        XCTAssertEqual(store.sessions.count, 1)
-        
-        // Note: Full HealthKit testing requires:
-        // 1. HealthKit to be available on device/simulator
-        // 2. Authorization to be granted
-        // 3. Actual HealthKit store interaction
-        // This is tested in device testing, not unit tests
     }
     
     // MARK: - Watch Integration Tests (Simulated)

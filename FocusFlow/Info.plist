@@ -38,10 +38,6 @@
 			<string>com.williamalston.focustimeralston.startFocus</string>
 		</dict>
 	</array>
-	<key>NSHealthShareUsageDescription</key>
-	<string>We use HealthKit to track your focus time and productivity sessions so you can monitor your mental wellness and work patterns in the Health app.</string>
-	<key>NSHealthUpdateUsageDescription</key>
-	<string>We use HealthKit to save your focus sessions, including focus time and completed Pomodoro sessions, so you can track your productivity in the Health app.</string>
 	<key>NSUserTrackingUsageDescription</key>
 	<string>We use this to show relevant ads and support free features.</string>
 	<key>UIBackgroundModes</key>

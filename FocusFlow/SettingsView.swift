@@ -35,10 +35,6 @@ struct SettingsView: View {
     // Watch connectivity (only used on iPad)
     @StateObject private var watchManager = WatchSessionManager.shared
     
-    // HealthKit
-    @StateObject private var healthKitStore = HealthKitStore.shared
-    @State private var showHealthKitPermissions = false
-    
     // Daily Motivation toggle
     @AppStorage("dailyMotivationEnabled") private var dailyMotivationEnabled = true
     
@@ -57,7 +53,6 @@ struct SettingsView: View {
                         pomodoroTimerSection
                         watchSection
                         reminderSection
-                        healthKitSection
                         dataSection
                         aboutSection
                         dangerSection
@@ -75,7 +70,6 @@ struct SettingsView: View {
                         soundSection
                         pomodoroTimerSection
                         reminderSection
-                        healthKitSection
                         dataSection
                         aboutSection
                         dangerSection
@@ -133,10 +127,6 @@ struct SettingsView: View {
                 ActivityView(activityItems: shareItems).ignoresSafeArea()
                     .iPadOptimizedSheetPresentation()
             }
-            .sheet(isPresented: $showHealthKitPermissions) {
-                HealthKitPermissionsView()
-                    .iPadOptimizedSheetPresentation()
-            }
             .onAppear {
                 // Appearance seed
                 if let scheme = theme.colorScheme {
@@ -148,8 +138,6 @@ struct SettingsView: View {
                 // Reminder seed
                 refreshNotificationStatus()
                 readCurrentReminderScheduled()
-                // HealthKit status
-                healthKitStore.checkAuthorizationStatus()
             }
             // iOS 16+ compatible onChange
             .onChange(of: matchSystem) { _ in
@@ -745,161 +733,6 @@ struct SettingsView: View {
         }
     }
 
-    private var healthKitSection: some View {
-        Section {
-            if healthKitStore.isAvailable {
-                HStack(spacing: DesignSystem.Spacing.md) {
-                    Image(systemName: "heart.text.square.fill")
-                        .font(.system(size: DesignSystem.IconSize.large))
-                        .foregroundStyle(
-                            healthKitStore.isAuthorized 
-                                ? LinearGradient(
-                                    colors: [Theme.accentA, Theme.accentB],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                                : LinearGradient(
-                                    colors: [Color.secondary, Color.secondary],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                        )
-                        .frame(width: DesignSystem.IconSize.large, height: DesignSystem.IconSize.large)
-                    
-                    VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
-                        Text("Health Integration")
-                            .font(Theme.headline)
-                            .foregroundStyle(Theme.textPrimary)
-                        
-                        Text(healthKitStatusText)
-                            .font(Theme.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                    
-                    Spacer()
-                    
-                    if healthKitStore.isAuthorized {
-                        Image(systemName: "checkmark.circle.fill")
-                            .font(.system(size: DesignSystem.IconSize.medium))
-                            .foregroundStyle(.green)
-                            .accessibilityLabel("Connected")
-                    } else {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.system(size: DesignSystem.IconSize.medium))
-                            .foregroundStyle(.orange)
-                            .accessibilityLabel("Not Connected")
-                    }
-                }
-                .accessibilityElement(children: .combine)
-                .accessibilityLabel("Health Integration, \(healthKitStatusText)")
-                
-                if !healthKitStore.isAuthorized {
-                    Button {
-                        showHealthKitPermissions = true
-                    } label: {
-                        Label("Connect with Health", systemImage: "heart.fill")
-                            .frame(maxWidth: .infinity)
-                            .frame(height: DesignSystem.ButtonSize.standard.height)
-                    }
-                    .buttonStyle(.bordered)
-                    .accessibilityLabel("Connect with Health")
-                    .accessibilityHint("Double tap to connect your focus sessions with Apple Health")
-                } else {
-                    Button {
-                        openHealthSettings()
-                    } label: {
-                        Label("Manage in Settings", systemImage: "gearshape")
-                            .frame(maxWidth: .infinity)
-                            .frame(height: DesignSystem.ButtonSize.standard.height)
-                    }
-                    .buttonStyle(.bordered)
-                    .accessibilityLabel("Manage in Settings")
-                    .accessibilityHint("Double tap to open Health app settings")
-                }
-                
-                VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
-                    Text("What's synced:")
-                        .font(Theme.caption)
-                        .foregroundStyle(Theme.accentA)
-                    
-                    VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
-                        SyncFeatureRow(
-                            icon: "figure.run",
-                            text: "Focus sessions"
-                        )
-                        
-                        SyncFeatureRow(
-                            icon: "flame.fill",
-                            text: "Calories burned"
-                        )
-                        
-                        SyncFeatureRow(
-                            icon: "clock.fill",
-                            text: "Exercise minutes"
-                        )
-                        
-                        SyncFeatureRow(
-                            icon: "chart.line.uptrend.xyaxis",
-                            text: "Activity rings"
-                        )
-                    }
-                }
-                .padding(.vertical, DesignSystem.Spacing.sm)
-            } else {
-                HStack(spacing: DesignSystem.Spacing.md) {
-                    Image(systemName: "heart.slash.fill")
-                        .font(.system(size: DesignSystem.IconSize.large))
-                        .foregroundStyle(.secondary)
-                        .frame(width: DesignSystem.IconSize.large, height: DesignSystem.IconSize.large)
-                    
-                    VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
-                        Text("Health Integration")
-                            .font(Theme.headline)
-                            .foregroundStyle(Theme.textPrimary)
-                        
-                        Text("HealthKit is not available on this device")
-                            .font(Theme.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                    
-                    Spacer()
-                }
-                .accessibilityElement(children: .combine)
-                .accessibilityLabel("Health Integration, HealthKit is not available on this device")
-            }
-        } header: {
-            Text("Health Integration").textCase(.none)
-        } footer: {
-            if healthKitStore.isAvailable {
-                Text("Your focus sessions are automatically synced to Apple Health and Activity apps. Your health data is private and secure.")
-            } else {
-                Text("HealthKit is only available on iOS devices.")
-            }
-        }
-    }
-    
-    // MARK: - Sync Feature Row Helper
-    
-    private struct SyncFeatureRow: View {
-        let icon: String
-        let text: String
-        
-        var body: some View {
-            HStack(spacing: DesignSystem.Spacing.sm) {
-                Image(systemName: icon)
-                    .font(.system(size: DesignSystem.IconSize.small))
-                    .foregroundStyle(Theme.accentB)
-                    .frame(width: DesignSystem.IconSize.small, height: DesignSystem.IconSize.small)
-                
-                Text(text)
-                    .font(Theme.caption2)
-                    .foregroundStyle(Theme.textPrimary)
-            }
-            .accessibilityElement(children: .combine)
-            .accessibilityLabel(text)
-        }
-    }
-    
     private var dataSection: some View {
         Section {
             Button {
@@ -1091,29 +924,6 @@ struct SettingsView: View {
         }
     }
     
-    private var healthKitStatusText: String {
-        if !healthKitStore.isAvailable {
-            return "Not available on this device"
-        } else if healthKitStore.isAuthorized {
-            return "Connected to Health"
-        } else {
-            return "Not connected"
-        }
-    }
-    
-    private func openHealthSettings() {
-        guard let url = URL(string: "x-apple-health://") else {
-            // Fallback to general settings if Health app URL is not available
-            openSystemSettings()
-            return
-        }
-        if UIApplication.shared.canOpenURL(url) {
-            UIApplication.shared.open(url)
-        } else {
-            openSystemSettings()
-        }
-    }
-
     private func cancelDailyReminder() {
         // Use NotificationManager for consistent cancellation
         NotificationManager.cancelDailyReminder(identifier: "daily_workout")
