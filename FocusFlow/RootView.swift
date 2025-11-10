@@ -450,6 +450,7 @@ struct iPadSidebar: View {
                     endPoint: .bottomTrailing
                 ))
                 .ignoresSafeArea()
+                .allowsHitTesting(false)
         )
     }
 }
@@ -464,18 +465,28 @@ struct iPadMainContent: View {
     @EnvironmentObject private var preferencesStore: FocusPreferencesStore
     
     var body: some View {
-        Group {
-            switch selectedTab {
-            case 0:
-                FocusContentView() // Agent 11: Updated to use FocusContentView
+        detailContent()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .id(selectedTab)
+    }
+    
+    @ViewBuilder
+    private func detailContent() -> some View {
+        switch selectedTab {
+        case 0:
+            NavigationStack {
+                FocusContentView()
                     .environmentObject(focusStore)
                     .environmentObject(theme)
                     .environmentObject(preferencesStore)
-            case 1:
-                FocusHistoryView() // Agent 11: Updated to use FocusHistoryView
+            }
+        case 1:
+            NavigationStack {
+                FocusHistoryView()
                     .environmentObject(focusStore)
-            case 2:
-                // Stats view placeholder - will be created by Agent 4
+            }
+        case 2:
+            NavigationStack {
                 VStack {
                     Text("Stats")
                         .font(Theme.largeTitle)
@@ -484,18 +495,22 @@ struct iPadMainContent: View {
                         .font(Theme.body)
                         .foregroundStyle(Theme.textSecondary)
                 }
-            case 3:
+                .padding()
+            }
+        case 3:
+            NavigationStack {
                 SettingsView()
                     .environmentObject(focusStore)
                     .environmentObject(theme)
-            default:
-                FocusContentView() // Agent 11: Updated to use FocusContentView
+            }
+        default:
+            NavigationStack {
+                FocusContentView()
                     .environmentObject(focusStore)
                     .environmentObject(theme)
                     .environmentObject(preferencesStore)
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
