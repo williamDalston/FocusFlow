@@ -8,7 +8,6 @@ enum HelpContext: String, Identifiable {
     case streakTracking
     case achievements
     case settings
-    case healthIntegration
     case gestureControls
     
     var id: String {
@@ -115,17 +114,9 @@ class ContextualHelpManager: ObservableObject {
             return HelpContent(
                 title: "Configure Settings",
                 description: "Customize appearance, notifications, and app preferences",
-                content: "In Settings, you can customize your app experience. Change color themes, adjust sound and haptic settings, set up workout reminders, connect with Apple Health, and more. All changes are saved automatically.",
+                content: "In Settings, you can customize your app experience. Change color themes, adjust sound and haptic settings, set up focus reminders, and more. All changes are saved automatically.",
                 icon: "gearshape.fill",
                 color: .secondary
-            )
-        case .healthIntegration:
-            return HelpContent(
-                title: "Connect with Apple Health",
-                description: "Sync your workouts with Apple Health automatically",
-                content: "Connecting with Apple Health allows your workouts to sync automatically with the Health app. Your workout sessions, calories burned, and exercise minutes will be tracked. Your health data is private and secure—only you can see it.",
-                icon: "heart.text.square.fill",
-                color: Theme.accentB
             )
         case .gestureControls:
             return HelpContent(

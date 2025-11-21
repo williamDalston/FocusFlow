@@ -1,7 +1,7 @@
-# Privacy Policy for Ritual7
+# Privacy Policy for Alston Focus Timer
 
-**Last Updated:** November 5, 2024  
-**App Name:** Ritual7  
+**Last Updated:** November 11, 2025  
+**App Name:** Alston Focus Timer  
 **Developer:** William Alston  
 **Contact:** [Your Email Address]
 
@@ -9,30 +9,21 @@
 
 ## Introduction
 
-Ritual7 ("we," "our," or "the app") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application.
+Alston Focus Timer ("we," "our," or "the app") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application.
 
 ---
 
 ## Information We Collect
 
 ### Data You Provide
-- **Workout Data**: Your workout history, including dates, times, exercises completed, and duration
-- **Preferences**: Your workout preferences, settings, and customizations
-- **Fitness Level**: Your self-reported fitness level (if provided during onboarding)
+- **Focus Session Data**: Your focus session history, including dates, times, durations, and completion status
+- **Preferences**: Your focus timer preferences, settings, and customizations (focus duration, break duration, etc.)
+- **Goals and Achievements**: Your focus goals, streaks, and achievement progress
 
 ### Data Collected Automatically
 - **Usage Data**: How you interact with the app, features used, and performance metrics
 - **Device Information**: Device type, operating system version, and app version
 - **Crash Reports**: Information about app crashes and errors (if crash reporting is enabled)
-
-### Health Data (Optional)
-If you choose to enable HealthKit integration:
-- **Workout Sessions**: Your workout sessions are saved to Apple Health
-- **Exercise Minutes**: Minutes of exercise are recorded
-- **Active Calories**: Estimated calories burned during workouts
-- **Heart Rate Data**: Heart rate information (if available from your device)
-
-**Note**: HealthKit data is stored and managed by Apple Health, not by our app. We only read/write data with your explicit permission.
 
 ---
 
@@ -41,9 +32,9 @@ If you choose to enable HealthKit integration:
 We use the information we collect to:
 
 1. **Provide App Functionality**
-   - Track your workout history and progress
+   - Track your focus session history and progress
    - Calculate statistics, streaks, and achievements
-   - Customize workouts based on your preferences
+   - Customize focus timer settings based on your preferences
    - Provide personalized insights and recommendations
 
 2. **Improve the App**
@@ -51,12 +42,7 @@ We use the information we collect to:
    - Develop new features
    - Analyze usage patterns (anonymized)
 
-3. **HealthKit Integration** (Optional)
-   - Save workout data to Apple Health
-   - Read health data to provide better calorie estimates
-   - Contribute to Activity rings
-
-4. **Advertising** (if applicable)
+3. **Advertising** (if applicable)
    - Show relevant advertisements (if ads are enabled)
    - Track ad performance (anonymized)
 
@@ -66,18 +52,13 @@ We use the information we collect to:
 
 ### Local Storage
 - Most of your data is stored locally on your device
-- Workout history and preferences are stored in your device's local storage
+- Focus session history and preferences are stored in your device's local storage
 - Data is encrypted using iOS standard encryption
 
 ### iCloud Sync (if enabled)
 - If you enable iCloud sync, your data may be synced to your iCloud account
 - iCloud sync is managed by Apple, not by our app
 - Your data remains private and is not accessible to us
-
-### HealthKit Data
-- HealthKit data is stored by Apple Health on your device
-- We do not have access to your HealthKit data beyond what you explicitly grant permission for
-- You can revoke HealthKit permissions at any time in iOS Settings
 
 ### Third-Party Services
 - We may use third-party analytics services (anonymized data only)
@@ -102,17 +83,12 @@ We do not sell, trade, or rent your personal information to third parties. We ma
 ## Your Rights and Choices
 
 ### Access and Control
-- You can view all your workout data within the app
-- You can export your workout data at any time
-- You can delete your workout history within the app
-
-### HealthKit Permissions
-- You can enable or disable HealthKit integration in iOS Settings
-- You can revoke HealthKit permissions at any time
-- Revoking permissions will stop future data sharing but won't delete existing HealthKit data
+- You can view all your focus session data within the app
+- You can export your focus session data at any time
+- You can delete your focus session history within the app
 
 ### Data Deletion
-- You can delete individual workout sessions
+- You can delete individual focus sessions
 - You can reset all app data
 - Deleting the app will remove all local data (iCloud data may persist if synced)
 
@@ -124,7 +100,7 @@ We do not sell, trade, or rent your personal information to third parties. We ma
 
 ## Children's Privacy
 
-Ritual7 is not intended for children under the age of 13. We do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe your child has provided us with personal information, please contact us.
+Alston Focus Timer is not intended for children under the age of 13. We do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe your child has provided us with personal information, please contact us.
 
 ---
 
@@ -167,17 +143,12 @@ If you have questions about this Privacy Policy or our data practices, please co
 
 ## App-Specific Privacy Notes
 
-### HealthKit Integration
-- HealthKit integration is completely optional
-- We only access HealthKit data with your explicit permission
-- You can revoke HealthKit permissions at any time
-- We do not store HealthKit data on our servers
-
-### Workout Data
-- Your workout history is stored locally on your device
+### Focus Session Data
+- Your focus session history is stored locally on your device
 - You can export your data at any time
 - You can delete your data at any time
-- We do not access your workout data without your device
+- We do not access your focus session data without your device
+- This app does not use HealthKit or collect health data
 
 ### Analytics
 - We use anonymized analytics to improve the app
@@ -194,8 +165,7 @@ If you have questions about this Privacy Policy or our data practices, please co
 
 ## Data Retention
 
-- **Workout Data**: Stored locally on your device until you delete it
-- **HealthKit Data**: Managed by Apple Health according to Apple's policies
+- **Focus Session Data**: Stored locally on your device until you delete it
 - **Analytics Data**: Anonymized and retained for app improvement purposes
 - **Crash Reports**: Retained for bug fixing purposes
 

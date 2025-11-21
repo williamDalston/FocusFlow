@@ -196,8 +196,6 @@ class MicrocopyManager {
             return "Achievements are unlocked by completing workouts and reaching milestones. Check back regularly to see your progress."
         case .settings:
             return "Configure app appearance, notifications, sound settings, and more. All changes are saved automatically."
-        case .healthIntegration:
-            return "Connect with Apple Health to sync your workouts automatically. Your health data is private and secure."
         case .gestureControls:
             return "Use swipe gestures to control your workout. Swipe right to pause or resume, swipe left to skip rest periods."
         }

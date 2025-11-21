@@ -40,10 +40,6 @@
 	</array>
 	<key>NSUserTrackingUsageDescription</key>
 	<string>We use this to show relevant ads and support free features.</string>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>audio</string>
-	</array>
 	<key>NSSupportsLiveActivities</key>
 	<true/>
 	<key>CFBundleIcons</key>
